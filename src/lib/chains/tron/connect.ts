@@ -357,5 +357,9 @@ export class TronConnect {
         return this.__tronConfig?.addresses.releaseWallet;
       }
 
+      public getTxnHashed(txnID: string): string {
+        return ethers.utils.keccak256(`0x${txnID}`);
+      }
+
 
 }
