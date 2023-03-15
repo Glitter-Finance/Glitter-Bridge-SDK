@@ -6,6 +6,8 @@ import AlgodClient from "algosdk";
 import {  BridgeToken, BridgeTokens, Routing, RoutingDefault, RoutingString, SetRoutingUnits } from "../../../common";
 import {AlgorandAccountsConfig, AlgorandProgramAccount} from "../config";
 import { ValueUnits } from "../../../common";
+import { RoutingHelper } from "../../../common/routing/routing";
+import BigNumber from "bignumber.js";
 
 export enum AlgorandBridgeTxnType {
     none,
@@ -220,7 +222,7 @@ export class AlgorandBridgeTxnsV1 {
                  if (!routing.amount) throw new Error("Routing Amount is required");
                  if (!this._transactions) throw new Error("Algorand Transactions is required");
 
-                 const amount_nanoUsdc = ValueUnits.fromValue(routing.amount,token.decimals).units;
+                 const amount_nanoUsdc = RoutingHelper.BaseUnits_FromReadableValue(routing.amount,token.decimals);
                  
                  const routingData:Routing = {
                     from: {
@@ -236,7 +238,7 @@ export class AlgorandBridgeTxnsV1 {
                       txn_signature: "",
                     },
                     amount: routing.amount,
-                    units: BigInt(amount_nanoUsdc).toString(),
+                    units: amount_nanoUsdc,
                   };
 
                 let txn = this._transactions.initAlgorandUSDCTokenBridge(routingData,token);
@@ -391,7 +393,7 @@ export class AlgorandBridgeTxnsV1 {
                 feeRouting.units = undefined;
 
                 //Get Fee
-                feeRouting.amount = routing.amount / token.fee_divisor;
+                feeRouting.amount = BigNumber(routing.amount).div( token.fee_divisor);
 
                 //Get Transaction
                 //  usdc 

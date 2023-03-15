@@ -16,6 +16,9 @@ export function Sleep(ms: number) {
     return new Promise(resolve => setTimeout(resolve, ms));
 }
 
+/**
+ * @deprecated The method should not be used
+ */
 export function Precise(value: number | string, precision: number = 21): number {
     if (typeof value === "string") {
         return Number(parseFloat(value).toPrecision(precision));
@@ -23,6 +26,9 @@ export function Precise(value: number | string, precision: number = 21): number 
         return Number(parseFloat(value.toString()).toPrecision(precision));
     }
 }
+/**
+ * @deprecated The method should not be used
+ */
 export function PreciseDecimals(value: number | string, decimals: number = 2): number {
     return Number(Precise(value).toFixed(decimals));
 }

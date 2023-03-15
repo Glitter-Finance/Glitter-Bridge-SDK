@@ -1,13 +1,13 @@
+import BigNumber from "bignumber.js";
 import { BridgeToken } from "../tokens/tokens";
 import { ValueUnits } from "../utils/value_units";
 
 export type Routing = {
     from: RoutingPoint;
     to: RoutingPoint;
-    amount: number | undefined;
-    units: string | undefined;
+    amount: BigNumber | number | undefined;
+    units: BigNumber | undefined;
 }
-
 export type RoutingPoint = {
     network: string;
     address: string;
@@ -70,12 +70,25 @@ export function RoutingString(routing: Routing): string {
     );
 }
 
+/**
+ * @deprecated The method should not be used. Please use RoutingHelper instead
+ */
 export function SetRoutingUnits(routing: Routing, token: BridgeToken | undefined) {
     if (!token) throw new Error("Token not defined");
     if (routing.units) return;
     if (!routing.amount) throw new Error("Routing amount not defined");
     if (token.decimals == undefined) throw new Error("Routing decimals not defined");
-
-    routing.units = ValueUnits.fromValue(routing.amount, token.decimals).units.toString();
+    routing.units =  BigNumber(routing.amount).times(BigNumber(10).pow(token.decimals));    //ValueUnits.fromValue(routing.amount, token.decimals).units.toString();
 }
 
+export class RoutingHelper {
+    public static BaseUnits_FromReadableValue(value: number|BigNumber, decimals: number): BigNumber {
+        let baseRaw = BigNumber(value).times(BigNumber(10).pow(decimals));
+        let baseString = baseRaw.toFixed(0);
+        return BigNumber(baseString);
+    }
+    public static ReadableValue_FromBaseUnits(baseUnits: BigNumber, decimals: number): BigNumber {
+        let baseRaw = BigNumber(baseUnits).div(BigNumber(10).pow(decimals));
+        return baseRaw;
+    }
+}

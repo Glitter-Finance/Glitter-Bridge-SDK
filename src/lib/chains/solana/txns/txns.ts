@@ -3,6 +3,7 @@ import { ASSOCIATED_TOKEN_PROGRAM_ID, TOKEN_PROGRAM_ID, NATIVE_MINT, createClose
 import * as util from "util";
 import { BridgeToken, BridgeTokens, Routing, ValueUnits } from "../../../common";
 import { SolanaError } from "../solanaError";
+import { RoutingHelper } from "../../../common/routing/routing";
 
 export class SolanaTxns {
 
@@ -34,7 +35,7 @@ export class SolanaTxns {
             SystemProgram.transfer({
                 fromPubkey: new PublicKey(routing.from.address),
                 toPubkey: new PublicKey(routing.to.address),
-                lamports: ValueUnits.fromValue(routing.amount, solToken.decimals).units, // 1 SOL = 1,000,000,000 lamports
+                lamports: RoutingHelper.BaseUnits_FromReadableValue(routing.amount, solToken.decimals).toNumber()    //ValueUnits.fromValue(routing.amount, solToken.decimals).units, // 1 SOL = 1,000,000,000 lamports
             })
         );
         return (txn);
@@ -58,7 +59,7 @@ export class SolanaTxns {
                 new PublicKey(token.address),
                 recipientTokenAccount,
                 new PublicKey(routing.from.address),
-                ValueUnits.fromValue(routing.amount, token.decimals).units,
+                RoutingHelper.BaseUnits_FromReadableValue(routing.amount, token.decimals).toNumber(),//ValueUnits.fromValue(routing.amount, token.decimals).units,
                 token.decimals
             )
         );
