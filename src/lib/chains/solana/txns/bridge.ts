@@ -22,6 +22,8 @@ import { DepositNote } from "../utils";
 import { BridgeToken, BridgeTokens, Routing, ValueUnits } from "../../../common";
 import { SolanaAccountsConfig, SolanaProgramId } from "../config";
 import { SolanaError } from "../solanaError";
+import { RoutingHelper } from "../../../common/routing/routing";
+import BigNumber from "bignumber.js";
 
 export class SolanaBridgeTxnsV1 {
 
@@ -150,7 +152,7 @@ export class SolanaBridgeTxnsV1 {
         return new Promise(async (resolve, reject) => {
             try {
 
-                let transferAmount: number;
+                let transferAmount: BigNumber;
                 if (!routing.from.address) throw new Error('Source address can not be found');
                 if (!routing.to.address) throw new Error('Destination address can not be found');
                 let asset = BridgeTokens.get("solana", routing.from.token);
@@ -160,11 +162,9 @@ export class SolanaBridgeTxnsV1 {
 
                 if (!routing.amount) {
                     throw new Error("amount can not be null");
-                } 
-                const amount_nanoUsdc = ValueUnits.fromValue(routing.amount, asset.decimals).units   
-
-                 transferAmount = routing.amount * 10 ** asset.decimals
-                  
+                }
+                const amount_nanoUsdc = RoutingHelper.BaseUnits_FromReadableValue(routing.amount, asset.decimals);
+                transferAmount = amount_nanoUsdc
 
                 if (routing.amount < 1) {
                     throw new Error("Minimum Deposit Amount should be >= 1")
@@ -183,8 +183,8 @@ export class SolanaBridgeTxnsV1 {
                         address: routing.to.address,
                         txn_signature: "",
                     },
-                    amount:  routing.amount ,
-                    units: BigInt(amount_nanoUsdc).toString(),
+                    amount: routing.amount,
+                    units: amount_nanoUsdc,
                 } as Routing;
 
                 const bridgeNodeInstructionData: DepositNote = {
@@ -231,7 +231,7 @@ export class SolanaBridgeTxnsV1 {
                         fromTokenAccount.address,
                         destinationPubkey,
                         PubKeywallet,
-                        transferAmount,
+                        transferAmount.toNumber(),
                         [],
                         TOKEN_PROGRAM_ID
 
@@ -261,7 +261,7 @@ export class SolanaBridgeTxnsV1 {
     public async HandleUsdcSwapUnsigned(routing: Routing, token: BridgeToken): Promise<Transaction | undefined> {
         return new Promise(async (resolve, reject) => {
             try {
-                let transferAmount: number;
+                let transferAmount: BigNumber;
                 if (!routing.from.address) throw new Error('Source address can not be found');
                 if (!routing.to.address) throw new Error('Destination address can not be found');
                 let asset = BridgeTokens.get("solana", routing.from.token);
@@ -271,12 +271,13 @@ export class SolanaBridgeTxnsV1 {
 
                 if (!routing.amount) {
                     throw new Error("amount can not be null");
-                } 
+                }
 
-                   const amount_nanoUsdc = ValueUnits.fromValue(routing.amount, token.decimals).units   
+                const amount_nanoUsdc = RoutingHelper.BaseUnits_FromReadableValue(routing.amount, asset.decimals);
+                //const amount_nanoUsdc = ValueUnits.fromValue(routing.amount, token.decimals).units   
 
-                    transferAmount = routing.amount * 10 ** asset.decimals
-                
+                transferAmount = amount_nanoUsdc
+
                 if (routing.amount < 1) {
                     throw new Error("Minimum Deposit Amount should be >= 1")
                 }
@@ -293,8 +294,8 @@ export class SolanaBridgeTxnsV1 {
                         address: routing.to.address,
                         txn_signature: "",
                     },
-                    amount: routing.amount ,
-                    units: BigInt(amount_nanoUsdc).toString(),
+                    amount: routing.amount,
+                    units: amount_nanoUsdc,
                 } as Routing;
 
                 const bridgeNodeInstructionData: DepositNote = {
@@ -339,7 +340,7 @@ export class SolanaBridgeTxnsV1 {
                         fromTokenAccount,
                         destinationPubkey,
                         PubKeywallet,
-                        transferAmount,
+                        transferAmount.toNumber(),
                         [],
                         TOKEN_PROGRAM_ID
 
@@ -390,12 +391,13 @@ export class SolanaBridgeTxnsV1 {
                 if (!toAddress) throw new Error("to address is required.  Could not deserialize address");
 
                 //Get Data
-                let amount = Number(ValueUnits.fromValue(routing.amount, token.decimals).units);
+                // let amount = Number(ValueUnits.fromValue(routing.amount, token.decimals).units);
+                let amount = RoutingHelper.BaseUnits_FromReadableValue(routing.amount, token.decimals);
                 let data = serialize(
                     BridgeInitSchema.init_schema,
                     new BridgeInitSchema({
                         algo_address: toAddress,
-                        amount,
+                        amount: amount.toNumber(),
                     })
                 );
 
@@ -461,12 +463,13 @@ export class SolanaBridgeTxnsV1 {
                 if (!toAddress) throw new Error("to address is required.  Could not deserialize address");
 
                 //Get Data
-                let amount = Number(ValueUnits.fromValue(routing.amount, token.decimals).units);
+                //let amount = Number(ValueUnits.fromValue(routing.amount, token.decimals).units);
+                let amount = RoutingHelper.BaseUnits_FromReadableValue(routing.amount, token.decimals);
                 let data = serialize(
                     BridgeInitSchema.init_schema,
                     new BridgeInitSchema({
                         algo_address: toAddress,
-                        amount,
+                        amount: amount.toNumber(),
                     })
                 );
 
