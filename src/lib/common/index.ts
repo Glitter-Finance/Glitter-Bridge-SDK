@@ -4,6 +4,7 @@ import {
     RoutingDefault, 
     RoutingPointDefault,
     RoutingString,
+    RoutingHelper,
     SetRoutingUnits
 }   from "./routing/routing";
 import {
@@ -25,7 +26,9 @@ import {
 import {
     ValueUnits
 } from "./utils/value_units";
-
+import{
+    Shorten
+} from "./utils/shorten";
 export{   
     Routing,
     RoutingPoint,
@@ -43,5 +46,7 @@ export{
     Precise,
     PreciseDecimals,
     ValueUnits,
-    LogProgress
+    LogProgress,
+    RoutingHelper,
+    Shorten
 }

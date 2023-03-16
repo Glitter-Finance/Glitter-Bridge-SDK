@@ -1,8 +1,8 @@
-import {  Connection, Keypair, PublicKey, sendAndConfirmTransaction, Transaction, TransactionInstruction } from '@solana/web3.js';
+import { Connection, Keypair, PublicKey, sendAndConfirmTransaction, Transaction, TransactionInstruction } from '@solana/web3.js';
 import { SolanaAccount, SolanaAccounts } from './accounts';
 import { SolanaAssets } from './assets';
 import { SolanaBridgeTxnsV1 } from './txns/bridge';
-import {  SolanaConfig, SolanaProgramId, SolanaPublicNetworks } from './config';
+import { SolanaConfig, SolanaProgramId, SolanaPublicNetworks } from './config';
 import { SolanaTxns } from './txns/txns';
 import * as util from 'util';
 import { BridgeToken, BridgeTokens, LogProgress, Precise, Routing, RoutingDefault, Sleep, ValueUnits } from '../../common';
@@ -60,16 +60,16 @@ export class SolanaConnect {
     ): Promise<Transaction | undefined> {
         return new Promise(async (resolve, reject) => {
 
-        try{
-            //Fail Safe
-            if (!this._client) throw new Error(SolanaError.CLIENT_NOT_SET);
-            if (!this._bridgeTxnsV1) throw new Error(SolanaError.BRIDGE_NOT_SET);
-            if (!this._accounts) throw new Error(SolanaError.ACCOUNTS_NOT_SET);
-            if (!this._assets) throw new Error(SolanaError.ASSETS_NOT_SET);
-            
-             //Get Token
-             const token = BridgeTokens.get("solana", fromSymbol);
-             if (!token) throw new Error(SolanaError.INVALID_ASSET);
+            try {
+                //Fail Safe
+                if (!this._client) throw new Error(SolanaError.CLIENT_NOT_SET);
+                if (!this._bridgeTxnsV1) throw new Error(SolanaError.BRIDGE_NOT_SET);
+                if (!this._accounts) throw new Error(SolanaError.ACCOUNTS_NOT_SET);
+                if (!this._assets) throw new Error(SolanaError.ASSETS_NOT_SET);
+
+                //Get Token
+                const token = BridgeTokens.get("solana", fromSymbol);
+                if (!token) throw new Error(SolanaError.INVALID_ASSET);
 
 
                 //Get routing
@@ -125,14 +125,14 @@ export class SolanaConnect {
             try {
 
                 //Fail Safe
-            if (!this._client) throw new Error(SolanaError.CLIENT_NOT_SET);
-            if (!this._bridgeTxnsV1) throw new Error(SolanaError.BRIDGE_NOT_SET);
-            if (!this._accounts) throw new Error(SolanaError.ACCOUNTS_NOT_SET);
-            if (!this._assets) throw new Error(SolanaError.ASSETS_NOT_SET);
-            
-             //Get Token
-             const token = BridgeTokens.get("solana", fromSymbol);
-             if (!token) throw new Error(SolanaError.INVALID_ASSET);
+                if (!this._client) throw new Error(SolanaError.CLIENT_NOT_SET);
+                if (!this._bridgeTxnsV1) throw new Error(SolanaError.BRIDGE_NOT_SET);
+                if (!this._accounts) throw new Error(SolanaError.ACCOUNTS_NOT_SET);
+                if (!this._assets) throw new Error(SolanaError.ASSETS_NOT_SET);
+
+                //Get Token
+                const token = BridgeTokens.get("solana", fromSymbol);
+                if (!token) throw new Error(SolanaError.INVALID_ASSET);
 
                 //Get routing
                 const routing = RoutingDefault();
@@ -261,11 +261,11 @@ export class SolanaConnect {
         return new Promise(async (resolve, reject) => {
             try {
 
-                   //Fail Safe
-            if (!this._client) throw new Error(SolanaError.CLIENT_NOT_SET);
-            if (!this._transactions) throw new Error(SolanaError.UNDEFINED_TRANSACTION);
-            if (!this._accounts) throw new Error(SolanaError.ACCOUNTS_NOT_SET);
-           
+                //Fail Safe
+                if (!this._client) throw new Error(SolanaError.CLIENT_NOT_SET);
+                if (!this._transactions) throw new Error(SolanaError.UNDEFINED_TRANSACTION);
+                if (!this._accounts) throw new Error(SolanaError.ACCOUNTS_NOT_SET);
+
                 //Get balance
                 const balance = await this.getBalance(signer.addr);
 
@@ -326,11 +326,11 @@ export class SolanaConnect {
         return new Promise(async (resolve, reject) => {
             try {
 
-           //Fail Safe
-            if (!this._client) throw new Error(SolanaError.CLIENT_NOT_SET);
-            if (!this._transactions) throw new Error(SolanaError.UNDEFINED_TRANSACTION);
-            if (!this._accounts) throw new Error(SolanaError.ACCOUNTS_NOT_SET);
-           
+                //Fail Safe
+                if (!this._client) throw new Error(SolanaError.CLIENT_NOT_SET);
+                if (!this._transactions) throw new Error(SolanaError.UNDEFINED_TRANSACTION);
+                if (!this._accounts) throw new Error(SolanaError.ACCOUNTS_NOT_SET);
+
                 //Get Transactions
                 console.log(`Sending ${routing.amount} SOL from ${signer.addr} to ${routing.to.address}`);
                 const txn = await this._transactions.sendSolTransaction(routing);
@@ -369,11 +369,11 @@ export class SolanaConnect {
                 if (!account) throw new Error(SolanaError.INVALID_ACCOUNT);
                 if (!token) throw new Error(SolanaError.INVALID_ASSET);
                 if (!this._assets) throw new Error(SolanaError.UNDEFINED_SOL_ASSETS);
-                
+
                 if (!this._client) throw new Error(SolanaError.CLIENT_NOT_SET);
                 if (!this._transactions) throw new Error(SolanaError.UNDEFINED_TRANSACTION);
                 if (!this._accounts) throw new Error(SolanaError.ACCOUNTS_NOT_SET);
-                
+
                 //get token accounts
                 const senderTokenAccount = await this._assets.getTokenAccount(account.pk, token);
                 const receiverTokenAccount = await this._assets.getTokenAccount(new PublicKey(routing.to.address), token);
@@ -559,11 +559,11 @@ export class SolanaConnect {
     public async getBalance(address: string): Promise<number> {
         return new Promise(async (resolve, reject) => {
             try {
-     
+
                 if (!this._client) throw new Error(SolanaError.CLIENT_NOT_SET);
                 if (!this._transactions) throw new Error(SolanaError.UNDEFINED_TRANSACTION);
                 if (!this._accounts) throw new Error(SolanaError.ACCOUNTS_NOT_SET);
-           
+
                 //get account
                 const account = this._accounts.getAccount(address);
                 if (!account) throw new Error(SolanaError.INVALID_ACCOUNT);
@@ -923,7 +923,7 @@ export class SolanaConnect {
     }
 
 
-        //Helper Functions
+    //Helper Functions
     async getTestAirDrop(signer: SolanaAccount): Promise<boolean> {
         // eslint-disable-next-line no-async-promise-executor
         return new Promise(async (resolve, reject) => {
@@ -943,10 +943,10 @@ export class SolanaConnect {
         return new Promise(async (resolve, reject) => {
             try {
 
-                if(!txn) throw new Error(SolanaError.UNDEFINED_TRANSACTION);
-                if(!account) throw new Error(SolanaError.UNDEFINED_ACCOUNTS);
-                if(!this._client) throw new Error(SolanaError.CLIENT_NOT_SET);
-                const wallet = Keypair.fromSecretKey(account.sk); 
+                if (!txn) throw new Error(SolanaError.UNDEFINED_TRANSACTION);
+                if (!account) throw new Error(SolanaError.UNDEFINED_ACCOUNTS);
+                if (!this._client) throw new Error(SolanaError.CLIENT_NOT_SET);
+                const wallet = Keypair.fromSecretKey(account.sk);
 
                 const txn_signature = await sendAndConfirmTransaction(this._client, txn, [wallet]);
 
@@ -968,14 +968,14 @@ export class SolanaConnect {
     public get assets() {
         return this._assets;
     }
-   
+
     // wallet- txn helper 
     public async sendSignedTransaction(txn: number[] | Uint8Array): Promise<string> {
         return new Promise(async (resolve, reject) => {
             try {
                 if (!txn) throw new Error("Transaction is not Signed");
                 if (!this._client) throw new Error(SolanaError.CLIENT_NOT_SET);
-                const txn_hash = await this._client.sendRawTransaction(txn,{
+                const txn_hash = await this._client.sendRawTransaction(txn, {
                     skipPreflight: false,
                     preflightCommitment: COMMITMENT
                 });
@@ -1033,6 +1033,11 @@ export class SolanaConnect {
     }
     public getToken(token: string): BridgeToken | undefined {
         return BridgeTokens.get("solana", token);
+    }
+
+     public async Reconnect(): Promise<void> {
+        if (this._config) this._client = new Connection(this._config.server);
+        Sleep(1000);
     }
 
 }

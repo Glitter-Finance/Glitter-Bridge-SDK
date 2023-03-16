@@ -84,8 +84,7 @@ export function SetRoutingUnits(routing: Routing, token: BridgeToken | undefined
 export class RoutingHelper {
     public static BaseUnits_FromReadableValue(value: number|BigNumber, decimals: number): BigNumber {
         let baseRaw = BigNumber(value).times(BigNumber(10).pow(decimals));
-        let baseString = baseRaw.toFixed(0);
-        return BigNumber(baseString);
+        return baseRaw.decimalPlaces(0,BigNumber.ROUND_DOWN);
     }
     public static ReadableValue_FromBaseUnits(baseUnits: BigNumber, decimals: number): BigNumber {
         let baseRaw = BigNumber(baseUnits).div(BigNumber(10).pow(decimals));

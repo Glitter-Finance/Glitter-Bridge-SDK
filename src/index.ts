@@ -48,6 +48,7 @@ import {
   RoutingDefault,
   RoutingPointDefault,
   RoutingString,
+  RoutingHelper,
   SetRoutingUnits,
 } from "./lib/common/routing/routing";
 import {
@@ -66,6 +67,7 @@ import {
   LogProgress,
 } from "./lib/common/utils/utils";
 import { ValueUnits } from "./lib/common/utils/value_units";
+import { Shorten } from "./lib/common/utils/shorten";
 import {convertToAscii,convertToNumber} from "./lib/chains/algorand/utils"
 import { GlitterBridgeSDK } from "./GlitterBridgeSDK";
 import { BridgeNetworks,NetworkIdentifiers } from "./lib/common/networks/networks";
@@ -121,6 +123,7 @@ export {
   RoutingDefault,
   RoutingPointDefault,
   RoutingString,
+  RoutingHelper,
   SetRoutingUnits,
   BridgeTokenConfig,
   BridgeToken,
@@ -146,5 +149,6 @@ export {
   NetworkIdentifiers,
   BridgeDepositEvent,
   BridgeReleaseEvent,
-  TransferEvent
+  TransferEvent,
+  Shorten
 };

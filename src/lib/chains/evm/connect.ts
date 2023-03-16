@@ -22,7 +22,7 @@ import {
 } from "../../common/networks/networks";
 import { BridgeType, ChainStatus, PartialBridgeTxn, TransactionType } from "../../common/transactions/transactions";
 import { BridgeToken, BridgeTokens } from "../../common/tokens/tokens";
-import { Routing, ValueUnits } from "../../common";
+import { Routing, RoutingHelper, ValueUnits } from "../../common";
 import { walletToAddress } from "../../common/utils/utils";
 import BigNumber from "bignumber.js";
 
@@ -358,109 +358,109 @@ export class EvmConnect {
     })
   }
 
-  public async getUSDCPartialTxn(txnID: string): Promise<PartialBridgeTxn> {
+  // public async getUSDCPartialTxn(txnID: string): Promise<PartialBridgeTxn> {
 
-    //USDC decimals
-    let decimals = 6;
+  //   //USDC decimals
+  //   let decimals = 6;
 
-    //Get logs
-    const logs = await this.parseLogs(txnID);
+  //   //Get logs
+  //   const logs = await this.parseLogs(txnID);
 
-    //Get Timestamp
-    const blockNumber = await this.getBlockNumber(txnID);
-    const timestamp_s = await this.getTimeStampFromBlockNumber(blockNumber);
-    const timestamp = new Date(timestamp_s * 1000);
+  //   //Get Timestamp
+  //   const blockNumber = await this.getBlockNumber(txnID);
+  //   const timestamp_s = await this.getTimeStampFromBlockNumber(blockNumber);
+  //   const timestamp = new Date(timestamp_s * 1000);
 
-    //Check deposit/transfer/release
-    const releaseEvent = logs?.find(
-      (log) => log.__type === "BridgeRelease"
-    ) as BridgeReleaseEvent;
+  //   //Check deposit/transfer/release
+  //   const releaseEvent = logs?.find(
+  //     (log) => log.__type === "BridgeRelease"
+  //   ) as BridgeReleaseEvent;
 
-    const depositEvent = logs?.find(
-      (log) => log.__type === "BridgeDeposit"
-    ) as BridgeDepositEvent;
+  //   const depositEvent = logs?.find(
+  //     (log) => log.__type === "BridgeDeposit"
+  //   ) as BridgeDepositEvent;
 
-    const transferEvent = logs?.find(
-      (log) => log.__type === "Transfer"
-    ) as TransferEvent;
+  //   const transferEvent = logs?.find(
+  //     (log) => log.__type === "Transfer"
+  //   ) as TransferEvent;
 
-    //Get transaction type
-    let type: TransactionType;
-    if (releaseEvent) {
-      type = TransactionType.Release;
-    } else if (depositEvent) {
-      type = TransactionType.Deposit;
-    } else {
-      type = TransactionType.Unknown;
-    }
+  //   //Get transaction type
+  //   let type: TransactionType;
+  //   if (releaseEvent) {
+  //     type = TransactionType.Release;
+  //   } else if (depositEvent) {
+  //     type = TransactionType.Deposit;
+  //   } else {
+  //     type = TransactionType.Unknown;
+  //   }
 
-    //Get return object
-    let returnTxn: PartialBridgeTxn = {
-      txnID: txnID,
-      txnIDHashed: this.getTxnHashed(txnID),
-      bridgeType: BridgeType.USDC,
-      txnType: type,
-      txnTimestamp: timestamp,
-      chainStatus: await this.getTxnStatus(txnID),
-      network: this.__network,
-      tokenSymbol: "usdc",
-      block: blockNumber,
-    };
+  //   //Get return object
+  //   let returnTxn: PartialBridgeTxn = {
+  //     txnID: txnID,
+  //     txnIDHashed: this.getTxnHashed(txnID),
+  //     bridgeType: BridgeType.USDC,
+  //     txnType: type,
+  //     txnTimestamp: timestamp,
+  //     chainStatus: await this.getTxnStatus(txnID),
+  //     network: this.__network,
+  //     tokenSymbol: "usdc",
+  //     block: blockNumber,
+  //   };
 
-    //Get txn params
-    if (type === TransactionType.Deposit && transferEvent) {
-      returnTxn.address = transferEvent.from;
-      returnTxn.units = BigInt(depositEvent.amount.toString()).toString();
-      returnTxn.amount = ValueUnits.fromUnits(BigInt(returnTxn.units), decimals).value;
+  //   //Get txn params
+  //   if (type === TransactionType.Deposit && transferEvent) {
+  //     returnTxn.address = transferEvent.from;
+  //     returnTxn.units =  BigNumber(depositEvent.amount.toString()) ;     
+  //     returnTxn.amount = RoutingHelper.ReadableValue_FromBaseUnits(returnTxn.units,decimals);
 
-      //Get Routing
-      let toNetwork = this.getChainFromID(depositEvent.destinationChainId);
-      let toAddress = toNetwork ? DeserializeEvmBridgeTransfer.deserializeAddress(toNetwork, depositEvent.destinationWallet) : "";
-      let routing: Routing = {
-        from: {
-          network: this.__network,
-          address: transferEvent.from,
-          token: "usdc",
-          txn_signature: txnID,
-        },
-        to: {
-          network: toNetwork?.toString() || "",
-          address: toAddress,
-          token: "usdc"
-        },
-        amount: returnTxn.amount,
-        units: BigNumber(returnTxn.units),
-      };
-      returnTxn.routing = routing;
+  //     //Get Routing
+  //     let toNetwork = this.getChainFromID(depositEvent.destinationChainId);
+  //     let toAddress = toNetwork ? DeserializeEvmBridgeTransfer.deserializeAddress(toNetwork, depositEvent.destinationWallet) : "";
+  //     let routing: Routing = {
+  //       from: {
+  //         network: this.__network,
+  //         address: transferEvent.from,
+  //         token: "usdc",
+  //         txn_signature: txnID,
+  //       },
+  //       to: {
+  //         network: toNetwork?.toString() || "",
+  //         address: toAddress,
+  //         token: "usdc"
+  //       },
+  //       amount: returnTxn.amount,
+  //       units: BigNumber(returnTxn.units),
+  //     };
+  //     returnTxn.routing = routing;
 
-    } else if (type === TransactionType.Release && transferEvent) {
+  //   } else if (type === TransactionType.Release && transferEvent) {
 
-      returnTxn.address = releaseEvent.destinationWallet;
-      returnTxn.units = BigInt(releaseEvent.amount.toString()).toString();
-      returnTxn.amount = ValueUnits.fromUnits(BigInt(returnTxn.units), decimals).value;
+  //     returnTxn.address = releaseEvent.destinationWallet;
+  //     returnTxn.units = BigInt(releaseEvent.amount.toString()).toString();
+  //     returnTxn.amount = ValueUnits.fromUnits(BigInt(returnTxn.units), decimals).value;
 
-      //Get Routing
-      let routing: Routing = {
-        from: {
-          network: "",
-          address: "",
-          token: "usdc",
-          txn_signature_hashed: releaseEvent.depositTransactionHash,
-        },
-        to: {
-          network: this.__network,
-          address: returnTxn.address,
-          token: "usdc",
-          txn_signature: txnID,
-        },
-        amount: returnTxn.amount,
-        units: BigNumber(returnTxn.units),
-      };
-      returnTxn.routing = routing;
+  //     //Get Routing
+  //     let routing: Routing = {
+  //       from: {
+  //         network: "",
+  //         address: "",
+  //         token: "usdc",
+  //         txn_signature_hashed: releaseEvent.depositTransactionHash,
+  //       },
+  //       to: {
+  //         network: this.__network,
+  //         address: returnTxn.address,
+  //         token: "usdc",
+  //         txn_signature: txnID,
+  //       },
+  //       amount: returnTxn.amount,
+  //       units: BigNumber(returnTxn.units),
+  //     };
+  //     returnTxn.routing = routing;
 
-    }
-    return Promise.resolve(returnTxn);
-  }
+  //   }
+  //   return Promise.resolve(returnTxn);
+  // }
 
   public get tokenBridgePollerAddress(): string | number | undefined {
     return undefined;
