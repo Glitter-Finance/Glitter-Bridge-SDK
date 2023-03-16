@@ -1,6 +1,6 @@
 {
   "name": "glitter-sdk-core",
-  "version": "1.0.2-8",
+  "version": "1.0.2-9",
   "description": "Glitter Finance Bridge: Connections Library",
   "main": "dist/index.js",
   "module": "dist/index.js",
