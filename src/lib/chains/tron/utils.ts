@@ -42,7 +42,7 @@ export function decodeEventData(
     switch (topic) {
         case "BridgeRelease":
             const decodedRelease = coder.decode(
-                ["address", "address", "uint256"],
+                ["address", "address", "uint256", "bytes32"],
                 !log.data.startsWith("0x") ? `0x${log.data}` : log.data
             );
             if (decodedRelease.length > 0) {

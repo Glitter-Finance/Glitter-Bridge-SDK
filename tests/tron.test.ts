@@ -43,5 +43,20 @@ describe("TRON SDk Test", () => {
             const humanUnitsBalance = Number(balance)
             expect(humanUnitsBalance).toBeTruthy()
             expect(humanUnitsBalance).toBeGreaterThan(0)
+        }),
+        it('Should provide BridgeRelease Event', async () => {
+            const sdk = new GlitterBridgeSDK();
+            sdk.setEnvironment(GlitterEnvironment.mainnet)
+
+            sdk.connect([
+                BridgeNetworks.TRON
+            ])
+
+            const tronConnect = sdk.tron
+            const logs = await tronConnect!.getBridgeLogs("922062ceba3f82dd6b3a5ec98f53c178fc4004f3c3a699125c966ce7a8397657")
+            const l = logs.find(x => x.__type === "BridgeRelease")
+
+            expect(l).toBeTruthy()
+            console.log(l)
         })
 })
