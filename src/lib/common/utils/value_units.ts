@@ -1,5 +1,8 @@
 import { Precise, PreciseDecimals } from "./utils";
 
+/**
+ * @deprecated The method should not be used. Please use RoutingHelper instead
+ */
 export class ValueUnits {
   public value: number = 0;
   public units: bigint = BigInt(0);

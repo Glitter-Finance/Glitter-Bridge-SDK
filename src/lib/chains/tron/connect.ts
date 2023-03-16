@@ -349,4 +349,17 @@ export class TronConnect {
     get tronConfig() {
         return this.__tronConfig
     }
+
+    public get usdcBridgeDepositAddress(): string | number | undefined {
+        return this.__tronConfig?.addresses.depositWallet;
+      }
+      public get usdcBridgeReceiverAddress(): string | number | undefined {
+        return this.__tronConfig?.addresses.releaseWallet;
+      }
+
+      public getTxnHashed(txnID: string): string {
+        return ethers.utils.keccak256(`0x${txnID}`);
+      }
+
+
 }
