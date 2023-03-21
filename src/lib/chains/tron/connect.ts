@@ -30,6 +30,10 @@ export class TronConnect {
         this.initContracts();
     }
 
+    public setApiKey(apiKey: string) {
+        this.__tronWeb.setHeader({ "TRON-PRO-API-KEY": apiKey });
+    }
+
     private async initContracts(): Promise<void> {
         const usdcConf = this.__tronConfig.tokens.find(x => x.symbol.toLowerCase() === "usdc")
 
@@ -352,14 +356,14 @@ export class TronConnect {
 
     public get usdcBridgeDepositAddress(): string | number | undefined {
         return this.__tronConfig?.addresses.depositWallet;
-      }
-      public get usdcBridgeReceiverAddress(): string | number | undefined {
+    }
+    public get usdcBridgeReceiverAddress(): string | number | undefined {
         return this.__tronConfig?.addresses.releaseWallet;
-      }
+    }
 
-      public getTxnHashed(txnID: string): string {
+    public getTxnHashed(txnID: string): string {
         return ethers.utils.keccak256(`0x${txnID}`);
-      }
+    }
 
 
 }
