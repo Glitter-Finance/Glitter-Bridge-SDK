@@ -1,4 +1,4 @@
-import { BridgeNetworks } from "glitter-sdk-core/dist";
+import { BridgeNetworks } from "@glitter-finance/sdk-core";
 
 export class ServerError {
     static ClientNotSet(network: BridgeNetworks): Error {

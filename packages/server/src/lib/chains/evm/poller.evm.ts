@@ -1,4 +1,4 @@
-import { BridgeNetworks, BridgeType, EvmConnect, PartialBridgeTxn } from "glitter-sdk-core/dist";
+import { BridgeNetworks, BridgeType, EvmConnect, PartialBridgeTxn } from "@glitter-finance/sdk-core";
 import { GlitterSDKServer } from "../../glitterSDKServer";
 import { Cursor, NewCursor } from "../../common/cursor";
 import { GlitterPoller, PollerResult } from "../../common/poller.Interface";

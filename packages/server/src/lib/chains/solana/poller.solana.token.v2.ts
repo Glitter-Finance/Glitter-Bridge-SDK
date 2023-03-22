@@ -4,7 +4,7 @@ import {
     TransactionSignature,
     VersionedTransactionResponse,
 } from "@solana/web3.js";
-import { PartialBridgeTxn } from "glitter-sdk-core/dist";
+import { PartialBridgeTxn } from "@glitter-finance/sdk-core";
 import { GlitterSDKServer } from "../../glitterSDKServer";
 
 export class SolanaV2Parser {

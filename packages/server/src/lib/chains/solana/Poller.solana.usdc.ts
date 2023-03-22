@@ -17,7 +17,7 @@ import {
     RoutingHelper,
     SolanaPublicNetworks,
     TransactionType,
-} from "glitter-sdk-core/dist";
+} from "@glitter-finance/sdk-core";
 import { GlitterSDKServer } from "../../glitterSDKServer";
 import { Cursor } from "../../common/cursor";
 import { ServerError } from "../../common/serverErrors";

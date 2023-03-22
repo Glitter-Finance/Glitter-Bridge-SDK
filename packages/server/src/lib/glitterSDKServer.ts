@@ -1,6 +1,5 @@
-import { BridgeNetworks, BridgeType, GlitterBridgeSDK, GlitterEnvironment } from "glitter-sdk-core";
+import { BridgeNetworks, GlitterBridgeSDK, GlitterEnvironment } from "@glitter-finance/sdk-core";
 import { GlitterPoller } from "./common/poller.Interface";
-import { Cursor } from "./common/cursor";
 import { GlitterAlgorandPoller } from "./chains/algorand/poller.algorand";
 import { GlitterSolanaPoller } from "./chains/solana/poller.solana";
 import { GlitterEVMPoller } from "./chains/evm/poller.evm";

@@ -1,4 +1,4 @@
-import { BridgeNetworks, PartialBridgeTxn } from "glitter-sdk-core/dist";
+import { BridgeNetworks, PartialBridgeTxn } from "@glitter-finance/sdk-core";
 import { GlitterSDKServer } from "../glitterSDKServer";
 import { Cursor } from "./cursor";
 

@@ -4,7 +4,7 @@ import {
     PublicKey,
     SignaturesForAddressOptions,
 } from "@solana/web3.js";
-import { BridgeNetworks, BridgeType, PartialBridgeTxn } from "glitter-sdk-core/dist";
+import { BridgeNetworks, BridgeType, PartialBridgeTxn } from "@glitter-finance/sdk-core";
 import { GlitterSDKServer } from "../../glitterSDKServer";
 import { Cursor, NewCursor, CursorBatch, CompleteBatch } from "../../common/cursor";
 import { GlitterPoller, PollerResult } from "../../common/poller.Interface";

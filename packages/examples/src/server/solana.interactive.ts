@@ -1,10 +1,11 @@
 import { setupNoCursor, SOLANA_CACHED_TXIDS, testPollOnce } from "../tests_archive/solana.tests.common";
 import * as util from "util";
-import { GlitterSDKServer } from "../../../server/src/lib/glitterSDKServer";
-import { BridgeNetworks, GlitterEnvironment, Sleep, Shorten, PartialBridgeTxn } from "glitter-sdk-core/dist";
+import { GlitterSDKServer } from "@glitter-finance/sdk-server/dist";
+import { BridgeNetworks, GlitterEnvironment, Sleep, Shorten, PartialBridgeTxn } from "@glitter-finance/sdk-core";
 import assert from "assert";
 import { Cursor } from "../../../server/src/lib/common/cursor";
 const yargs = require("yargs");
+import {} from "@solana/web3.js";
 
 //Demo Parameters
 let SPEED = 0.85;

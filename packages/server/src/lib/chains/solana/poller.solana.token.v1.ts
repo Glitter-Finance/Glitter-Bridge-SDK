@@ -21,7 +21,7 @@ import {
     RoutingHelper,
     Sleep,
     TransactionType,
-} from "glitter-sdk-core/dist";
+} from "@glitter-finance/sdk-core";
 import { GlitterSDKServer } from "../../glitterSDKServer";
 import { ServerError } from "../../common/serverErrors";
 import { SolanaPollerCommon } from "./poller.solana.common";

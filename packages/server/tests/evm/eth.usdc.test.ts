@@ -1,4 +1,4 @@
-import { BridgeNetworks, GlitterEnvironment, Sleep } from "glitter-sdk-core/dist";
+import { BridgeNetworks, GlitterEnvironment, Sleep } from "@glitter-finance/sdk-core";
 import { GlitterSolanaPoller } from "../../src/lib/chains/solana/poller.solana";
 import { GlitterPoller } from "../../src/lib/common/poller.Interface";
 import { GlitterSDKServer } from "../../src/lib/glitterSDKServer";
