@@ -10,7 +10,8 @@
         "prepare": "husky install",
         "build:core": "yarn workspace @glitter/sdk-core build",
         "release:core": "npm run build-and-release -w ./packages/core",
-        "release:server": "npm run build-and-release -w ./packages/server"
+        "release:server": "npm run build-and-release -w ./packages/server",
+        "example:server-solana": "npm run example:solana -w ./packages/examples"
     },
     "devDependencies": {
         "@types/node": "^18.15.3",

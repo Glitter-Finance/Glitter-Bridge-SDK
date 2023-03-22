@@ -1,9 +1,8 @@
 import { SOLANA_CACHED_TXIDS } from "./solana.txns";
 import * as util from "util";
-import { GlitterSDKServer } from "@glitter-finance/sdk-server/dist";
+import { GlitterSDKServer, Cursor } from "@glitter-finance/sdk-server/dist";
 import { BridgeNetworks, GlitterEnvironment, Sleep, Shorten, PartialBridgeTxn } from "@glitter-finance/sdk-core";
 import assert from "assert";
-import { Cursor } from "../../../server/src/lib/common/cursor";
 const yargs = require("yargs");
 import {} from "@solana/web3.js";
 
