@@ -1,1 +1,1 @@
-# Glitter-Bridge-Connections
+#Glitter-Finance SDK (JavaScript/TypeScript)
