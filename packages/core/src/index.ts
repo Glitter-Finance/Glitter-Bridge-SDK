@@ -48,8 +48,7 @@ import {
 } from "./lib/common/routing/routing";
 import { BridgeTokenConfig, BridgeToken, BridgeTokenDefault, BridgeTokens } from "./lib/common/tokens/tokens";
 
-import { Logger } from "./lib/common/utils/logger";
-import { InputParams, Sleep, Precise, PreciseDecimals, LogProgress } from "./lib/common/utils/utils";
+import { Sleep, Precise, PreciseDecimals, LogProgress } from "./lib/common/utils/utils";
 import { ValueUnits } from "./lib/common/utils/value_units";
 import { Shorten } from "./lib/common/utils/shorten";
 import { convertToAscii, convertToNumber } from "./lib/chains/algorand/utils";
@@ -110,8 +109,6 @@ export {
     BridgeToken,
     BridgeTokenDefault,
     BridgeTokens,
-    Logger,
-    InputParams,
     Sleep,
     Precise,
     PreciseDecimals,

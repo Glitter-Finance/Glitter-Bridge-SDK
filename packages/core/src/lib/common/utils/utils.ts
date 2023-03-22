@@ -1,14 +1,13 @@
 import { PublicKey } from "@solana/web3.js";
 import algosdk from "algosdk";
-import minimist = require("minimist");
 import * as readline from "readline";
 
-export class InputParams {
-    static get(field: string): string | undefined {
-        const argv = minimist(process.argv.slice(2));
-        return argv[field];
-    }
-}
+// export class InputParams {
+//     static get(field: string): string | undefined {
+//         const argv = minimist(process.argv.slice(2));
+//         return argv[field];
+//     }
+// }
 
 export function Sleep(ms: number) {
     return new Promise((resolve) => setTimeout(resolve, ms));

@@ -15,15 +15,15 @@
     },
     "repository": {
         "type": "git",
-        "url": "git+https://github.com/Glitter-Finance/Glitter-Bridge-SDK-NodeServer.git"
+        "url": "git+https://github.com/Glitter-Finance/SDK.git"
     },
     "keywords": [],
     "author": "Glitter Finanace",
     "license": "ISC",
     "bugs": {
-        "url": "https://github.com/Glitter-Finance/Glitter-Bridge-SDK-NodeServer/issues"
+        "url": "https://github.com/Glitter-Finance/SDK/issues"
     },
-    "homepage": "https://github.com/Glitter-Finance/Glitter-Bridge-SDK-NodeServer#readme",
+    "homepage": "https://github.com/Glitter-Finance/SDK#readme",
     "devDependencies": {
         "@types/jest": "^29.4.0",
         "@types/minimist": "^1.2.2",
@@ -44,7 +44,7 @@
         "borsh": "0.7.0",
         "bs58": "^5.0.0",
         "ethers": "^5.7.2",
-        "glitter-sdk-core": "1.1.0-6",
+        "@glitter-finance/sdk-core": "1.1.0-11",
         "yargs": "^17.7.1"
     },
     "release-it": {

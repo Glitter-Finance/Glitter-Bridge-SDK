@@ -2,6 +2,7 @@
     "name": "glitter-finance-sdk",
     "version": "1.0.0",
     "author": "Glitter Finance",
+    "private": true,
     "workspaces": [
         "packages/*"
     ],
