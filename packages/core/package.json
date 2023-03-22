@@ -59,8 +59,7 @@
         "typescript": "^4.9.4"
     },
     "publishConfig": {
-        "access": "public",
-        "@glitter-finance:registry": "https://npm.pkg.github.com"
+        "access": "public"
     },
     "files": [
         "dist/**/*"
