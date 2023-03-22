@@ -1,16 +1,14 @@
 {
-    "name": "@glitter/sdk-server",
+    "name": "@glitter-finance/sdk-server",
     "version": "1.0.0",
     "description": "Glitter Finance: SDK (Server)",
     "main": "dist/index.js",
     "module": "dist/index.js",
     "types": "dist/index.d.js",
     "scripts": {
-        "solanapollertest": "jest solana.test",
-        "solanaUsdcpollertest": "jest usdcPoller_s.test",
-        "algotest": "jest src/algorand",
-        "evmtest": "jest src/evm",
+        "build": "npx tsc",
         "release": "release-it",
+        "build-and-release": "npm run build && npm run release",
         "example:solana": "npx ts-node examples/solana.interactive.ts"
     },
     "repository": {
@@ -44,7 +42,7 @@
         "borsh": "0.7.0",
         "bs58": "^5.0.0",
         "ethers": "^5.7.2",
-        "@glitter-finance/sdk-core": "1.1.0-11",
+        "@glitter-finance/sdk-core": "1.1.0-12",
         "yargs": "^17.7.1"
     },
     "release-it": {
