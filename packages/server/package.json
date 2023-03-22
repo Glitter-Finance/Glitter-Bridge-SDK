@@ -1,6 +1,6 @@
 {
     "name": "@glitter-finance/sdk-server",
-    "version": "1.0.0",
+    "version": "1.0.1-0",
     "description": "Glitter Finance: SDK (Server)",
     "main": "dist/index.js",
     "module": "dist/index.js",
@@ -24,7 +24,6 @@
     "homepage": "https://github.com/Glitter-Finance/SDK#readme",
     "devDependencies": {
         "@types/jest": "^29.4.0",
-        "@types/minimist": "^1.2.2",
         "jest": "^29.4.3",
         "ts-jest": "^29.0.5",
         "ts-node": "^10.9.1",
@@ -42,12 +41,14 @@
         "borsh": "0.7.0",
         "bs58": "^5.0.0",
         "ethers": "^5.7.2",
-        "@glitter-finance/sdk-core": "1.1.0-12",
-        "yargs": "^17.7.1"
+        "@glitter-finance/sdk-core": "1.1.0-12"
     },
     "release-it": {
         "github": {
             "release": true
         }
+    },
+    "publishConfig": {
+        "access": "public"
     }
 }
