@@ -5,10 +5,12 @@ import { BridgeDepositEvent, BridgeReleaseEvent, TransferEvent } from "../evm";
 import { TronConfig } from "./types";
 import { decodeEventData, getLogByEventSignature, hexToBytes } from "./utils";
 import { walletToAddress } from "../../common/utils/utils";
-import TronWeb from "tronweb";
 import Trc20DetailedAbi from "./abi/TRC20Detailed.json";
 import TokenBridgeAbi from "./abi/TokenBridge.json";
 import algosdk from "algosdk";
+
+// eslint-disable-next-line @typescript-eslint/no-var-requires
+const TronWeb = require("tronweb");
 
 export class TronConnect {
     protected __tronConfig: TronConfig;

@@ -1,9 +1,9 @@
 import { setupNoCursor, SOLANA_CACHED_TXIDS, testPollOnce } from "../tests_archive/solana.tests.common";
 import * as util from "util";
-import { GlitterSDKServer } from "../src/lib/glitterSDKServer";
+import { GlitterSDKServer } from "../../../server/src/lib/glitterSDKServer";
 import { BridgeNetworks, GlitterEnvironment, Sleep, Shorten, PartialBridgeTxn } from "glitter-sdk-core/dist";
 import assert from "assert";
-import { Cursor } from "../src/lib/common/cursor";
+import { Cursor } from "../../../server/src/lib/common/cursor";
 const yargs = require("yargs");
 
 //Demo Parameters

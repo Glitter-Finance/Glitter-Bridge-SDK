@@ -1,6 +1,5 @@
 import { PublicKey } from "@solana/web3.js";
 import { ethers } from "ethers";
-import TronWeb from "tronweb";
 import { fromHexString } from "../../common/utils/bytes";
 import algoSdk from "algosdk";
 import {
@@ -9,6 +8,9 @@ import {
     getNetworkByNumericId,
     getNumericNetworkId,
 } from "../../common/networks/networks";
+
+// eslint-disable-next-line @typescript-eslint/no-var-requires
+const TronWeb = require("tronweb");
 
 export class SerializeEvmBridgeTransfer {
     /**

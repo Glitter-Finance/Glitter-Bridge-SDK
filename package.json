@@ -8,7 +8,8 @@
     ],
     "scripts": {
         "prepare": "husky install",
-        "build:core": "yarn workspace @glitter/sdk-core build"
+        "build:core": "yarn workspace @glitter/sdk-core build",
+        "release:core": "npm run build-and-release -w ./packages/core"
     },
     "devDependencies": {
         "@types/node": "^18.15.3",

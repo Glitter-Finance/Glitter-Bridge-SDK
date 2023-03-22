@@ -1,18 +1,11 @@
 {
-    "name": "@glitter/sdk-server",
+    "name": "@glitter/sdk-examples",
     "version": "1.0.0",
-    "description": "Glitter Finance: SDK (Server)",
+    "description": "Glitter Finance Bridge: SDK Examples",
     "main": "dist/index.js",
     "module": "dist/index.js",
     "types": "dist/index.d.js",
-    "scripts": {
-        "solanapollertest": "jest solana.test",
-        "solanaUsdcpollertest": "jest usdcPoller_s.test",
-        "algotest": "jest src/algorand",
-        "evmtest": "jest src/evm",
-        "release": "release-it",
-        "example:solana": "npx ts-node examples/solana.interactive.ts"
-    },
+    "scripts": {},
     "repository": {
         "type": "git",
         "url": "git+https://github.com/Glitter-Finance/Glitter-Bridge-SDK-NodeServer.git"
