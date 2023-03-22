@@ -1,11 +1,4 @@
-import {
-    ConfirmedSignatureInfo,
-    ParsedInstruction,
-    ParsedTransactionWithMeta,
-    PartiallyDecodedInstruction,
-    TransactionSignature,
-    VersionedTransactionResponse,
-} from "@solana/web3.js";
+import { ParsedInstruction, ParsedTransactionWithMeta, PartiallyDecodedInstruction } from "@solana/web3.js";
 import bs58 from "bs58";
 import {
     BridgeNetworks,

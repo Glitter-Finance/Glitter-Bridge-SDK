@@ -1,4 +1,4 @@
-import { setupNoCursor, SOLANA_CACHED_TXIDS, testPollOnce } from "../tests_archive/solana.tests.common";
+import { SOLANA_CACHED_TXIDS } from "./solana.txns";
 import * as util from "util";
 import { GlitterSDKServer } from "@glitter-finance/sdk-server/dist";
 import { BridgeNetworks, GlitterEnvironment, Sleep, Shorten, PartialBridgeTxn } from "@glitter-finance/sdk-core";

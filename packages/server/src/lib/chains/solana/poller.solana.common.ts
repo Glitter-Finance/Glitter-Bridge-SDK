@@ -1,9 +1,4 @@
-import {
-    ParsedTransactionWithMeta,
-    TokenBalance,
-    TransactionResponse,
-    VersionedTransactionResponse,
-} from "@solana/web3.js";
+import { ParsedTransactionWithMeta, TokenBalance } from "@solana/web3.js";
 import { GlitterSDKServer } from "../../glitterSDKServer";
 
 export class SolanaPollerCommon {

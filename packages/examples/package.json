@@ -37,7 +37,7 @@
         "borsh": "0.7.0",
         "bs58": "^5.0.0",
         "ethers": "^5.7.2",
-        "@glitter-finance/sdk-server": "1.0.1-1",
+        "@glitter-finance/sdk-server": "1.0.1-2",
         "yargs": "^17.7.1"
     },
     "release-it": {

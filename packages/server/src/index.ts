@@ -4,5 +4,14 @@ import { GlitterSolanaPoller } from "./lib/chains/solana/poller.solana";
 import { GlitterSDKServer } from "./lib/glitterSDKServer";
 import { ServerError } from "./lib/common/serverErrors";
 import { GlitterPoller } from "./lib/common/poller.Interface";
+import { Cursor } from "./lib/common/cursor";
 
-export { GlitterAlgorandPoller, GlitterEVMPoller, GlitterSolanaPoller, GlitterSDKServer, ServerError, GlitterPoller };
+export {
+    GlitterAlgorandPoller,
+    GlitterEVMPoller,
+    GlitterSolanaPoller,
+    GlitterSDKServer,
+    ServerError,
+    GlitterPoller,
+    Cursor,
+};
