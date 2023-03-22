@@ -1,10 +1,11 @@
 {
     "name": "@glitter/sdk-core",
-    "version": "1.1.0-7",
+    "version": "1.1.0-8",
     "description": "Glitter Finance SDK: Core Functions",
     "main": "dist/index.js",
     "module": "dist/index.js",
     "types": "dist/index.d.js",
+    "private": false,
     "scripts": {
         "test": "yarn jest",
         "build": "npx tsc",
