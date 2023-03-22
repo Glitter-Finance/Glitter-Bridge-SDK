@@ -1230,7 +1230,7 @@
     "@solana/buffer-layout-utils" "^0.2.0"
     buffer "^6.0.3"
 
-"@solana/web3.js@^1.32.0", "@solana/web3.js@^1.65.0", "@solana/web3.js@^1.70.3":
+"@solana/web3.js@^1.32.0", "@solana/web3.js@^1.65.0", "@solana/web3.js@^1.70.3", "@solana/web3.js@^1.73.2":
   version "1.74.0"
   resolved "https://registry.npmjs.org/@solana/web3.js/-/web3.js-1.74.0.tgz"
   integrity sha512-RKZyPqizPCxmpMGfpu4fuplNZEWCrhRBjjVstv5QnAJvgln1jgOfgui+rjl1ExnqDnWKg9uaZ5jtGROH/cwabg==
@@ -1900,6 +1900,11 @@ async@^3.2.3:
   resolved "https://registry.npmjs.org/async/-/async-3.2.4.tgz"
   integrity sha512-iAB+JbDEGXhyIUavoDl9WP/Jj106Kz9DEn1DPgYw5ruDn0e3Wgi3sKFm55sASdGBNOQB8F59d9qQ7deqrHA8wQ==
 
+asynckit@^0.4.0:
+  version "0.4.0"
+  resolved "https://registry.yarnpkg.com/asynckit/-/asynckit-0.4.0.tgz#c79ed97f7f34cb8f2ba1bc9790bcc366474b4b79"
+  integrity sha512-Oei9OH4tRh0YqU3GxhX79dM/mwVgvbZJaSNaRk+bshkj0S5cfHcgYakreBjrHwatXKbz+IoIdYLxrKim2MjW0Q==
+
 available-typed-arrays@^1.0.5:
   version "1.0.5"
   resolved "https://registry.npmjs.org/available-typed-arrays/-/available-typed-arrays-1.0.5.tgz"
@@ -1918,6 +1923,15 @@ axios@^0.26.1:
   integrity sha512-fPwcX4EvnSHuInCMItEhAGnaSEXRBjtzh9fOtsE6E1G6p7vl7edEeZe11QHf18+6+9gR5PbKV/sGKNaD8YaMeA==
   dependencies:
     follow-redirects "^1.14.8"
+
+axios@^1.3.2:
+  version "1.3.4"
+  resolved "https://registry.yarnpkg.com/axios/-/axios-1.3.4.tgz#f5760cefd9cfb51fd2481acf88c05f67c4523024"
+  integrity sha512-toYm+Bsyl6VC5wSkfkbbNB6ROv7KY93PEBBL6xyDczaIHasAiv4wPqQ/c4RjoQzipxRD2W5g21cOqQulZ7rHwQ==
+  dependencies:
+    follow-redirects "^1.15.0"
+    form-data "^4.0.0"
+    proxy-from-env "^1.1.0"
 
 babel-jest@^29.5.0:
   version "29.5.0"
@@ -2066,7 +2080,7 @@ bn.js@^5.0.0, bn.js@^5.2.0, bn.js@^5.2.1:
   resolved "https://registry.npmjs.org/bn.js/-/bn.js-5.2.1.tgz"
   integrity sha512-eXRvHzWyYPBuB4NBy0cmYQjGitUrtqwbvlzP3G6VFnNRbsZQIxQ10PbKKHt8gZ/HW/D/747aDl+QkDqg3KQLMQ==
 
-borsh@^0.7.0:
+borsh@0.7.0, borsh@^0.7.0:
   version "0.7.0"
   resolved "https://registry.npmjs.org/borsh/-/borsh-0.7.0.tgz"
   integrity sha512-CLCsZGIBCFnPtkNnieW/a8wmreDmfUtjU2m9yHrzPXIlNbqVs0AQrSatSG6vdNYUqdc83tkQi2eHfF98ubzQLA==
@@ -2407,6 +2421,13 @@ colorspace@1.1.x:
     color "^3.1.3"
     text-hex "1.0.x"
 
+combined-stream@^1.0.8:
+  version "1.0.8"
+  resolved "https://registry.yarnpkg.com/combined-stream/-/combined-stream-1.0.8.tgz#c3d45a8b34fd730631a110a8a2520682b31d5a7f"
+  integrity sha512-FQN4MRfuJeHf7cBbBMJFXhKSDq+2kAArBlmRBvcvFE5BB1HZKXtSFASDhdlz9zOYwxh8lDdnvmMOe/+5cdoEdg==
+  dependencies:
+    delayed-stream "~1.0.0"
+
 commander@^2.12.1, commander@^2.20.3:
   version "2.20.3"
   resolved "https://registry.npmjs.org/commander/-/commander-2.20.3.tgz"
@@ -2633,6 +2654,11 @@ delay@^5.0.0:
   version "5.0.0"
   resolved "https://registry.npmjs.org/delay/-/delay-5.0.0.tgz"
   integrity sha512-ReEBKkIfe4ya47wlPYf/gu5ib6yUG0/Aez0JQZQz94kiWtRQvZIQbTiehsnwHvLSWJnQdhVeqYue7Id1dKr0qw==
+
+delayed-stream@~1.0.0:
+  version "1.0.0"
+  resolved "https://registry.yarnpkg.com/delayed-stream/-/delayed-stream-1.0.0.tgz#df3ae199acadfb7d440aaae0b29e2272b24ec619"
+  integrity sha512-ZySD7Nf91aLB0RxL4KGrKHBXl7Eds1DAmEdcoVawXnLD7SDhpNgtuII2aAkg7a7QS41jxPSZ17p4VdGnMHk3MQ==
 
 depd@2.0.0, depd@^2.0.0:
   version "2.0.0"
@@ -3292,7 +3318,7 @@ fn.name@1.x.x:
   resolved "https://registry.npmjs.org/fn.name/-/fn.name-1.1.0.tgz"
   integrity sha512-GRnmB5gPyJpAhTQdSZTSp9uaPSvl09KoYcMQtsB9rQoOmzs9dH6ffeccH+Z+cv6P68Hu5bC6JjRh4Ah/mHSNRw==
 
-follow-redirects@^1.14.0, follow-redirects@^1.14.8:
+follow-redirects@^1.14.0, follow-redirects@^1.14.8, follow-redirects@^1.15.0:
   version "1.15.2"
   resolved "https://registry.npmjs.org/follow-redirects/-/follow-redirects-1.15.2.tgz"
   integrity sha512-VQLG33o04KaQ8uYi2tVNbdrWp1QWxNNea+nmIB4EVM28v0hmP17z7aG1+wAkNzVq4KeXTq3221ye5qTJP91JwA==
@@ -3308,6 +3334,15 @@ form-data-encoder@^2.1.2:
   version "2.1.4"
   resolved "https://registry.npmjs.org/form-data-encoder/-/form-data-encoder-2.1.4.tgz"
   integrity sha512-yDYSgNMraqvnxiEXO4hi88+YZxaHC6QKzb5N84iRCTDeRO7ZALpir/lVmf/uXUhnwUr2O4HU8s/n6x+yNjQkHw==
+
+form-data@^4.0.0:
+  version "4.0.0"
+  resolved "https://registry.yarnpkg.com/form-data/-/form-data-4.0.0.tgz#93919daeaf361ee529584b9b31664dc12c9fa452"
+  integrity sha512-ETEklSGi5t0QMZuiXoA/Q6vcnxcLQP5vdugSpuAyi6SVGi2clPPp+xgEhuMaHC+zGgn31Kd235W35f7Hykkaww==
+  dependencies:
+    asynckit "^0.4.0"
+    combined-stream "^1.0.8"
+    mime-types "^2.1.12"
 
 formdata-polyfill@^4.0.10:
   version "4.0.10"
@@ -3441,6 +3476,31 @@ glitter-evm-contracts@^1.0.32:
     dotenv "^16.0.3"
     ethers "^5.7.2"
     uuid "^9.0.0"
+
+glitter-sdk-core@1.1.0-6:
+  version "1.1.0-6"
+  resolved "https://registry.yarnpkg.com/glitter-sdk-core/-/glitter-sdk-core-1.1.0-6.tgz#37a36441c8efeec844fd9a39c86f7d233d0d80a8"
+  integrity sha512-0zBIdGB7eOpWCbD11RxtQzAUQaY8zfyEJB7RxkVmGOzC8CllZBiBwf7DW72mKhbxuOe6VGiv6nZMITY5bEoPaw==
+  dependencies:
+    "@circle-fin/circle-sdk" "^1.3.0"
+    "@perawallet/connect" "^1.0.7"
+    "@randlabs/myalgo-connect" "^1.4.2"
+    "@solana/spl-token" "^0.3.6"
+    "@solana/web3.js" "^1.65.0"
+    algosdk "^1.24.1"
+    bignumber.js "^9.1.1"
+    bip39 "^3.0.4"
+    bs58 "^5.0.0"
+    chalk "4.1.0"
+    dotenv "^16.0.3"
+    ed25519-hd-key "^1.3.0"
+    ethers "^5.7.2"
+    eventemitter3 "^5.0.0"
+    glitter-evm-contracts "^1.0.32"
+    minimist latest
+    tronweb "^5.1.0"
+    tweetnacl "^1.0.3"
+    winston latest
 
 glob-parent@^5.1.2:
   version "5.1.2"
@@ -4818,7 +4878,7 @@ mime-db@1.52.0:
   resolved "https://registry.npmjs.org/mime-db/-/mime-db-1.52.0.tgz"
   integrity sha512-sPU4uV7dYlvtWJxwwxHD0PuihVNiE7TyAbQ5SWxDCB9mUYvOgroQOwYQQOKPJ8CIbE+1ETVlOoK1UC2nU3gYvg==
 
-mime-types@2.1.35:
+mime-types@2.1.35, mime-types@^2.1.12:
   version "2.1.35"
   resolved "https://registry.npmjs.org/mime-types/-/mime-types-2.1.35.tgz"
   integrity sha512-ZDY+bPm5zTTF+YpCrAU9nK0UgICYPT0QtT1NZWFv4s++TNkcgVaT0g6+4R2uI4MjQjzysHB1zxuWL50hzaeXiw==
@@ -5337,7 +5397,7 @@ proxy-agent@5.0.0:
     proxy-from-env "^1.0.0"
     socks-proxy-agent "^5.0.0"
 
-proxy-from-env@^1.0.0:
+proxy-from-env@^1.0.0, proxy-from-env@^1.1.0:
   version "1.1.0"
   resolved "https://registry.npmjs.org/proxy-from-env/-/proxy-from-env-1.1.0.tgz"
   integrity sha512-D+zkORCbA9f1tdWRK0RaCR3GPv50cMxcrz4X8k5LTSUD1Dkw47mKJEZQNunItRTkWwgtaUSo1RVFRIG9ZXiFYg==
@@ -6125,7 +6185,7 @@ tslib@^2.0.1, tslib@^2.1.0:
   resolved "https://registry.npmjs.org/tslib/-/tslib-2.5.0.tgz"
   integrity sha512-336iVw3rtn2BUK7ORdIAHTyxHGRIHVReokCR3XjbckJMK7ms8FysBfhLR8IXnAgy7T0PTPNBWKiH514FOW/WSg==
 
-tslint@latest:
+tslint@^6.1.3, tslint@latest:
   version "6.1.3"
   resolved "https://registry.npmjs.org/tslint/-/tslint-6.1.3.tgz"
   integrity sha512-IbR4nkT96EQOvKE2PW/djGz8iGNeJ4rF2mBfiYaR/nvUWYKJhLwimoJKgjIFEIDibBtOevj7BqCRL4oHeWWUCg==
@@ -6223,7 +6283,7 @@ typedarray-to-buffer@3.1.5, typedarray-to-buffer@^3.1.5:
   dependencies:
     is-typedarray "^1.0.0"
 
-typescript@^4.9.4:
+typescript@^4.9.4, typescript@^4.9.5:
   version "4.9.5"
   resolved "https://registry.npmjs.org/typescript/-/typescript-4.9.5.tgz"
   integrity sha512-1FXk9E2Hm+QzZQ7z+McJiHL4NW1F2EzMu9Nq9i3zAaGqibafqYwCVU6WyWAuyQRRzOlxou8xZSyXLEN8oKj24g==
@@ -6587,7 +6647,7 @@ yargs-parser@21.1.1, yargs-parser@^21.0.1, yargs-parser@^21.1.1:
   resolved "https://registry.npmjs.org/yargs-parser/-/yargs-parser-21.1.1.tgz"
   integrity sha512-tVpsJW7DdjecAiFpbIB1e3qxIQsE6NoPc5/eTdrbbIC4h0LVsWhnoa3g+m2HclBIujHzsxZ4VJVA+GUuc2/LBw==
 
-yargs@^17.3.1:
+yargs@^17.3.1, yargs@^17.7.1:
   version "17.7.1"
   resolved "https://registry.npmjs.org/yargs/-/yargs-17.7.1.tgz"
   integrity sha512-cwiTb08Xuv5fqF4AovYacTFNxk62th7LKJ6BL9IGUpTJrWoU7/7WdQGTP2SjKf1dUNBGzDd28p/Yfs/GI6JrLw==
