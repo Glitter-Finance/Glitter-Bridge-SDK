@@ -10,14 +10,15 @@ import {
     BridgeType,
     GlitterEnvironment,
     PartialBridgeTxn,
+    SolanaPublicNetworks,
 } from "@glitter-finance/sdk-core";
-import { GlitterSDKServer } from "../../glitterSDKServer";
-import { Cursor, NewCursor, CompleteBatch } from "../../common/cursor";
-import { GlitterPoller, PollerResult } from "../../common/poller.Interface";
-import { ServerError } from "../../common/serverErrors";
-import { SolanaV1Parser } from "./poller.solana.token.v1";
-import { SolanaUSDCParser } from "./Poller.solana.usdc";
-import { SolanaV2Parser } from "./poller.solana.token.v2";
+import {GlitterSDKServer} from "../../glitterSDKServer";
+import {Cursor, NewCursor, CompleteBatch} from "../../common/cursor";
+import {GlitterPoller, PollerResult} from "../../common/poller.Interface";
+import {ServerError} from "../../common/serverErrors";
+import {SolanaV1Parser} from "./poller.solana.token.v1";
+import {SolanaUSDCParser} from "./Poller.solana.usdc";
+import {SolanaV2Parser} from "./poller.solana.token.v2";
 
 export class GlitterSolanaPoller implements GlitterPoller {
     //Cursors
@@ -76,14 +77,14 @@ export class GlitterSolanaPoller implements GlitterPoller {
         cursor: Cursor
     ): Promise<PollerResult> {
     //Check Client
-        const client = sdkServer.sdk?.solana?.client;
+        let client = sdkServer.sdk?.solana?.client;
 
         if (sdkServer.sdk.environment === GlitterEnvironment.testnet) {
             if (
                 cursor.bridgeType === BridgeType.USDC ||
         cursor.bridgeType === BridgeType.TokenV2
             ) {
-                // client = sdkServer.sdk?.solana?.get;
+                client = sdkServer.sdk?.solana?.getClient(SolanaPublicNetworks.devnet);
             }
         }
         if (!client) throw ServerError.ClientNotSet(BridgeNetworks.solana);

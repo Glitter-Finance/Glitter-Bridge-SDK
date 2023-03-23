@@ -45,6 +45,9 @@ module.exports = {
     indent: ["warn", 4, { SwitchCase: 1 }],
     "comma-spacing": ["warn", { before: false, after: true }],
     "no-multi-spaces": "warn",
+    "object-curly-spacing": ["warn", "never"],
+    "array-bracket-spacing": ["warn", "never"],
+    "space-in-parens": ["warn", "never"],
   },
   ignorePatterns: ["dist", "node_modules", "scripts", ".eslintrc.js"],
 };
