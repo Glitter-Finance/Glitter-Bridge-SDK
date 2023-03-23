@@ -1,10 +1,22 @@
 {
-    "editor.defaultFormatter": "esbenp.prettier-vscode",
-    "editor.formatOnSave": true,
-    "editor.formatOnPaste": true,
-    "[yaml]": {
-        "editor.formatOnSave": false,
-        "editor.formatOnPaste": false
-    },
-    "eslint.workingDirectories": ["./packages"]
+  "editor.defaultFormatter": "dbaeumer.vscode-eslint",
+  "editor.formatOnSave": true,
+  "editor.formatOnPaste": true,
+  "[yaml]": {
+    "editor.formatOnSave": false,
+    "editor.formatOnPaste": false
+  },
+  "eslint.workingDirectories": ["./packages", "."],
+  "[typescript]": {
+    "editor.defaultFormatter": "dbaeumer.vscode-eslint"
+  },
+  "[javascript]": {
+    "editor.defaultFormatter": "vscode.typescript-language-features"
+  },
+  "[jsonc]": {
+    "editor.defaultFormatter": "dbaeumer.vscode-eslint"
+  },
+  "editor.codeActionsOnSave": {
+    "source.fixAll.eslint": true
+  }
 }

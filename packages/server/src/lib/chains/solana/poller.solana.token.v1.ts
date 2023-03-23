@@ -1,10 +1,6 @@
 import {
-    ConfirmedSignatureInfo,
-    GetVersionedTransactionConfig,
     ParsedTransactionWithMeta,
     PartiallyDecodedInstruction,
-    TransactionResponse,
-    VersionedTransactionResponse,
 } from "@solana/web3.js";
 import algosdk from "algosdk";
 import BigNumber from "bignumber.js";
@@ -19,13 +15,11 @@ import {
     PartialBridgeTxn,
     Routing,
     RoutingHelper,
-    Sleep,
     TransactionType,
 } from "@glitter-finance/sdk-core";
 import { GlitterSDKServer } from "../../glitterSDKServer";
 import { ServerError } from "../../common/serverErrors";
 import { SolanaPollerCommon } from "./poller.solana.common";
-import * as util from "util";
 
 export class SolanaV1Parser {
     //V1 Token Process
@@ -33,7 +27,7 @@ export class SolanaV1Parser {
         sdkServer: GlitterSDKServer,
         txn: ParsedTransactionWithMeta
     ): Promise<PartialBridgeTxn> {
-        //Destructure Local Vars
+    //Destructure Local Vars
         const txnID = txn.transaction.signatures[0];
 
         //Set Partial Txn
@@ -64,32 +58,64 @@ export class SolanaV1Parser {
             partialTxn.block = txn.slot;
 
             //Get txnData From Solana
-            const txnData = (txn.transaction.message.instructions[0] as PartiallyDecodedInstruction).data;
+            const txnData = (
+        txn.transaction.message.instructions[0] as PartiallyDecodedInstruction
+            ).data;
             const data_bytes = bs58.decode(txnData);
 
             //Parse Transaction Type
             switch (Number(data_bytes[0])) {
-                case 10:
-                    partialTxn = this.getV1SolDeposit(sdkServer, txn, data_bytes, partialTxn);
-                    break;
-                case 11:
-                    partialTxn = this.getV1solFinalize(sdkServer, txn, data_bytes, partialTxn);
-                    break;
-                case 13:
-                    partialTxn = this.getV1SOLRelease(sdkServer, txn, data_bytes, partialTxn);
-                    break;
-                case 20:
-                    partialTxn = this.getV1xALGODeposit(sdkServer, txn, data_bytes, partialTxn);
-                    break;
-                case 21:
-                    partialTxn = this.getV1xALGOFinalize(sdkServer, txn, data_bytes, partialTxn);
-                    break;
-                case 23:
-                    partialTxn = this.getV1xALGORelease(sdkServer, txn, data_bytes, partialTxn);
-                    break;
-                default:
-                    console.log(`Txn ${txnID} is not a bridge`);
-                    break;
+            case 10:
+                partialTxn = this.getV1SolDeposit(
+                    sdkServer,
+                    txn,
+                    data_bytes,
+                    partialTxn
+                );
+                break;
+            case 11:
+                partialTxn = this.getV1solFinalize(
+                    sdkServer,
+                    txn,
+                    data_bytes,
+                    partialTxn
+                );
+                break;
+            case 13:
+                partialTxn = this.getV1SOLRelease(
+                    sdkServer,
+                    txn,
+                    data_bytes,
+                    partialTxn
+                );
+                break;
+            case 20:
+                partialTxn = this.getV1xALGODeposit(
+                    sdkServer,
+                    txn,
+                    data_bytes,
+                    partialTxn
+                );
+                break;
+            case 21:
+                partialTxn = this.getV1xALGOFinalize(
+                    sdkServer,
+                    txn,
+                    data_bytes,
+                    partialTxn
+                );
+                break;
+            case 23:
+                partialTxn = this.getV1xALGORelease(
+                    sdkServer,
+                    txn,
+                    data_bytes,
+                    partialTxn
+                );
+                break;
+            default:
+                console.log(`Txn ${txnID} is not a bridge`);
+                break;
             }
         } catch (e) {
             throw ServerError.ProcessingError(BridgeNetworks.solana, txnID, e);
@@ -119,7 +145,12 @@ export class SolanaV1Parser {
         );
 
         //Get Address
-        const data = SolanaPollerCommon.getSolanaAddressWithAmount(sdkServer, txn, null, true);
+        const data = SolanaPollerCommon.getSolanaAddressWithAmount(
+            sdkServer,
+            txn,
+            null,
+            true
+        );
         partialTxn.address = data[0] || "";
 
         //Set Routing
@@ -163,7 +194,12 @@ export class SolanaV1Parser {
         );
 
         //Get Address
-        const data = SolanaPollerCommon.getSolanaAddressWithAmount(sdkServer, txn, "xalgo", true);
+        const data = SolanaPollerCommon.getSolanaAddressWithAmount(
+            sdkServer,
+            txn,
+            "xalgo",
+            true
+        );
         partialTxn.address = data[0] || "";
 
         //Set Routing
@@ -207,7 +243,12 @@ export class SolanaV1Parser {
         );
 
         //Get Address
-        const data = SolanaPollerCommon.getSolanaAddressWithAmount(sdkServer, txn, null, false);
+        const data = SolanaPollerCommon.getSolanaAddressWithAmount(
+            sdkServer,
+            txn,
+            null,
+            false
+        );
         partialTxn.address = data[0] || "";
 
         //Set Routing
@@ -251,7 +292,12 @@ export class SolanaV1Parser {
         );
 
         //Get Address
-        const data = SolanaPollerCommon.getSolanaAddressWithAmount(sdkServer, txn, "xalgo", false);
+        const data = SolanaPollerCommon.getSolanaAddressWithAmount(
+            sdkServer,
+            txn,
+            "xalgo",
+            false
+        );
         partialTxn.address = data[0] || "";
 
         //Set Routing
@@ -287,12 +333,20 @@ export class SolanaV1Parser {
         partialTxn.txnType = TransactionType.Finalize;
 
         //Get Address
-        const data = SolanaPollerCommon.getSolanaAddressWithAmount(sdkServer, txn, null, false);
+        const data = SolanaPollerCommon.getSolanaAddressWithAmount(
+            sdkServer,
+            txn,
+            null,
+            false
+        );
         partialTxn.tokenSymbol = "sol";
         partialTxn.address = data[0] || "";
 
         partialTxn.units = BigNumber(data[1]);
-        partialTxn.amount = RoutingHelper.ReadableValue_FromBaseUnits(partialTxn.units, decimals);
+        partialTxn.amount = RoutingHelper.ReadableValue_FromBaseUnits(
+            partialTxn.units,
+            decimals
+        );
 
         return partialTxn;
     }
@@ -308,12 +362,20 @@ export class SolanaV1Parser {
         partialTxn.txnType = TransactionType.Finalize;
 
         //Get Address
-        const data = SolanaPollerCommon.getSolanaAddressWithAmount(sdkServer, txn, "xalgo", false);
+        const data = SolanaPollerCommon.getSolanaAddressWithAmount(
+            sdkServer,
+            txn,
+            "xalgo",
+            false
+        );
         partialTxn.tokenSymbol = "xalgo";
         partialTxn.address = data[0] || "";
 
         partialTxn.amount = BigNumber(data[1]);
-        partialTxn.units = RoutingHelper.BaseUnits_FromReadableValue(partialTxn.amount, decimals);
+        partialTxn.units = RoutingHelper.BaseUnits_FromReadableValue(
+            partialTxn.amount,
+            decimals
+        );
 
         return partialTxn;
     }

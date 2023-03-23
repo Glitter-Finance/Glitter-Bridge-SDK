@@ -18,11 +18,13 @@ export const BridgeMainnet: GlitterBridgeConfig = {
             feeReceiver: "A2GPNMIWXZDD3O3MP5UFQL6TKAZPBJEDZYHMFFITIAJZXLQH37SJZUWSZQ",
             multiSig1: "JPDV3CKFABIXDVH36E7ZBVJ2NC2EQJIBEHCKYTWVC4RDDOHHOPSBWH3QFY",
             multiSig2: "DFFTYAB6MWMRTZGHL2GAP7TMK7OUGHDD2AACSO7LXSZ7SY2VLO3OEOJBQU",
-            usdcReceiver: "GUSN5SEZQTM77WE2RMNHXRAKP2ELDM7GRLOEE3GJWNS5BMACRK7JVS3PLE",
+            usdcReceiver:
+        "GUSN5SEZQTM77WE2RMNHXRAKP2ELDM7GRLOEE3GJWNS5BMACRK7JVS3PLE",
             usdcDeposit: "O7MYJZR3JQS5RYFJVMW4SMXEBXNBPQCEHDAOKMXJCOUSH3ZRIBNRYNMJBQ",
             bridge: "XJQ25THCV734QIUZARPZGG3NPRFZXTIIU77JSJBT23TJMGL3FXJWVR57OQ",
             asaVault: "U4A3YARBVMT7PORTC3OWXNC75BMGF6TCHFOQY4ZSIIECC5RW25SVKNKV3U",
             algoVault: "R7VCOR74LCUIFH5WKCCMZOS7ADLSDBQJ42YURFPDT3VGYTVNBNG7AIYTCQ",
+            tokenBridgeV2Address: "",
         },
         tokens: [
             {
@@ -41,7 +43,7 @@ export const BridgeMainnet: GlitterBridgeConfig = {
                 symbol: "USDC",
                 address: 31566704,
                 decimals: 6,
-                min_transfer: 5,
+                min_transfer: 1,
                 fee_divisor: 200,
                 name: undefined,
                 max_transfer: undefined,
@@ -84,6 +86,7 @@ export const BridgeMainnet: GlitterBridgeConfig = {
             usdcDepositTokenAccount: "",
             memoProgram: "MemoSq4gqABAXKb96qnH8TysNcWxMyWCqXgDLGmfcHr",
             solVault: "7xCU4nvqu3Nz3BBQckKzibp3kBav4xbkuqQ3WM9CBHdJ",
+            tokenBridgeV2Address: "",
         },
         tokens: [
             {
@@ -195,7 +198,8 @@ export const BridgeMainnet: GlitterBridgeConfig = {
     },
     stellar: {
         accounts: {
-            usdcDepositAddress: "GAFK7XFZHMLSNV7OJTBO7BAIZA66X6QIBV5RMZZYXK4Q7ZSO52J5C3WQ",
+            usdcDepositAddress:
+        "GAFK7XFZHMLSNV7OJTBO7BAIZA66X6QIBV5RMZZYXK4Q7ZSO52J5C3WQ",
             usdcDepositTag: "5794940577887230301",
             usdcReceiverAddress: "",
             usdcReceiverTag: "",

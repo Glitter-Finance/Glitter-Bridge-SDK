@@ -1,27 +1,29 @@
 {
-    "name": "glitter-finance-sdk",
-    "version": "1.0.0",
-    "author": "Glitter Finance",
-    "private": true,
-    "workspaces": [
-        "packages/*"
-    ],
-    "scripts": {
-        "prepare": "husky install",
-        "build:core": "yarn workspace @glitter/sdk-core build",
-        "release:core": "npm run build-and-release -w ./packages/core",
-        "release:server": "npm run build-and-release -w ./packages/server",
-        "example:server-solana": "npm run example:solana -w ./packages/examples"
-    },
-    "devDependencies": {
-        "@types/node": "^18.15.3",
-        "@typescript-eslint/eslint-plugin": "^5.54.0",
-        "@typescript-eslint/parser": "^5.56.0",
-        "eslint": "^8.36.0",
-        "eslint-config-prettier": "^8.7.0",
-        "eslint-plugin-import": "^2.27.5",
-        "husky": "^8.0.3",
-        "prettier": "^2.8.5",
-        "typescript": "^5.0.2"
-    }
+  "name": "glitter-finance-sdk",
+  "version": "1.0.0",
+  "author": "Glitter Finance",
+  "private": true,
+  "workspaces": [
+    "packages/*"
+  ],
+  "scripts": {
+    "prepare": "husky install",
+    "build:core": "yarn workspace @glitter/sdk-core build",
+    "release:core": "npm run build-and-release -w ./packages/core",
+    "release:server": "npm run build-and-release -w ./packages/server",
+    "example:server-solana": "npm run example:solana -w ./packages/examples",
+    "docs": "npx typedoc --out docs"
+  },
+  "devDependencies": {
+    "@types/node": "^18.15.3",
+    "@typescript-eslint/eslint-plugin": "^5.54.0",
+    "@typescript-eslint/parser": "^5.56.0",
+    "eslint": "^8.36.0",
+    "eslint-config-prettier": "^8.7.0",
+    "eslint-plugin-import": "^2.27.5",
+    "husky": "^8.0.3",
+    "prettier": "^2.8.5",
+    "typedoc": "^0.23.28",
+    "typescript": "^5.0.2"
+  }
 }

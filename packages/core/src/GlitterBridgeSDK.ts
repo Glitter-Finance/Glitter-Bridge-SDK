@@ -3,17 +3,24 @@ import { EvmConnect } from "./lib/chains/evm";
 import { SolanaConnect } from "./lib/chains/solana";
 import { TronConnect } from "./lib/chains/tron/connect";
 import { BridgeToken, BridgeTokens } from "./lib/common";
-import { BridgeEvmNetworks, BridgeNetworks } from "./lib/common/networks/networks";
+import {
+    BridgeEvmNetworks,
+    BridgeNetworks,
+} from "./lib/common/networks/networks";
 import { GlitterBridgeConfig, GlitterEnvironment } from "./lib/configs/config";
 import { BridgeMainnet } from "./lib/configs/networks/mainnet";
 import { BridgeTestnet } from "./lib/configs/networks/testnet";
 
+/**
+ * Glitter Bridge SDK
+ */
 export class GlitterBridgeSDK {
     private _environment: GlitterEnvironment | undefined;
     /** Bridge Configuration */
     private _bridgeConfig: GlitterBridgeConfig | undefined;
     /** RPC URL Override */
     private _rpcOverrides: { [key: string]: string } = {};
+
     /** Chain Specific SDKs */
     private _evm: Map<BridgeEvmNetworks, EvmConnect | undefined> = new Map();
     private _algorand: AlgorandConnect | undefined;
@@ -22,18 +29,18 @@ export class GlitterBridgeSDK {
 
     //Setters
     public setEnvironment(environment: GlitterEnvironment): GlitterBridgeSDK {
-        //Set environment
+    //Set environment
         this._environment = environment;
 
         switch (environment) {
-            case GlitterEnvironment.mainnet:
-                this._bridgeConfig = BridgeMainnet;
-                break;
-            case GlitterEnvironment.testnet:
-                this._bridgeConfig = BridgeTestnet;
-                break;
-            default:
-                throw new Error("Environment not found");
+        case GlitterEnvironment.mainnet:
+            this._bridgeConfig = BridgeMainnet;
+            break;
+        case GlitterEnvironment.testnet:
+            this._bridgeConfig = BridgeTestnet;
+            break;
+        default:
+            throw new Error("Environment not found");
         }
 
         //Get Tokens
@@ -54,59 +61,63 @@ export class GlitterBridgeSDK {
         return this;
     }
     /**
-     * Initialize connections and SDK
-     * @param {BridgeNetworks[]} networks list of
-     * networks to connect to
-     * @returns {GlitterBridgeSDK}
-     */
+   * Initialize connections and SDK
+   * @param {BridgeNetworks[]} networks list of
+   * networks to connect to
+   * @returns {GlitterBridgeSDK}
+   */
     public connect(networks: BridgeNetworks[]): GlitterBridgeSDK {
         networks.forEach((network) => {
             /**
-             * TODO: Have a single method
-             * for each chain e.g
-             * interface ChainConnect { connect(network: BridgeNetworks): void; }
-             */
+       * TODO: Have a single method
+       * for each chain e.g
+       * interface ChainConnect { connect(network: BridgeNetworks): void; }
+       */
             switch (network) {
-                case BridgeNetworks.algorand:
-                    this.connectToAlgorand();
-                    break;
-                case BridgeNetworks.solana:
-                    this.connectToSolana();
-                    break;
-                case BridgeNetworks.Ethereum:
-                    this.connectToEvmNetwork(BridgeNetworks.Ethereum);
-                    break;
-                case BridgeNetworks.Polygon:
-                    this.connectToEvmNetwork(BridgeNetworks.Polygon);
-                    break;
-                case BridgeNetworks.Avalanche:
-                    this.connectToEvmNetwork(BridgeNetworks.Avalanche);
-                    break;
-                case BridgeNetworks.TRON:
-                    this.connectToTron();
-                    break;
+            case BridgeNetworks.algorand:
+                this.connectToAlgorand();
+                break;
+            case BridgeNetworks.solana:
+                this.connectToSolana();
+                break;
+            case BridgeNetworks.Ethereum:
+                this.connectToEvmNetwork(BridgeNetworks.Ethereum);
+                break;
+            case BridgeNetworks.Polygon:
+                this.connectToEvmNetwork(BridgeNetworks.Polygon);
+                break;
+            case BridgeNetworks.Avalanche:
+                this.connectToEvmNetwork(BridgeNetworks.Avalanche);
+                break;
+            case BridgeNetworks.TRON:
+                this.connectToTron();
+                break;
             }
         });
 
         return this;
     }
     /**
-     *
-     * @param {BridgeNetworks} network
-     */
+   *
+   * @param {BridgeNetworks} network
+   */
     private preInitializeChecks(network: BridgeNetworks) {
         if (!this._bridgeConfig) throw new Error("Glitter environment not set");
         /**
-         * TODO: have config keys in such
-         * a way that we directly check
-         * using JS this._bridgeConfig[network]
-         */
+     * TODO: have config keys in such
+     * a way that we directly check
+     * using JS this._bridgeConfig[network]
+     */
         const unavailableConfigError = `${network} Configuration unavailable`;
         if (network === BridgeNetworks.TRON && !this._bridgeConfig.tron) {
             throw new Error(unavailableConfigError);
         } else if (
-            [BridgeNetworks.Avalanche, BridgeNetworks.Ethereum, BridgeNetworks.Polygon].includes(network) &&
-            !this._bridgeConfig.evm[network as BridgeEvmNetworks]
+            [
+                BridgeNetworks.Avalanche,
+                BridgeNetworks.Ethereum,
+                BridgeNetworks.Polygon,
+            ].includes(network) &&
+      !this._bridgeConfig.evm[network as BridgeEvmNetworks]
         ) {
             throw new Error(unavailableConfigError);
         }
@@ -120,15 +131,19 @@ export class GlitterBridgeSDK {
     }
 
     private connectToAlgorand(): GlitterBridgeSDK {
-        // Failsafe
-        // copy paste is an anti pattern
-        // https://en.wikipedia.org/wiki/Don%27t_repeat_yourself
+    // Failsafe
+    // copy paste is an anti pattern
+    // https://en.wikipedia.org/wiki/Don%27t_repeat_yourself
         if (!this._bridgeConfig) throw new Error("Glitter environment not set");
-        if (!this._bridgeConfig.algorand) throw new Error("Algorand environment not set");
+        if (!this._bridgeConfig.algorand)
+            throw new Error("Algorand environment not set");
 
         if (this._rpcOverrides[BridgeNetworks.algorand]) {
-            console.log("Algorand RPC override: " + this._rpcOverrides[BridgeNetworks.algorand]);
-            this._bridgeConfig.algorand.serverUrl = this._rpcOverrides[BridgeNetworks.algorand];
+            console.log(
+                "Algorand RPC override: " + this._rpcOverrides[BridgeNetworks.algorand]
+            );
+            this._bridgeConfig.algorand.serverUrl =
+        this._rpcOverrides[BridgeNetworks.algorand];
         }
 
         //Get the connections
@@ -140,14 +155,18 @@ export class GlitterBridgeSDK {
     }
 
     private connectToSolana(): GlitterBridgeSDK {
-        //Failsafe
-        // same here
+    //Failsafe
+    // same here
         if (!this._bridgeConfig) throw new Error("Glitter environment not set");
-        if (!this._bridgeConfig.solana) throw new Error("Solana environment not set");
+        if (!this._bridgeConfig.solana)
+            throw new Error("Solana environment not set");
 
         if (this._rpcOverrides[BridgeNetworks.solana]) {
-            console.log("Solana RPC override: " + this._rpcOverrides[BridgeNetworks.solana]);
-            this._bridgeConfig.solana.server = this._rpcOverrides[BridgeNetworks.solana];
+            console.log(
+                "Solana RPC override: " + this._rpcOverrides[BridgeNetworks.solana]
+            );
+            this._bridgeConfig.solana.server =
+        this._rpcOverrides[BridgeNetworks.solana];
         }
 
         this._solana = new SolanaConnect(this._bridgeConfig?.solana);
@@ -161,21 +180,24 @@ export class GlitterBridgeSDK {
         this.preInitializeChecks(network);
 
         if (this._rpcOverrides[network]) {
-            this._bridgeConfig!.evm[network].rpcUrl = this._rpcOverrides[network];
+      this._bridgeConfig!.evm[network].rpcUrl = this._rpcOverrides[network];
         }
 
-        this._evm.set(network, new EvmConnect(network, this._bridgeConfig!.evm[network]));
+        this._evm.set(
+            network,
+            new EvmConnect(network, this._bridgeConfig!.evm[network])
+        );
         return this;
     }
 
     /** Get chain specific connection */
 
     /**
-     * Returns EVMConnect for
-     * a specific evm network
-     * @param {BridgeEvmNetworks} network
-     * @returns {EvmConnect | undefined}
-     */
+   * Returns EVMConnect for
+   * a specific evm network
+   * @param {BridgeEvmNetworks} network
+   * @returns {EvmConnect | undefined}
+   */
     public getEvmNetwork(evmNetwork: BridgeEvmNetworks): EvmConnect | undefined {
         return this._evm.get(evmNetwork);
     }
