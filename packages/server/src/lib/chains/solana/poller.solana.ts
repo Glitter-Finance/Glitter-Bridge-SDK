@@ -8,6 +8,7 @@ import {
 import {
     BridgeNetworks,
     BridgeType,
+    GlitterEnvironment,
     PartialBridgeTxn,
 } from "@glitter-finance/sdk-core";
 import { GlitterSDKServer } from "../../glitterSDKServer";
@@ -76,6 +77,15 @@ export class GlitterSolanaPoller implements GlitterPoller {
     ): Promise<PollerResult> {
     //Check Client
         const client = sdkServer.sdk?.solana?.client;
+
+        if (sdkServer.sdk.environment === GlitterEnvironment.testnet) {
+            if (
+                cursor.bridgeType === BridgeType.USDC ||
+        cursor.bridgeType === BridgeType.TokenV2
+            ) {
+                // client = sdkServer.sdk?.solana?.get;
+            }
+        }
         if (!client) throw ServerError.ClientNotSet(BridgeNetworks.solana);
 
         //Check Cursor
@@ -129,20 +139,20 @@ export class GlitterSolanaPoller implements GlitterPoller {
             //Process Transaction
             let partialTxn: PartialBridgeTxn | undefined;
             switch (cursor.bridgeType) {
-            case BridgeType.TokenV1:
-                partialTxn = await SolanaV1Parser.process(sdkServer, txn);
-                break;
-            case BridgeType.TokenV2:
-                partialTxn = await SolanaV2Parser.process(sdkServer, txn);
-                break;
-            case BridgeType.USDC:
-                partialTxn = await SolanaUSDCParser.process(sdkServer, txn, cursor);
-                break;
-            default:
-                throw ServerError.InvalidBridgeType(
-                    BridgeNetworks.solana,
-                    cursor.bridgeType
-                );
+                case BridgeType.TokenV1:
+                    partialTxn = await SolanaV1Parser.process(sdkServer, txn);
+                    break;
+                case BridgeType.TokenV2:
+                    partialTxn = await SolanaV2Parser.process(sdkServer, txn);
+                    break;
+                case BridgeType.USDC:
+                    partialTxn = await SolanaUSDCParser.process(sdkServer, txn, cursor);
+                    break;
+                default:
+                    throw ServerError.InvalidBridgeType(
+                        BridgeNetworks.solana,
+                        cursor.bridgeType
+                    );
             }
             if (partialTxn) partialTxns.push(partialTxn);
         }

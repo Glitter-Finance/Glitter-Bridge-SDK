@@ -27,6 +27,7 @@ import base58 from "bs58";
 import { SolanaError } from "./solanaError";
 
 export class SolanaConnect {
+    //Load config
     private _client?: Connection;
     private _accounts: SolanaAccounts | undefined = undefined;
     private _assets: SolanaAssets | undefined = undefined;
@@ -34,7 +35,15 @@ export class SolanaConnect {
     private _bridgeTxnsV1: SolanaBridgeTxnsV1 | undefined = undefined;
     private _config: SolanaConfig | undefined = undefined;
 
+    private _clients?: { [key: string]: Connection } = {
+        mainnet: new Connection(SolanaPublicNetworks.mainnet_beta.toString()),
+        testnet: new Connection(SolanaPublicNetworks.testnet.toString()),
+        devnet: new Connection(SolanaPublicNetworks.devnet.toString()),
+    };
+
+    //Constructor
     constructor(config: SolanaConfig) {
+    //Save Local Config
         this._config = config;
         this._client = new Connection(config.server);
         this._accounts = new SolanaAccounts(this._client);
@@ -1095,6 +1104,18 @@ export class SolanaConnect {
     }
     public getToken(token: string): BridgeToken | undefined {
         return BridgeTokens.get("solana", token);
+    }
+    public getClient(network: SolanaPublicNetworks): Connection | undefined {
+        switch (network) {
+            case SolanaPublicNetworks.mainnet_beta:
+                return this._clients?.mainnet;
+            case SolanaPublicNetworks.devnet:
+                return this._clients?.devnet;
+            case SolanaPublicNetworks.testnet:
+                return this._clients?.testnet;
+            default:
+                return undefined;
+        }
     }
 
     public async Reconnect(): Promise<void> {

@@ -38,7 +38,7 @@
     "borsh": "0.7.0",
     "bs58": "^5.0.0",
     "ethers": "^5.7.2",
-    "@glitter-finance/sdk-core": "1.1.0-12"
+    "@glitter-finance/sdk-core": "1.1.0-15"
   },
   "release-it": {
     "github": {
