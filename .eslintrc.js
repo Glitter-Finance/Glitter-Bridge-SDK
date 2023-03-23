@@ -42,7 +42,7 @@ module.exports = {
 
     //Formatting Rules
     "no-multiple-empty-lines": ["warn", { max: 1, maxEOF: 0, maxBOF: 0 }],
-    indent: ["warn", 4],
+    indent: ["warn", 4, { SwitchCase: 1 }],
     "comma-spacing": ["warn", { before: false, after: true }],
     "no-multi-spaces": "warn",
   },

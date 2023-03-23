@@ -1,4 +1,8 @@
-import { BridgeNetworks, GlitterBridgeSDK, GlitterEnvironment } from "@glitter-finance/sdk-core";
+import {
+    BridgeNetworks,
+    GlitterBridgeSDK,
+    GlitterEnvironment,
+} from "@glitter-finance/sdk-core";
 import { GlitterPoller } from "./common/poller.Interface";
 import { GlitterAlgorandPoller } from "./chains/algorand/poller.algorand";
 import { GlitterSolanaPoller } from "./chains/solana/poller.solana";
@@ -7,7 +11,10 @@ import { clusterApiUrl } from "@solana/web3.js";
 
 export class GlitterSDKServer {
     private _sdk: GlitterBridgeSDK = new GlitterBridgeSDK();
-    private _pollers: Map<BridgeNetworks, GlitterPoller> = new Map<BridgeNetworks, GlitterPoller>();
+    private _pollers: Map<BridgeNetworks, GlitterPoller> = new Map<
+    BridgeNetworks,
+    GlitterPoller
+  >();
     private _defaultLimit = 5;
 
     constructor(environment?: GlitterEnvironment) {
@@ -16,7 +23,7 @@ export class GlitterSDKServer {
 
     //Create Pollers
     public createPollers(networks: BridgeNetworks[]): GlitterSDKServer {
-        //Check for RPC overrides
+    //Check for RPC overrides
         this.check_RPC_Overrides();
 
         //Connect Core SDK to networks
