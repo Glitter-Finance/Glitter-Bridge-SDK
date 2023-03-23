@@ -4,6 +4,8 @@ module.exports = {
     project: [
       "./packages/core/tsconfig.json",
       "./packages/server/tsconfig.json",
+      "./packages/examples/tsconfig.json",
+      "./packages/tests/tsconfig.json",
       "./tsconfig.base.json",
     ],
     tsconfigRootDir: __dirname,
@@ -36,16 +38,13 @@ module.exports = {
       "error",
       { checksVoidReturn: false },
     ],
+    "prefer-const": "warn",
 
     //Formatting Rules
     "no-multiple-empty-lines": ["warn", { max: 1, maxEOF: 0, maxBOF: 0 }],
     indent: ["warn", 4],
+    "comma-spacing": ["warn", { before: false, after: true }],
+    "no-multi-spaces": "warn",
   },
-  ignorePatterns: [
-    "dist",
-    "node_modules",
-    "examples",
-    "scripts",
-    ".eslintrc.js",
-  ],
+  ignorePatterns: ["dist", "node_modules", "scripts", ".eslintrc.js"],
 };

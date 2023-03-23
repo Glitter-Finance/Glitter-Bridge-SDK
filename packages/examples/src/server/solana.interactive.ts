@@ -1,15 +1,26 @@
 import { SOLANA_CACHED_TXIDS } from "./solana.txns";
 import * as util from "util";
 import { GlitterSDKServer, Cursor } from "@glitter-finance/sdk-server/dist";
-import { BridgeNetworks, GlitterEnvironment, Sleep, Shorten, PartialBridgeTxn } from "@glitter-finance/sdk-core";
+import {
+    BridgeNetworks,
+    GlitterEnvironment,
+    Sleep,
+    Shorten,
+    PartialBridgeTxn,
+} from "@glitter-finance/sdk-core";
 import assert from "assert";
+
+// eslint-disable-next-line @typescript-eslint/no-var-requires
 const yargs = require("yargs");
+
 import {} from "@solana/web3.js";
 
 //Demo Parameters
 let SPEED = 0.85;
-let logLine = (message?: string) => {
-    console.log("------------------------------------------------------------------");
+const logLine = (message?: string) => {
+    console.log(
+        "------------------------------------------------------------------"
+    );
     if (message) {
         console.log(message);
     } else {
@@ -21,7 +32,8 @@ let logLine = (message?: string) => {
 const argv = yargs
     .option("speed", {
         alias: "s",
-        description: "Speed of demo.  1 = normal speed, 0.5 = half speed, 2 = double speed",
+        description:
+      "Speed of demo.  1 = normal speed, 0.5 = half speed, 2 = double speed",
         type: "number",
     })
     .help().argv;
@@ -31,13 +43,13 @@ main();
 
 async function main() {
     //Initialize SDK
-    let sdk = new GlitterSDKServer(GlitterEnvironment.mainnet);
+    const sdk = new GlitterSDKServer(GlitterEnvironment.mainnet);
 
     //Create Solana Poller
     sdk.createPollers([BridgeNetworks.solana]);
 
     //local references for ease of use
-    let poller = sdk.poller(BridgeNetworks.solana);
+    const poller = sdk.poller(BridgeNetworks.solana);
 
     //Get cursor
     let cursor = poller?.tokenV1Cursor;
@@ -56,10 +68,14 @@ async function main() {
     //Dialog
     logLine("Setting up cursor");
     await Sleep(500 / SPEED);
-    console.log("For this example, we'll set the 'current block' to some known point in the past");
+    console.log(
+        "For this example, we'll set the 'current block' to some known point in the past"
+    );
     await Sleep(2500 / SPEED);
     console.log("");
-    console.log("We will match against a pre-cached list of TxnIDs on the Glitter Bridge");
+    console.log(
+        "We will match against a pre-cached list of TxnIDs on the Glitter Bridge"
+    );
     await Sleep(2500 / SPEED);
     console.log("");
     console.log("This list has 31 elements, arranged newest to oldest.");
@@ -67,12 +83,15 @@ async function main() {
     console.log("");
     console.log(
         "While in realtime, we don't know what the current Txn is, for this example that's set in the past," +
-            " we will assume that the current time is just before the 25th txn in the cached list : " +
-            SOLANA_CACHED_TXIDS[0]
+      " we will assume that the current time is just before the 25th txn in the cached list : " +
+      SOLANA_CACHED_TXIDS[0]
     );
     await Sleep(6500 / SPEED);
     console.log("");
-    console.log("The last cached TxnID is: " + SOLANA_CACHED_TXIDS[SOLANA_CACHED_TXIDS.length - 1]);
+    console.log(
+        "The last cached TxnID is: " +
+      SOLANA_CACHED_TXIDS[SOLANA_CACHED_TXIDS.length - 1]
+    );
     await Sleep(2500 / SPEED);
 
     //Set Beginning Cursor.  Note for realtime polling, this is not required.
@@ -115,13 +134,19 @@ async function main() {
     await Sleep(5000 / SPEED);
 
     //Dialog
-    logLine("Since we received the max transactions, the cursor entered batching mode.");
+    logLine(
+        "Since we received the max transactions, the cursor entered batching mode."
+    );
     await Sleep(2500 / SPEED);
     console.log("");
-    console.log("When we poll again, we should get the next 5 transactions within the original bounds");
+    console.log(
+        "When we poll again, we should get the next 5 transactions within the original bounds"
+    );
     await Sleep(2500 / SPEED);
     console.log("");
-    console.log("If there are no extra transactions, then we will exit batching mode and the cursor will reset.");
+    console.log(
+        "If there are no extra transactions, then we will exit batching mode and the cursor will reset."
+    );
     await Sleep(3000 / SPEED);
     console.log("");
 
@@ -151,7 +176,9 @@ async function main() {
     //Batch 2: =======================================================================================
 
     //Print new cursor
-    logLine("This is the new Cursor.  Note that the end transaction is updated to reflect the new results.");
+    logLine(
+        "This is the new Cursor.  Note that the end transaction is updated to reflect the new results."
+    );
     cursor = result?.cursor;
     console.log(util.inspect(cursor, false, null, true));
     await Sleep(5000 / SPEED);
@@ -162,7 +189,9 @@ async function main() {
     );
     await Sleep(3000 / SPEED);
     console.log("");
-    logLine("Let's continue this example by setting the beginning bounds to another known point, 18th in the list.");
+    logLine(
+        "Let's continue this example by setting the beginning bounds to another known point, 18th in the list."
+    );
     await Sleep(3000 / SPEED);
     console.log("");
 
@@ -194,7 +223,9 @@ async function main() {
     //Poll 4: ---------------------------------------------------------------------------------------
     logLine("Running Fourth Poll:");
     await Sleep(1000 / SPEED);
-    console.log("We need to sleep here to prevent rate limiting.  This is not required with a paid RPC.");
+    console.log(
+        "We need to sleep here to prevent rate limiting.  This is not required with a paid RPC."
+    );
     await Sleep(5000); //Needed to prevent rate limiting
     result = await poller?.poll(sdk, cursor);
     resultTxns = result?.txns || [];
@@ -214,7 +245,9 @@ async function main() {
     await Sleep(5000 / SPEED);
 
     //Final Dialog
-    logLine("As you can see, the cursor has run through two batches, 5 and 2, and then reset.");
+    logLine(
+        "As you can see, the cursor has run through two batches, 5 and 2, and then reset."
+    );
     await Sleep(3000 / SPEED);
     console.log("");
 
@@ -225,7 +258,9 @@ async function main() {
     //================================================================================================
     //Batch 3: =======================================================================================
 
-    logLine("Let's finish this example by setting the poller to the first txn in the list");
+    logLine(
+        "Let's finish this example by setting the poller to the first txn in the list"
+    );
     await Sleep(3000 / SPEED);
 
     //Set new beginning cursor
@@ -236,7 +271,9 @@ async function main() {
     //Poll 5: ---------------------------------------------------------------------------------------
     logLine("Running Fifth Poll:");
     await Sleep(1000 / SPEED);
-    console.log("We need to sleep here to prevent rate limiting.  This is not required with a paid RPC.");
+    console.log(
+        "We need to sleep here to prevent rate limiting.  This is not required with a paid RPC."
+    );
     await Sleep(5000); //Needed to prevent rate limiting
 
     result = await poller?.poll(sdk, cursor);
@@ -259,7 +296,9 @@ async function main() {
     //Poll 6: ---------------------------------------------------------------------------------------
     logLine("Running Sixth Poll:");
     await Sleep(1000 / SPEED);
-    console.log("We need to sleep here to prevent rate limiting.  This is not required with a paid RPC.");
+    console.log(
+        "We need to sleep here to prevent rate limiting.  This is not required with a paid RPC."
+    );
     await Sleep(5000); //Needed to prevent rate limiting
 
     result = await poller?.poll(sdk, cursor);
@@ -282,7 +321,9 @@ async function main() {
     //Poll 7: ---------------------------------------------------------------------------------------
     logLine("Running Seventh Poll:");
     await Sleep(1000 / SPEED);
-    console.log("We need to sleep here to prevent rate limiting.  This is not required with a paid RPC.");
+    console.log(
+        "We need to sleep here to prevent rate limiting.  This is not required with a paid RPC."
+    );
     await Sleep(5000); //Needed to prevent rate limiting
 
     result = await poller?.poll(sdk, cursor);
@@ -305,7 +346,9 @@ async function main() {
     //Poll 8: ---------------------------------------------------------------------------------------
     logLine("Running Eighth Poll:");
     await Sleep(1000 / SPEED);
-    console.log("We need to sleep here to prevent rate limiting.  This is not required with a paid RPC.");
+    console.log(
+        "We need to sleep here to prevent rate limiting.  This is not required with a paid RPC."
+    );
     await Sleep(5000); //Needed to prevent rate limiting
 
     result = await poller?.poll(sdk, cursor);
@@ -330,8 +373,10 @@ async function main() {
     fullTxnList = UpdateFullList(fullTxnList, batchList);
 
     //Final Dialog
-    let finalSignatures = fullTxnList.map((txn) => Shorten.shorten(txn.txnID, 4));
-    let cachedSignatures = [];
+    const finalSignatures = fullTxnList.map((txn) =>
+        Shorten.shorten(txn.txnID, 4)
+    );
+    const cachedSignatures = [];
     for (let i = 1; i < SOLANA_CACHED_TXIDS.length - 1; i++) {
         cachedSignatures.push(Shorten.shorten(SOLANA_CACHED_TXIDS[i], 4));
     }
@@ -349,7 +394,7 @@ async function CheckResults(
     resultTxns: PartialBridgeTxn[],
     cursor: Cursor,
     offset: number,
-    speedMultiplier: number = 2
+    speedMultiplier = 2
 ) {
     //Update offset
     if (cursor.batch) {
@@ -359,20 +404,34 @@ async function CheckResults(
     }
 
     for (let i = 0; i < resultTxns.length || 0; i++) {
-        let expectedTxn = Shorten.shorten(SOLANA_CACHED_TXIDS[SOLANA_CACHED_TXIDS.length - offset + i], 4);
-        let actualTxn = Shorten.shorten(resultTxns[i].txnID, 4);
-        let type = resultTxns[i].txnType;
-        assert(expectedTxn == actualTxn, "Expected TxnID " + expectedTxn + " but received " + actualTxn);
-        console.log(`Txn ${i} matches.  Expected: ${expectedTxn} | Actual: ${actualTxn} | Type: ${type}`);
+        const expectedTxn = Shorten.shorten(
+            SOLANA_CACHED_TXIDS[SOLANA_CACHED_TXIDS.length - offset + i],
+            4
+        );
+        const actualTxn = Shorten.shorten(resultTxns[i].txnID, 4);
+        const type = resultTxns[i].txnType;
+        assert(
+            expectedTxn == actualTxn,
+            "Expected TxnID " + expectedTxn + " but received " + actualTxn
+        );
+        console.log(
+            `Txn ${i} matches.  Expected: ${expectedTxn} | Actual: ${actualTxn} | Type: ${type}`
+        );
         await Sleep(1000 / SPEED / speedMultiplier);
     }
 }
-function AddToBatchList(batchList: PartialBridgeTxn[], resultTxns: PartialBridgeTxn[]) {
+function AddToBatchList(
+    batchList: PartialBridgeTxn[],
+    resultTxns: PartialBridgeTxn[]
+) {
     batchList.push(...resultTxns);
 }
-function UpdateFullList(fullList: PartialBridgeTxn[], batchList: PartialBridgeTxn[]): PartialBridgeTxn[] {
+function UpdateFullList(
+    fullList: PartialBridgeTxn[],
+    batchList: PartialBridgeTxn[]
+): PartialBridgeTxn[] {
     //Insert batchlist into front of fullList
-    let resultTxns: PartialBridgeTxn[] = [];
+    const resultTxns: PartialBridgeTxn[] = [];
     resultTxns.push(...batchList);
     resultTxns.push(...fullList);
 

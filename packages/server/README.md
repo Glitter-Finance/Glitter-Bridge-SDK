@@ -24,6 +24,3 @@ yarn run example:solana
 ```
 npx ts-node examples/solana.interactive -v -s 20
 ```
-
-Run tests:
-yarn jest solana.usdc.test.ts --detectOpenHandles --verbose true

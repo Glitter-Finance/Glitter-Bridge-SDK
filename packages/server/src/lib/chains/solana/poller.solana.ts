@@ -4,9 +4,14 @@ import {
     PublicKey,
     SignaturesForAddressOptions,
 } from "@solana/web3.js";
-import { BridgeNetworks, BridgeType, PartialBridgeTxn } from "@glitter-finance/sdk-core";
+
+import {
+    BridgeNetworks,
+    BridgeType,
+    PartialBridgeTxn,
+} from "@glitter-finance/sdk-core";
 import { GlitterSDKServer } from "../../glitterSDKServer";
-import { Cursor, NewCursor, CursorBatch, CompleteBatch } from "../../common/cursor";
+import { Cursor, NewCursor, CompleteBatch } from "../../common/cursor";
 import { GlitterPoller, PollerResult } from "../../common/poller.Interface";
 import { ServerError } from "../../common/serverErrors";
 import { SolanaV1Parser } from "./poller.solana.token.v1";
@@ -20,9 +25,10 @@ export class GlitterSolanaPoller implements GlitterPoller {
     public usdcCursors: Cursor[] | undefined;
 
     //Initialize
-    public initialize(sdkServer: GlitterSDKServer, tokenV2Address?: string): void {
-        //Add Token Cursor
-        const tokenAddress = sdkServer.sdk?.solana?.tokenBridgePollerAddress?.toString();
+    public initialize(sdkServer: GlitterSDKServer): void {
+    //Add Token Cursor
+        const tokenAddress =
+      sdkServer.sdk?.solana?.tokenBridgePollerAddress?.toString();
         if (tokenAddress)
             this.tokenV1Cursor = NewCursor(
                 BridgeNetworks.solana,
@@ -32,6 +38,8 @@ export class GlitterSolanaPoller implements GlitterPoller {
             );
 
         //Add Token V2 Cursor
+        const tokenV2Address =
+      sdkServer.sdk?.solana?.tokenBridgeV2Address?.toString();
         if (tokenV2Address)
             this.tokenV2Cursor = NewCursor(
                 BridgeNetworks.solana,
@@ -51,14 +59,22 @@ export class GlitterSolanaPoller implements GlitterPoller {
         usdcAddresses.forEach((address) => {
             if (address)
                 this.usdcCursors?.push(
-                    NewCursor(BridgeNetworks.solana, BridgeType.USDC, address, sdkServer.defaultLimit)
+                    NewCursor(
+                        BridgeNetworks.solana,
+                        BridgeType.USDC,
+                        address,
+                        sdkServer.defaultLimit
+                    )
                 );
         });
     }
 
     //Poll
-    public async poll(sdkServer: GlitterSDKServer, cursor: Cursor): Promise<PollerResult> {
-        //Check Client
+    public async poll(
+        sdkServer: GlitterSDKServer,
+        cursor: Cursor
+    ): Promise<PollerResult> {
+    //Check Client
         const client = sdkServer.sdk?.solana?.client;
         if (!client) throw ServerError.ClientNotSet(BridgeNetworks.solana);
 
@@ -71,7 +87,10 @@ export class GlitterSolanaPoller implements GlitterPoller {
         let newTxns: ConfirmedSignatureInfo[] = [];
         do {
             try {
-                newTxns = await client.getSignaturesForAddress(new PublicKey(cursor.address || ""), searchFilter);
+                newTxns = await client.getSignaturesForAddress(
+                    new PublicKey(cursor.address || ""),
+                    searchFilter
+                );
                 break;
             } catch (e: any) {
                 attempts++;
@@ -89,7 +108,9 @@ export class GlitterSolanaPoller implements GlitterPoller {
         let txnData: (ParsedTransactionWithMeta | null)[] = [];
         do {
             try {
-                txnData = await client.getParsedTransactions(signatures, { maxSupportedTransactionVersion: 0 });
+                txnData = await client.getParsedTransactions(signatures, {
+                    maxSupportedTransactionVersion: 0,
+                });
                 break;
             } catch (e: any) {
                 attempts++;
@@ -108,17 +129,20 @@ export class GlitterSolanaPoller implements GlitterPoller {
             //Process Transaction
             let partialTxn: PartialBridgeTxn | undefined;
             switch (cursor.bridgeType) {
-                case BridgeType.TokenV1:
-                    partialTxn = await SolanaV1Parser.process(sdkServer, txn);
-                    break;
-                case BridgeType.TokenV2:
-                    partialTxn = await SolanaV2Parser.process(sdkServer, txn);
-                    break;
-                case BridgeType.USDC:
-                    partialTxn = await SolanaUSDCParser.process(sdkServer, txn, cursor);
-                    break;
-                default:
-                    throw ServerError.InvalidBridgeType(BridgeNetworks.solana, cursor.bridgeType);
+            case BridgeType.TokenV1:
+                partialTxn = await SolanaV1Parser.process(sdkServer, txn);
+                break;
+            case BridgeType.TokenV2:
+                partialTxn = await SolanaV2Parser.process(sdkServer, txn);
+                break;
+            case BridgeType.USDC:
+                partialTxn = await SolanaUSDCParser.process(sdkServer, txn, cursor);
+                break;
+            default:
+                throw ServerError.InvalidBridgeType(
+                    BridgeNetworks.solana,
+                    cursor.bridgeType
+                );
             }
             if (partialTxn) partialTxns.push(partialTxn);
         }
@@ -135,7 +159,7 @@ export class GlitterSolanaPoller implements GlitterPoller {
 
     //Get Transactions
     public async getFilter(cursor: Cursor): Promise<SignaturesForAddressOptions> {
-        //Set Search Filter
+    //Set Search Filter
         const searchFilter = {
             limit: cursor.limit,
             before: cursor.beginning?.txn || undefined,
@@ -151,8 +175,12 @@ export class GlitterSolanaPoller implements GlitterPoller {
     }
 
     //Update Cursor
-    public async updateCursor(sdkServer: GlitterSDKServer, cursor: Cursor, txnIDs: string[]): Promise<Cursor> {
-        //Check if we have maxxed out the limit
+    public async updateCursor(
+        sdkServer: GlitterSDKServer,
+        cursor: Cursor,
+        txnIDs: string[]
+    ): Promise<Cursor> {
+    //Check if we have maxxed out the limit
         if (txnIDs && txnIDs.length == cursor.limit) {
             //Check if Batch Exists
             if (!cursor.batch) {

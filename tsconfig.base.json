@@ -17,7 +17,9 @@
   "typedocoptions": {
     "entryPoints": [
       "./package/core/src/index.ts",
-      "./package/server/src/index.ts"
+      "./package/server/src/index.ts",
+      "./package/examples/src/index.ts",
+      "./package/tests/src/index.ts"
     ],
     "out": "./docs"
   }
