@@ -4,7 +4,7 @@ import {
 } from "@solana/web3.js";
 import algosdk from "algosdk";
 import BigNumber from "bignumber.js";
-import { deserialize } from "borsh";
+import {deserialize} from "borsh";
 import bs58 from "bs58";
 import {
     BridgeInitSchema,
@@ -17,9 +17,9 @@ import {
     RoutingHelper,
     TransactionType,
 } from "@glitter-finance/sdk-core";
-import { GlitterSDKServer } from "../../glitterSDKServer";
-import { ServerError } from "../../common/serverErrors";
-import { SolanaPollerCommon } from "./poller.solana.common";
+import {GlitterSDKServer} from "../../glitterSDKServer";
+import {ServerError} from "../../common/serverErrors";
+import {SolanaPollerCommon} from "./poller.solana.common";
 
 export class SolanaV1Parser {
     //V1 Token Process
@@ -65,57 +65,57 @@ export class SolanaV1Parser {
 
             //Parse Transaction Type
             switch (Number(data_bytes[0])) {
-            case 10:
-                partialTxn = this.getV1SolDeposit(
-                    sdkServer,
-                    txn,
-                    data_bytes,
-                    partialTxn
-                );
-                break;
-            case 11:
-                partialTxn = this.getV1solFinalize(
-                    sdkServer,
-                    txn,
-                    data_bytes,
-                    partialTxn
-                );
-                break;
-            case 13:
-                partialTxn = this.getV1SOLRelease(
-                    sdkServer,
-                    txn,
-                    data_bytes,
-                    partialTxn
-                );
-                break;
-            case 20:
-                partialTxn = this.getV1xALGODeposit(
-                    sdkServer,
-                    txn,
-                    data_bytes,
-                    partialTxn
-                );
-                break;
-            case 21:
-                partialTxn = this.getV1xALGOFinalize(
-                    sdkServer,
-                    txn,
-                    data_bytes,
-                    partialTxn
-                );
-                break;
-            case 23:
-                partialTxn = this.getV1xALGORelease(
-                    sdkServer,
-                    txn,
-                    data_bytes,
-                    partialTxn
-                );
-                break;
-            default:
-                console.log(`Txn ${txnID} is not a bridge`);
-                break;
+                case 10:
+                    partialTxn = this.getV1SolDeposit(
+                        sdkServer,
+                        txn,
+                        data_bytes,
+                        partialTxn
+                    );
+                    break;
+                case 11:
+                    partialTxn = this.getV1solFinalize(
+                        sdkServer,
+                        txn,
+                        data_bytes,
+                        partialTxn
+                    );
+                    break;
+                case 13:
+                    partialTxn = this.getV1SOLRelease(
+                        sdkServer,
+                        txn,
+                        data_bytes,
+                        partialTxn
+                    );
+                    break;
+                case 20:
+                    partialTxn = this.getV1xALGODeposit(
+                        sdkServer,
+                        txn,
+                        data_bytes,
+                        partialTxn
+                    );
+                    break;
+                case 21:
+                    partialTxn = this.getV1xALGOFinalize(
+                        sdkServer,
+                        txn,
+                        data_bytes,
+                        partialTxn
+                    );
+                    break;
+                case 23:
+                    partialTxn = this.getV1xALGORelease(
+                        sdkServer,
+                        txn,
+                        data_bytes,
+                        partialTxn
+                    );
+                    break;
+                default:
+                    console.log(`Txn ${txnID} is not a bridge`);
+                    break;
             }
         } catch (e) {
             throw ServerError.ProcessingError(BridgeNetworks.solana, txnID, e);

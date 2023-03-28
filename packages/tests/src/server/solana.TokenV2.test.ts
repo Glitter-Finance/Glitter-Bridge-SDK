@@ -1,5 +1,5 @@
-import { BridgeNetworks, GlitterEnvironment } from "@glitter-finance/sdk-core";
-import { GlitterSDKServer, GlitterPoller } from "@glitter-finance/sdk-server";
+import {BridgeNetworks, GlitterEnvironment} from "@glitter-finance/sdk-core";
+import {GlitterSDKServer, GlitterPoller} from "@glitter-finance/sdk-server";
 import * as assert from "assert";
 import * as util from "util";
 
@@ -28,7 +28,7 @@ describe("Solana Poller Token V2 Tests ", () => {
 
         const result = await poller.poll(sdk, cursor);
         console.log(util.inspect(result, false, null, true /* enable colors */));
-    });
+    }, 10000);
 
     afterAll(async () => {
         console.log("Closing SDK");
