@@ -1,25 +1,27 @@
 import BigNumber from "bignumber.js";
-import { BridgeToken } from "../tokens/tokens";
+import {BridgeToken} from "../tokens/tokens";
 
 export type Routing = {
-    from: RoutingPoint;
-    to: RoutingPoint;
-    amount: BigNumber | number | undefined;
-    units: BigNumber | undefined;
+  from: RoutingPoint;
+  to: RoutingPoint;
+  amount: BigNumber | number | undefined;
+  units: BigNumber | undefined;
 };
 export type RoutingPoint = {
-    network: string;
-    address: string;
-    token: string;
-    txn_signature?: string;
-    txn_signature_hashed?: string;
+  network: string;
+  address: string;
+  token: string;
+  txn_signature?: string;
+  txn_signature_hashed?: string;
 };
 export type DepositNote = {
-    system: string;
-    date: string;
+  system: string;
+  date: string;
 };
 
-export function RoutingDefault(copyFrom: Routing | undefined = undefined): Routing {
+export function RoutingDefault(
+    copyFrom: Routing | undefined = undefined
+): Routing {
     if (copyFrom) {
         return {
             from: RoutingPointDefault(copyFrom.from),
@@ -37,7 +39,9 @@ export function RoutingDefault(copyFrom: Routing | undefined = undefined): Routi
     }
 }
 
-export function RoutingPointDefault(copyFrom: RoutingPoint | undefined = undefined): RoutingPoint {
+export function RoutingPointDefault(
+    copyFrom: RoutingPoint | undefined = undefined
+): RoutingPoint {
     if (copyFrom) {
         return {
             network: copyFrom.network,
@@ -60,28 +64,40 @@ export function RoutingString(routing: Routing): string {
         typeof value === "bigint"
             ? value.toString()
             : JSON.stringify(value, (keyInner, valueInner) =>
-                  typeof valueInner === "bigint" ? valueInner.toString() : valueInner
-              )
+                typeof valueInner === "bigint" ? valueInner.toString() : valueInner
+            )
     );
 }
 
 /**
  * @deprecated The method should not be used. Please use RoutingHelper instead
  */
-export function SetRoutingUnits(routing: Routing, token: BridgeToken | undefined) {
+export function SetRoutingUnits(
+    routing: Routing,
+    token: BridgeToken | undefined
+) {
     if (!token) throw new Error("Token not defined");
     if (routing.units) return;
     if (!routing.amount) throw new Error("Routing amount not defined");
-    if (token.decimals == undefined) throw new Error("Routing decimals not defined");
-    routing.units = BigNumber(routing.amount).times(BigNumber(10).pow(token.decimals)); //ValueUnits.fromValue(routing.amount, token.decimals).units.toString();
+    if (token.decimals == undefined)
+        throw new Error("Routing decimals not defined");
+    routing.units = BigNumber(routing.amount).times(
+        BigNumber(10).pow(token.decimals)
+    ); //ValueUnits.fromValue(routing.amount, token.decimals).units.toString();
 }
 
 export class RoutingHelper {
-    public static BaseUnits_FromReadableValue(value: number | BigNumber, decimals: number): BigNumber {
+    public static BaseUnits_FromReadableValue(
+        value: number | BigNumber,
+        decimals: number
+    ): BigNumber {
         const baseRaw = BigNumber(value).times(BigNumber(10).pow(decimals));
         return baseRaw.decimalPlaces(0, BigNumber.ROUND_DOWN);
     }
-    public static ReadableValue_FromBaseUnits(baseUnits: BigNumber, decimals: number): BigNumber {
+    public static ReadableValue_FromBaseUnits(
+        baseUnits: BigNumber,
+        decimals: number
+    ): BigNumber {
         const baseRaw = BigNumber(baseUnits).div(BigNumber(10).pow(decimals));
         return baseRaw;
     }
