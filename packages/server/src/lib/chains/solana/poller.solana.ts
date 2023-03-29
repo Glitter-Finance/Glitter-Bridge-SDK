@@ -147,7 +147,12 @@ export class GlitterSolanaPoller implements GlitterPoller {
                     partialTxn = await SolanaV2Parser.process(sdkServer, client, txn);
                     break;
                 case BridgeType.USDC:
-                    partialTxn = await SolanaUSDCParser.process(sdkServer, txn, cursor);
+                    partialTxn = await SolanaUSDCParser.process(
+                        sdkServer,
+                        txn,
+                        client,
+                        cursor
+                    );
                     break;
                 default:
                     throw ServerError.InvalidBridgeType(

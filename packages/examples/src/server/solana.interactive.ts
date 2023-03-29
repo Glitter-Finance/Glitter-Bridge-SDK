@@ -1,6 +1,6 @@
-import { SOLANA_CACHED_TXIDS } from "./solana.txns";
+import {SOLANA_CACHED_TXIDS} from "./solana.txns";
 import * as util from "util";
-import { GlitterSDKServer, Cursor } from "@glitter-finance/sdk-server/dist";
+import {GlitterSDKServer, Cursor} from "@glitter-finance/sdk-server/dist";
 import {
     BridgeNetworks,
     GlitterEnvironment,

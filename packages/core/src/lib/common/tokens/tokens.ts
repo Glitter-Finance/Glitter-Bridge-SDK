@@ -50,18 +50,18 @@
 // }
 
 export type BridgeTokenConfig = {
-    tokens: BridgeToken[];
+  tokens: BridgeToken[];
 };
 export type BridgeToken = {
-    symbol: string;
-    network: string;
-    address: string | number | undefined;
-    decimals: number;
-    name: string | undefined;
-    fee_divisor?: number | undefined;
-    min_transfer?: number | undefined;
-    max_transfer?: number | undefined;
-    total_supply?: bigint | undefined;
+  symbol: string;
+  network: string;
+  address: string | number | undefined;
+  decimals: number;
+  name: string | undefined;
+  fee_divisor?: number | undefined;
+  min_transfer?: number | undefined;
+  max_transfer?: number | undefined;
+  total_supply?: bigint | undefined;
 };
 export function BridgeTokenDefault(): BridgeToken {
     return {
@@ -100,12 +100,29 @@ export class BridgeTokens {
     public static get(network: string, symbol: string): BridgeToken | undefined {
         return this._tokens.find((t) => {
             if (!t.symbol || !t.network) return false;
-            return t.network.toLowerCase() === network.toLowerCase() && t.symbol.toLowerCase() === symbol.toLowerCase();
+            return (
+                t.network.toLowerCase() === network.toLowerCase() &&
+        t.symbol.toLowerCase() === symbol.toLowerCase()
+            );
+        });
+    }
+
+    public static getFromAddress(
+        network: string,
+        address: string | number
+    ): BridgeToken | undefined {
+        return this._tokens.find((t) => {
+            if (!t.symbol || !t.network) return false;
+            return (
+                t.network.toLowerCase() === network.toLowerCase() &&
+        t.address &&
+        t.address.toString().toLowerCase() === address.toString().toLowerCase()
+            );
         });
     }
 
     public static add(...args: [token: BridgeToken]) {
-        //Check if already exists
+    //Check if already exists
         const existing = this.get(args[0].network, args[0].symbol);
         if (existing === undefined) {
             this._tokens.push(args[0]);
