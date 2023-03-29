@@ -2,6 +2,7 @@ import {
     BridgeDepositEvent,
     BridgeReleaseEvent,
     EvmNetworkConfig,
+    EvmTokenConfig,
     TransferEvent,
 } from "./types";
 import {ethers, providers} from "ethers";
@@ -469,7 +470,7 @@ export class EvmConnect {
         return ethers.Wallet.createRandom();
     }
 
-    public getToken(token: string): BridgeToken | undefined {
-        return BridgeTokens.get(this.__network, token);
+    public gettokenConfig(tokenSymbol: string): EvmTokenConfig | undefined {
+        return this.__config.tokens.find((x) => x.symbol === tokenSymbol);
     }
 }
