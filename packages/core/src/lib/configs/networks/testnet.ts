@@ -1,5 +1,5 @@
-import { BridgeNetworks } from "../../common/networks/networks";
-import { GlitterBridgeConfig } from "../config";
+import {BridgeNetworks} from "../../common/networks/networks";
+import {GlitterBridgeConfig} from "../config";
 
 export const BridgeTestnet: GlitterBridgeConfig = {
     name: "testnet",
@@ -119,7 +119,7 @@ export const BridgeTestnet: GlitterBridgeConfig = {
             rpcUrl: "https://rpc.ankr.com/avalanche_fuji",
             tokens: [
                 {
-                    network: "avalanche",
+                    bridgeConfig: {minTransferAmount: 1},
                     address: "0x5425890298aed601595a70AB815c96711a31Bc65",
                     symbol: "USDC",
                     decimals: 6,
@@ -135,7 +135,7 @@ export const BridgeTestnet: GlitterBridgeConfig = {
             rpcUrl: "https://rpc.ankr.com/eth_goerli",
             tokens: [
                 {
-                    network: "ethereum",
+                    bridgeConfig: {minTransferAmount: 1},
                     address: "0x07865c6E87B9F70255377e024ace6630C1Eaa37F",
                     symbol: "USDC",
                     decimals: 6,
@@ -151,7 +151,7 @@ export const BridgeTestnet: GlitterBridgeConfig = {
             rpcUrl: "https://rpc.ankr.com/polygon_mumbai",
             tokens: [
                 {
-                    network: "polygon",
+                    bridgeConfig: {minTransferAmount: 1},
                     address: "0x0fa8781a83e46826621b3bc094ea2a0212e71b23",
                     symbol: "USDC",
                     decimals: 6,
@@ -186,6 +186,9 @@ export const BridgeTestnet: GlitterBridgeConfig = {
                 name: "USD Coin",
                 symbol: "USDC",
                 decimals: 6,
+                bridgeConfig: {
+                    minTransferAmount: 1,
+                },
             },
         ],
         fullNode: "https://api.shasta.trongrid.io",
