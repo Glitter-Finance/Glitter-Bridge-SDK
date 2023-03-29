@@ -9,11 +9,9 @@ import {
     BridgeNetworks,
     BridgeType,
     ChainStatus,
-    GlitterEnvironment,
     PartialBridgeTxn,
     Routing,
     RoutingHelper,
-    SolanaPublicNetworks,
     TransactionType,
 } from "@glitter-finance/sdk-core";
 import {GlitterSDKServer} from "../../glitterSDKServer";
