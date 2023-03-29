@@ -22,7 +22,6 @@ import {
     NetworkIdentifiers,
 } from "../../common/networks/networks";
 import {ChainStatus} from "../../common/transactions/transactions";
-import {BridgeToken, BridgeTokens} from "../../common/tokens/tokens";
 import {walletToAddress} from "../../common/utils/utils";
 
 type Connection = {
