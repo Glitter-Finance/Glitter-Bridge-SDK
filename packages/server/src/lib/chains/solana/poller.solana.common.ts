@@ -50,7 +50,7 @@ export class SolanaPollerCommon {
         } else {
             for (let i = 0; i < txn?.transaction?.message?.accountKeys.length; i++) {
                 //Get Address
-                const address = txn?.transaction?.message?.accountKeys[i]?.toString();
+                const address = txn?.transaction?.message?.accountKeys[i]?.pubkey.toString();
                 if (!address) continue;
 
                 let delta = Number(0);

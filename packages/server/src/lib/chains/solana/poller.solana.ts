@@ -12,13 +12,13 @@ import {
     PartialBridgeTxn,
     SolanaPublicNetworks,
 } from "@glitter-finance/sdk-core";
-import {GlitterSDKServer} from "../../glitterSDKServer";
-import {Cursor, NewCursor, CompleteBatch} from "../../common/cursor";
-import {GlitterPoller, PollerResult} from "../../common/poller.Interface";
-import {ServerError} from "../../common/serverErrors";
-import {SolanaV1Parser} from "./poller.solana.token.v1";
-import {SolanaUSDCParser} from "./Poller.solana.usdc";
-import {SolanaV2Parser} from "./poller.solana.token.v2";
+import { GlitterSDKServer } from "../../glitterSDKServer";
+import { Cursor, NewCursor, CompleteBatch, CursorFilter } from "../../common/cursor";
+import { GlitterPoller, PollerResult } from "../../common/poller.Interface";
+import { ServerError } from "../../common/serverErrors";
+import { SolanaV1Parser } from "./poller.solana.token.v1";
+import { SolanaUSDCParser } from "./Poller.solana.usdc";
+import { SolanaV2Parser } from "./poller.solana.token.v2";
 
 export class GlitterSolanaPoller implements GlitterPoller {
     //Cursors
@@ -160,7 +160,7 @@ export class GlitterSolanaPoller implements GlitterPoller {
                         cursor.bridgeType
                     );
             }
-            if (partialTxn) partialTxns.push(partialTxn);
+            if (CursorFilter(cursor, partialTxn)) partialTxns.push(partialTxn);
         }
 
         //update cursor

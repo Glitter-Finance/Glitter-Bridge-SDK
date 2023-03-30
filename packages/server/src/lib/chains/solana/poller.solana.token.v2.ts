@@ -12,15 +12,18 @@ import {
     Routing,
     TransactionType,
 } from "@glitter-finance/sdk-core";
-import {GlitterSDKServer} from "../../glitterSDKServer";
+import { GlitterSDKServer } from "../../glitterSDKServer";
 import util from "util";
 import bs58 from "bs58";
 
 import * as anchor from "@project-serum/anchor";
-import {deserialize} from "borsh";
+import { deserialize } from "borsh";
 import * as borsh from "borsh";
 import BigNumber from "bignumber.js";
-import {BorshCoder, EventParser} from "@project-serum/anchor";
+import { BorshCoder, EventParser } from "@project-serum/anchor";
+import { BridgeTokens, RoutingHelper } from "@glitter-finance/sdk-core";
+import { SolanaPollerCommon } from "./poller.solana.common";
+import { base64ToString } from "@glitter-finance/sdk-core/dist/lib/common/utils/utils";
 
 const idl = {
     version: "0.1.0",
@@ -106,7 +109,7 @@ export class SolanaV2Parser {
         let partialTxn: PartialBridgeTxn = {
             txnID: txnID,
             txnIDHashed: sdkServer.sdk?.solana?.getTxnHashedFromBase58(txnID),
-            bridgeType: BridgeType.USDC,
+            bridgeType: BridgeType.TokenV2,
             txnType: TransactionType.Unknown,
             network: "solana",
             address: bridgeID || "",
@@ -125,16 +128,6 @@ export class SolanaV2Parser {
         partialTxn.block = txn.slot;
 
         try {
-            //Get Messages
-            // const messages = [
-            //     'Program HnoxGTCXd8Mvc9ucCXWWkCpibAcgSSYaVWuNVNbQc9hH invoke [1]',
-            //     'Program log: Instruction: DepositNative',
-            //     'Program 11111111111111111111111111111111 invoke [2]',
-            //     'Program 11111111111111111111111111111111 success',
-            //     'Program data: ePg9Ux+Oa5CamZmZmZnJPwDC6wsAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAgAAAAf5IJSLI5MS6wD08NSnoedP8wdMaa9/mHLD1BBj1IunUGAAAAU29sYW5hIAAAAAIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAACCAAAAGFsZ29yYW5k',
-            //     'Program HnoxGTCXd8Mvc9ucCXWWkCpibAcgSSYaVWuNVNbQc9hH consumed 12990 of 200000 compute units',
-            //     'Program HnoxGTCXd8Mvc9ucCXWWkCpibAcgSSYaVWuNVNbQc9hH success'
-            // ];
             const messages = txn.meta?.logMessages;
             if (!messages) throw Error("Log messages are undefined");
 
@@ -170,7 +163,7 @@ export class SolanaV2Parser {
             //Handle Events
             if (depositEvent) {
                 console.info(`Transaction ${txnID} is a deposit`);
-                partialTxn = await handleDeposit(
+                partialTxn = await this.handleDeposit(
                     sdkServer,
                     txn,
                     partialTxn,
@@ -178,7 +171,7 @@ export class SolanaV2Parser {
                 );
             } else if (releaseEvent) {
                 console.info(`Transaction ${txnID} is a release`);
-                partialTxn = await handleRelease(
+                partialTxn = await this.handleRelease(
                     sdkServer,
                     txn,
                     partialTxn,
@@ -186,7 +179,7 @@ export class SolanaV2Parser {
                 );
             } else if (refundEvent) {
                 console.info(`Transaction ${txnID} is a refund`);
-                partialTxn = await handleRefund(
+                partialTxn = await this.handleRefund(
                     sdkServer,
                     txn,
                     partialTxn,
@@ -201,41 +194,100 @@ export class SolanaV2Parser {
 
         return partialTxn;
     }
-}
 
-async function handleDeposit(
-    sdkServer: GlitterSDKServer,
-    txn: ParsedTransactionWithMeta,
-    partialTxn: PartialBridgeTxn,
-    depositEvent: any
-): Promise<PartialBridgeTxn> {
-    //Set type
-    partialTxn.txnType = TransactionType.Deposit;
+    private static async handleDeposit(
+        sdkServer: GlitterSDKServer,
+        txn: ParsedTransactionWithMeta,
+        partialTxn: PartialBridgeTxn,
+        depositEvent: any
+    ): Promise<PartialBridgeTxn> {
 
-    //Get token address
-    const tokenAddress = depositEvent.data.mint.toBase58();
+        //Set type
+        partialTxn.txnType = TransactionType.Deposit;
 
-    //Check if addres is solana token address
-    const isSolanaToken = tokenAddress === "11111111111111111111111111111111";
+        //Get token Information
+        const tokenAddress = depositEvent.data.mint.toBase58();
+        const token = BridgeTokens.getFromAddress("solana", tokenAddress);
+        if (!token) throw Error("Token not found");
+        partialTxn.tokenSymbol = token?.symbol || "";
 
-    //TODO: get token symbol from address
-    //partialTxn.tokenSymbol = sdkServer.sdk.solana?.getSymbolFromAddress(tokenAddress) || "";
+        //Get Address
+        const data = SolanaPollerCommon.
+            getSolanaAddressWithAmount(sdkServer, txn, null, true);
+        partialTxn.address = data[0] || "";
+        
+        //Get amount;
+        const amountTransferred = BigNumber(-data[1]) || BigNumber(0)
+        const amountEvent = RoutingHelper.BaseUnits_FromReadableValue(
+            BigNumber(depositEvent.data.amount), token.decimals);
+        if (!amountEvent.minus(amountTransferred).eq(0)) {
+            throw Error("Amount transferred does not match amount in event");
+        }
 
-    return partialTxn;
-}
-async function handleRelease(
-    sdkServer: GlitterSDKServer,
-    txn: ParsedTransactionWithMeta,
-    partialTxn: PartialBridgeTxn,
-    releaseEvent: any
-): Promise<PartialBridgeTxn> {
-    return partialTxn;
-}
-async function handleRefund(
-    sdkServer: GlitterSDKServer,
-    txn: ParsedTransactionWithMeta,
-    partialTxn: PartialBridgeTxn,
-    refundEvent: any
-): Promise<PartialBridgeTxn> {
-    return partialTxn;
+        //Get to Address
+        const toAddressBuffer = depositEvent.data.to.address;
+        const toAddress = toAddressBuffer.toString("base64");
+        const toNetwork = depositEvent.data.to.network;
+
+        //Set Routing
+        partialTxn.routing = this.getV1Routing(
+            "solana",
+            partialTxn.address || "",
+            partialTxn.tokenSymbol,
+            partialTxn.txnID,
+            toNetwork,
+            toAddress,
+            partialTxn.tokenSymbol,
+            "",
+            amountTransferred,
+            token.decimals
+        );
+        
+        return partialTxn;
+    }
+    private static async handleRelease(
+        sdkServer: GlitterSDKServer,
+        txn: ParsedTransactionWithMeta,
+        partialTxn: PartialBridgeTxn,
+        releaseEvent: any
+    ): Promise<PartialBridgeTxn> {
+        return partialTxn;
+    }
+    private static async handleRefund(
+        sdkServer: GlitterSDKServer,
+        txn: ParsedTransactionWithMeta,
+        partialTxn: PartialBridgeTxn,
+        refundEvent: any
+    ): Promise<PartialBridgeTxn> {
+        return partialTxn;
+    }
+    private static getV1Routing(
+        fromNetwork: string,
+        fromAddress: string,
+        fromToken: string,
+        fromTxnID: string,
+        toNetwork: string,
+        toAddress: string,
+        toToken: string,
+        toTxnID: string,
+        units: BigNumber,
+        decimals: number
+    ): Routing {
+        return {
+            from: {
+                network: fromNetwork,
+                address: fromAddress,
+                token: fromToken,
+                txn_signature: fromTxnID,
+            },
+            to: {
+                network: toNetwork,
+                address: toAddress,
+                token: toToken,
+                txn_signature: toTxnID,
+            },
+            units: units,
+            amount: RoutingHelper.ReadableValue_FromBaseUnits(units, decimals),
+        };
+    }
 }

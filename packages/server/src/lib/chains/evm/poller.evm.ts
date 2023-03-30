@@ -21,21 +21,21 @@ export class GlitterEVMPoller implements GlitterPoller {
     //Construct class with network
     constructor(sdkServer: GlitterSDKServer, network: BridgeNetworks) {
         this.network = network;
+
+        const apiConfig = sdkServer.API_Config(network);
+
+        this.apiKey = apiConfig?.API_KEY;
+        this.apiURL = apiConfig?.API_URL;
+
         //Store
         switch (network) {
             case BridgeNetworks.Ethereum:
-                this.apiKey = process.env.ETH_API_KEY;
-                this.apiURL = process.env.ETH_API_URL;
                 this.connect = sdkServer.sdk?.ethereum;
                 break;
             case BridgeNetworks.Avalanche:
-                this.apiKey = process.env.AVAX_API_KEY;
-                this.apiURL = process.env.AVAX_API_URL;
                 this.connect = sdkServer.sdk?.avalanche;
                 break;
             case BridgeNetworks.Polygon:
-                this.apiKey = process.env.POLYGON_API_KEY;
-                this.apiURL = process.env.POLYGON_API_URL;
                 this.connect = sdkServer.sdk?.polygon;
                 break;
             default:

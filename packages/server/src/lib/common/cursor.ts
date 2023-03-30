@@ -1,4 +1,4 @@
-import { BridgeNetworks, BridgeType } from "@glitter-finance/sdk-core";
+import { BridgeNetworks, BridgeType, ChainStatus, PartialBridgeTxn, TransactionType } from "@glitter-finance/sdk-core";
 
 export type Cursor = {
     //What to watch
@@ -10,6 +10,9 @@ export type Cursor = {
     beginning?: CursorPosition;
     end?: CursorPosition;
     limit?: number;
+
+    //Filter
+    filter?: CursorFilter;
 
     //Batching
     batch?: CursorBatch;
@@ -28,6 +31,10 @@ export type CursorBatch = {
     txns: number;
     complete: boolean;
 };
+export type CursorFilter = {
+    txnType?: TransactionType;
+    chainStatus?: ChainStatus;
+}
 
 export function NewCursor(network: BridgeNetworks, bridgeType: BridgeType, address: string, limit: number): Cursor {
     return {
@@ -66,4 +73,10 @@ export function CompleteBatch(cursor: Cursor): Cursor {
 
     //Return cursor
     return cursor;
+}
+export function CursorFilter(cursor: Cursor, txn:PartialBridgeTxn): PartialBridgeTxn|undefined {
+    if (!cursor.filter) return txn;
+    if (cursor.filter.txnType && cursor.filter.txnType != txn.txnType) return undefined;
+    if (cursor.filter.chainStatus && cursor.filter.chainStatus != txn.chainStatus) return undefined;
+    return txn;
 }

@@ -8,29 +8,65 @@ import { GlitterAlgorandPoller } from "./chains/algorand/poller.algorand";
 import { GlitterSolanaPoller } from "./chains/solana/poller.solana";
 import { GlitterEVMPoller } from "./chains/evm/poller.evm";
 import { clusterApiUrl } from "@solana/web3.js";
+import { ChainAPIConfig, GlitterServerConfig } from "./configs/config";
+
+import { ServerMainnet } from "./configs/networks/mainnet";
+import { ServerTestnet } from "./configs/networks/testnet";
 
 export class GlitterSDKServer {
+
+    //Local Params
     private _sdk: GlitterBridgeSDK = new GlitterBridgeSDK();
-    private _pollers: Map<BridgeNetworks, GlitterPoller> = new Map<
-    BridgeNetworks,
-    GlitterPoller
-  >();
+    private _pollers: Map<BridgeNetworks, GlitterPoller> = new Map< BridgeNetworks, GlitterPoller >();
     private _defaultLimit = 5;
+    private _serverConfig: GlitterServerConfig;
+    private _apiOverrides: { [key: string]: ChainAPIConfig } = {};
+    private _apis: { [key: string]: ChainAPIConfig } = {};
 
     constructor(environment?: GlitterEnvironment) {
         if (environment) this._sdk = this._sdk.setEnvironment(environment);
+
+        switch (environment) {
+            case GlitterEnvironment.mainnet:
+                this._serverConfig = ServerMainnet;
+                break;
+            case GlitterEnvironment.testnet:
+                this._serverConfig = ServerTestnet;
+                break;
+            default:
+                throw new Error("Environment not found");
+        }
+    }
+    
+    public setChainAPIs(network: BridgeNetworks, api: ChainAPIConfig): GlitterSDKServer {
+        this._apiOverrides[network] = api;
+        return this;
     }
 
     //Create Pollers
     public createPollers(networks: BridgeNetworks[]): GlitterSDKServer {
-    //Check for RPC overrides
-        this.check_RPC_Overrides();
+    
+        //Check for RPC overrides
+        this.check_API_Overrides();
 
         //Connect Core SDK to networks
         this.sdk.connect(networks);
 
         //Create Pollers for each network
         networks.forEach((network) => {
+
+            //Set API Config list
+            const apiConfig = this._serverConfig.chainAPIs.find((api) => api.network === network);
+            if (apiConfig) {
+                const overrideConfig = this._apiOverrides[network];
+                if (overrideConfig) {
+                    if (overrideConfig.API_KEY) apiConfig.API_KEY = overrideConfig.API_KEY;
+                    if (overrideConfig.API_URL) apiConfig.API_URL = overrideConfig.API_URL;
+                    if (overrideConfig.RPC) apiConfig.RPC = overrideConfig.RPC;
+                }
+                this._apis[network] = apiConfig;
+            }
+
             //Create poller:
             const poller = this.createPoller(network);
             poller.initialize(this);
@@ -56,31 +92,13 @@ export class GlitterSDKServer {
     }
 
     //Check overrides
-    private check_RPC_Overrides(): void {
-        const { ETH_RPC, POLYGON_RPC, AVAX_RPC, SOLANA_RPC } = process.env;
+    private check_API_Overrides(): void {
 
-        if (ETH_RPC) {
-            console.log("Overriding Ethereum RPC to: " + ETH_RPC);
-            this.sdk.setRPC(BridgeNetworks.Ethereum, ETH_RPC);
-        }
-
-        if (POLYGON_RPC) {
-            console.log("Overriding Polygon RPC to: " + POLYGON_RPC);
-            this.sdk.setRPC(BridgeNetworks.Polygon, POLYGON_RPC);
-        }
-
-        if (AVAX_RPC) {
-            console.log("Overriding Avalanche RPC to: " + AVAX_RPC);
-            this.sdk.setRPC(BridgeNetworks.Avalanche, AVAX_RPC);
-        }
-
-        if (this.sdk.environment === GlitterEnvironment.mainnet) {
-            if (SOLANA_RPC) {
-                this.sdk.setRPC(BridgeNetworks.solana, SOLANA_RPC);
-            }
-        } else {
-            this.sdk.setRPC(BridgeNetworks.solana, clusterApiUrl("testnet"));
-        }
+        for (const key in this._apiOverrides) {
+            const api = this._apiOverrides[key];
+            console.log("Overriding " + api.network + " RPC to: " + api.RPC);
+            this.sdk.setRPC(api.network, api.RPC);         
+        }        
     }
 
     public get sdk(): GlitterBridgeSDK {
@@ -91,5 +109,8 @@ export class GlitterSDKServer {
     }
     public poller(networks: BridgeNetworks): GlitterPoller | undefined {
         return this._pollers.get(networks);
+    }
+    public API_Config(network: BridgeNetworks): ChainAPIConfig | undefined {
+        return this._apis[network];
     }
 }

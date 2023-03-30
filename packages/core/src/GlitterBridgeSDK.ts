@@ -20,6 +20,7 @@ export class GlitterBridgeSDK {
     private _bridgeConfig: GlitterBridgeConfig | undefined;
     /** RPC URL Override */
     private _rpcOverrides: { [key: string]: string } = {};
+    private _rpc_URLS: { [key: string]: string } = {};
 
     /** Chain Specific SDKs */
     private _evm: Map<BridgeEvmNetworks, EvmConnect | undefined> = new Map();
@@ -33,14 +34,14 @@ export class GlitterBridgeSDK {
         this._environment = environment;
 
         switch (environment) {
-        case GlitterEnvironment.mainnet:
-            this._bridgeConfig = BridgeMainnet;
-            break;
-        case GlitterEnvironment.testnet:
-            this._bridgeConfig = BridgeTestnet;
-            break;
-        default:
-            throw new Error("Environment not found");
+            case GlitterEnvironment.mainnet:
+                this._bridgeConfig = BridgeMainnet;
+                break;
+            case GlitterEnvironment.testnet:
+                this._bridgeConfig = BridgeTestnet;
+                break;
+            default:
+                throw new Error("Environment not found");
         }
 
         //Get Tokens
@@ -74,24 +75,24 @@ export class GlitterBridgeSDK {
        * interface ChainConnect { connect(network: BridgeNetworks): void; }
        */
             switch (network) {
-            case BridgeNetworks.algorand:
-                this.connectToAlgorand();
-                break;
-            case BridgeNetworks.solana:
-                this.connectToSolana();
-                break;
-            case BridgeNetworks.Ethereum:
-                this.connectToEvmNetwork(BridgeNetworks.Ethereum);
-                break;
-            case BridgeNetworks.Polygon:
-                this.connectToEvmNetwork(BridgeNetworks.Polygon);
-                break;
-            case BridgeNetworks.Avalanche:
-                this.connectToEvmNetwork(BridgeNetworks.Avalanche);
-                break;
-            case BridgeNetworks.TRON:
-                this.connectToTron();
-                break;
+                case BridgeNetworks.algorand:
+                    this.connectToAlgorand();
+                    break;
+                case BridgeNetworks.solana:
+                    this.connectToSolana();
+                    break;
+                case BridgeNetworks.Ethereum:
+                    this.connectToEvmNetwork(BridgeNetworks.Ethereum);
+                    break;
+                case BridgeNetworks.Polygon:
+                    this.connectToEvmNetwork(BridgeNetworks.Polygon);
+                    break;
+                case BridgeNetworks.Avalanche:
+                    this.connectToEvmNetwork(BridgeNetworks.Avalanche);
+                    break;
+                case BridgeNetworks.TRON:
+                    this.connectToTron();
+                    break;
             }
         });
 
@@ -145,9 +146,12 @@ export class GlitterBridgeSDK {
             this._bridgeConfig.algorand.serverUrl =
         this._rpcOverrides[BridgeNetworks.algorand];
         }
-
+        
         //Get the connections
         this._algorand = new AlgorandConnect(this._bridgeConfig.algorand);
+
+        //set the RPC URL
+        this._rpc_URLS[BridgeNetworks.algorand] = this._bridgeConfig.algorand.serverUrl;
 
         if (!this._algorand.client) throw new Error("Algorand client not set");
 
@@ -168,9 +172,11 @@ export class GlitterBridgeSDK {
             this._bridgeConfig.solana.server =
         this._rpcOverrides[BridgeNetworks.solana];
         }
-
+      
         this._solana = new SolanaConnect(this._bridgeConfig?.solana);
-        //(this._glitterNetwork.algorand.appProgramId);
+
+        //set the RPC URL
+        this._rpc_URLS[BridgeNetworks.solana] = this._bridgeConfig.solana.server;
 
         if (!this._solana.client) throw new Error("Solana client not set");
         return this;
@@ -187,6 +193,10 @@ export class GlitterBridgeSDK {
             network,
             new EvmConnect(network, this._bridgeConfig!.evm[network])
         );
+      
+        //set the RPC URL
+        this._rpc_URLS[BridgeNetworks.solana] = this._bridgeConfig!.evm[network].rpcUrl;
+
         return this;
     }
 
@@ -200,6 +210,9 @@ export class GlitterBridgeSDK {
    */
     public getEvmNetwork(evmNetwork: BridgeEvmNetworks): EvmConnect | undefined {
         return this._evm.get(evmNetwork);
+    }
+    public getRPCUrl(network: BridgeNetworks): string | undefined {
+        return this._rpc_URLS[network];
     }
 
     get environment(): GlitterEnvironment | undefined {

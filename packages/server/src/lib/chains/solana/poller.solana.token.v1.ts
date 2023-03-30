@@ -4,7 +4,7 @@ import {
 } from "@solana/web3.js";
 import algosdk from "algosdk";
 import BigNumber from "bignumber.js";
-import {deserialize} from "borsh";
+import { deserialize } from "borsh";
 import bs58 from "bs58";
 import {
     BridgeInitSchema,
@@ -17,17 +17,18 @@ import {
     RoutingHelper,
     TransactionType,
 } from "@glitter-finance/sdk-core";
-import {GlitterSDKServer} from "../../glitterSDKServer";
-import {ServerError} from "../../common/serverErrors";
-import {SolanaPollerCommon} from "./poller.solana.common";
+import { GlitterSDKServer } from "../../glitterSDKServer";
+import { ServerError } from "../../common/serverErrors";
+import { SolanaPollerCommon } from "./poller.solana.common";
 
 export class SolanaV1Parser {
     //V1 Token Process
     public static async process(
         sdkServer: GlitterSDKServer,
-        txn: ParsedTransactionWithMeta
+        txn: ParsedTransactionWithMeta,
     ): Promise<PartialBridgeTxn> {
-    //Destructure Local Vars
+        
+        //Destructure Local Vars
         const txnID = txn.transaction.signatures[0];
 
         //Set Partial Txn
@@ -41,6 +42,7 @@ export class SolanaV1Parser {
 
         //Try to get the txn details
         try {
+
             //get client
             const client = sdkServer.sdk?.solana?.client;
             if (!client) throw ServerError.ClientNotSet(BridgeNetworks.solana);
@@ -58,9 +60,7 @@ export class SolanaV1Parser {
             partialTxn.block = txn.slot;
 
             //Get txnData From Solana
-            const txnData = (
-        txn.transaction.message.instructions[0] as PartiallyDecodedInstruction
-            ).data;
+            const txnData = (txn.transaction.message.instructions[0] as PartiallyDecodedInstruction).data;
             const data_bytes = bs58.decode(txnData);
 
             //Parse Transaction Type
@@ -174,6 +174,7 @@ export class SolanaV1Parser {
         //return
         return partialTxn;
     }
+
     private static getV1xALGODeposit(
         sdkServer: GlitterSDKServer,
         txn: ParsedTransactionWithMeta,
@@ -223,12 +224,14 @@ export class SolanaV1Parser {
         //return
         return partialTxn;
     }
+
     private static getV1SOLRelease(
         sdkServer: GlitterSDKServer,
         txn: ParsedTransactionWithMeta,
         data_bytes: Uint8Array,
         partialTxn: PartialBridgeTxn
     ): PartialBridgeTxn {
+
         const decimals = 9;
 
         //Set type
@@ -272,12 +275,14 @@ export class SolanaV1Parser {
         //return
         return partialTxn;
     }
+
     private static getV1xALGORelease(
         sdkServer: GlitterSDKServer,
         txn: ParsedTransactionWithMeta,
         data_bytes: Uint8Array,
         partialTxn: PartialBridgeTxn
     ): PartialBridgeTxn {
+
         const decimals = 6;
 
         //Set type
