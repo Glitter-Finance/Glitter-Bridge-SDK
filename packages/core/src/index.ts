@@ -34,7 +34,7 @@ import {
     AlgorandAccounts,
 } from "./lib/chains/algorand/AccountsStore";
 
-import {AlgorandConnect} from "./lib/chains/algorand/connect";
+import {AlgorandConnect} from "./lib/chains/algorand/AlgorandConnect";
 import {SolanaPublicNetworks} from "./lib/chains/solana/config";
 import {
     Routing,

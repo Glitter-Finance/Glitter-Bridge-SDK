@@ -1,7 +1,7 @@
 import {BridgeNetworks} from "src/lib/common/networks/networks";
 
 export type AlgorandStandardAssetConfig = {
-  destinationSymbol: Record<BridgeNetworks, string>;
+  destinationSymbol: Record<BridgeNetworks, string | null>;
   name: string;
   symbol: string;
   assetId: number;

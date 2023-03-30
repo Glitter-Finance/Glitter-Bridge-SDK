@@ -17,6 +17,38 @@ import {
     buildTokenBridgeTxParams,
 } from "./helpers";
 
+function validateTokenBridgeTransaction(params: {
+  routing: Routing;
+  tokenConfig: AlgorandAssetConfig;
+}): boolean {
+    const {routing, tokenConfig} = params;
+    const toNetwork = routing.to.network.toLowerCase();
+    const fromNetwork = routing.from.network.toLowerCase();
+    const toTokenSymbol = routing.to.token.toLowerCase();
+    const fromTokenSymbol = routing.from.token.toLowerCase();
+
+    if (!routing.units || !routing.amount) return false;
+    const amount = new BigNumber(routing.amount).toNumber();
+    if (tokenConfig.maxTransfer && !isNaN(tokenConfig.maxTransfer)) {
+        if (amount > tokenConfig.maxTransfer) {
+            return false;
+        }
+    }
+    if (tokenConfig.minTransfer && !isNaN(tokenConfig.minTransfer)) {
+        if (amount < tokenConfig.minTransfer) {
+            return false;
+        }
+    }
+
+    if (fromNetwork === "algorand" && toNetwork === "solana") {
+        if (fromTokenSymbol === "algo" && toTokenSymbol === "xalgo") return true;
+        if (fromTokenSymbol === "xsol" && toTokenSymbol === "sol") return true;
+        if (fromTokenSymbol === "usdc" && toTokenSymbol === "usdc") return true;
+    }
+
+    return false;
+}
+
 /**
  *
  * @param client
@@ -159,9 +191,6 @@ export const bridgeDeposit = async (
     feeCollectorAddress: string,
     tokenConfig: AlgorandAssetConfig
 ): Promise<Transaction[]> => {
-    // if (fNetwork == "algorand" && fToken == "algo" && tNetwork == "solana" && tToken == "xalgo") return true;
-    // if (fNetwork == "algorand" && fToken == "xsol" && tNetwork == "solana" && tToken == "sol") return true;
-    // if (fNetwork == "algorand" && fToken == "usdc" && tNetwork == "solana" && tToken == "usdc") return true;
     const routingInfo: Routing = {
         from: {
             address: sourceAddress,
@@ -178,6 +207,15 @@ export const bridgeDeposit = async (
         ),
         units: new BigNumber(amount.toString()),
     };
+
+    if (
+        !validateTokenBridgeTransaction({
+            routing: routingInfo,
+            tokenConfig: tokenConfig,
+        })
+    ) {
+        return Promise.reject("Unsupported bridge transaction");
+    }
 
     const isAlgo = tokenConfig.symbol.trim().toLowerCase() === "algo";
     const depositMethod = isAlgo

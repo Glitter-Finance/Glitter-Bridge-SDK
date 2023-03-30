@@ -1,3 +1,3 @@
 export * from "./AccountsStore";
-export * from "./connect";
+export * from "./AlgorandConnect";
 export * from "./types";

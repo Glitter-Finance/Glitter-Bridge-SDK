@@ -43,7 +43,7 @@ export class AssetsRepository {
         });
     }
 
-    get(
+    getAsset(
         tokenSymbol: string
     ): (AlgorandAssetMetadata & AlgorandAssetConfig) | undefined {
         return this.__metadata.get(tokenSymbol);

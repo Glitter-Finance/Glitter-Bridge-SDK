@@ -1,4 +1,10 @@
-import algosdk, {MultisigMetadata, Algodv2} from "algosdk";
+import algosdk, {
+    MultisigMetadata,
+    Algodv2,
+    Transaction,
+    Account,
+} from "algosdk";
+import SendRawTransaction from "algosdk/dist/types/client/v2/algod/sendRawTransaction";
 import {AlgorandStandardAssetConfig} from "./types";
 
 export type AlgorandAccount = {
@@ -209,5 +215,87 @@ export class AlgorandAccountsStore {
         }
 
         return 0;
+    }
+    /**
+   *
+   * @param transactions
+   * @param signer
+   * @returns
+   */
+    async signAndSendTransactions(
+        transactions: Transaction[],
+        signer: Account
+    ): Promise<SendRawTransaction> {
+        if (transactions.length == 0)
+            throw new Error(
+                "Transactions array should contain one or more transactions."
+            );
+        if (transactions.length > 4)
+            throw new Error("Maximum of 4 transactions can be sent at a time.");
+
+        const signedTxns: Uint8Array[] = [];
+        const groupID = algosdk.computeGroupID(transactions);
+
+        for (let i = 0; i < transactions.length; i++) {
+            transactions[i].group = groupID;
+            const signedTxn: Uint8Array = transactions[i].signTxn(signer.sk);
+            signedTxns.push(signedTxn);
+        }
+
+        const txnResult: SendRawTransaction = await this.__client
+            .sendRawTransaction(signedTxns)
+            .do();
+        await algosdk.waitForConfirmation(
+            this.__client,
+            transactions[0].txID().toString(),
+            4
+        );
+        return txnResult;
+    }
+    /**
+   *
+   * Signs and send multi sig
+   * @param groupedTxns
+   * @param signers
+   * @param mParams
+   * @returns
+   */
+    async signAndSendMultisigTransactions(
+        groupedTxns: Transaction[],
+        mParams: algosdk.MultisigMetadata,
+        signers: Account[]
+    ): Promise<SendRawTransaction> {
+        if (groupedTxns.length == 0) throw new Error("No Transactions to sign");
+        if (groupedTxns.length > 4)
+            throw new Error("Maximum 4 Transactions in a group");
+
+        const signedTxns: Uint8Array[] = [];
+        const groupID = algosdk.computeGroupID(groupedTxns);
+
+        for (let i = 0; i < groupedTxns.length; i++) {
+            groupedTxns[i].group = groupID;
+
+            let signedTxn: Uint8Array = algosdk.signMultisigTransaction(
+                groupedTxns[i],
+                mParams,
+                signers[0].sk
+            ).blob;
+            for (let j = 1; j < signers.length; j++) {
+                signedTxn = algosdk.appendSignMultisigTransaction(
+                    signedTxn,
+                    mParams,
+                    signers[j].sk
+                ).blob;
+            }
+            signedTxns.push(signedTxn);
+        }
+
+        const txnResult = await this.__client.sendRawTransaction(signedTxns).do();
+        await algosdk.waitForConfirmation(
+            this.__client,
+            groupedTxns[0].txID().toString(),
+            4
+        );
+        return txnResult;
     }
 }

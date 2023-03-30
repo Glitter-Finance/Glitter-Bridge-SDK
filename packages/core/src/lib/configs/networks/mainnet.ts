@@ -36,11 +36,11 @@ export const BridgeMainnet: GlitterBridgeConfig = {
                 totalSupply: BigInt(NaN),
                 destinationSymbol: {
                     [BridgeNetworks.solana]: "xALGO",
-                    [BridgeNetworks.Ethereum]: "xALGO",
-                    [BridgeNetworks.Avalanche]: "xALGO",
-                    [BridgeNetworks.TRON]: "xALGO",
-                    [BridgeNetworks.algorand]: "xALGO",
-                    [BridgeNetworks.Polygon]: "xALGO",
+                    [BridgeNetworks.Ethereum]: null,
+                    [BridgeNetworks.Avalanche]: null,
+                    [BridgeNetworks.TRON]: null,
+                    [BridgeNetworks.algorand]: null,
+                    [BridgeNetworks.Polygon]: null,
                 },
             },
             {
@@ -72,11 +72,11 @@ export const BridgeMainnet: GlitterBridgeConfig = {
                 name: "Wrapped SOL",
                 destinationSymbol: {
                     [BridgeNetworks.solana]: "SOL",
-                    [BridgeNetworks.Ethereum]: "xSOL",
-                    [BridgeNetworks.Avalanche]: "xSOL",
-                    [BridgeNetworks.TRON]: "xSOL",
-                    [BridgeNetworks.algorand]: "xSOL",
-                    [BridgeNetworks.Polygon]: "xSOL",
+                    [BridgeNetworks.Ethereum]: null,
+                    [BridgeNetworks.Avalanche]: null,
+                    [BridgeNetworks.TRON]: null,
+                    [BridgeNetworks.algorand]: null,
+                    [BridgeNetworks.Polygon]: null,
                 },
             },
             {
@@ -88,6 +88,7 @@ export const BridgeMainnet: GlitterBridgeConfig = {
                 maxTransfer: NaN,
                 totalSupply: BigInt(NaN),
                 destinationSymbol: {
+                    // Unknown status
                     [BridgeNetworks.solana]: "xGLI",
                     [BridgeNetworks.Ethereum]: "xGLI",
                     [BridgeNetworks.Avalanche]: "xGLI",
