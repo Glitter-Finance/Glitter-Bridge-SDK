@@ -8,12 +8,19 @@ interface BaseTokenConfig {
   totalSupply?: bigint;
 }
 
-export type BridgeTokenConfig = { address: string } & BaseTokenConfig;
-export type AlgorandStandardAssetConfig = Omit<BridgeTokenConfig, "address"> & {
+export type BridgeTokenConfig = { 
+  address: string;
+  type: "__bridgeTokenConfig"
+} & BaseTokenConfig;
+
+export type AlgorandStandardAssetConfig = {
   assetId: number;
-} & { wrappedSymbol?: string };
-export type AlgorandNativeTokenConfig = Omit<BridgeTokenConfig, "address"> & {
+  wrappedSymbol?: string
+  type: "__algorandStandardAssetConfig"
+} & BaseTokenConfig;
+
+export type AlgorandNativeTokenConfig = {
   isNative: boolean;
-} & {
   wrappedSymbol?: string;
-};
+  type: "__algorandNativeTokenConfig"
+} & BaseTokenConfig;
