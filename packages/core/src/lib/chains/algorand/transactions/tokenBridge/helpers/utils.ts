@@ -14,22 +14,12 @@ import {
     AlgorandTokenBridgeReleaseTransactions,
     buildReleaseParams,
 } from "./tokenRelease";
-import {
-    AlgorandTokenBridgeVaultConfigTransactions,
-    AlgorandTokenBridgeVaultTokenTransactions,
-    buildTokenVaultConfigTransactionParams,
-    buildTokenVaultTokenTransactionParams,
-} from "./tokenVault";
 
 export const buildTokenBridgeTxParams = (
     method:
     | AlgorandTokenBridgeDepositTransactions
     | AlgorandTokenBridgeRefundTransactions
-    | AlgorandTokenBridgeReleaseTransactions
-    | AlgorandTokenBridgeVaultConfigTransactions
-    | AlgorandTokenBridgeVaultTokenTransactions,
-    sourceNetwork: BridgeNetworks,
-    destinationNetwork: BridgeNetworks,
+    | AlgorandTokenBridgeReleaseTransactions,
     routing: Routing,
     tokenConfig: AlgorandStandardAssetConfig | AlgorandNativeTokenConfig
 ): Uint8Array[] => {
@@ -57,31 +47,6 @@ export const buildTokenBridgeTxParams = (
                 bigAmount,
         tokenConfig.symbol as "xSOL" | "algo",
         routing.to.txn_signature
-            );
-        case AlgorandTokenBridgeVaultConfigTransactions.optin:
-        case AlgorandTokenBridgeVaultConfigTransactions.setup:
-        case AlgorandTokenBridgeVaultConfigTransactions.update_fee:
-        case AlgorandTokenBridgeVaultConfigTransactions.update_limits:
-            if (!(tokenConfig as AlgorandStandardAssetConfig).assetId)
-                throw new Error(
-                    "Standard Asset ID required for vault config transaction."
-                );
-            return buildTokenVaultConfigTransactionParams(
-                method,
-        tokenConfig as AlgorandStandardAssetConfig
-            );
-
-        case AlgorandTokenBridgeVaultTokenTransactions.deposit:
-        case AlgorandTokenBridgeVaultTokenTransactions.refund:
-        case AlgorandTokenBridgeVaultTokenTransactions.release:
-            return buildTokenVaultTokenTransactionParams(
-                method,
-                sourceNetwork,
-                destinationNetwork,
-                routing.from.address,
-                routing.to.address,
-                bigAmount,
-                routing.from.txn_signature
             );
         default:
             return [];

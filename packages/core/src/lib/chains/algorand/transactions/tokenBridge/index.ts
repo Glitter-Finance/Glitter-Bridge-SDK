@@ -16,8 +16,6 @@ import {
     AlgorandTokenBridgeDepositTransactions,
     AlgorandTokenBridgeRefundTransactions,
     AlgorandTokenBridgeReleaseTransactions,
-    AlgorandTokenBridgeVaultConfigTransactions,
-    AlgorandTokenBridgeVaultTokenTransactions,
     buildTokenBridgeTxParams,
 } from "./helpers";
 
@@ -132,11 +130,7 @@ export const approvalTransaction = async (
     method:
     | AlgorandTokenBridgeDepositTransactions
     | AlgorandTokenBridgeRefundTransactions
-    | AlgorandTokenBridgeReleaseTransactions
-    | AlgorandTokenBridgeVaultConfigTransactions
-    | AlgorandTokenBridgeVaultTokenTransactions,
-    sourceNetwork: BridgeNetworks,
-    destiantionNetwork: BridgeNetworks,
+    | AlgorandTokenBridgeReleaseTransactions,
     routing: Routing,
     bridgeAppIndex: number,
     vault: string,
@@ -148,13 +142,7 @@ export const approvalTransaction = async (
         date: `${new Date()}`,
     };
     const note = algosdk.encodeObj(record);
-    const appArgs = buildTokenBridgeTxParams(
-        method,
-        sourceNetwork,
-        destiantionNetwork,
-        routing,
-        token
-    );
+    const appArgs = buildTokenBridgeTxParams(method, routing, token);
     const accounts: string[] = [];
     accounts.push(routing.from.address);
     accounts.push(vault);
@@ -232,8 +220,6 @@ export const bridgeDeposit = async (
     const appTxn = await approvalTransaction(
         client,
         depositMethod,
-        BridgeNetworks.algorand,
-        destinationNetwork,
         routingInfo,
         bridgeAppIndex,
         vault,
