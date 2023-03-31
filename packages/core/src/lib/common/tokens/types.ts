@@ -11,9 +11,9 @@ interface BaseTokenConfig {
 export type BridgeTokenConfig = { address: string } & BaseTokenConfig;
 export type AlgorandStandardAssetConfig = Omit<BridgeTokenConfig, "address"> & {
   assetId: number;
-} & { destinationSymbol: Record<string, string> };
+} & { wrappedSymbol?: string };
 export type AlgorandNativeTokenConfig = Omit<BridgeTokenConfig, "address"> & {
   isNative: boolean;
 } & {
-  destinationSymbol: Record<string, string>;
+  wrappedSymbol?: string;
 };

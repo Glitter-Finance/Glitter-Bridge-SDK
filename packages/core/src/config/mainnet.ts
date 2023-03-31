@@ -34,9 +34,7 @@ export const config: GlitterBridgeConfig = {
                 name: "Algorand ALGO",
                 maxTransfer: NaN,
                 totalSupply: BigInt(NaN),
-                destinationSymbol: {
-                    [BridgeNetworks.solana]: "xALGO",
-                },
+                wrappedSymbol: "xALGO",
                 isNative: true,
             },
             {
@@ -48,14 +46,6 @@ export const config: GlitterBridgeConfig = {
                 name: "USD Coin",
                 maxTransfer: NaN,
                 totalSupply: BigInt(NaN),
-                destinationSymbol: {
-                    [BridgeNetworks.solana]: "USDC",
-                    [BridgeNetworks.Ethereum]: "USDC",
-                    [BridgeNetworks.Avalanche]: "USDC",
-                    [BridgeNetworks.TRON]: "USDC",
-                    [BridgeNetworks.algorand]: "USDC",
-                    [BridgeNetworks.Polygon]: "USDC",
-                },
             },
             {
                 symbol: "xSOL",
@@ -63,12 +53,10 @@ export const config: GlitterBridgeConfig = {
                 decimals: 9,
                 minTransfer: 0.05,
                 feeDivisor: 200,
+                wrappedSymbol: "SOL",
                 maxTransfer: undefined,
                 totalSupply: undefined,
                 name: "Wrapped SOL",
-                destinationSymbol: {
-                    [BridgeNetworks.solana]: "SOL",
-                },
             },
             {
                 symbol: "xGLI",
@@ -78,14 +66,6 @@ export const config: GlitterBridgeConfig = {
                 feeDivisor: NaN,
                 maxTransfer: NaN,
                 totalSupply: BigInt(NaN),
-                destinationSymbol: {
-                    [BridgeNetworks.solana]: "xGLI",
-                    [BridgeNetworks.Ethereum]: "xGLI",
-                    [BridgeNetworks.Avalanche]: "xGLI",
-                    [BridgeNetworks.TRON]: "xGLI",
-                    [BridgeNetworks.algorand]: "xGLI",
-                    [BridgeNetworks.Polygon]: "xGLI",
-                },
                 name: "Glitter Token",
             },
         ],

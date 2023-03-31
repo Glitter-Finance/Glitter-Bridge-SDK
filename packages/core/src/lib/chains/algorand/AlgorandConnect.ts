@@ -59,8 +59,6 @@ export class AlgorandConnect {
     ): Promise<algosdk.Transaction[]> {
         const token = this.assetsRepo.getAsset(tokenSymbol);
         if (!token) return Promise.reject("Token unsupported");
-        if (!token.destinationSymbol[destinationNetwork])
-            return Promise.reject("Token unsupported");
 
         const depositAddress = this.config.bridgeAccounts.usdcDeposit;
         const routing = RoutingDefault();
@@ -68,7 +66,7 @@ export class AlgorandConnect {
         routing.from.token = tokenSymbol;
         routing.from.network = BridgeNetworks.algorand.toString().toLowerCase();
         routing.to.address = destinationAdress;
-        routing.to.token = token.destinationSymbol[destinationNetwork] as string;
+        routing.to.token = token.wrappedSymbol ?? token.symbol;
         routing.to.network = destinationNetwork.toString().toLowerCase();
         routing.amount = new BigNumber(amount.toString());
 

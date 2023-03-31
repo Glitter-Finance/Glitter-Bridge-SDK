@@ -192,7 +192,7 @@ export const bridgeDeposit = async (
         to: {
             address: destinationAddress,
             network: destinationNetwork.toString().toLowerCase(),
-            token: tokenConfig.destinationSymbol[destinationNetwork],
+            token: tokenConfig.wrappedSymbol ?? tokenConfig.symbol,
         },
         amount: new BigNumber(
             (amount / BigInt(10 ** tokenConfig.decimals)).toString()
