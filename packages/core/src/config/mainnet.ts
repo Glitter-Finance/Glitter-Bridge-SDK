@@ -210,23 +210,23 @@ export const config: GlitterBridgeConfig = {
             releaseWallet: "0xfdc9Af7852F9b2d234b96B1F53804BC781Ce26b3",
         },
     },
-    stellar: {
-        accounts: {
-            usdcDepositAddress:
-        "GAFK7XFZHMLSNV7OJTBO7BAIZA66X6QIBV5RMZZYXK4Q7ZSO52J5C3WQ",
-            usdcDepositTag: "5794940577887230301",
-            usdcReceiverAddress: "",
-            usdcReceiverTag: "",
-        },
-    },
-    hedera: {
-        accounts: {
-            usdcDepositAddress: "0.0.439415",
-            usdcDepositTag: "6461445716",
-            usdcReceiverAddress: "",
-            usdcReceiverTag: "",
-        },
-    },
+    // stellar: {
+    //     accounts: {
+    //         usdcDepositAddress:
+    //     "GAFK7XFZHMLSNV7OJTBO7BAIZA66X6QIBV5RMZZYXK4Q7ZSO52J5C3WQ",
+    //         usdcDepositTag: "5794940577887230301",
+    //         usdcReceiverAddress: "",
+    //         usdcReceiverTag: "",
+    //     },
+    // },
+    // hedera: {
+    //     accounts: {
+    //         usdcDepositAddress: "0.0.439415",
+    //         usdcDepositTag: "6461445716",
+    //         usdcReceiverAddress: "",
+    //         usdcReceiverTag: "",
+    //     },
+    // },
     tron: {
         tokens: [
             {
@@ -245,10 +245,10 @@ export const config: GlitterBridgeConfig = {
             releaseWallet: "TGUSL4VtESnWQfy2G6RmCNJT6eqqfcR6om",
         },
     },
-    flow: {
-        accounts: {
-            usdcDeposit: "0x1fafdb9e814dfe06",
-            usdcReceiver: "",
-        },
-    },
+    // flow: {
+    //     accounts: {
+    //         usdcDeposit: "0x1fafdb9e814dfe06",
+    //         usdcReceiver: "",
+    //     },
+    // },
 };

@@ -159,22 +159,6 @@ export const config: GlitterBridgeConfig = {
             chainId: 80001,
         },
     },
-    stellar: {
-        accounts: {
-            usdcDepositAddress: "",
-            usdcDepositTag: "",
-            usdcReceiverAddress: "",
-            usdcReceiverTag: "",
-        },
-    },
-    hedera: {
-        accounts: {
-            usdcDepositAddress: "",
-            usdcDepositTag: "",
-            usdcReceiverAddress: "",
-            usdcReceiverTag: "",
-        },
-    },
     tron: {
         tokens: [
             {
@@ -191,12 +175,6 @@ export const config: GlitterBridgeConfig = {
             bridge: "TG5L1sypor6QsvEWdF5zVQR48Fd4B73P3E",
             depositWallet: "TXpEeQDe6UenfjkhG9Y3HPMjuXQGukpJq8",
             releaseWallet: "TEWifyy5yrm7zWbWBs5RVbLyZm4JPiawpf",
-        },
-    },
-    flow: {
-        accounts: {
-            usdcDeposit: "",
-            usdcReceiver: "",
         },
     },
 };
