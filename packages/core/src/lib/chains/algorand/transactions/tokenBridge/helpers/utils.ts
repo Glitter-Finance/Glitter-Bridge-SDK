@@ -3,8 +3,6 @@ import {
     AlgorandNativeTokenConfig,
     Routing,
 } from "src/lib/common";
-import {BridgeNetworks} from "src/lib/common/networks/networks";
-
 import {
     AlgorandTokenBridgeDepositTransactions,
     buildDepositParams,
