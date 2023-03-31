@@ -7,10 +7,15 @@ import {
     RoutingHelper,
     SetRoutingUnits,
 } from "./routing/routing";
-import { BridgeTokenConfig, BridgeToken, BridgeTokenDefault, BridgeTokens } from "./tokens/tokens";
-import { Sleep, Precise, PreciseDecimals, LogProgress } from "./utils/utils";
-import { ValueUnits } from "./utils/value_units";
-import { Shorten } from "./utils/shorten";
+import {
+    BridgeTokens,
+    BridgeTokenConfig,
+    AlgorandStandardAssetConfig,
+    AlgorandNativeTokenConfig,
+} from "./tokens";
+import {Sleep, Precise, PreciseDecimals, LogProgress} from "./utils/utils";
+import {ValueUnits} from "./utils/value_units";
+import {Shorten} from "./utils/shorten";
 export {
     Routing,
     RoutingPoint,
@@ -19,9 +24,9 @@ export {
     RoutingString,
     SetRoutingUnits,
     BridgeTokenConfig,
-    BridgeToken,
-    BridgeTokenDefault,
     BridgeTokens,
+    AlgorandStandardAssetConfig,
+    AlgorandNativeTokenConfig,
     Sleep,
     Precise,
     PreciseDecimals,

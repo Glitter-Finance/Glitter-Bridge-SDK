@@ -5,7 +5,7 @@ import algosdk, {
     Account,
 } from "algosdk";
 import SendRawTransaction from "algosdk/dist/types/client/v2/algod/sendRawTransaction";
-import {AlgorandStandardAssetConfig} from "./types";
+import {AlgorandStandardAssetConfig} from "src/lib/common";
 
 export type AlgorandAccount = {
   addr: string;

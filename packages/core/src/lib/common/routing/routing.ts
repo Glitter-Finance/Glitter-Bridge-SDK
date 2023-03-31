@@ -1,5 +1,5 @@
 import BigNumber from "bignumber.js";
-import {BridgeToken} from "../tokens/tokens";
+import {BridgeToken} from "../tokens/BridgeTokens";
 
 export type Routing = {
   from: RoutingPoint;

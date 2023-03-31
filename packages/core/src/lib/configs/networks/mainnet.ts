@@ -36,12 +36,8 @@ export const BridgeMainnet: GlitterBridgeConfig = {
                 totalSupply: BigInt(NaN),
                 destinationSymbol: {
                     [BridgeNetworks.solana]: "xALGO",
-                    [BridgeNetworks.Ethereum]: null,
-                    [BridgeNetworks.Avalanche]: null,
-                    [BridgeNetworks.TRON]: null,
-                    [BridgeNetworks.algorand]: null,
-                    [BridgeNetworks.Polygon]: null,
                 },
+                isNative: true,
             },
             {
                 symbol: "USDC",
@@ -72,11 +68,6 @@ export const BridgeMainnet: GlitterBridgeConfig = {
                 name: "Wrapped SOL",
                 destinationSymbol: {
                     [BridgeNetworks.solana]: "SOL",
-                    [BridgeNetworks.Ethereum]: null,
-                    [BridgeNetworks.Avalanche]: null,
-                    [BridgeNetworks.TRON]: null,
-                    [BridgeNetworks.algorand]: null,
-                    [BridgeNetworks.Polygon]: null,
                 },
             },
             {
@@ -88,7 +79,6 @@ export const BridgeMainnet: GlitterBridgeConfig = {
                 maxTransfer: NaN,
                 totalSupply: BigInt(NaN),
                 destinationSymbol: {
-                    // Unknown status
                     [BridgeNetworks.solana]: "xGLI",
                     [BridgeNetworks.Ethereum]: "xGLI",
                     [BridgeNetworks.Avalanche]: "xGLI",
@@ -180,7 +170,6 @@ export const BridgeMainnet: GlitterBridgeConfig = {
             rpcUrl: "https://rpc.ankr.com/avalanche",
             tokens: [
                 {
-                    network: "avalanche",
                     address: "0xB97EF9Ef8734C71904D8002F8b6Bc66Dd9c48a6E",
                     symbol: "USDC",
                     decimals: 6,
@@ -196,7 +185,6 @@ export const BridgeMainnet: GlitterBridgeConfig = {
             rpcUrl: "https://rpc.ankr.com/eth",
             tokens: [
                 {
-                    network: "ethereum",
                     address: "0xA0b86991c6218b36c1d19D4a2e9Eb0cE3606eB48",
                     symbol: "USDC",
                     decimals: 6,
@@ -212,7 +200,6 @@ export const BridgeMainnet: GlitterBridgeConfig = {
             rpcUrl: "https://rpc.ankr.com/polygon",
             tokens: [
                 {
-                    network: "polygon",
                     address: "0x2791Bca1f2de4661ED88A30C99A7a9449Aa84174",
                     symbol: "USDC",
                     decimals: 6,

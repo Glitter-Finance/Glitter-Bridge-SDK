@@ -1,6 +1,6 @@
 import algosdk from "algosdk";
+import {AlgorandStandardAssetConfig} from "src/lib/common";
 import {BridgeNetworks} from "src/lib/common/networks/networks";
-import {AlgorandStandardAssetConfig} from "../../../types";
 
 export enum AlgorandTokenBridgeVaultConfigTransactions {
   setup = "token_vault_setup",
@@ -25,8 +25,9 @@ export const buildTokenVaultConfigTransactionParams = (
     method: AlgorandTokenBridgeVaultConfigTransactions,
     tokenConfig: AlgorandStandardAssetConfig
 ): Uint8Array[] => {
-    const args: Uint8Array[] = [];
+    if (!tokenConfig.feeDivisor) throw new Error("Fee Divisor is undefined");
 
+    const args: Uint8Array[] = [];
     args.push(new Uint8Array(Buffer.from(method.toString())));
     args.push(algosdk.encodeUint64(tokenConfig.assetId));
     args.push(new Uint8Array(Buffer.from(tokenConfig.symbol)));

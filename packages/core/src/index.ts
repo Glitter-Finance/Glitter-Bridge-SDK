@@ -50,7 +50,7 @@ import {
     BridgeToken,
     BridgeTokenDefault,
     BridgeTokens,
-} from "./lib/common/tokens/tokens";
+} from "./lib/common/tokens/BridgeTokens";
 
 import {
     Sleep,

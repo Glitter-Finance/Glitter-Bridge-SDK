@@ -5,14 +5,14 @@ import {
     sendAndConfirmTransaction,
     Transaction,
 } from "@solana/web3.js";
-import { SolanaAccount, SolanaAccounts } from "./accounts";
-import { SolanaAssets } from "./assets";
-import { SolanaBridgeTxnsV1 } from "./txns/bridge";
-import { SolanaConfig, SolanaProgramId, SolanaPublicNetworks } from "./config";
-import { SolanaTxns } from "./txns/txns";
+import {SolanaAccount, SolanaAccounts} from "./accounts";
+import {SolanaAssets} from "./assets";
+import {SolanaBridgeTxnsV1} from "./txns/bridge";
+import {SolanaConfig, SolanaProgramId, SolanaPublicNetworks} from "./config";
+import {SolanaTxns} from "./txns/txns";
 import * as util from "util";
 import {
-    BridgeToken,
+    BridgeTokenConfig,
     BridgeTokens,
     LogProgress,
     Precise,
@@ -21,10 +21,11 @@ import {
     Sleep,
     ValueUnits,
 } from "../../common";
-import { COMMITMENT } from "./utils";
-import { ethers } from "ethers";
+import {COMMITMENT} from "./utils";
+import {ethers} from "ethers";
 import base58 from "bs58";
-import { SolanaError } from "./solanaError";
+import {SolanaError} from "./solanaError";
+import {BridgeNetworks} from "src/lib/common/networks/networks";
 
 export class SolanaConnect {
     //Load config
@@ -55,10 +56,7 @@ export class SolanaConnect {
             config.accounts
         );
 
-        //Load tokens
-        config.tokens.forEach((element) => {
-            BridgeTokens.add(element);
-        });
+        BridgeTokens.add(BridgeNetworks.solana, config.tokens);
     }
 
     public getPublicConnection(network: SolanaPublicNetworks): Connection {
@@ -91,7 +89,7 @@ export class SolanaConnect {
         if (!this._assets) throw new Error(SolanaError.ASSETS_NOT_SET);
 
         //Get Token
-        const token = BridgeTokens.get("solana", fromSymbol);
+        const token = BridgeTokens.getToken(BridgeNetworks.solana, fromSymbol);
         if (!token) throw new Error(SolanaError.INVALID_ASSET);
 
         //Get routing
@@ -154,7 +152,7 @@ export class SolanaConnect {
         if (!this._assets) throw new Error(SolanaError.ASSETS_NOT_SET);
 
         //Get Token
-        const token = BridgeTokens.get("solana", fromSymbol);
+        const token = BridgeTokens.getToken(BridgeNetworks.solana, fromSymbol);
         if (!token) throw new Error(SolanaError.INVALID_ASSET);
 
         //Get routing
@@ -255,7 +253,7 @@ export class SolanaConnect {
         if (!this._client) throw new Error(SolanaError.CLIENT_NOT_SET);
 
         //Get Token
-        const token = BridgeTokens.get("solana", symbol);
+        const token = BridgeTokens.getToken(BridgeNetworks.solana, symbol);
         if (!token) throw new Error(SolanaError.INVALID_ASSET);
 
         //Get routing
@@ -270,7 +268,11 @@ export class SolanaConnect {
 
         routing.amount = amount;
 
-        const returnValue = await this.sendTokens(routing, funder, token);
+        const returnValue = await this.sendTokens(
+            routing,
+            funder,
+      token as BridgeTokenConfig
+        );
         return returnValue;
     }
 
@@ -387,7 +389,7 @@ export class SolanaConnect {
     public async sendTokens(
         routing: Routing,
         account: SolanaAccount,
-        token: BridgeToken
+        token: BridgeTokenConfig
     ): Promise<boolean> {
     // eslint-disable-next-line no-async-promise-executor
         return new Promise(async (resolve, reject) => {
@@ -465,11 +467,11 @@ export class SolanaConnect {
                 //Fail Safe
 
                 //Get Token
-                const token = BridgeTokens.get("solana", symbol);
+                const token = BridgeTokens.getToken(
+                    BridgeNetworks.solana,
+                    symbol
+                ) as BridgeTokenConfig;
                 if (!token) throw new Error(SolanaError.ASSETS_NOT_SET);
-                if (!token.address) throw new Error(SolanaError.INVALID_ASSET_ID);
-                if (typeof token.address !== "string")
-                    throw new Error(SolanaError.INVALID_ASSET_ID_TYPE);
 
                 //Get Txn
                 console.log(`Opting in ${account.addr} to ${token.address}`);
@@ -532,11 +534,11 @@ export class SolanaConnect {
         let balance = await this.getTokenBalance(signer.addr, symbol);
 
         //Get Token
-        const token = BridgeTokens.get("solana", symbol);
+        const token = BridgeTokens.getToken(
+            BridgeNetworks.solana,
+            symbol
+        ) as BridgeTokenConfig;
         if (!token) throw new Error(SolanaError.INVALID_ASSET);
-        if (!token.address) throw new Error(SolanaError.INVALID_ASSET_ID);
-        if (typeof token.address !== "string")
-            throw new Error(SolanaError.INVALID_ASSET_ID_TYPE);
 
         //Check if balance needs to be closed out
         if (balance > 0) {
@@ -572,11 +574,11 @@ export class SolanaConnect {
         if (!this._assets) throw new Error(SolanaError.UNDEFINED_SOL_ASSETS);
 
         // //Get Token
-        const token = BridgeTokens.get("solana", symbol);
+        const token = BridgeTokens.getToken(
+            BridgeNetworks.solana,
+            symbol
+        ) as BridgeTokenConfig;
         if (!token) throw new Error(SolanaError.INVALID_ASSET);
-        if (!token.address) throw new Error(SolanaError.INVALID_ASSET_ID);
-        if (typeof token.address !== "string")
-            throw new Error(SolanaError.INVALID_ASSET_ID_TYPE);
 
         //get token account
         const tokenAccount = await this._assets.getTokenAccount(account.pk, token);
@@ -798,11 +800,11 @@ export class SolanaConnect {
         if (!this._client) throw new Error(SolanaError.UNDEFINED_SOL_ASSETS);
 
         //Get Token
-        const token = BridgeTokens.get("solana", symbol);
+        const token = BridgeTokens.getToken(
+            BridgeNetworks.solana,
+            symbol
+        ) as BridgeTokenConfig;
         if (!token) throw new Error(SolanaError.INVALID_ASSET);
-        if (!token.address) throw new Error(SolanaError.INVALID_ASSET_ID);
-        if (typeof token.address !== "string")
-            throw new Error(SolanaError.INVALID_ASSET_ID_TYPE);
 
         //get token account
         const tokenAccount = await this._assets.getTokenAccount(
@@ -1091,19 +1093,21 @@ export class SolanaConnect {
             if (!this._accounts) throw new Error("Solana Accounts not defined");
 
             //Get Token
-            const token = BridgeTokens.get("solana", symbol);
-            if (!token) throw new Error("Token not found");
-            if (!token.address) throw new Error("mint address is required");
-            if (typeof token.address !== "string")
-                throw new Error("token address is required in string format");
+            const token = BridgeTokens.getToken(
+                BridgeNetworks.solana,
+                symbol
+            ) as BridgeTokenConfig;
             return token.address;
         } catch (error) {
             console.log(error);
             return undefined;
         }
     }
-    public getToken(token: string): BridgeToken | undefined {
-        return BridgeTokens.get("solana", token);
+    public getToken(token: string): BridgeTokenConfig | undefined {
+        return BridgeTokens.getToken(
+            BridgeNetworks.solana,
+            token
+        ) as BridgeTokenConfig;
     }
     public getClient(network: SolanaPublicNetworks): Connection | undefined {
         switch (network) {

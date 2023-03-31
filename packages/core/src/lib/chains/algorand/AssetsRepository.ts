@@ -1,5 +1,5 @@
 import {Algodv2} from "algosdk";
-import {AlgorandAssetConfig} from "./types";
+import {AlgorandStandardAssetConfig} from "src/lib/common";
 
 export type AlgorandAssetMetadata = {
   index: number;
@@ -23,7 +23,7 @@ export type AlgorandAssetMetadata = {
 export class AssetsRepository {
     protected __metadata: Map<
     string,
-    AlgorandAssetMetadata & AlgorandAssetConfig
+    AlgorandAssetMetadata & AlgorandStandardAssetConfig
   >;
     protected __algoClient: Algodv2;
 
@@ -32,7 +32,10 @@ export class AssetsRepository {
         this.__metadata = new Map();
     }
 
-    async addStandardAsset(assetId: number, tokenConfig: AlgorandAssetConfig) {
+    async addStandardAsset(
+        assetId: number,
+        tokenConfig: AlgorandStandardAssetConfig
+    ) {
         const assetInfo = (await this.__algoClient
             .getAssetByID(assetId)
             .do()) as AlgorandAssetMetadata;
@@ -45,7 +48,7 @@ export class AssetsRepository {
 
     getAsset(
         tokenSymbol: string
-    ): (AlgorandAssetMetadata & AlgorandAssetConfig) | undefined {
+    ): (AlgorandAssetMetadata & AlgorandStandardAssetConfig) | undefined {
         return this.__metadata.get(tokenSymbol);
     }
 }

@@ -1,9 +1,10 @@
-import {Routing} from "src/lib/common";
-import {BridgeNetworks} from "src/lib/common/networks/networks";
 import {
-    AlgorandAssetConfig,
     AlgorandStandardAssetConfig,
-} from "../../../types";
+    AlgorandNativeTokenConfig,
+    Routing,
+} from "src/lib/common";
+import {BridgeNetworks} from "src/lib/common/networks/networks";
+
 import {
     AlgorandTokenBridgeDepositTransactions,
     buildDepositParams,
@@ -30,7 +31,7 @@ export const buildTokenBridgeTxParams = (
     sourceNetwork: BridgeNetworks,
     destinationNetwork: BridgeNetworks,
     routing: Routing,
-    tokenConfig: AlgorandStandardAssetConfig | AlgorandAssetConfig
+    tokenConfig: AlgorandStandardAssetConfig | AlgorandNativeTokenConfig
 ): Uint8Array[] => {
     if (!routing.amount) throw new Error("Amount is required");
     const bigAmount = BigInt(routing.amount.toString());

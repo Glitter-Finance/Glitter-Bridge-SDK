@@ -1,24 +1,7 @@
-import {BridgeNetworks} from "src/lib/common/networks/networks";
-
-export type AlgorandStandardAssetConfig = {
-  destinationSymbol: Record<BridgeNetworks, string | null>;
-  name: string;
-  symbol: string;
-  assetId: number;
-  decimals: number;
-  feeDivisor: number;
-  minTransfer?: number;
-  maxTransfer?: number;
-  totalSupply?: bigint;
-};
-
-export type AlgorandNativeAssetConfig = Omit<
-  AlgorandStandardAssetConfig,
-  "assetId"
->;
-export type AlgorandAssetConfig =
-  | AlgorandNativeAssetConfig
-  | AlgorandStandardAssetConfig;
+import {
+    AlgorandNativeTokenConfig,
+    AlgorandStandardAssetConfig,
+} from "src/lib/common";
 
 export type AlgorandConfig = {
   serverUrl: string;
@@ -41,7 +24,7 @@ export type AlgorandConfig = {
     usdcDeposit: string;
     tokenBridgeV2Address: string;
   };
-  assets: Array<AlgorandStandardAssetConfig | AlgorandAssetConfig>;
+  assets: Array<AlgorandNativeTokenConfig | AlgorandStandardAssetConfig>;
 };
 
 export type AlgorandPollerOptions = {

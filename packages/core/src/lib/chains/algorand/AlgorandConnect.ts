@@ -1,15 +1,16 @@
 import * as algosdk from "algosdk";
-import {
-    AlgorandConfig,
-    AlgorandAssetConfig,
-    AlgorandStandardAssetConfig,
-} from "./types";
+import {AlgorandConfig} from "./types";
 import {AssetsRepository} from "./AssetsRepository";
 import {BridgeNetworks} from "src/lib/common/networks/networks";
 import BigNumber from "bignumber.js";
 import {bridgeDeposit, bridgeUSDC} from "./transactions";
 import SendRawTransaction from "algosdk/dist/types/client/v2/algod/sendRawTransaction";
-import {RoutingDefault} from "src/lib/common";
+import {
+    AlgorandNativeTokenConfig,
+    AlgorandStandardAssetConfig,
+    BridgeTokens,
+    RoutingDefault,
+} from "src/lib/common";
 import {AlgorandAccountsStore} from "./AccountsStore";
 
 export class AlgorandConnect {
@@ -26,13 +27,14 @@ export class AlgorandConnect {
         this.clientIndexer = this.getAlgodIndexer();
         this.assetsRepo = new AssetsRepository(this.client);
         this.accountsStore = new AlgorandAccountsStore(this.client);
+        BridgeTokens.loadConfig(BridgeNetworks.algorand, config.assets);
 
         config.assets.map(
-            (conf: AlgorandStandardAssetConfig | AlgorandAssetConfig) => {
+            (conf: AlgorandNativeTokenConfig | AlgorandStandardAssetConfig) => {
                 if ((conf as AlgorandStandardAssetConfig).assetId) {
                     return this.assetsRepo.addStandardAsset(
                         (conf as AlgorandStandardAssetConfig).assetId,
-                        conf
+            conf as AlgorandStandardAssetConfig
                     );
                 }
             }

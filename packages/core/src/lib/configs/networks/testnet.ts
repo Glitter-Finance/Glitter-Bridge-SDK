@@ -34,14 +34,8 @@ export const BridgeTestnet: GlitterBridgeConfig = {
                 name: "",
                 maxTransfer: NaN,
                 totalSupply: BigInt(NaN),
-                destinationSymbol: {
-                    [BridgeNetworks.Avalanche]: null,
-                    [BridgeNetworks.algorand]: null,
-                    [BridgeNetworks.Ethereum]: null,
-                    [BridgeNetworks.solana]: null,
-                    [BridgeNetworks.Polygon]: null,
-                    [BridgeNetworks.TRON]: null,
-                },
+                destinationSymbol: {},
+                isNative: true,
             },
             {
                 symbol: "USDC",
@@ -52,14 +46,7 @@ export const BridgeTestnet: GlitterBridgeConfig = {
                 name: "",
                 maxTransfer: NaN,
                 totalSupply: BigInt(NaN),
-                destinationSymbol: {
-                    [BridgeNetworks.Avalanche]: null,
-                    [BridgeNetworks.algorand]: null,
-                    [BridgeNetworks.Ethereum]: null,
-                    [BridgeNetworks.solana]: null,
-                    [BridgeNetworks.Polygon]: null,
-                    [BridgeNetworks.TRON]: null,
-                },
+                destinationSymbol: {},
             },
             {
                 symbol: "xSOL",
@@ -70,14 +57,7 @@ export const BridgeTestnet: GlitterBridgeConfig = {
                 name: "",
                 maxTransfer: NaN,
                 totalSupply: BigInt(NaN),
-                destinationSymbol: {
-                    [BridgeNetworks.Avalanche]: null,
-                    [BridgeNetworks.algorand]: null,
-                    [BridgeNetworks.Ethereum]: null,
-                    [BridgeNetworks.solana]: null,
-                    [BridgeNetworks.Polygon]: null,
-                    [BridgeNetworks.TRON]: null,
-                },
+                destinationSymbol: {},
             },
         ],
     },
@@ -138,7 +118,6 @@ export const BridgeTestnet: GlitterBridgeConfig = {
             rpcUrl: "https://rpc.ankr.com/avalanche_fuji",
             tokens: [
                 {
-                    network: "avalanche",
                     address: "0x5425890298aed601595a70AB815c96711a31Bc65",
                     symbol: "USDC",
                     decimals: 6,
@@ -154,7 +133,6 @@ export const BridgeTestnet: GlitterBridgeConfig = {
             rpcUrl: "https://rpc.ankr.com/eth_goerli",
             tokens: [
                 {
-                    network: "ethereum",
                     address: "0x07865c6E87B9F70255377e024ace6630C1Eaa37F",
                     symbol: "USDC",
                     decimals: 6,
@@ -170,7 +148,6 @@ export const BridgeTestnet: GlitterBridgeConfig = {
             rpcUrl: "https://rpc.ankr.com/polygon_mumbai",
             tokens: [
                 {
-                    network: "polygon",
                     address: "0x0fa8781a83e46826621b3bc094ea2a0212e71b23",
                     symbol: "USDC",
                     decimals: 6,

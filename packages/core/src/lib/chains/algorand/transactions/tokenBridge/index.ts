@@ -1,8 +1,12 @@
 import algosdk, {Transaction} from "algosdk";
 import BigNumber from "bignumber.js";
-import {Routing, RoutingDefault} from "src/lib/common";
+import {
+    AlgorandStandardAssetConfig,
+    AlgorandNativeTokenConfig,
+    Routing,
+    RoutingDefault,
+} from "src/lib/common";
 import {BridgeNetworks} from "src/lib/common/networks/networks";
-import {AlgorandAssetConfig, AlgorandStandardAssetConfig} from "../../types";
 import {
     algoTransferTxnWithRoutingNote,
     assetTransferTxnWithRoutingNote,
@@ -19,7 +23,7 @@ import {
 
 function validateTokenBridgeTransaction(params: {
   routing: Routing;
-  tokenConfig: AlgorandAssetConfig;
+  tokenConfig: AlgorandNativeTokenConfig | AlgorandStandardAssetConfig;
 }): boolean {
     const {routing, tokenConfig} = params;
     const toNetwork = routing.to.network.toLowerCase();
@@ -59,7 +63,7 @@ function validateTokenBridgeTransaction(params: {
 const getTransferTxByAssetSymbol = async (
     client: algosdk.Algodv2,
     routing: Routing,
-    tokenConfig?: AlgorandAssetConfig | AlgorandStandardAssetConfig
+    tokenConfig?: AlgorandNativeTokenConfig | AlgorandStandardAssetConfig
 ): Promise<algosdk.Transaction> => {
     switch (routing.from.token.trim().toLowerCase()) {
         case "algo":
@@ -89,7 +93,7 @@ export const feeTransaction = async (
     client: algosdk.Algodv2,
     routing: Routing,
     feeCollector: string,
-    tokenConfig: AlgorandAssetConfig | AlgorandStandardAssetConfig
+    tokenConfig: AlgorandNativeTokenConfig | AlgorandStandardAssetConfig
 ): Promise<Transaction> => {
     /**
    * FeeRouting seems to be copy
@@ -103,13 +107,13 @@ export const feeTransaction = async (
     feeRouting.to.address = feeCollector;
     feeRouting.units = undefined;
 
-    if (routing.amount) {
+    if (routing.amount && tokenConfig.feeDivisor) {
         feeRouting.amount = BigNumber(routing.amount).div(tokenConfig.feeDivisor);
 
         return await getTransferTxByAssetSymbol(client, routing, tokenConfig);
     }
 
-    throw new Error("Amount is required");
+    throw new Error("Amount or fee is undefined, check algorand tokens config");
 };
 
 /**
@@ -136,7 +140,7 @@ export const approvalTransaction = async (
     routing: Routing,
     bridgeAppIndex: number,
     vault: string,
-    token: AlgorandAssetConfig
+    token: AlgorandStandardAssetConfig | AlgorandNativeTokenConfig
 ): Promise<Transaction> => {
     const params = await getAlgorandDefaultTransactionParams(client);
     const record = {
@@ -189,7 +193,7 @@ export const bridgeDeposit = async (
     asaVault: string;
   },
     feeCollectorAddress: string,
-    tokenConfig: AlgorandAssetConfig
+    tokenConfig: AlgorandStandardAssetConfig | AlgorandNativeTokenConfig
 ): Promise<Transaction[]> => {
     const routingInfo: Routing = {
         from: {
