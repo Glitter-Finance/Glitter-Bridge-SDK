@@ -1,13 +1,13 @@
-import { PublicKey } from "@solana/web3.js";
-import { ethers } from "ethers";
-import { fromHexString } from "../../common/utils/bytes";
+import {PublicKey} from "@solana/web3.js";
+import {ethers} from "ethers";
+import {fromHexString} from "../../common/utils/bytes";
 import algoSdk from "algosdk";
 import {
     BridgeEvmNetworks,
     BridgeNetworks,
     getNetworkByNumericId,
     getNumericNetworkId,
-} from "../../common/networks/networks";
+} from "../../common/networks";
 
 // eslint-disable-next-line @typescript-eslint/no-var-requires
 const TronWeb = require("tronweb");

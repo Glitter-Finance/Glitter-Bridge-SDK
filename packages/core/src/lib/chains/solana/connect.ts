@@ -25,7 +25,7 @@ import {COMMITMENT} from "./utils";
 import {ethers} from "ethers";
 import base58 from "bs58";
 import {SolanaError} from "./solanaError";
-import {BridgeNetworks} from "src/lib/common/networks/networks";
+import {BridgeNetworks} from "src/lib/common/networks";
 
 export class SolanaConnect {
     //Load config

@@ -1,5 +1,5 @@
 import {ethers} from "ethers";
-import {BridgeEvmNetworks} from "../../common/networks/networks";
+import {BridgeEvmNetworks} from "../../common/networks";
 import {BridgeTokenConfig} from "../../common";
 
 export type TokenConfig = {

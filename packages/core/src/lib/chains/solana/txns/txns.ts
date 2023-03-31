@@ -1,8 +1,8 @@
-import { Connection, PublicKey, SystemProgram, Transaction } from "@solana/web3.js";
-import { createCloseAccountInstruction, createTransferCheckedInstruction } from "@solana/spl-token";
-import { BridgeToken, BridgeTokens, Routing } from "../../../common";
-import { SolanaError } from "../solanaError";
-import { RoutingHelper } from "../../../common/routing/routing";
+import {Connection, PublicKey, SystemProgram, Transaction} from "@solana/web3.js";
+import {createCloseAccountInstruction, createTransferCheckedInstruction} from "@solana/spl-token";
+import {BridgeToken, BridgeTokens, Routing} from "../../../common";
+import {SolanaError} from "../solanaError";
+import {RoutingHelper} from "../../../common/routing";
 
 export class SolanaTxns {
     private _client?: Connection;

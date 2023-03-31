@@ -19,8 +19,8 @@ import {
     BridgeEvmNetworks,
     BridgeNetworks,
     NetworkIdentifiers,
-} from "../../common/networks/networks";
-import {ChainStatus} from "../../common/transactions/transactions";
+} from "../../common/networks";
+import {ChainStatus} from "../../common/transactions";
 import {walletToAddress} from "../../common/utils/utils";
 import {BridgeTokenConfig, BridgeTokens} from "src";
 

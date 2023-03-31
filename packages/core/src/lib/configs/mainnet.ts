@@ -1,7 +1,7 @@
-import {BridgeNetworks} from "../../common/networks/networks";
-import {GlitterBridgeConfig} from "../config";
+import {GlitterBridgeConfig} from "src/types";
+import {BridgeNetworks} from "../common";
 
-export const BridgeMainnet: GlitterBridgeConfig = {
+export const config: GlitterBridgeConfig = {
     name: "mainnet",
     algorand: {
         serverUrl: "https://node.algoexplorerapi.io",

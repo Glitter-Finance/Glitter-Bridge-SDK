@@ -1,4 +1,4 @@
-import {BridgeNetworks} from "../networks/networks";
+import {BridgeNetworks} from "../networks";
 import {
     BridgeTokenConfig,
     AlgorandStandardAssetConfig,

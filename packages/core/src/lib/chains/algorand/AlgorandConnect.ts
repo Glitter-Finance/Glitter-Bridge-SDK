@@ -1,7 +1,7 @@
 import * as algosdk from "algosdk";
 import {AlgorandConfig} from "./types";
 import {AssetsRepository} from "./AssetsRepository";
-import {BridgeNetworks} from "src/lib/common/networks/networks";
+import {BridgeNetworks} from "src/lib/common/networks";
 import BigNumber from "bignumber.js";
 import {bridgeDeposit, bridgeUSDC} from "./transactions";
 import SendRawTransaction from "algosdk/dist/types/client/v2/algod/sendRawTransaction";

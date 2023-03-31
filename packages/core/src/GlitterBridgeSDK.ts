@@ -1,3 +1,4 @@
+import {GlitterEnvironment} from "src";
 import {AlgorandConnect} from "./lib/chains/algorand";
 import {EvmConnect} from "./lib/chains/evm";
 import {SolanaConnect} from "./lib/chains/solana";
@@ -5,10 +6,9 @@ import {TronConnect} from "./lib/chains/tron/connect";
 import {
     BridgeEvmNetworks,
     BridgeNetworks,
-} from "./lib/common/networks/networks";
-import {GlitterBridgeConfig, GlitterEnvironment} from "./lib/configs/config";
-import {BridgeMainnet} from "./lib/configs/networks/mainnet";
-import {BridgeTestnet} from "./lib/configs/networks/testnet";
+} from "./lib/common/networks";
+import {mainnetConfig, testnetConfig} from "./lib/configs";
+import {GlitterBridgeConfig} from "./types";
 
 /**
  * Glitter Bridge SDK
@@ -30,10 +30,10 @@ export class GlitterBridgeSDK {
 
         switch (environment) {
             case GlitterEnvironment.mainnet:
-                this._bridgeConfig = BridgeMainnet;
+                this._bridgeConfig = mainnetConfig;
                 break;
             case GlitterEnvironment.testnet:
-                this._bridgeConfig = BridgeTestnet;
+                this._bridgeConfig = testnetConfig;
                 break;
             default:
                 throw new Error("Environment not found");

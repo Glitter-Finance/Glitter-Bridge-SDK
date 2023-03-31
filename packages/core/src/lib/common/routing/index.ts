@@ -1,5 +1,5 @@
 import BigNumber from "bignumber.js";
-import {BridgeToken} from "../tokens/BridgeTokens";
+import {BridgeTokenConfig} from "../tokens";
 
 export type Routing = {
   from: RoutingPoint;
@@ -74,7 +74,7 @@ export function RoutingString(routing: Routing): string {
  */
 export function SetRoutingUnits(
     routing: Routing,
-    token: BridgeToken | undefined
+    token: BridgeTokenConfig | undefined
 ) {
     if (!token) throw new Error("Token not defined");
     if (routing.units) return;

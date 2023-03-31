@@ -1,5 +1,5 @@
 import BigNumber from "bignumber.js";
-import { Routing } from "../routing/routing";
+import {Routing} from "../routing";
 
 export enum TransactionType {
     Unknown = "Unknown",

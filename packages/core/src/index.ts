@@ -26,14 +26,6 @@ import {SolanaConfig} from "./lib/chains/solana/config";
 import {SolanaProgramId} from "./lib/chains/solana/config";
 import {SolanaConnect} from "./lib/chains/solana/connect";
 
-import {
-    AlgorandAccount,
-    AlgorandMSigAccount,
-    AlgorandAccountDetails,
-    AlgorandAccountAsset,
-    AlgorandAccounts,
-} from "./lib/chains/algorand/AccountsStore";
-
 import {AlgorandConnect} from "./lib/chains/algorand/AlgorandConnect";
 import {SolanaPublicNetworks} from "./lib/chains/solana/config";
 import {
@@ -44,11 +36,8 @@ import {
     RoutingString,
     RoutingHelper,
     SetRoutingUnits,
-} from "./lib/common/routing/routing";
+} from "./lib/common/routing";
 import {
-    BridgeTokenConfig,
-    BridgeToken,
-    BridgeTokenDefault,
     BridgeTokens,
 } from "./lib/common/tokens/BridgeTokens";
 
@@ -65,9 +54,9 @@ import {GlitterBridgeSDK} from "./GlitterBridgeSDK";
 import {
     BridgeNetworks,
     NetworkIdentifiers,
-} from "./lib/common/networks/networks";
+} from "./lib/common/networks";
 import {GlitterEnvironment} from "./lib/configs/config";
-import {DepositNote} from "./lib/common/routing/routing";
+import {DepositNote} from "./lib/common/routing";
 import {
     base64To0xString,
     base64ToBigUIntString,
@@ -77,7 +66,7 @@ import {
     TransactionType,
     BridgeType,
     ChainStatus,
-} from "./lib/common/transactions/transactions";
+} from "./lib/common/transactions";
 import {
     BridgeDepositEvent,
     BridgeReleaseEvent,
@@ -110,14 +99,7 @@ export {
     SolanaConfig,
     SolanaProgramId,
     SolanaConnect,
-    AlgorandAccount,
-    AlgorandMSigAccount,
-    AlgorandAccountDetails,
-    AlgorandAccountAsset,
-    AlgorandAccounts,
-    AlgorandAsset,
-    AlgorandAssets,
-    AlgorandConfig,
+
     AlgorandConnect,
     Routing,
     RoutingPoint,
@@ -126,9 +108,7 @@ export {
     RoutingString,
     RoutingHelper,
     SetRoutingUnits,
-    BridgeTokenConfig,
-    BridgeToken,
-    BridgeTokenDefault,
+
     BridgeTokens,
     Sleep,
     Precise,

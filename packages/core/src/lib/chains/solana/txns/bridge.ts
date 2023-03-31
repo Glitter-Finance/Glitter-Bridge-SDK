@@ -1,7 +1,7 @@
-import { serialize } from "borsh";
+import {serialize} from "borsh";
 import algosdk from "algosdk";
-import { SolanaAccount } from "../accounts";
-import { Connection, Keypair, PublicKey, SystemProgram, Transaction, TransactionInstruction } from "@solana/web3.js";
+import {SolanaAccount} from "../accounts";
+import {Connection, Keypair, PublicKey, SystemProgram, Transaction, TransactionInstruction} from "@solana/web3.js";
 import {
     getMint,
     ASSOCIATED_TOKEN_PROGRAM_ID,
@@ -10,11 +10,11 @@ import {
     createTransferInstruction,
     getAssociatedTokenAddress,
 } from "@solana/spl-token";
-import { DepositNote } from "../utils";
-import { BridgeToken, BridgeTokens, Routing } from "../../../common";
-import { SolanaAccountsConfig, SolanaProgramId } from "../config";
-import { SolanaError } from "../solanaError";
-import { RoutingHelper } from "../../../common/routing/routing";
+import {DepositNote} from "../utils";
+import {BridgeToken, BridgeTokens, Routing} from "../../../common";
+import {SolanaAccountsConfig, SolanaProgramId} from "../config";
+import {SolanaError} from "../solanaError";
+import {RoutingHelper} from "../../../common/routing";
 import BigNumber from "bignumber.js";
 
 export class SolanaBridgeTxnsV1 {
@@ -169,7 +169,7 @@ export class SolanaBridgeTxnsV1 {
         );
         tx.add(
             new TransactionInstruction({
-                keys: [{ pubkey: PubKeywallet, isSigner: true, isWritable: true }],
+                keys: [{pubkey: PubKeywallet, isSigner: true, isWritable: true}],
                 data: Buffer.from(JSON.stringify(bridgeNodeInstructionData), "utf-8"),
                 programId: new PublicKey(memoProgram),
             })
@@ -260,7 +260,7 @@ export class SolanaBridgeTxnsV1 {
         );
         tx.add(
             new TransactionInstruction({
-                keys: [{ pubkey: PubKeywallet, isSigner: true, isWritable: true }],
+                keys: [{pubkey: PubKeywallet, isSigner: true, isWritable: true}],
                 data: Buffer.from(JSON.stringify(bridgeNodeInstructionData), "utf-8"),
                 programId: new PublicKey(memoProgram),
             })
@@ -312,14 +312,14 @@ export class SolanaBridgeTxnsV1 {
         const instructions = new TransactionInstruction({
             programId: bridgeProgram,
             keys: [
-                { pubkey: account, isSigner: true, isWritable: true },
-                { pubkey: solanaEscrowAccount, isSigner: false, isWritable: true },
+                {pubkey: account, isSigner: true, isWritable: true},
+                {pubkey: solanaEscrowAccount, isSigner: false, isWritable: true},
                 {
                     pubkey: new PublicKey("GdMte7MdNc3n6zFKZAmKa3TCBhPooPNJ3cBGnJc3uHnG"),
                     isSigner: false,
                     isWritable: false,
                 },
-                { pubkey: SystemProgram.programId, isSigner: false, isWritable: false },
+                {pubkey: SystemProgram.programId, isSigner: false, isWritable: false},
             ],
             data: Buffer.from(data),
         });
@@ -382,18 +382,18 @@ export class SolanaBridgeTxnsV1 {
         const instructions = new TransactionInstruction({
             programId: bridgeProgram,
             keys: [
-                { pubkey: account, isSigner: true, isWritable: false },
-                { pubkey: userTokenAccount, isSigner: false, isWritable: true },
-                { pubkey: solEscrowAccount, isSigner: false, isWritable: true },
-                { pubkey: tokenEscrowAccount, isSigner: false, isWritable: true },
+                {pubkey: account, isSigner: true, isWritable: false},
+                {pubkey: userTokenAccount, isSigner: false, isWritable: true},
+                {pubkey: solEscrowAccount, isSigner: false, isWritable: true},
+                {pubkey: tokenEscrowAccount, isSigner: false, isWritable: true},
                 {
                     pubkey: new PublicKey("2g1SsjER76eKTLsSCdpDyB726ba8SwvN23YMoknTHvmX"),
                     isSigner: false,
                     isWritable: false,
                 },
-                { pubkey: mintToken, isSigner: false, isWritable: false },
-                { pubkey: TOKEN_PROGRAM_ID, isSigner: false, isWritable: false },
-                { pubkey: SystemProgram.programId, isSigner: false, isWritable: false },
+                {pubkey: mintToken, isSigner: false, isWritable: false},
+                {pubkey: TOKEN_PROGRAM_ID, isSigner: false, isWritable: false},
+                {pubkey: SystemProgram.programId, isSigner: false, isWritable: false},
             ],
             data: Buffer.from(data),
         });

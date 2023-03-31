@@ -1,6 +1,6 @@
 import {PublicKey} from "@solana/web3.js";
 import {BigNumber, ethers} from "ethers";
-import {BridgeNetworks} from "../../common/networks/networks";
+import {BridgeNetworks} from "../../common/networks";
 import {BridgeDepositEvent, BridgeReleaseEvent, TransferEvent} from "../evm";
 import {TronConfig} from "./types";
 import {decodeEventData, getLogByEventSignature, hexToBytes} from "./utils";

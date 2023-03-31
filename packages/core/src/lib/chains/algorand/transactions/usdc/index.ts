@@ -1,7 +1,7 @@
 import algosdk from "algosdk";
 import BigNumber from "bignumber.js";
 import {Routing} from "src/lib/common";
-import {BridgeNetworks} from "src/lib/common/networks/networks";
+import {BridgeNetworks} from "src/lib/common/networks";
 import {AlgorandStandardAssetConfig} from "src/lib/common";
 import {getAlgorandDefaultTransactionParams} from "../utils";
 
