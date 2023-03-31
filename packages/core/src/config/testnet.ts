@@ -1,5 +1,5 @@
 import {GlitterBridgeConfig} from "src/types";
-import {BridgeNetworks} from "../common";
+import {BridgeNetworks} from "../lib/common";
 
 export const config: GlitterBridgeConfig = {
     name: "testnet",

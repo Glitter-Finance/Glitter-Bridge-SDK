@@ -55,7 +55,6 @@ import {
     BridgeNetworks,
     NetworkIdentifiers,
 } from "./lib/common/networks";
-import {GlitterEnvironment} from "./lib/configs/config";
 import {DepositNote} from "./lib/common/routing";
 import {
     base64To0xString,
@@ -72,6 +71,7 @@ import {
     BridgeReleaseEvent,
     TransferEvent,
 } from "./lib/chains/evm/types";
+import {GlitterEnvironment} from "./types";
 
 export {
     GlitterBridgeSDK,

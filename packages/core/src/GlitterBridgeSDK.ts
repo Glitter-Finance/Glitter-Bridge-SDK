@@ -7,7 +7,7 @@ import {
     BridgeEvmNetworks,
     BridgeNetworks,
 } from "./lib/common/networks";
-import {mainnetConfig, testnetConfig} from "./lib/configs";
+import {mainnetConfig, testnetConfig} from "./config";
 import {GlitterBridgeConfig} from "./types";
 
 /**
