@@ -1,7 +1,13 @@
 import * as algosdk from "algosdk";
-import { Transaction, Algodv2 } from "algosdk";
-import { BridgeToken, BridgeTokens, Routing, RoutingString, SetRoutingUnits } from "../../../common";
-import { AlgorandAccountsConfig } from "../config";
+import {Transaction, Algodv2} from "algosdk";
+import {
+    BridgeToken,
+    BridgeTokens,
+    Routing,
+    RoutingString,
+    SetRoutingUnits,
+} from "../../../common";
+import {AlgorandAccountsConfig} from "../config";
 
 export class AlgorandTxns {
     private _client: Algodv2;
@@ -22,7 +28,7 @@ export class AlgorandTxns {
 
     //Txn Definitions
     async sendAlgoTransaction(routing: Routing): Promise<Transaction> {
-        // eslint-disable-next-line no-async-promise-executor
+    // eslint-disable-next-line no-async-promise-executor
         return new Promise(async (resolve, reject) => {
             try {
                 //Get Default Parameters
@@ -63,7 +69,7 @@ export class AlgorandTxns {
         routing: Routing,
         token: BridgeToken | undefined
     ): Promise<algosdk.Transaction[]> {
-        // eslint-disable-next-line no-async-promise-executor
+    // eslint-disable-next-line no-async-promise-executor
         return new Promise(async (resolve, reject) => {
             try {
                 //Get Default Parameters
@@ -84,7 +90,7 @@ export class AlgorandTxns {
                     },
                     to: {
                         token: "USDC",
-                        network: "solana",
+                        network: routing.to.network,
                         address: routing.to.address,
                         txn_signature: "",
                     },
@@ -97,19 +103,21 @@ export class AlgorandTxns {
                 });
 
                 const UsdcDepositAddress = this._accounts?.usdcDeposit;
-                if (!UsdcDepositAddress) throw new Error("USDC Deposit Address not found");
+                if (!UsdcDepositAddress)
+                    throw new Error("USDC Deposit Address not found");
 
-                const Deposittxn = algosdk.makeAssetTransferTxnWithSuggestedParamsFromObject({
-                    suggestedParams: params,
-                    assetIndex: Number(assetID.address),
-                    from: routing.from.address,
-                    to: UsdcDepositAddress,
-                    amount: Number(routing.units),
-                    note: note,
-                    closeRemainderTo: undefined,
-                    revocationTarget: undefined,
-                    rekeyTo: undefined,
-                });
+                const Deposittxn =
+          algosdk.makeAssetTransferTxnWithSuggestedParamsFromObject({
+              suggestedParams: params,
+              assetIndex: Number(assetID.address),
+              from: routing.from.address,
+              to: UsdcDepositAddress,
+              amount: Number(routing.units),
+              note: note,
+              closeRemainderTo: undefined,
+              revocationTarget: undefined,
+              rekeyTo: undefined,
+          });
                 const txnsArray = [Deposittxn];
                 // const groupID = algosdk.computeGroupID(txnsArray);
                 // for (let i = 0; i < 1; i++) txnsArray[i].group = groupID;
@@ -121,8 +129,11 @@ export class AlgorandTxns {
         });
     }
 
-    async sendTokensTransaction(routing: Routing, token: BridgeToken): Promise<Transaction> {
-        // eslint-disable-next-line no-async-promise-executor
+    async sendTokensTransaction(
+        routing: Routing,
+        token: BridgeToken
+    ): Promise<Transaction> {
+    // eslint-disable-next-line no-async-promise-executor
         return new Promise(async (resolve, reject) => {
             try {
                 //Get Default Parameters
@@ -165,8 +176,11 @@ export class AlgorandTxns {
         });
     }
 
-    async optinTransaction(address: string, token_asset_id: number): Promise<Transaction> {
-        // eslint-disable-next-line no-async-promise-executor
+    async optinTransaction(
+        address: string,
+        token_asset_id: number
+    ): Promise<Transaction> {
+    // eslint-disable-next-line no-async-promise-executor
         return new Promise(async (resolve, reject) => {
             try {
                 //Get Default Transaction Params
@@ -184,7 +198,10 @@ export class AlgorandTxns {
                     rekeyTo: undefined,
                     suggestedParams,
                 };
-                const txn = algosdk.makeAssetTransferTxnWithSuggestedParamsFromObject(transactionOptions);
+                const txn =
+          algosdk.makeAssetTransferTxnWithSuggestedParamsFromObject(
+              transactionOptions
+          );
                 resolve(txn);
             } catch (error) {
                 reject(error);
@@ -192,8 +209,11 @@ export class AlgorandTxns {
         });
     }
 
-    async closeOutAccountTransaction(address_closing: string, address_receiving: string): Promise<Transaction> {
-        //Get Default Parameters
+    async closeOutAccountTransaction(
+        address_closing: string,
+        address_receiving: string
+    ): Promise<Transaction> {
+    //Get Default Parameters
         const params = await this._client.getTransactionParams().do();
         params.fee = 1000;
         params.flatFee = true;
@@ -220,7 +240,7 @@ export class AlgorandTxns {
         address_receiving: string,
         token_asset_id: number
     ): Promise<Transaction> {
-        //Get Default Transaction Params
+    //Get Default Transaction Params
         const suggestedParams = await this._client.getTransactionParams().do();
 
         //Setup Transaction
@@ -235,7 +255,10 @@ export class AlgorandTxns {
             rekeyTo: undefined,
             suggestedParams,
         };
-        const txn = algosdk.makeAssetTransferTxnWithSuggestedParamsFromObject(transactionOptions);
+        const txn =
+      algosdk.makeAssetTransferTxnWithSuggestedParamsFromObject(
+          transactionOptions
+      );
         return txn;
     }
 }
