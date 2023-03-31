@@ -1,7 +1,7 @@
 import * as bip39 from "bip39";
 import * as nacl from "tweetnacl";
-import { derivePath } from "ed25519-hd-key";
-import { Commitment } from "@solana/web3.js";
+import {derivePath} from "ed25519-hd-key";
+import {Commitment} from "@solana/web3.js";
 
 export type DepositNote = {
     system: string;

@@ -11,7 +11,7 @@ import {
     getAssociatedTokenAddress,
 } from "@solana/spl-token";
 import {DepositNote} from "../utils";
-import {BridgeToken, BridgeTokens, Routing} from "../../../common";
+import {BridgeNetworks, BridgeTokenConfig, BridgeTokens, Routing} from "../../../common";
 import {SolanaAccountsConfig, SolanaProgramId} from "../config";
 import {SolanaError} from "../solanaError";
 import {RoutingHelper} from "../../../common/routing";
@@ -87,7 +87,7 @@ export class SolanaBridgeTxnsV1 {
     public async HandleUsdcSwap(account: SolanaAccount, routing: Routing): Promise<Transaction | undefined> {
         if (!routing.from.address) throw new Error("Source address can not be found");
         if (!routing.to.address) throw new Error("Destination address can not be found");
-        const asset = BridgeTokens.get("solana", routing.from.token);
+        const asset = BridgeTokens.getToken(BridgeNetworks.solana, routing.from.token);
         if (!asset || asset.symbol.toLocaleLowerCase() !== "usdc") {
             throw new Error(SolanaError.INVALID_ASSET);
         }
@@ -130,7 +130,7 @@ export class SolanaBridgeTxnsV1 {
         };
 
         const PubKeywallet = new PublicKey(USDCroutingData.from.address);
-        const usdcMint = BridgeTokens.get("solana", "usdc")?.address;
+        const usdcMint = BridgeTokens.getToken(BridgeNetworks.solana, "usdc")?.address;
         if (!usdcMint) throw new Error("USDC mint not found");
         const destination = this._accounts?.usdcDeposit;
         if (!destination) throw new Error("USDC destination not found");
@@ -181,7 +181,7 @@ export class SolanaBridgeTxnsV1 {
     public async HandleUsdcSwapUnsigned(routing: Routing): Promise<Transaction | undefined> {
         if (!routing.from.address) throw new Error("Source address can not be found");
         if (!routing.to.address) throw new Error("Destination address can not be found");
-        const asset = BridgeTokens.get("solana", routing.from.token);
+        const asset = BridgeTokens.getToken(BridgeNetworks.solana, routing.from.token);
         if (!asset || asset.symbol.toLocaleLowerCase() !== "usdc") {
             throw new Error(SolanaError.INVALID_ASSET);
         }
@@ -226,7 +226,7 @@ export class SolanaBridgeTxnsV1 {
         };
 
         const PubKeywallet = new PublicKey(USDCroutingData.from.address);
-        const usdcMint = BridgeTokens.get("solana", "usdc")?.address;
+        const usdcMint = BridgeTokens.getToken(BridgeNetworks.solana, "usdc")?.address;
         if (!usdcMint) throw new Error("USDC mint not found");
         const destination = this._accounts?.usdcDeposit;
         if (!destination) throw new Error("USDC destination not found");
@@ -272,7 +272,7 @@ export class SolanaBridgeTxnsV1 {
     public async solBridgeTransaction(
         account: PublicKey,
         routing: Routing,
-        token: BridgeToken
+        token: BridgeTokenConfig
     ): Promise<Transaction | undefined> {
         //Fail Safe
         if (token.symbol.toLowerCase() != "sol") throw new Error("Token must be SOL");
@@ -337,7 +337,7 @@ export class SolanaBridgeTxnsV1 {
     public async tokenBridgeTransaction(
         account: PublicKey,
         routing: Routing,
-        token: BridgeToken
+        token: BridgeTokenConfig
     ): Promise<Transaction | undefined> {
         //Fail Safe
         if (token.symbol.toLowerCase() == "sol") throw new Error("Token must be SOL");
@@ -437,7 +437,7 @@ export class SolanaBridgeTxnsV1 {
                 break;
             }
             case "UsdcMint": {
-                res = BridgeTokens.get("solana", "usdc")?.address;
+                res = BridgeTokens.getToken(BridgeNetworks.solana, "usdc")?.address;
                 break;
             }
             default: {

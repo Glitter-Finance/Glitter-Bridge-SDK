@@ -1,8 +1,8 @@
-import { ethers } from "ethers";
-import { AbiCoder } from "ethers/lib/utils";
-import { isArray } from "util";
-import { BridgeDepositEvent, BridgeReleaseEvent, TransferEvent } from "../evm";
-import { EventTopics } from "./types";
+import {ethers} from "ethers";
+import {AbiCoder} from "ethers/lib/utils";
+import {isArray} from "util";
+import {BridgeDepositEvent, BridgeReleaseEvent, TransferEvent} from "../evm";
+import {EventTopics} from "./types";
 
 const BRIDGE_RELEASE_EVENT_SIGNATURE = (trWeb: any): string =>
     trWeb.sha3("BridgeRelease(uint256,address,address,bytes32)");
