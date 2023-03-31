@@ -6,22 +6,7 @@ import algosdk, {
 } from "algosdk";
 import SendRawTransaction from "algosdk/dist/types/client/v2/algod/sendRawTransaction";
 import {AlgorandStandardAssetConfig} from "src/lib/common";
-import {AlgorandAccountInformation} from "./types";
-
-export type AlgorandAccount = {
-  addr: string;
-  sk: Uint8Array;
-  pk: Uint8Array;
-  information: AlgorandAccountInformation;
-};
-
-export type AlgorandMultiSigAccount = {
-  addr: string;
-  pk: Uint8Array;
-  addresses: string[];
-  params: MultisigMetadata;
-  information: AlgorandAccountInformation;
-};
+import {AlgorandAccount, AlgorandAccountInformation, AlgorandMultiSigAccount} from "./types";
 
 export class AlgorandAccountsStore {
     private ALGO_DECIMALS = 6;

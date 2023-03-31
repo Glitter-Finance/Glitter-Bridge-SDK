@@ -1,24 +1,6 @@
 import {Algodv2} from "algosdk";
-import {AlgorandStandardAssetConfig} from "src/lib/common";
-
-export type AlgorandAssetMetadata = {
-  index: number;
-  params: {
-    creator: string;
-    decimals: number;
-    "default-frozen": boolean;
-    freeze: string;
-    manager: string;
-    name: string;
-    "name-b64": string;
-    reserve: string;
-    total: number;
-    "unit-name": string;
-    "unit-name-b64": string;
-    url: string;
-    "url-b64": string;
-  };
-};
+import {AlgorandNativeTokenConfig, AlgorandStandardAssetConfig} from "src/lib/common";
+import {AlgorandAssetMetadata} from "./types";
 
 export class AssetsRepository {
     protected __metadata: Map<
@@ -34,16 +16,18 @@ export class AssetsRepository {
 
     async addStandardAsset(
         assetId: number,
-        tokenConfig: AlgorandStandardAssetConfig
+        tokenConfig: AlgorandStandardAssetConfig | AlgorandNativeTokenConfig
     ) {
-        const assetInfo = (await this.__algoClient
-            .getAssetByID(assetId)
-            .do()) as AlgorandAssetMetadata;
-
-        this.__metadata.set(assetInfo.params["unit-name"], {
-            ...assetInfo,
-            ...tokenConfig,
-        });
+        if ((tokenConfig as AlgorandStandardAssetConfig).assetId) {
+            const assetInfo = (await this.__algoClient
+                .getAssetByID(assetId)
+                .do()) as AlgorandAssetMetadata;
+        
+            this.__metadata.set(assetInfo.params["unit-name"], {
+                ...assetInfo,
+                ...(tokenConfig as AlgorandStandardAssetConfig),
+            });
+        }
     }
 
     getAsset(

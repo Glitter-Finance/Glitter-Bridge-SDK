@@ -34,7 +34,7 @@ export class AlgorandConnect {
                 if ((conf as AlgorandStandardAssetConfig).assetId) {
                     return this.assetsRepo.addStandardAsset(
                         (conf as AlgorandStandardAssetConfig).assetId,
-            conf as AlgorandStandardAssetConfig
+                        conf
                     );
                 }
             }

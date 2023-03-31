@@ -1,3 +1,4 @@
+import {MultisigMetadata} from "algosdk";
 import {
     AlgorandNativeTokenConfig,
     AlgorandStandardAssetConfig,
@@ -55,4 +56,38 @@ export type AlgorandAccountInformation = {
     "asset-id": number;
     "is-frozen": boolean;
   }>;
+};
+
+export type AlgorandAssetMetadata = {
+  index: number;
+  params: {
+    creator: string;
+    decimals: number;
+    "default-frozen": boolean;
+    freeze: string;
+    manager: string;
+    name: string;
+    "name-b64": string;
+    reserve: string;
+    total: number;
+    "unit-name": string;
+    "unit-name-b64": string;
+    url: string;
+    "url-b64": string;
+  };
+};
+
+export type AlgorandAccount = {
+  addr: string;
+  sk: Uint8Array;
+  pk: Uint8Array;
+  information: AlgorandAccountInformation;
+};
+
+export type AlgorandMultiSigAccount = {
+  addr: string;
+  pk: Uint8Array;
+  addresses: string[];
+  params: MultisigMetadata;
+  information: AlgorandAccountInformation;
 };

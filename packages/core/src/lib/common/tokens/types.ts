@@ -14,5 +14,6 @@ export type AlgorandStandardAssetConfig = Omit<BridgeTokenConfig, "address"> & {
 } & { destinationSymbol: Record<string, string> };
 export type AlgorandNativeTokenConfig = Omit<BridgeTokenConfig, "address"> & {
   isNative: boolean;
+} & {
   destinationSymbol: Record<string, string>;
 };
