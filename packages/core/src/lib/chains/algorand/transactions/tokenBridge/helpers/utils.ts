@@ -31,8 +31,8 @@ export const buildTokenBridgeTxParams = (
                 routing.from.address,
                 routing.to.address,
                 bigAmount,
-        tokenConfig.symbol as "xSOL" | "algo",
-        routing.from.txn_signature
+                tokenConfig.symbol as "xSOL" | "algo",
+                routing.from.txn_signature
             );
         case AlgorandTokenBridgeReleaseTransactions.algo_release:
         case AlgorandTokenBridgeReleaseTransactions.xsol_release:
@@ -43,8 +43,8 @@ export const buildTokenBridgeTxParams = (
                 routing.from.address,
                 routing.to.address,
                 bigAmount,
-        tokenConfig.symbol as "xSOL" | "algo",
-        routing.to.txn_signature
+                tokenConfig.symbol as "xSOL" | "algo",
+                routing.to.txn_signature
             );
         default:
             return [];

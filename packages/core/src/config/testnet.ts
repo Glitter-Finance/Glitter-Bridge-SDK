@@ -34,7 +34,6 @@ export const config: GlitterBridgeConfig = {
                 name: "",
                 maxTransfer: NaN,
                 totalSupply: BigInt(NaN),
-                destinationSymbol: {},
                 isNative: true,
             },
             {
@@ -46,7 +45,6 @@ export const config: GlitterBridgeConfig = {
                 name: "",
                 maxTransfer: NaN,
                 totalSupply: BigInt(NaN),
-                destinationSymbol: {},
             },
             {
                 symbol: "xSOL",
@@ -57,7 +55,6 @@ export const config: GlitterBridgeConfig = {
                 name: "",
                 maxTransfer: NaN,
                 totalSupply: BigInt(NaN),
-                destinationSymbol: {},
             },
         ],
     },
