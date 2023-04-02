@@ -78,7 +78,7 @@ export const bridgeUSDC = async (
         from: sourceAddress,
         to: bridgeDepositAddress,
         amount: BigInt(amount.toString()),
-        note: note,
+        note,
         closeRemainderTo: undefined,
         revocationTarget: undefined,
         rekeyTo: undefined,
