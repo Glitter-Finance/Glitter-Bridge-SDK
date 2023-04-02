@@ -68,7 +68,7 @@ export const bridgeUSDC = async (
     };
 
     const note = algosdk.encodeObj({
-        system: JSON.stringify(routingData),
+        system: routingData,
         date: `${new Date()}`,
     });
 
