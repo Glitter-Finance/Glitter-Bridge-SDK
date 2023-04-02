@@ -4,7 +4,7 @@ import {SolanaConfig} from "./lib/chains/solana";
 import {TronConfig} from "./lib/chains/tron";
 
 export type GlitterBridgeConfig = {
-  name: string;
+  name: GlitterEnvironment;
   algorand: AlgorandConfig;
   solana: SolanaConfig;
   evm: EvmConfig;

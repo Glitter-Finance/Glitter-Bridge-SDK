@@ -20,7 +20,10 @@ export class AlgorandConnect {
     public readonly client: algosdk.Algodv2;
     public readonly accountsStore: AlgorandAccountsStore;
     _lastTxnHash = "";
-
+    /**
+     * 
+     * @param config 
+     */
     constructor(config: AlgorandConfig) {
         this.config = config;
         this.client = this.getAlgodClient();
@@ -40,16 +43,15 @@ export class AlgorandConnect {
             }
         );
     }
-
     /**
-   *
-   * @param sourceAddress
-   * @param destinationNetwork
-   * @param destinationAdress
-   * @param tokenSymbol
-   * @param amount
-   * @returns
-   */
+     * 
+     * @param sourceAddress 
+     * @param destinationNetwork 
+     * @param destinationAdress 
+     * @param tokenSymbol 
+     * @param amount 
+     * @returns 
+     */
     public async bridgeTransactions(
         sourceAddress: string,
         destinationNetwork: BridgeNetworks,
@@ -98,12 +100,11 @@ export class AlgorandConnect {
 
         return transactions;
     }
-
     /**
-   *
-   * @param rawsignedTxns
-   * @returns
-   */
+     * 
+     * @param rawsignedTxns 
+     * @returns 
+     */
     async sendSignedTransaction(
         rawsignedTxns: Uint8Array[]
     ): Promise<SendRawTransaction> {
@@ -111,7 +112,10 @@ export class AlgorandConnect {
         await algosdk.waitForConfirmation(this.client, txnResult, 4);
         return txnResult;
     }
-
+    /**
+     * 
+     * @returns 
+     */
     getAlgodIndexer(): algosdk.Indexer {
         const indexer = new algosdk.Indexer(
             this.config.indexerUrl,
@@ -121,7 +125,10 @@ export class AlgorandConnect {
         indexer.setIntEncoding(algosdk.IntDecoding.MIXED);
         return indexer;
     }
-
+    /**
+     * 
+     * @returns 
+     */
     getAlgodClient(): algosdk.Algodv2 {
         const client = new algosdk.Algodv2(
             this.config.serverUrl,
@@ -131,7 +138,6 @@ export class AlgorandConnect {
         client.setIntEncoding(algosdk.IntDecoding.MIXED);
         return client;
     }
-
     /**
    *
    * @param key

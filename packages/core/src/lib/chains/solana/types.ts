@@ -1,11 +1,12 @@
-import { BridgeToken } from "../../common";
+import {BridgeTokenConfig} from "../../common";
 
 export type SolanaConfig = {
   name: string;
   server: string;
   accounts: SolanaAccountsConfig;
-  tokens: BridgeToken[];
+  tokens: BridgeTokenConfig[];
 };
+
 export type SolanaAccountsConfig = {
   bridgeProgram: string;
   vestingProgram: string;
@@ -34,6 +35,7 @@ export type PollerOptions = {
   startHash?: string;
   endHash?: string;
 };
+
 export enum SolanaPublicNetworks {
   mainnet_beta = "https://api.mainnet-beta.solana.com",
   testnet = "https://api.testnet.solana.com",

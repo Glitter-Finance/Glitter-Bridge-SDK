@@ -1,4 +1,3 @@
-import {GlitterEnvironment} from "src";
 import {AlgorandConnect} from "./lib/chains/algorand";
 import {EvmConnect} from "./lib/chains/evm";
 import {SolanaConnect} from "./lib/chains/solana";
@@ -8,7 +7,7 @@ import {
     BridgeNetworks,
 } from "./lib/common/networks";
 import {mainnetConfig, testnetConfig} from "./config";
-import {GlitterBridgeConfig} from "./types";
+import {GlitterBridgeConfig, GlitterEnvironment} from "./types";
 
 /**
  * Glitter Bridge SDK
@@ -132,7 +131,7 @@ export class GlitterBridgeSDK {
             this._bridgeConfig!.solana.server = this._rpcOverrides[BridgeNetworks.solana];
         }
 
-        this._solana = new SolanaConnect(this._bridgeConfig!.solana);
+        this._solana = new SolanaConnect(this._bridgeConfig!);
         return this;
     }
 

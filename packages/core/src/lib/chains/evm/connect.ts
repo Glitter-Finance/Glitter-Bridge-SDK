@@ -22,7 +22,7 @@ import {
 } from "../../common/networks";
 import {ChainStatus} from "../../common/transactions";
 import {walletToAddress} from "../../common/utils/utils";
-import {BridgeTokenConfig, BridgeTokens} from "src";
+import {BridgeTokens, BridgeTokenConfig} from "src/lib/common";
 
 type Connection = {
   rpcProvider: providers.BaseProvider;

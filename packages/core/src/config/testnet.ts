@@ -1,8 +1,8 @@
-import {GlitterBridgeConfig} from "src/types";
+import {GlitterBridgeConfig, GlitterEnvironment} from "src/types";
 import {BridgeNetworks} from "../lib/common";
 
 export const config: GlitterBridgeConfig = {
-    name: "testnet",
+    name: GlitterEnvironment.testnet,
     algorand: {
         serverUrl: "https://node.testnet.algoexplorerapi.io",
         serverPort: NaN,
@@ -75,37 +75,34 @@ export const config: GlitterBridgeConfig = {
         },
         tokens: [
             {
-                network: "solana",
                 symbol: "SOL",
                 address: "11111111111111111111111111111111",
                 decimals: 9,
-                min_transfer: 0.05,
-                fee_divisor: 200,
-                name: undefined,
-                max_transfer: undefined,
-                total_supply: undefined,
+                minTransfer: 0.05,
+                feeDivisor: 200,
+                name: "Solana",
+                maxTransfer: undefined,
+                totalSupply: undefined,
             },
             {
-                network: "solana",
                 symbol: "xALGO",
                 address: "xALGoH1zUfRmpCriy94qbfoMXHtK6NDnMKzT4Xdvgms",
                 decimals: 6,
-                min_transfer: 5,
-                fee_divisor: 200,
-                name: undefined,
-                max_transfer: undefined,
-                total_supply: undefined,
+                minTransfer: 5,
+                feeDivisor: 200,
+                name: "Wrapped ALGO",
+                maxTransfer: undefined,
+                totalSupply: undefined,
             },
             {
-                network: "solana",
                 symbol: "USDC",
                 address: "4zMMC9srt5Ri5X14GAgXhaHii3GnPAEERYPJgZJDncDU",
                 decimals: 6,
-                min_transfer: 1,
-                fee_divisor: 200,
-                name: undefined,
-                max_transfer: undefined,
-                total_supply: undefined,
+                minTransfer: 1,
+                feeDivisor: 200,
+                name: "USD Coin",
+                maxTransfer: undefined,
+                totalSupply: undefined,
             },
         ],
     },
