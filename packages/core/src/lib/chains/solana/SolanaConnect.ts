@@ -4,7 +4,7 @@ import {
 import {SolanaConfig, SolanaPublicNetworks} from "./types";
 import {SolanaAccount, SolanaAccountsStore} from "./AccountsStore";
 import {GlitterBridgeConfig, GlitterEnvironment} from "src/types";
-import {BridgeNetworks, BridgeTokenConfig, BridgeTokens, Routing} from "src/lib/common";
+import {BridgeNetworks, BridgeTokenConfig, BridgeTokens, Routing, Sleep} from "src/lib/common";
 import BigNumber from "bignumber.js";
 import {bridgeUSDC, solBridgeTransaction, tokenBridgeTransaction} from "./transactions";
 
@@ -42,7 +42,7 @@ export class SolanaConnect {
      * @param amount 
      * @returns 
      */
-    private async bridgeTransaction(
+    async bridgeTransaction(
         sourceAddress: string,
         tokenSymbol: string,
         destinationNetwork: BridgeNetworks,
@@ -158,5 +158,55 @@ export class SolanaConnect {
             }
         );
         return txID
+    }
+
+    public async getBalance(account: string, tokenSymbol: string) {
+        const tksLowercase = tokenSymbol.trim().toLowerCase()
+        const token = this.getToken(tokenSymbol)
+        if (!token) return Promise.reject(new Error('Token Config unavailable'))
+        const isNative = tksLowercase === "sol"
+
+        return isNative ? await this.accountStore.getSOLBalance(
+            account,
+            this.connections[this.defaultConnection]
+        ) : await this.accountStore.getSPLTokenBalance(
+            account,
+            token,
+            this.connections[this.defaultConnection]
+        )
+    }
+
+    public async waitForBalanceChange(
+        address: string,
+        tokenSymbol: string,
+        expectedAmount: number,
+        timeoutSeconds = 60,
+        threshold = 0.001,
+        anybalance = false,
+        noBalance = false,
+    ): Promise<number> {
+        const start = Date.now();
+        let balanceRes = await this.getBalance(address, tokenSymbol);
+        let balance = balanceRes.balanceBn.toNumber()
+
+        for (let i = 0; i <= timeoutSeconds; i++) {
+
+            if (anybalance && balance > 0) {
+                break;
+            } else if (noBalance && balance == 0) {
+                break;
+            } else if (Math.abs(balance - expectedAmount) < threshold) {
+                break;
+            }
+
+            if (Date.now() - start > timeoutSeconds * 1000) {
+                throw new Error("Timeout waiting for balance");
+            }
+
+            await Sleep(1000);
+            balanceRes = await this.getBalance(address, tokenSymbol);
+            balance = balanceRes.balanceBn.toNumber()
+        }
+        return balance;
     }
 }

@@ -176,24 +176,30 @@ export class SolanaAccountsStore {
      * @param tokenConfig 
      * @returns 
      */
-    async createTokenAccount(signer: Signer, owner: PublicKey, tokenConfig: BridgeTokenConfig, connection?: Connection): Promise<Account> {
+    async createTokenAccount(owner: string, tokenConfig: BridgeTokenConfig, connection?: Connection): Promise<Account> {
+        const ownerAccount = this.get(owner)
+        if (!ownerAccount) return Promise.reject('Account unavailable')
+
         const mintAddress = new PublicKey(tokenConfig.address);
-        const address = await this.getTokenAaddress(signer.publicKey.toString(), tokenConfig, connection);
+        const address = await this.getTokenAaddress(ownerAccount.pk.toString(), tokenConfig, connection);
         const programId = TOKEN_PROGRAM_ID;
         const associatedTokenProgramId = ASSOCIATED_TOKEN_PROGRAM_ID;
 
         const transaction = new solanaWeb3.Transaction().add(
             createAssociatedTokenAccountInstruction(
-                signer.publicKey,
+                ownerAccount.pk,
                 address,
-                owner,
+                ownerAccount.pk,
                 mintAddress,
                 programId,
                 associatedTokenProgramId
             )
         );
 
-        await sendAndConfirmTransaction(connection ? connection : this.__connection, transaction, [signer], {
+        await sendAndConfirmTransaction(connection ? connection : this.__connection, transaction, [{
+            secretKey: ownerAccount.sk,
+            publicKey: ownerAccount.pk
+        }], {
             commitment: "finalized",
         });
 
@@ -245,6 +251,23 @@ export class SolanaAccountsStore {
     async requestAirDrop(signer: SolanaAccount, amount = 1_000_000_000, connection : Connection): Promise<string> {
         const airdropTx = connection ? await connection.requestAirdrop(signer.pk, amount) : await this.__connection.requestAirdrop(signer.pk, amount);
         return airdropTx
+    }
+
+    async tokenAccountExists(
+        owner: string,
+        solanaTokenConfig: BridgeTokenConfig,
+        connection?: Connection
+    ): Promise<boolean> {
+        const mintAddress = await getMint(connection ? connection : this.__connection, new PublicKey(solanaTokenConfig.address));
+        const pk = new PublicKey(owner)
+
+        const account = connection ? await connection.getTokenAccountsByOwner(pk, {
+            mint: new PublicKey(mintAddress)
+        }) : await this.__connection.getTokenAccountsByOwner(pk, {
+            mint: new PublicKey(mintAddress)
+        });
+
+        return account.value.length > 0;
     }
 
 }
