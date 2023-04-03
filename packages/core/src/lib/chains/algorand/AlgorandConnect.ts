@@ -134,7 +134,7 @@ export class AlgorandConnect {
     getAlgodClient(): algosdk.Algodv2 {
         const client = new algosdk.Algodv2(
             this.config.serverUrl,
-            this.config.serverPort.toString(),
+            this.config.serverPort ? this.config.serverPort.toString() : undefined,
             this.config.nativeTokenSymbol
         );
         client.setIntEncoding(algosdk.IntDecoding.MIXED);
@@ -162,7 +162,10 @@ export class AlgorandConnect {
      * @param tokenSymbol 
      * @returns 
      */
-    public async getBalance(address: string, tokenSymbol: string): Promise<number> {
+    public async getBalance(address: string, tokenSymbol: string): Promise<{
+        balanceBn: BigNumber;
+        balanceHuman: BigNumber
+    }> {
         const token = this.assetsRepo.getAsset(tokenSymbol) as AlgorandStandardAssetConfig | AlgorandNativeTokenConfig
         if (!token) return Promise.reject('Asset unavailable')
         const native = token.symbol.toLowerCase() === "algo"
@@ -187,7 +190,7 @@ export class AlgorandConnect {
         let balance = await this.getBalance(address, tokenSymbol)
 
         for (let i = 0; i <= timeoutSeconds; i++) {
-            if (balance != startingAmount) {
+            if (balance.balanceHuman.toNumber() != startingAmount) {
                 break;
             }
 
@@ -199,7 +202,7 @@ export class AlgorandConnect {
             balance = await this.getBalance(address, tokenSymbol);
         }
 
-        return balance;
+        return balance.balanceHuman.toNumber();
     }
     /**
      * 
@@ -214,7 +217,7 @@ export class AlgorandConnect {
         let balance = await this.getBalance(address, tokenSymbol);
 
         for (let i = 0; i <= timeoutSeconds; i++) {
-            if (balance >= minAmount) {
+            if (balance.balanceHuman.toNumber() != minAmount) {
                 break;
             }
 
@@ -226,7 +229,7 @@ export class AlgorandConnect {
             balance = await this.getBalance(address, tokenSymbol);
         }
 
-        return balance;
+        return balance.balanceHuman.toNumber();
     }
     /**
      * 
@@ -251,11 +254,11 @@ export class AlgorandConnect {
         const start = Date.now();
         let balance = await this.getBalance(address, tokenSymbol);
         for (let i = 0; i <= timeoutSeconds; i++) {
-            if (anybalance && balance > 0) {
+            if (anybalance && balance.balanceHuman.gt(0)) {
                 break;
-            } else if (noBalance && balance == 0) {
+            } else if (noBalance && balance.balanceHuman.eq(0)) {
                 break;
-            } else if (Math.abs(balance - expectedAmount) < threshold) {
+            } else if (Math.abs(balance.balanceHuman.toNumber() - expectedAmount) < threshold) {
                 break;
             }
 
@@ -267,7 +270,7 @@ export class AlgorandConnect {
             balance = await this.getBalance(address, tokenSymbol);
         }
 
-        return balance;
+        return balance.balanceHuman.toNumber();
     }
     /**
      * 

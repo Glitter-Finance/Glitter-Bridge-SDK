@@ -6,7 +6,7 @@ import {
 
 export type AlgorandConfig = {
   serverUrl: string;
-  serverPort: number;
+  serverPort?: number;
   indexerUrl: string;
   indexerPort: string | number;
   nativeTokenSymbol: string;
@@ -81,7 +81,7 @@ export type AlgorandAccount = {
   addr: string;
   sk: Uint8Array;
   pk: Uint8Array;
-  information: AlgorandAccountInformation;
+  information?: AlgorandAccountInformation;
 };
 
 export type AlgorandMultiSigAccount = {

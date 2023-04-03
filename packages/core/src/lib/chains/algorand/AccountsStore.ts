@@ -7,6 +7,7 @@ import algosdk, {
 import SendRawTransaction from "algosdk/dist/types/client/v2/algod/sendRawTransaction";
 import {AlgorandStandardAssetConfig} from "src/lib/common";
 import {AlgorandAccount, AlgorandAccountInformation, AlgorandMultiSigAccount} from "./types";
+import BigNumber from "bignumber.js";
 
 export class AlgorandAccountsStore {
     private ALGO_DECIMALS = 6;
@@ -68,6 +69,9 @@ export class AlgorandAccountsStore {
             addrs: addreses,
         } as MultisigMetadata;
 
+        // https://github.com/Glitter-Finance/SDK/pull/33
+        // TODO: aurel suggested to add another value
+        // to make it unique
         const mSigIdentifier = addreses.join("");
         const exists = this.__multisigs.get(mSigIdentifier);
 
@@ -90,12 +94,6 @@ export class AlgorandAccountsStore {
         return msig;
     }
 
-    public async getAccountInfo(
-    account: AlgorandAccount
-  ): Promise<AlgorandAccountInformation>;
-    public async getAccountInfo(
-    address: string
-  ): Promise<AlgorandAccountInformation>;
     public async getAccountInfo(
         params: string | AlgorandAccount
     ): Promise<AlgorandAccountInformation> {
@@ -121,12 +119,10 @@ export class AlgorandAccountsStore {
 
     public async createNew(): Promise<AlgorandAccount> {
         const account = algosdk.generateAccount();
-        const accountInfo = await this.getAccountInfo(account.addr.toString());
         const algorandAcocunt: AlgorandAccount = {
             addr: account.addr,
             sk: account.sk,
-            pk: algosdk.decodeAddress(account.addr).publicKey,
-            information: accountInfo,
+            pk: algosdk.decodeAddress(account.addr).publicKey
         };
         this.__accounts.set(account.addr, algorandAcocunt);
         return algorandAcocunt;
@@ -136,7 +132,7 @@ export class AlgorandAccountsStore {
         prefix: string,
         tries = 10000
     ): Promise<AlgorandAccount> {
-        for (let i = 0; i < tries; i++) {
+        for (let i = 0; i < Math.min(tries, 10**5); i++) {
             if (i % 100 === 0) console.log(`Trying ${i} of ${tries}`);
 
             const account = algosdk.generateAccount();
@@ -152,30 +148,41 @@ export class AlgorandAccountsStore {
         return Promise.reject("Account generation with retries exhausted");
     }
 
-    public async getAlgoBalance(address: string): Promise<number> {
+    public async getAlgoBalance(address: string): Promise<{
+        balanceHuman: BigNumber;
+        balanceBn: BigNumber;
+    }> {
         const accountInfo = await this.getAccountInfo(address);
-        const amount =
-      BigInt(accountInfo.amount) / BigInt(10 ** this.ALGO_DECIMALS);
-        return Number(amount.toString());
+        const amount = BigInt(accountInfo.amount) / BigInt(10 ** this.ALGO_DECIMALS);
+        return {
+            balanceHuman: BigNumber(amount.toString()),
+            balanceBn: BigNumber(accountInfo.amount)
+        }
     }
 
     public async getStandardAssetBalance(
         address: string,
         token: AlgorandStandardAssetConfig
-    ): Promise<number> {
+    ): Promise<{
+        balanceHuman: BigNumber;
+        balanceBn: BigNumber;
+    }> {
         const accountInfo = this.__accounts.get(address);
 
-        if (accountInfo) {
+        if (accountInfo && accountInfo.information) {
             const asset = accountInfo.information.assets.find(
                 (x) => x["asset-id"] === token.assetId
             );
             if (asset) {
                 const amount = BigInt(asset.amount) / BigInt(10 ** token.decimals);
-                return Number(amount.toString());
+                return {
+                    balanceBn: new BigNumber(asset.amount),
+                    balanceHuman: new BigNumber(amount.toString())
+                }
             }
         }
 
-        return 0;
+        throw new Error('Unable to fetch account info')
     }
     /**
    *
@@ -210,7 +217,7 @@ export class AlgorandAccountsStore {
         await algosdk.waitForConfirmation(
             this.__client,
             transactions[0].txID().toString(),
-            4
+            20
         );
 
         return transactions.map(x => x.txID());

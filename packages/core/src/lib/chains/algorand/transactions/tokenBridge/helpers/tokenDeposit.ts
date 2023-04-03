@@ -61,6 +61,7 @@ export const buildDepositParams = (
    * TODO: figure out why txnSignature is added here,
    * since it is a deposit, which means no
    * txnSignature except of the deposit tx itself
+   * Note from Andrew: The app args are common between deposit/refund/release, so this is just skipped inside the contract check
    */
     args.push(new Uint8Array(Buffer.from(txnSignature ?? "")));
     args.push(algosdk.encodeUint64(amount));
