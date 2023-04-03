@@ -150,6 +150,7 @@ export const BridgeMainnet: GlitterBridgeConfig = {
         [BridgeNetworks.Avalanche]: {
             chainId: 43114,
             bridge: "0x19a230a99d520687d9858e427523e5d76342ad54",
+            tokenV2Bridge:"",
             rpcUrl: "https://rpc.ankr.com/avalanche",
             tokens: [
                 {
@@ -166,6 +167,7 @@ export const BridgeMainnet: GlitterBridgeConfig = {
         [BridgeNetworks.Ethereum]: {
             chainId: 1,
             bridge: "0x8b1B445749B14a6a01B062271EB28Cd119ce9a98",
+            tokenV2Bridge:"",
             rpcUrl: "https://rpc.ankr.com/eth",
             tokens: [
                 {
@@ -182,6 +184,7 @@ export const BridgeMainnet: GlitterBridgeConfig = {
         [BridgeNetworks.Polygon]: {
             chainId: 137,
             bridge: "0x3C649eed903d9770A5abDBA49C754AdfD1ed4172",
+            tokenV2Bridge:"",
             rpcUrl: "https://rpc.ankr.com/polygon",
             tokens: [
                 {

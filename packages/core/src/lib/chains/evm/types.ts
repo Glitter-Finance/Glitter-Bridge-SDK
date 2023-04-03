@@ -12,6 +12,7 @@ export type EvmConfig = {
     [network in BridgeEvmNetworks]: {
         chainId: number;
         bridge: string;
+        tokenV2Bridge: string;
         rpcUrl: string;
         tokens: BridgeToken[];
         depositWallet: string;

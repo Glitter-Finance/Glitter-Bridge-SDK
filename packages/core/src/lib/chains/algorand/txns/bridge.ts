@@ -508,33 +508,3 @@ export class AlgorandBridgeTxnsV1 {
         return res;
     }
 }
-
-{
-    [
-        {
-            Token: "USDC",
-            Mapping: [
-                "Algorand|USDC",
-                "Solana|USDC",
-                "Ethereum|USDC",
-                "Avalanche|USDC",
-                "Polygon|USDC",
-                "Tron|USDC"
-            ]
-        },
-        {
-            Token: "ALGO",
-            Mapping: [
-                "Algorand|ALGO",
-                "Solana|xALGO",
-            ]
-        },
-        {
-            Token: "SOL",
-            "Mapping": [
-                "Algorand|xSOL",
-                "Solana|SOL",
-            ]
-        },
-    ]
-}

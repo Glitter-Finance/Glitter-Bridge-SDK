@@ -702,10 +702,10 @@
     "@ethersproject/properties" "^5.7.0"
     "@ethersproject/strings" "^5.7.0"
 
-"@glitter-finance/sdk-core@1.1.0-12":
-  version "1.1.0-12"
-  resolved "https://registry.npmjs.org/@glitter-finance/sdk-core/-/sdk-core-1.1.0-12.tgz"
-  integrity sha512-jsCsemxnT2kBS66sq8pI73ShBpm1aqLBrBJa/FyB+kCXai077QdmZn9CWooilsPe/UgdUg/LiLxfGY02R+7H/A==
+"@glitter-finance/sdk-core@1.1.0-16":
+  version "1.1.0-16"
+  resolved "https://registry.npmjs.org/@glitter-finance/sdk-core/-/sdk-core-1.1.0-16.tgz"
+  integrity sha512-XvrtipuXh2QtrC3IvYmk+ZPatnLjpKC3QOD7i/S1yEwQhaOh8WbJx3BUTj7WXKpyTiPUbUzZV5vcaVB1M02oMg==
   dependencies:
     "@circle-fin/circle-sdk" "^1.3.0"
     "@solana/spl-token" "^0.3.6"
@@ -720,12 +720,12 @@
     tronweb "^5.1.0"
     tweetnacl "^1.0.3"
 
-"@glitter-finance/sdk-server@1.0.1-3":
-  version "1.0.1-3"
-  resolved "https://registry.npmjs.org/@glitter-finance/sdk-server/-/sdk-server-1.0.1-3.tgz"
-  integrity sha512-BWXIh5QWqM6/+MtV5wJVFzDk3bmq0iTNXFb+h8TMAfAJtaS3lM+CB9uoBrcdxlalNMlvzMrIXKrQqB4Skv1HnQ==
+"@glitter-finance/sdk-server@1.0.1-5":
+  version "1.0.1-5"
+  resolved "https://registry.npmjs.org/@glitter-finance/sdk-server/-/sdk-server-1.0.1-5.tgz"
+  integrity sha512-oraZ1WD5GP03fbZz35nki+Ik5E6y8mpNvN0Jfu3qhDpxtJJJkqVnu5mhJHmmYgf+rwCYSahsQSkxAeTAZy3fDg==
   dependencies:
-    "@glitter-finance/sdk-core" "1.1.0-12"
+    "@glitter-finance/sdk-core" "1.1.0-16"
     "@solana/web3.js" "^1.73.2"
     algosdk "^1.24.1"
     axios "^1.3.2"
