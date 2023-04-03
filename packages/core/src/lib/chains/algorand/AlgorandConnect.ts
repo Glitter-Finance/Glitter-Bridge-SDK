@@ -3,15 +3,17 @@ import {AlgorandConfig} from "./types";
 import {AssetsRepository} from "./AssetsRepository";
 import {BridgeNetworks} from "src/lib/common/networks";
 import BigNumber from "bignumber.js";
-import {bridgeDeposit, bridgeUSDC} from "./transactions";
+import {assetOptin, bridgeDeposit, bridgeUSDC} from "./transactions";
 import SendRawTransaction from "algosdk/dist/types/client/v2/algod/sendRawTransaction";
 import {
     AlgorandNativeTokenConfig,
     AlgorandStandardAssetConfig,
     BridgeTokens,
     RoutingDefault,
+    Sleep,
 } from "src/lib/common";
 import {AlgorandAccountsStore} from "./AccountsStore";
+import {Account} from "algosdk";
 
 export class AlgorandConnect {
     public readonly clientIndexer: algosdk.Indexer;
@@ -19,7 +21,6 @@ export class AlgorandConnect {
     public readonly config: AlgorandConfig;
     public readonly client: algosdk.Algodv2;
     public readonly accountsStore: AlgorandAccountsStore;
-    _lastTxnHash = "";
     /**
      * 
      * @param config 
@@ -72,33 +73,34 @@ export class AlgorandConnect {
         routing.to.network = destinationNetwork.toString().toLowerCase();
         routing.amount = new BigNumber(amount.toString());
 
-        const transactions =
-      token.symbol.trim().toLowerCase() === "usdc"
-          ? await bridgeUSDC(
-              this.client,
-              sourceAddress,
-              destinationAdress,
-              destinationNetwork,
-              new BigNumber(amount.toString()),
-              depositAddress,
+        const isUSDC = token.symbol.trim().toLowerCase() === "usdc"
+        if (isUSDC) {
+            return await bridgeUSDC(
+                this.client,
+                sourceAddress,
+                destinationAdress,
+                destinationNetwork,
+                new BigNumber(amount.toString()),
+                depositAddress,
             token as AlgorandStandardAssetConfig
-          )
-          : await bridgeDeposit(
-              this.client,
-              this.config.bridgeProgramId,
-              sourceAddress,
-              destinationAdress,
-              destinationNetwork,
-              amount,
-              {
-                  algoVault: this.config.bridgeAccounts.algoVault,
-                  asaVault: this.config.bridgeAccounts.asaVault,
-              },
-              this.config.bridgeAccounts.feeReceiver,
-              token
-          );
+            )
+        }
 
-        return transactions;
+        return await bridgeDeposit(
+            this.client,
+            this.config.bridgeProgramId,
+            sourceAddress,
+            destinationAdress,
+            destinationNetwork,
+            amount,
+            {
+                algoVault: this.config.bridgeAccounts.algoVault,
+                asaVault: this.config.bridgeAccounts.asaVault,
+            },
+            this.config.bridgeAccounts.feeReceiver,
+            token
+        )
+        
     }
     /**
      * 
@@ -149,5 +151,107 @@ export class AlgorandConnect {
 
     public getToken(tokenSymbol: string): AlgorandStandardAssetConfig | AlgorandNativeTokenConfig | undefined {
         return this.assetsRepo.getAsset(tokenSymbol)
+    }
+
+    public async getBalance(address: string, tokenSymbol: string): Promise<number> {
+        const token = this.assetsRepo.getAsset(tokenSymbol) as AlgorandStandardAssetConfig | AlgorandNativeTokenConfig
+        if (!token) return Promise.reject('Asset unavailable')
+        const native = token.symbol.toLowerCase() === "algo"
+
+        return native ? await this.accountsStore.getAlgoBalance(
+            address
+        ) : this.accountsStore.getStandardAssetBalance(
+            address,
+            token as AlgorandStandardAssetConfig
+        )
+    }
+
+    public async waitForBalanceChange(address: string, tokenSymbol: string, startingAmount: number, timeoutSeconds = 60): Promise<number> {
+        const start = Date.now();
+        let balance = await this.getBalance(address, tokenSymbol)
+
+        for (let i = 0; i <= timeoutSeconds; i++) {
+            if (balance != startingAmount) {
+                break;
+            }
+
+            if (Date.now() - start > timeoutSeconds * 1000) {
+                return Promise.reject(new Error('WaitForBalanceChange Timeout'));
+            }
+
+            await Sleep(1000);
+            balance = await this.getBalance(address, tokenSymbol);
+        }
+
+        return balance;
+    }
+
+    public async waitForMinBalance(address: string, minAmount: number, tokenSymbol: string, timeoutSeconds = 60): Promise<number> {
+        const start = Date.now();
+        let balance = await this.getBalance(address, tokenSymbol);
+
+        for (let i = 0; i <= timeoutSeconds; i++) {
+            if (balance >= minAmount) {
+                break;
+            }
+
+            if (Date.now() - start > timeoutSeconds * 1000) {
+                return Promise.reject(new Error('waitForMinBalance Timeout'))
+            }
+
+            await Sleep(1000);
+            balance = await this.getBalance(address, tokenSymbol);
+        }
+
+        return balance;
+    }
+
+    public async waitForBalance(
+        address: string,
+        expectedAmount: number,
+        tokenSymbol: string,
+        timeoutSeconds = 60,
+        threshold = 0.001,
+        anybalance = false,
+        noBalance = false
+    ): Promise<number> {
+        const start = Date.now();
+        let balance = await this.getBalance(address, tokenSymbol);
+        for (let i = 0; i <= timeoutSeconds; i++) {
+            if (anybalance && balance > 0) {
+                break;
+            } else if (noBalance && balance == 0) {
+                break;
+            } else if (Math.abs(balance - expectedAmount) < threshold) {
+                break;
+            }
+
+            if (Date.now() - start > timeoutSeconds * 1000) {
+                return Promise.reject(new Error('waitForMinBalance Timeout'))
+            }
+
+            await Sleep(1000);
+            balance = await this.getBalance(address, tokenSymbol);
+        }
+
+        return balance;
+    }
+
+    async optinToken(signer: Account, tokenSymbol: string): Promise<string> {
+        const token = this.getToken(tokenSymbol);
+        if (!token || !(token as AlgorandStandardAssetConfig).assetId) return Promise.reject(new Error("Unsupported token"));
+
+        const txn = await assetOptin(
+            this.client,
+            signer.addr.toString(),
+            token as AlgorandStandardAssetConfig
+        )
+
+        const [txID] = await this.accountsStore.signAndSendTransactions(
+            [txn],
+            signer
+        )
+
+        return txID
     }
 }

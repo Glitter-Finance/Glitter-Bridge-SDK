@@ -186,7 +186,7 @@ export class AlgorandAccountsStore {
     async signAndSendTransactions(
         transactions: Transaction[],
         signer: Account
-    ): Promise<SendRawTransaction> {
+    ): Promise<string[]> {
         if (transactions.length == 0)
             throw new Error(
                 "Transactions array should contain one or more transactions."
@@ -203,15 +203,17 @@ export class AlgorandAccountsStore {
             signedTxns.push(signedTxn);
         }
 
-        const txnResult: SendRawTransaction = await this.__client
+        await this.__client
             .sendRawTransaction(signedTxns)
             .do();
+
         await algosdk.waitForConfirmation(
             this.__client,
             transactions[0].txID().toString(),
             4
         );
-        return txnResult;
+
+        return transactions.map(x => x.txID());
     }
     /**
    *
