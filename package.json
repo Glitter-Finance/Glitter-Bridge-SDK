@@ -1,5 +1,5 @@
 {
-  "name": "glitter-finance-sdk",
+  "name": "glitter-finance",
   "version": "1.0.0",
   "author": "Glitter Finance",
   "private": true,
@@ -8,7 +8,7 @@
   ],
   "scripts": {
     "prepare": "husky install",
-    "build:core": "yarn workspace @glitter/sdk-core build",
+    "build:core": "yarn workspace @glitter-finance/sdk-core build",
     "release:core": "npm run build-and-release -w ./packages/core",
     "release:server": "npm run build-and-release -w ./packages/server",
     "example:server-solana": "npm run example:solana -w ./packages/examples",
