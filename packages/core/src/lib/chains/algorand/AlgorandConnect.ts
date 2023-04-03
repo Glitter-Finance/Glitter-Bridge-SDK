@@ -141,18 +141,27 @@ export class AlgorandConnect {
         return client;
     }
     /**
-   *
-   * @param key
-   * @returns
-   */
+     * 
+     * @param key 
+     * @returns 
+     */
     getAddress(key: keyof AlgorandConfig["bridgeAccounts"]): string {
         return this.config.bridgeAccounts[key];
     }
-
-    public getToken(tokenSymbol: string): AlgorandStandardAssetConfig | AlgorandNativeTokenConfig | undefined {
+    /**
+     * 
+     * @param tokenSymbol 
+     * @returns 
+     */
+    public getAsset(tokenSymbol: string): AlgorandStandardAssetConfig | AlgorandNativeTokenConfig | undefined {
         return this.assetsRepo.getAsset(tokenSymbol)
     }
-
+    /**
+     * 
+     * @param address 
+     * @param tokenSymbol 
+     * @returns 
+     */
     public async getBalance(address: string, tokenSymbol: string): Promise<number> {
         const token = this.assetsRepo.getAsset(tokenSymbol) as AlgorandStandardAssetConfig | AlgorandNativeTokenConfig
         if (!token) return Promise.reject('Asset unavailable')
@@ -165,7 +174,14 @@ export class AlgorandConnect {
             token as AlgorandStandardAssetConfig
         )
     }
-
+    /**
+     * 
+     * @param address 
+     * @param tokenSymbol 
+     * @param startingAmount 
+     * @param timeoutSeconds 
+     * @returns 
+     */
     public async waitForBalanceChange(address: string, tokenSymbol: string, startingAmount: number, timeoutSeconds = 60): Promise<number> {
         const start = Date.now();
         let balance = await this.getBalance(address, tokenSymbol)
@@ -185,7 +201,14 @@ export class AlgorandConnect {
 
         return balance;
     }
-
+    /**
+     * 
+     * @param address 
+     * @param minAmount 
+     * @param tokenSymbol 
+     * @param timeoutSeconds 
+     * @returns 
+     */
     public async waitForMinBalance(address: string, minAmount: number, tokenSymbol: string, timeoutSeconds = 60): Promise<number> {
         const start = Date.now();
         let balance = await this.getBalance(address, tokenSymbol);
@@ -205,7 +228,17 @@ export class AlgorandConnect {
 
         return balance;
     }
-
+    /**
+     * 
+     * @param address 
+     * @param expectedAmount 
+     * @param tokenSymbol 
+     * @param timeoutSeconds 
+     * @param threshold 
+     * @param anybalance 
+     * @param noBalance 
+     * @returns 
+     */
     public async waitForBalance(
         address: string,
         expectedAmount: number,
@@ -227,7 +260,7 @@ export class AlgorandConnect {
             }
 
             if (Date.now() - start > timeoutSeconds * 1000) {
-                return Promise.reject(new Error('waitForMinBalance Timeout'))
+                return Promise.reject(new Error('waitForBalance Timeout'))
             }
 
             await Sleep(1000);
@@ -236,9 +269,14 @@ export class AlgorandConnect {
 
         return balance;
     }
-
+    /**
+     * 
+     * @param signer 
+     * @param tokenSymbol 
+     * @returns 
+     */
     async optinToken(signer: Account, tokenSymbol: string): Promise<string> {
-        const token = this.getToken(tokenSymbol);
+        const token = this.getAsset(tokenSymbol);
         if (!token || !(token as AlgorandStandardAssetConfig).assetId) return Promise.reject(new Error("Unsupported token"));
 
         const txn = await assetOptin(
