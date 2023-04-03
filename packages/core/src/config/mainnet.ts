@@ -89,6 +89,7 @@ export const config: GlitterBridgeConfig = {
             {
                 symbol: "SOL",
                 address: "11111111111111111111111111111111",
+                wrappedSymbol: "xSOL",
                 decimals: 9,
                 minTransfer: 0.05,
                 feeDivisor: 200,
@@ -99,6 +100,7 @@ export const config: GlitterBridgeConfig = {
             {
                 symbol: "xALGO",
                 address: "xALGoH1zUfRmpCriy94qbfoMXHtK6NDnMKzT4Xdvgms",
+                wrappedSymbol: "ALGO",
                 decimals: 6,
                 minTransfer: 5,
                 feeDivisor: 200,
