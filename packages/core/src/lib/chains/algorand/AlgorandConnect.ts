@@ -146,4 +146,8 @@ export class AlgorandConnect {
     getAddress(key: keyof AlgorandConfig["bridgeAccounts"]): string {
         return this.config.bridgeAccounts[key];
     }
+
+    public getToken(tokenSymbol: string): AlgorandStandardAssetConfig | AlgorandNativeTokenConfig | undefined {
+        return this.assetsRepo.getAsset(tokenSymbol)
+    }
 }

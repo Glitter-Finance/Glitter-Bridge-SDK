@@ -20,16 +20,6 @@ export type SolanaAccountsConfig = {
   tokenBridgeV2Address: string;
 };
 
-export enum SolanaProgramId {
-  BridgeProgramId = "bridgeProgram",
-  VestingProgramId = "vestingProgram",
-  OwnerId = "owner",
-  UsdcReceiverId = "usdcReceiver",
-  UsdcDepositId = "usdcDeposit",
-  MemoProgramId = "memoProgram",
-  UsdcMint = "UsdcMint",
-}
-
 export type PollerOptions = {
   limit?: number;
   startHash?: string;

@@ -12,7 +12,7 @@ export async function solBridgeTransaction(
     routing: Routing,
     token: BridgeTokenConfig,
     solanaAccountsConfig: SolanaAccountsConfig
-): Promise<Transaction | undefined> {
+): Promise<Transaction> {
     let destinationAddressSerialized: Uint8Array | undefined = undefined;1
     if (token.symbol.toLowerCase() != "sol") return Promise.reject(new Error("Token must be SOL"));
     if (!routing.amount) return Promise.reject(new Error("Routing amount should be provided"));

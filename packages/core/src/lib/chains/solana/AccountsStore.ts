@@ -6,6 +6,7 @@ import {ASSOCIATED_TOKEN_PROGRAM_ID, Account, TOKEN_PROGRAM_ID, createAssociated
 import {PublicKey} from "@solana/web3.js";
 import {solanaMnemonicToSecretkey} from "./utils";
 import * as bip39 from "bip39"
+import BigNumber from "bignumber.js";
 
 export type SolanaAccount = {
     addr: string;
@@ -16,6 +17,7 @@ export type SolanaAccount = {
 };
 
 export class SolanaAccountsStore {
+    SOL_DECIMALS = 9
     private __accounts: Map<string, SolanaAccount>;
     private __connection: Connection;
     /**
@@ -59,12 +61,17 @@ export class SolanaAccountsStore {
      * @param accountAddress 
      * @returns 
      */
-    public async getBalance(accountAddress: string): Promise<SolanaAccount> {
+    public async getSOLBalance(accountAddress: string, connection?: Connection): Promise<{
+        balanceBn: BigNumber;
+        balanceHuman: BigNumber;
+    }> {
         const account = this.get(accountAddress);
         if (!account) {return Promise.reject(new Error('Account has not been added to AccountStore')) }
-        const balance = await this.__connection.getBalance(account.pk);
-        account.balance = balance
-        return account;
+        const balance = connection ? await connection.getBalance(account.pk) : await this.__connection.getBalance(account.pk);
+        return {
+            balanceBn: new BigNumber(balance),
+            balanceHuman: new BigNumber(balance).div(10 ** this.SOL_DECIMALS)
+        }
     }
     /**
      * 
@@ -129,9 +136,10 @@ export class SolanaAccountsStore {
      */
     async getTokenAaddress(
         owner: string,
-        solanaTokenConfig: BridgeTokenConfig
+        solanaTokenConfig: BridgeTokenConfig,
+        connection?: Connection
     ): Promise<PublicKey> {
-        const mintAddress = await getMint(this.__connection, new PublicKey(solanaTokenConfig.address));
+        const mintAddress = await getMint(connection ? connection : this.__connection, new PublicKey(solanaTokenConfig.address));
         const tokenAccountAddress = await getAssociatedTokenAddress(new PublicKey(mintAddress), new PublicKey(owner))
         return tokenAccountAddress
     }
@@ -143,14 +151,17 @@ export class SolanaAccountsStore {
      */
     async getTokenAccount(
         owner: string,
-        solanaTokenConfig: BridgeTokenConfig
+        solanaTokenConfig: BridgeTokenConfig,
+        connection?: Connection
     ): Promise<Account> {
         const associatedTokenAccountAddress = await this.getTokenAaddress(
             owner, 
-            solanaTokenConfig
+            solanaTokenConfig,
+            connection
         )
 
-        const tokenAccount = await getAccount(this.__connection, 
+        const tokenAccount = await getAccount(
+            connection ? connection : this.__connection,
             associatedTokenAccountAddress,
             "processed",
             TOKEN_PROGRAM_ID
@@ -165,9 +176,9 @@ export class SolanaAccountsStore {
      * @param tokenConfig 
      * @returns 
      */
-    async createTokenAccount(signer: Signer, owner: PublicKey, tokenConfig: BridgeTokenConfig): Promise<Account> {
+    async createTokenAccount(signer: Signer, owner: PublicKey, tokenConfig: BridgeTokenConfig, connection?: Connection): Promise<Account> {
         const mintAddress = new PublicKey(tokenConfig.address);
-        const address = await this.getTokenAaddress(signer.publicKey.toString(), tokenConfig);
+        const address = await this.getTokenAaddress(signer.publicKey.toString(), tokenConfig, connection);
         const programId = TOKEN_PROGRAM_ID;
         const associatedTokenProgramId = ASSOCIATED_TOKEN_PROGRAM_ID;
 
@@ -182,11 +193,58 @@ export class SolanaAccountsStore {
             )
         );
 
-        await sendAndConfirmTransaction(this.__connection, transaction, [signer], {
+        await sendAndConfirmTransaction(connection ? connection : this.__connection, transaction, [signer], {
             commitment: "finalized",
         });
 
         const account = await this.getTokenAccount(owner.toString(), tokenConfig)
         return account;
     }
+    /**
+     * 
+     * @param owner 
+     * @param tokenConfig 
+     * @returns 
+     */
+    async getSPLTokenBalance(
+        owner: string,
+        tokenConfig: BridgeTokenConfig,
+        connection : Connection
+    ): Promise<{
+        balanceBn: BigNumber;
+        balanceHuman: BigNumber;
+    }> {
+        const tokenAccount = await this.getTokenAccount(
+            owner,
+            tokenConfig
+        );
+
+        if (!tokenAccount) {
+            return Promise.reject('Token Account unavailable')
+        }
+
+        const unitsContext = connection ? await connection.getTokenAccountBalance(
+            tokenAccount.address
+        ) : await this.__connection.getTokenAccountBalance(
+            tokenAccount.address
+        );
+
+        return {
+            balanceBn: new BigNumber(unitsContext.value.amount),
+            balanceHuman: new BigNumber(unitsContext.value.amount).div(
+                10 ** unitsContext.value.decimals
+            )
+        }
+    }
+    /**
+     * 
+     * @param signer 
+     * @param amount 
+     * @returns 
+     */
+    async requestAirDrop(signer: SolanaAccount, amount = 1_000_000_000, connection : Connection): Promise<string> {
+        const airdropTx = connection ? await connection.requestAirdrop(signer.pk, amount) : await this.__connection.requestAirdrop(signer.pk, amount);
+        return airdropTx
+    }
+
 }

@@ -10,6 +10,7 @@ interface BaseTokenConfig {
 
 export type BridgeTokenConfig = { 
   address: string;
+  wrappedSymbol?: string
 } & BaseTokenConfig;
 
 export type AlgorandStandardAssetConfig = {
