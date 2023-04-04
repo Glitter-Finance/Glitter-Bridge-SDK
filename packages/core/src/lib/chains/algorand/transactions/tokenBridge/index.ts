@@ -103,10 +103,9 @@ export const feeTransaction = async (
     feeRouting.to.network = "algorand";
     feeRouting.to.token = feeRouting.from.token;
     feeRouting.to.address = feeCollector;
-    feeRouting.units = undefined;
-
     if (routing.amount && tokenConfig.feeDivisor) {
-        feeRouting.amount = BigNumber(routing.amount).div(tokenConfig.feeDivisor);
+        feeRouting.units = new BigNumber(routing.amount).div(tokenConfig.feeDivisor).toString();
+        feeRouting.amount = new BigNumber(routing.amount).div(tokenConfig.feeDivisor).div(10**tokenConfig.decimals).toNumber();
 
         return await getTransferTxByAssetSymbol(client, routing, tokenConfig);
     }
@@ -183,7 +182,7 @@ export const bridgeDeposit = async (
     feeCollectorAddress: string,
     tokenConfig: AlgorandStandardAssetConfig | AlgorandNativeTokenConfig
 ): Promise<Transaction[]> => {
-    const routingInfo: Routing = {
+    const routingInfo = {
         from: {
             address: sourceAddress,
             network: BridgeNetworks.algorand.toString().toLowerCase(),
@@ -196,8 +195,8 @@ export const bridgeDeposit = async (
         },
         amount: new BigNumber(
             (amount / BigInt(10 ** tokenConfig.decimals)).toString()
-        ),
-        units: new BigNumber(amount.toString()),
+        ).toNumber(),
+        units: new BigNumber(amount.toString()).toFixed(0),
     };
 
     if (

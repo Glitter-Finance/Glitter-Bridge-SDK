@@ -66,8 +66,8 @@ export class SolanaConnect {
                 token: token.wrappedSymbol ?? token.symbol,
                 txn_signature: ""
             },
-            amount: bigAmount.div(10**token.decimals).dp(2),
-            units: bigAmount
+            amount: bigAmount.div(10**token.decimals).toNumber(),
+            units: bigAmount.toString()
         }
 
         const symbolLowercase = tokenSymbol.toLowerCase()

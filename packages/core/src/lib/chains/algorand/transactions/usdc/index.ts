@@ -1,8 +1,7 @@
 import algosdk from "algosdk";
 import BigNumber from "bignumber.js";
-import {Routing} from "../../../../..//lib/common";
 import {BridgeNetworks} from "../../../../../lib/common/networks";
-import {AlgorandStandardAssetConfig} from "../../../../../lib/common";
+import {AlgorandStandardAssetConfig, Routing} from "../../../../../lib/common";
 import {getAlgorandDefaultTransactionParams} from "../utils";
 
 async function validParams(params: {
@@ -50,7 +49,7 @@ export const bridgeUSDC = async (
         tokenConfig: usdcConfig
     });
     const params = await getAlgorandDefaultTransactionParams(client);
-    const routingData = {
+    const routingData: Routing = {
         from: {
             token: usdcConfig.symbol,
             network: BridgeNetworks.algorand.toString().toLowerCase(),
@@ -63,7 +62,7 @@ export const bridgeUSDC = async (
             address: destinationAddress,
             txn_signature: "",
         },
-        amount: amount.div(10 ** usdcConfig.decimals).toFixed(2),
+        amount: amount.div(10 ** usdcConfig.decimals).toNumber(),
         units: amount.toFixed(0),
     };
 
