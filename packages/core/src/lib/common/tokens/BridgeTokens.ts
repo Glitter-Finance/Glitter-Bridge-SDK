@@ -31,7 +31,7 @@ export class BridgeTokens {
     public static getToken(network: BridgeNetworks, symbol: string) {
         const configToFind = this.tokenConfig.get(network);
         if (!configToFind) return undefined;
-        const token = configToFind?.find((x) => x.symbol.toLowerCase() === symbol);
+        const token = configToFind?.find((x) => x.symbol.toLowerCase() === symbol.toLowerCase());
         if (!token) return undefined;
         switch (network) {
             case BridgeNetworks.solana:

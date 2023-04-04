@@ -47,12 +47,12 @@ export class SolanaConnect {
         tokenSymbol: string,
         destinationNetwork: BridgeNetworks,
         destinationAddress: string,
-        amount: number
+        amount: bigint
     ): Promise<Transaction> {
         const token = BridgeTokens.getToken(BridgeNetworks.solana, tokenSymbol);
         if (!token) return Promise.reject(new Error('Unable to find token configuration'));
 
-        const bigAmount = new BigNumber(amount)
+        const bigAmount = new BigNumber(amount.toString())
         const routingInfo: Routing = {
             from: {
                 address: sourceAddress,
@@ -78,7 +78,7 @@ export class SolanaConnect {
                 sourceAddress,
                 destinationAddress,
                 destinationNetwork,
-                new BigNumber(amount),
+                new BigNumber(amount.toString()),
                 this.solanaConfig.accounts,
                 token,
             )
@@ -122,7 +122,7 @@ export class SolanaConnect {
         tokenSymbol: string,
         destinationNetwork: BridgeNetworks,
         destinationAddress: string,
-        amount: number
+        amount: bigint
     ): Promise<string> {
         const transaction = await this.bridgeTransaction(
             sourceAddress, tokenSymbol, destinationNetwork, destinationAddress, amount
