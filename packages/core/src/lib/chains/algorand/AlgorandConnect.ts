@@ -13,7 +13,6 @@ import {
     Sleep,
 } from "../../../lib/common";
 import {AlgorandAccountsStore} from "./AccountsStore";
-import {Account} from "algosdk";
 
 export class AlgorandConnect {
     public readonly clientIndexer: algosdk.Indexer;
@@ -37,8 +36,7 @@ export class AlgorandConnect {
             (conf: AlgorandNativeTokenConfig | AlgorandStandardAssetConfig) => {
                 if ((conf as AlgorandStandardAssetConfig).assetId) {
                     return this.assetsRepo.addStandardAsset(
-                        (conf as AlgorandStandardAssetConfig).assetId,
-                        conf
+                        conf as AlgorandStandardAssetConfig
                     );
                 }
             }
@@ -278,19 +276,19 @@ export class AlgorandConnect {
      * @param tokenSymbol 
      * @returns 
      */
-    async optinToken(signer: Account, tokenSymbol: string): Promise<string> {
+    async optinToken(signerAddres: string, tokenSymbol: string): Promise<string> {
         const token = this.getAsset(tokenSymbol);
         if (!token || !(token as AlgorandStandardAssetConfig).assetId) return Promise.reject(new Error("Unsupported token"));
 
         const txn = await assetOptin(
             this.client,
-            signer.addr.toString(),
+            signerAddres,
             token as AlgorandStandardAssetConfig
         )
 
         const [txID] = await this.accountsStore.signAndSendTransactions(
             [txn],
-            signer
+            signerAddres
         )
 
         return txID

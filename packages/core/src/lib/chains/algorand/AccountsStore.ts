@@ -192,13 +192,15 @@ export class AlgorandAccountsStore {
    */
     async signAndSendTransactions(
         transactions: Transaction[],
-        signer: Account
+        signerAddress: string
     ): Promise<string[]> {
         if (transactions.length == 0)
             throw new Error(
                 "Transactions array should contain one or more transactions."
             );
 
+        const signer = this.__accounts.get(signerAddress)
+        if (!signer) throw new Error('Signer Account unavailable')
         const signedTxns: Uint8Array[] = [];
         const groupID = algosdk.computeGroupID(transactions);
 

@@ -50,7 +50,7 @@ export const bridgeUSDC = async (
         tokenConfig: usdcConfig
     });
     const params = await getAlgorandDefaultTransactionParams(client);
-    const routingData: Routing = {
+    const routingData = {
         from: {
             token: usdcConfig.symbol,
             network: BridgeNetworks.algorand.toString().toLowerCase(),
@@ -63,8 +63,8 @@ export const bridgeUSDC = async (
             address: destinationAddress,
             txn_signature: "",
         },
-        amount: amount.div(10 ** usdcConfig.decimals).dp(2),
-        units: amount,
+        amount: amount.div(10 ** usdcConfig.decimals).toFixed(2),
+        units: amount.toFixed(0),
     };
 
     const note = algosdk.encodeObj({
