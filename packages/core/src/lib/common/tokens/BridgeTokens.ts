@@ -13,7 +13,7 @@ export class BridgeTokens {
       | AlgorandStandardAssetConfig
       | AlgorandNativeTokenConfig
     >
-  >;
+  > = new Map();
 
     public static loadConfig(
         network: BridgeNetworks,
