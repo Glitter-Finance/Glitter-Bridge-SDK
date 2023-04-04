@@ -8,7 +8,7 @@ import {walletToAddress} from "../../common/utils/utils";
 import Trc20DetailedAbi from "./abi/TRC20Detailed.json";
 import TokenBridgeAbi from "./abi/TokenBridge.json";
 import algosdk from "algosdk";
-import {BridgeTokens} from "src";
+import {BridgeTokens} from "../../";
 
 // eslint-disable-next-line @typescript-eslint/no-var-requires
 const TronWeb = require("tronweb");

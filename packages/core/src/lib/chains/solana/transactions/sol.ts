@@ -1,5 +1,5 @@
 import {PublicKey, SystemProgram, Transaction} from "@solana/web3.js";
-import {BridgeNetworks, BridgeTokens, Routing, RoutingHelper} from "src";
+import {BridgeNetworks, BridgeTokens, Routing, RoutingHelper} from "../../../";
 
 export async function sendSolTransaction(routing: Routing): Promise<Transaction> {
     if (!routing.amount) return Promise.reject(new Error("Invalid Routing information"));

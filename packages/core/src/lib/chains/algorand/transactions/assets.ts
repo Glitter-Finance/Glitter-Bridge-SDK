@@ -1,5 +1,5 @@
 import algosdk, {Transaction} from "algosdk";
-import {Routing} from "src";
+import {Routing} from "../../../";
 import {AlgorandStandardAssetConfig} from "../../../../lib/common";
 import {getAlgorandDefaultTransactionParams} from "./utils";
 
