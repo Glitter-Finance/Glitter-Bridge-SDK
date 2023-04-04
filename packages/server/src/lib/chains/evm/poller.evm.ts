@@ -44,17 +44,28 @@ export class GlitterEVMPoller implements GlitterPoller {
     }
 
     //Intialize Poller
-    initialize(sdkServer: GlitterSDKServer, tokenV2Address?: string): void {
+    initialize(sdkServer: GlitterSDKServer): void {
         if (this.network === undefined) throw ServerError.NetworkNotSet();
 
         //Add Token Cursor
         const tokenAddress = undefined;
         if (tokenAddress)
-            this.tokenV1Cursor = NewCursor(this.network, BridgeType.TokenV1, tokenAddress, sdkServer.defaultLimit);
+            this.tokenV1Cursor = NewCursor(
+                this.network, 
+                BridgeType.TokenV1, 
+                tokenAddress, 
+                sdkServer.defaultLimit
+            );
 
         //Add Token V2 Cursor
+        const tokenV2Address = this.connect?.token?.toString();       
         if (tokenV2Address)
-            this.tokenV2Cursor = NewCursor(this.network, BridgeType.TokenV2, tokenV2Address, sdkServer.defaultLimit);
+            this.tokenV2Cursor = NewCursor(
+                this.network,
+                BridgeType.TokenV2,
+                tokenV2Address,
+                sdkServer.defaultLimit
+            );
 
         //Add USDC Cursors
         const usdcAddresses = [

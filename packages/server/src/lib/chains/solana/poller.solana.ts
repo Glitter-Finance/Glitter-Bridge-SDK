@@ -29,8 +29,7 @@ export class GlitterSolanaPoller implements GlitterPoller {
     //Initialize
     public initialize(sdkServer: GlitterSDKServer): void {
     //Add Token Cursor
-        const tokenAddress =
-      sdkServer.sdk?.solana?.tokenBridgePollerAddress?.toString();
+        const tokenAddress = sdkServer.sdk?.solana?.tokenBridgePollerAddress?.toString();
         if (tokenAddress)
             this.tokenV1Cursor = NewCursor(
                 BridgeNetworks.solana,
@@ -40,8 +39,7 @@ export class GlitterSolanaPoller implements GlitterPoller {
             );
 
         //Add Token V2 Cursor
-        const tokenV2Address =
-      sdkServer.sdk?.solana?.tokenBridgeV2Address?.toString();
+        const tokenV2Address = sdkServer.sdk?.solana?.tokenBridgeV2Address?.toString();
         if (tokenV2Address)
             this.tokenV2Cursor = NewCursor(
                 BridgeNetworks.solana,

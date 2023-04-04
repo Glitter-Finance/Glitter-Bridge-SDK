@@ -415,6 +415,9 @@ export class EvmConnect {
     public get generateWallet(): ethers.Wallet {
         return ethers.Wallet.createRandom();
     }
+    public get tokenV2BridgePollerAddress(): string | number | undefined {
+        return this.__config?.tokenV2Bridge;
+    }
 
     public getToken(token: string): BridgeToken | undefined {
         return BridgeTokens.get(this.__network, token);
