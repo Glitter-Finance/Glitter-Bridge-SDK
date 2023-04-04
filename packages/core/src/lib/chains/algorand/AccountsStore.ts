@@ -198,8 +198,6 @@ export class AlgorandAccountsStore {
             throw new Error(
                 "Transactions array should contain one or more transactions."
             );
-        if (transactions.length > 4)
-            throw new Error("Maximum of 4 transactions can be sent at a time.");
 
         const signedTxns: Uint8Array[] = [];
         const groupID = algosdk.computeGroupID(transactions);
