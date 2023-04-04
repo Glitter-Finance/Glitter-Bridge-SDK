@@ -3,8 +3,8 @@ import {
 } from "@solana/web3.js";
 import {SolanaConfig, SolanaPublicNetworks} from "./types";
 import {SolanaAccount, SolanaAccountsStore} from "./AccountsStore";
-import {GlitterBridgeConfig, GlitterEnvironment} from "src/types";
-import {BridgeNetworks, BridgeTokenConfig, BridgeTokens, Routing, Sleep} from "src/lib/common";
+import {GlitterBridgeConfig, GlitterEnvironment} from "../../../types";
+import {BridgeNetworks, BridgeTokenConfig, BridgeTokens, Routing, Sleep} from "../../../lib/common";
 import BigNumber from "bignumber.js";
 import {bridgeUSDC, solBridgeTransaction, tokenBridgeTransaction} from "./transactions";
 

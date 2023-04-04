@@ -1,6 +1,6 @@
 import {createCloseAccountInstruction, createTransferCheckedInstruction} from "@solana/spl-token";
 import {PublicKey, Transaction} from "@solana/web3.js";
-import {BridgeTokenConfig, Routing, RoutingHelper} from "src/lib/common";
+import {BridgeTokenConfig, Routing, RoutingHelper} from "../../../common";
 
 export async function sendTokenTransaction(
     routing: Routing,

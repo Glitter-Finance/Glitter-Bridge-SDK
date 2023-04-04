@@ -2,7 +2,7 @@ import {MultisigMetadata} from "algosdk";
 import {
     AlgorandNativeTokenConfig,
     AlgorandStandardAssetConfig,
-} from "src/lib/common";
+} from "../../../lib/common";
 
 export type AlgorandConfig = {
   serverUrl: string;

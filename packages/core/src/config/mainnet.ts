@@ -1,4 +1,4 @@
-import {GlitterBridgeConfig, GlitterEnvironment} from "src/types";
+import {GlitterBridgeConfig, GlitterEnvironment} from "../types";
 import {BridgeNetworks} from "../lib/common";
 
 export const config: GlitterBridgeConfig = {

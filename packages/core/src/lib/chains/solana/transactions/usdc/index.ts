@@ -1,5 +1,5 @@
 import {Connection, PublicKey, Transaction, TransactionInstruction} from "@solana/web3.js";
-import {BridgeNetworks, BridgeTokenConfig, Routing} from "src/lib/common";
+import {BridgeNetworks, BridgeTokenConfig, Routing} from "../../../../common";
 import {SolanaAccountsConfig} from "../../types";
 import {TOKEN_PROGRAM_ID, createTransferInstruction, getAssociatedTokenAddress, getMint} from "@solana/spl-token";
 import BigNumber from "bignumber.js";

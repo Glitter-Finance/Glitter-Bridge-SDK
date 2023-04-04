@@ -5,8 +5,8 @@ import {
     AlgorandNativeTokenConfig,
     Routing,
     RoutingDefault,
-} from "src/lib/common";
-import {BridgeNetworks} from "src/lib/common/networks";
+} from "../../../../common";
+import {BridgeNetworks} from "../../../../common";
 import {
     algoTransferTxnWithRoutingNote,
     assetTransferTxnWithRoutingNote,

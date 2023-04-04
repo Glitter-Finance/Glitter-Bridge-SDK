@@ -5,7 +5,7 @@ import algosdk, {
     Account,
 } from "algosdk";
 import SendRawTransaction from "algosdk/dist/types/client/v2/algod/sendRawTransaction";
-import {AlgorandStandardAssetConfig} from "src/lib/common";
+import {AlgorandStandardAssetConfig} from "../../common";
 import {AlgorandAccount, AlgorandAccountInformation, AlgorandMultiSigAccount} from "./types";
 import BigNumber from "bignumber.js";
 

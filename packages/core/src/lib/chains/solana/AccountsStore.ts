@@ -1,6 +1,6 @@
 import * as solanaWeb3 from "@solana/web3.js";
 import {Connection, Keypair, sendAndConfirmTransaction} from "@solana/web3.js";
-import {BridgeTokenConfig} from "src/lib/common";
+import {BridgeTokenConfig} from "../../common";
 import {ASSOCIATED_TOKEN_PROGRAM_ID, Account, TOKEN_PROGRAM_ID, createAssociatedTokenAccountInstruction, getAccount, getAssociatedTokenAddress, getMint} from "@solana/spl-token";
 import {PublicKey} from "@solana/web3.js";
 import {solanaMnemonicToSecretkey} from "./utils";

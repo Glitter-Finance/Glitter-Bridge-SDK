@@ -2,7 +2,7 @@ import {
     AlgorandStandardAssetConfig,
     AlgorandNativeTokenConfig,
     Routing,
-} from "src/lib/common";
+} from "../../../../../common";
 import {
     AlgorandTokenBridgeDepositTransactions,
     buildDepositParams,

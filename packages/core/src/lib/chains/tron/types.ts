@@ -1,4 +1,4 @@
-import {BridgeTokenConfig} from "src/lib/common/tokens";
+import {BridgeTokenConfig} from "../../common/tokens";
 
 export type TronConfig = {
   fullNode: string;

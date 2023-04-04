@@ -1,5 +1,5 @@
 import {Connection, PublicKey, SystemProgram, Transaction, TransactionInstruction} from "@solana/web3.js";
-import {BridgeTokenConfig, Routing, RoutingHelper} from "src/lib/common";
+import {BridgeTokenConfig, Routing, RoutingHelper} from "../../../../common";
 import {SolanaAccountsConfig} from "../../types";
 import {getSolEscrowAccount} from "./utils";
 import algosdk from "algosdk";

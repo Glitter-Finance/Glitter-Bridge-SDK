@@ -1,5 +1,5 @@
 import {Algodv2} from "algosdk";
-import {AlgorandNativeTokenConfig, AlgorandStandardAssetConfig} from "src/lib/common";
+import {AlgorandNativeTokenConfig, AlgorandStandardAssetConfig} from "../../../lib/common";
 import {AlgorandAssetMetadata} from "./types";
 
 export class AssetsRepository {

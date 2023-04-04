@@ -1,7 +1,7 @@
 import * as algosdk from "algosdk";
 import {AlgorandConfig} from "./types";
 import {AssetsRepository} from "./AssetsRepository";
-import {BridgeNetworks} from "src/lib/common/networks";
+import {BridgeNetworks} from "../../../lib/common/networks";
 import BigNumber from "bignumber.js";
 import {assetOptin, bridgeDeposit, bridgeUSDC} from "./transactions";
 import SendRawTransaction from "algosdk/dist/types/client/v2/algod/sendRawTransaction";
@@ -11,7 +11,7 @@ import {
     BridgeTokens,
     RoutingDefault,
     Sleep,
-} from "src/lib/common";
+} from "../../../lib/common";
 import {AlgorandAccountsStore} from "./AccountsStore";
 import {Account} from "algosdk";
 
