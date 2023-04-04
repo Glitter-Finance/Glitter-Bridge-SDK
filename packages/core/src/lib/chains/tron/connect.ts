@@ -1,6 +1,6 @@
 import {PublicKey} from "@solana/web3.js";
 import {BigNumber, ethers} from "ethers";
-import {BridgeNetworks} from "../../common/networks/networks";
+import {BridgeNetworks} from "../../common/networks";
 import {BridgeDepositEvent, BridgeReleaseEvent, TransferEvent} from "../evm";
 import {TronConfig} from "./types";
 import {decodeEventData, getLogByEventSignature, hexToBytes} from "./utils";
@@ -8,6 +8,7 @@ import {walletToAddress} from "../../common/utils/utils";
 import Trc20DetailedAbi from "./abi/TRC20Detailed.json";
 import TokenBridgeAbi from "./abi/TokenBridge.json";
 import algosdk from "algosdk";
+import {BridgeTokens} from "src";
 
 // eslint-disable-next-line @typescript-eslint/no-var-requires
 const TronWeb = require("tronweb");
@@ -27,6 +28,7 @@ export class TronConnect {
         );
         // https://github.com/tronprotocol/tronweb/issues/90
         this.__tronWeb.setAddress(this.tronConfig.addresses.releaseWallet);
+        BridgeTokens.loadConfig(BridgeNetworks.TRON, this.__tronConfig.tokens);
         this.initContracts();
     }
 
@@ -337,13 +339,6 @@ export class TronConnect {
 
     get tronConfig() {
         return this.__tronConfig;
-    }
-
-    public get usdcBridgeDepositAddress(): string | number | undefined {
-        return this.__tronConfig?.addresses.depositWallet;
-    }
-    public get usdcBridgeReceiverAddress(): string | number | undefined {
-        return this.__tronConfig?.addresses.releaseWallet;
     }
 
     public getTxnHashed(txnID: string): string {
