@@ -29,7 +29,7 @@ export class AlgorandConnect {
         this.config = config;
         this.client = this.getAlgodClient();
         this.clientIndexer = this.getAlgodIndexer();
-        this.assetsRepo = new AssetsRepository(this.client);
+        this.assetsRepo = new AssetsRepository(this.client, this.clientIndexer);
         this.accountsStore = new AlgorandAccountsStore(this.client);
         BridgeTokens.loadConfig(BridgeNetworks.algorand, config.assets);
 
