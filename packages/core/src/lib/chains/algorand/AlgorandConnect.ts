@@ -134,8 +134,8 @@ export class AlgorandConnect {
     getAlgodClient(): algosdk.Algodv2 {
         const client = new algosdk.Algodv2(
             this.config.serverUrl,
-            this.config.serverPort ? this.config.serverPort.toString() : undefined,
-            this.config.nativeTokenSymbol
+            this.config.serverUrl,
+            this.config.serverPort
         );
         client.setIntEncoding(algosdk.IntDecoding.MIXED);
         return client;
