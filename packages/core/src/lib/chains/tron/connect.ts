@@ -32,6 +32,10 @@ export class TronConnect {
         this.initContracts();
     }
 
+    public setApiKey(apiKey: string) {
+        this.__tronWeb.setHeader({"TRON-PRO-API-KEY": apiKey});
+    }
+
     private async initContracts(): Promise<void> {
         const usdcConf = this.__tronConfig.tokens.find(
             (x) => x.symbol.toLowerCase() === "usdc"
