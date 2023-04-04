@@ -60,8 +60,8 @@ export class AlgorandAccountsStore {
 
     public async addMultiSignatureAccount(
         addreses: string[],
+        threshold: number,
         version = 1,
-        threshold = 2
     ): Promise<AlgorandMultiSigAccount> {
         const params = {
             version: version,
