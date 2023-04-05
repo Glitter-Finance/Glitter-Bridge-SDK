@@ -6,9 +6,9 @@ import {
 
 export type AlgorandConfig = {
   serverUrl: string;
-  serverPort?: number;
+  serverPort?: string;
   indexerUrl: string;
-  indexerPort: string | number;
+  indexerPort?: string;
   nativeTokenSymbol: string;
   bridgeProgramId: number;
   bridgeAccounts: {

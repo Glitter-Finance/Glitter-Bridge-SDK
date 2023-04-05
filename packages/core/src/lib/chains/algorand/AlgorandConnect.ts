@@ -121,9 +121,9 @@ export class AlgorandConnect {
      */
     getAlgodIndexer(): algosdk.Indexer {
         const indexer = new algosdk.Indexer(
+            {},
             this.config.indexerUrl,
-            this.config.indexerUrl,
-            this.config.nativeTokenSymbol
+            this.config.indexerPort ?? ""
         );
         indexer.setIntEncoding(algosdk.IntDecoding.MIXED);
         return indexer;
@@ -134,9 +134,9 @@ export class AlgorandConnect {
      */
     getAlgodClient(): algosdk.Algodv2 {
         const client = new algosdk.Algodv2(
+            {},
             this.config.serverUrl,
-            this.config.serverUrl,
-            this.config.serverPort
+            this.config.serverPort ?? ""
         );
         client.setIntEncoding(algosdk.IntDecoding.MIXED);
         return client;
