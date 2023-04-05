@@ -27,6 +27,7 @@ export const config: GlitterBridgeConfig = {
         assets: [
             {
                 symbol: "ALGO",
+                wrappedSymbol: "xALGO",
                 decimals: 6,
                 minTransfer: 5,
                 feeDivisor: 200,
@@ -43,6 +44,7 @@ export const config: GlitterBridgeConfig = {
             },
             {
                 symbol: "xSOL",
+                wrappedSymbol: "SOL",
                 assetId: 31566704,
                 decimals: 9,
                 minTransfer: 0.05,
