@@ -68,7 +68,7 @@ export const bridgeUSDC = async (
 
     const note = algosdk.encodeObj({
         system: routingData,
-        date: `${new Date()}`,
+        date: `${new Date().toISOString()}`,
     });
 
     const depositTxn = algosdk.makeAssetTransferTxnWithSuggestedParamsFromObject({
