@@ -1,11 +1,11 @@
 import {Algodv2} from "algosdk";
-import {AlgorandStandardAssetConfig} from "../../common";
+import {AlgorandNativeTokenConfig, AlgorandStandardAssetConfig} from "../../common";
 import {AlgorandAssetMetadata} from "./types";
 
 export class AssetsRepository {
     protected __metadata: Map<
     string,
-    AlgorandAssetMetadata & AlgorandStandardAssetConfig
+    AlgorandAssetMetadata & AlgorandStandardAssetConfig | AlgorandNativeTokenConfig
   >;
     protected __algoClient: Algodv2;
 
@@ -15,29 +15,29 @@ export class AssetsRepository {
     }
 
     async addStandardAsset(
-        tokenConfig: AlgorandStandardAssetConfig
+        tokenConfig: AlgorandStandardAssetConfig | AlgorandNativeTokenConfig
     ) {
+        this.__metadata.set(tokenConfig.symbol, {
+            ...tokenConfig,
+            index: (tokenConfig as AlgorandStandardAssetConfig).assetId,
+            params: {
+                creator: "",
+                decimals: tokenConfig.decimals,
+                "default-frozen": false,
+                freeze: "",
+                manager: "",
+                name: tokenConfig.name,
+                "name-b64": "",
+                reserve: "",
+                total: 0,
+                "unit-name": tokenConfig.symbol,
+                "unit-name-b64": "",
+                url: "",
+                "url-b64": ""
+            }
+        })
         if ((tokenConfig as AlgorandStandardAssetConfig).assetId) {
-            this.__metadata.set(tokenConfig.symbol, {
-                ...tokenConfig,
-                index: (tokenConfig as AlgorandStandardAssetConfig).assetId,
-                params: {
-                    creator: "",
-                    decimals: tokenConfig.decimals,
-                    "default-frozen": false,
-                    freeze: "",
-                    manager: "",
-                    name: tokenConfig.name,
-                    "name-b64": "",
-                    reserve: "",
-                    total: 0,
-                    "unit-name": tokenConfig.symbol,
-                    "unit-name-b64": "",
-                    url: "",
-                    "url-b64": ""
-                }
-            })
-            this.updateStandardAsset(tokenConfig)
+            this.updateStandardAsset(tokenConfig as AlgorandStandardAssetConfig)
         }
     }
 
@@ -58,7 +58,7 @@ export class AssetsRepository {
 
     getAsset(
         tokenSymbol: string
-    ): (AlgorandAssetMetadata & AlgorandStandardAssetConfig) | undefined {
+    ): (AlgorandAssetMetadata & AlgorandStandardAssetConfig | AlgorandNativeTokenConfig) | undefined {
         return this.__metadata.get(tokenSymbol);
     }
 }

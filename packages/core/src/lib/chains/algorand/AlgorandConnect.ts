@@ -34,11 +34,9 @@ export class AlgorandConnect {
 
         config.assets.map(
             (conf: AlgorandNativeTokenConfig | AlgorandStandardAssetConfig) => {
-                if ((conf as AlgorandStandardAssetConfig).assetId) {
-                    return this.assetsRepo.addStandardAsset(
-                        conf as AlgorandStandardAssetConfig
-                    );
-                }
+                return this.assetsRepo.addStandardAsset(
+                    conf
+                );
             }
         );
     }
