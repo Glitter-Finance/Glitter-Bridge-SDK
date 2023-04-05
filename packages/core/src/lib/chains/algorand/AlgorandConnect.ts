@@ -53,8 +53,8 @@ export class AlgorandConnect {
      */
     public async bridgeTransactions(
         sourceAddress: string,
-        destinationNetwork: BridgeNetworks,
         destinationAdress: string,
+        destinationNetwork: BridgeNetworks,
         tokenSymbol: string,
         amount: bigint
     ): Promise<algosdk.Transaction[]> {

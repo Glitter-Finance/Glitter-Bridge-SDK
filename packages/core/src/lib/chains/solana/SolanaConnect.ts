@@ -44,9 +44,9 @@ export class SolanaConnect {
      */
     async bridgeTransaction(
         sourceAddress: string,
-        tokenSymbol: string,
-        destinationNetwork: BridgeNetworks,
         destinationAddress: string,
+        destinationNetwork: BridgeNetworks,
+        tokenSymbol: string,
         amount: bigint
     ): Promise<Transaction> {
         const token = BridgeTokens.getToken(BridgeNetworks.solana, tokenSymbol);
@@ -119,13 +119,17 @@ export class SolanaConnect {
      */
     async bridge(
         sourceAddress: string,
-        tokenSymbol: string,
-        destinationNetwork: BridgeNetworks,
         destinationAddress: string,
+        destinationNetwork: BridgeNetworks,
+        tokenSymbol: string,
         amount: bigint
     ): Promise<string> {
         const transaction = await this.bridgeTransaction(
-            sourceAddress, tokenSymbol, destinationNetwork, destinationAddress, amount
+            sourceAddress,
+            destinationAddress,
+            destinationNetwork,
+            tokenSymbol,
+            amount
         )
         let connection = this.connections[this.defaultConnection]
         const account = this.accountStore.get(sourceAddress)
