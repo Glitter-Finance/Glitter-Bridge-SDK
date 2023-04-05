@@ -17,10 +17,10 @@ export enum AlgorandTokenBridgeDepositTransactions {
  * @returns
  */
 export const buildDepositParams = (
+    method: AlgorandTokenBridgeDepositTransactions,
     sourceAddress: string,
     destinationAddress: string,
     amount: bigint,
-    tokenSymbol: "xSOL" | "algo",
     txnSignature?: string
 ): Uint8Array[] => {
     const args: Uint8Array[] = [];
@@ -41,22 +41,20 @@ export const buildDepositParams = (
     args.push(
         new Uint8Array(
             Buffer.from(
-                tokenSymbol === "xSOL"
-                    ? "sol"
-                    : "xALGoH1zUfRmpCriy94qbfoMXHtK6NDnMKzT4Xdvgms"
+                method === AlgorandTokenBridgeDepositTransactions.deposit_algo ?
+                    "xALGoH1zUfRmpCriy94qbfoMXHtK6NDnMKzT4Xdvgms" : "sol"
             )
         )
     );
-    args.push(new Uint8Array(Buffer.from(tokenSymbol)));
     args.push(
         new Uint8Array(
             Buffer.from(
-                tokenSymbol === "xSOL"
-                    ? AlgorandTokenBridgeDepositTransactions.deposit_xsol.toString()
-                    : AlgorandTokenBridgeDepositTransactions.deposit_algo.toString()
+                method === AlgorandTokenBridgeDepositTransactions.deposit_algo ?
+                    "algo" : "xSOL"
             )
         )
     );
+    args.push(new Uint8Array(Buffer.from(method.toString())));
     /**
    * TODO: figure out why txnSignature is added here,
    * since it is a deposit, which means no

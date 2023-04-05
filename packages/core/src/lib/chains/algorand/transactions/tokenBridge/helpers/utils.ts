@@ -28,10 +28,10 @@ export const buildTokenBridgeTxParams = (
         case AlgorandTokenBridgeDepositTransactions.deposit_algo:
         case AlgorandTokenBridgeDepositTransactions.deposit_xsol:
             return buildDepositParams(
+                method,
                 routing.from.address,
                 routing.to.address,
                 bigAmount,
-                tokenConfig.symbol as "xSOL" | "algo",
                 routing.from.txn_signature
             );
         case AlgorandTokenBridgeReleaseTransactions.algo_release:
