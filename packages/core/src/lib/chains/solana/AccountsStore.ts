@@ -139,7 +139,7 @@ export class SolanaAccountsStore {
         connection?: Connection
     ): Promise<PublicKey> {
         const mintAddress = await getMint(connection ? connection : this.__connection, new PublicKey(solanaTokenConfig.address));
-        const tokenAccountAddress = await getAssociatedTokenAddress(new PublicKey(mintAddress), new PublicKey(owner))
+        const tokenAccountAddress = await getAssociatedTokenAddress(new PublicKey(mintAddress.address), new PublicKey(owner))
         return tokenAccountAddress
     }
     /**
