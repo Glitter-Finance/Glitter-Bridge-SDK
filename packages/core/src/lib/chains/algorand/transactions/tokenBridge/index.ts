@@ -107,7 +107,7 @@ export const feeTransaction = async (
         feeRouting.units = new BigNumber(routing.units).div(tokenConfig.feeDivisor).toFixed(0);
         feeRouting.amount = new BigNumber(feeRouting.units).div(10**tokenConfig.decimals).toNumber();
 
-        return await getTransferTxByAssetSymbol(client, routing, tokenConfig);
+        return await getTransferTxByAssetSymbol(client, feeRouting, tokenConfig);
     }
 
     throw new Error("Amount or fee is undefined, check algorand tokens config");
@@ -236,5 +236,5 @@ export const bridgeDeposit = async (
         tokenConfig
     );
 
-    return [appTxn, depositTxn, feeTxn];
+    return [appTxn, feeTxn, depositTxn];
 };

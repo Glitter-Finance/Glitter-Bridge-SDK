@@ -22,7 +22,7 @@ export const buildTokenBridgeTxParams = (
     tokenConfig: AlgorandStandardAssetConfig | AlgorandNativeTokenConfig
 ): Uint8Array[] => {
     if (!routing.amount) throw new Error("Amount is required");
-    const bigAmount = BigInt(routing.amount.toString());
+    const bigAmount = BigInt(routing.units);
 
     switch (method) {
         case AlgorandTokenBridgeDepositTransactions.deposit_algo:
