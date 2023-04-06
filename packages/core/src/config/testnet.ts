@@ -45,7 +45,7 @@ export const config: GlitterBridgeConfig = {
             {
                 symbol: "xSOL",
                 wrappedSymbol: "SOL",
-                assetId: 31566704,
+                assetId: 97628726,
                 decimals: 9,
                 minTransfer: 0.05,
                 feeDivisor: 200,

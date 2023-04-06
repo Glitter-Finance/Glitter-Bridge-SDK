@@ -6,19 +6,17 @@ interface BaseTokenConfig {
   minTransfer?: number;
   maxTransfer?: number;
   totalSupply?: bigint;
+  wrappedSymbol?: string
 }
 
 export type BridgeTokenConfig = { 
   address: string;
-  wrappedSymbol?: string
 } & BaseTokenConfig;
 
 export type AlgorandStandardAssetConfig = {
   assetId: number;
-  wrappedSymbol?: string
 } & BaseTokenConfig;
 
 export type AlgorandNativeTokenConfig = {
   isNative: boolean;
-  wrappedSymbol?: string;
 } & BaseTokenConfig;
