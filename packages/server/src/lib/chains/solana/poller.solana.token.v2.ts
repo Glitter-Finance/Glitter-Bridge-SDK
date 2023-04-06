@@ -1,8 +1,6 @@
 import {
     Connection,
-    ParsedInstruction,
     ParsedTransactionWithMeta,
-    PartiallyDecodedInstruction,
     PublicKey,
 } from "@solana/web3.js";
 import {
@@ -13,17 +11,10 @@ import {
     TransactionType,
 } from "@glitter-finance/sdk-core";
 import { GlitterSDKServer } from "../../glitterSDKServer";
-import util from "util";
-import bs58 from "bs58";
-
-import * as anchor from "@project-serum/anchor";
-import { deserialize } from "borsh";
-import * as borsh from "borsh";
 import BigNumber from "bignumber.js";
 import { BorshCoder, EventParser } from "@project-serum/anchor";
 import { BridgeTokens, RoutingHelper } from "@glitter-finance/sdk-core";
 import { SolanaPollerCommon } from "./poller.solana.common";
-import { base64ToString } from "@glitter-finance/sdk-core/dist/lib/common/utils/utils";
 
 const idl = {
     version: "0.1.0",
@@ -92,12 +83,14 @@ const idl = {
 };
 
 export class SolanaV2Parser {
+
     public static async process(
         sdkServer: GlitterSDKServer,
         client: Connection | undefined,
         txn: ParsedTransactionWithMeta
     ): Promise<PartialBridgeTxn> {
-    //Get txnId
+        
+        //Get txnId
         const txnID = txn.transaction.signatures[0];
 
         //Get Bridge Address

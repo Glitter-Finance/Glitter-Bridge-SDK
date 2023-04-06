@@ -1,10 +1,12 @@
 import { BridgeNetworks, BridgeType, EvmConnect, PartialBridgeTxn } from "@glitter-finance/sdk-core";
 import { GlitterSDKServer } from "../../glitterSDKServer";
-import { Cursor, NewCursor } from "../../common/cursor";
+import { Cursor, CursorFilter, NewCursor, UpdateCursor } from "../../common/cursor";
 import { GlitterPoller, PollerResult } from "../../common/poller.Interface";
 import { ServerError } from "../../common/serverErrors";
 import axios from "axios";
 import * as util from "util";
+import { EvmV2Parser } from "./poller.evm.token.v2";
+import { EvmUSDCParser } from "./poller.evm.usdc";
 
 export class GlitterEVMPoller implements GlitterPoller {
     //EVM Connect
@@ -58,7 +60,7 @@ export class GlitterEVMPoller implements GlitterPoller {
             );
 
         //Add Token V2 Cursor
-        const tokenV2Address = this.connect?.token?.toString();       
+        const tokenV2Address = this.connect?.tokenV2BridgePollerAddress?.toString();       
         if (tokenV2Address)
             this.tokenV2Cursor = NewCursor(
                 this.network,
@@ -88,25 +90,62 @@ export class GlitterEVMPoller implements GlitterPoller {
         if (cursor.batch) startBlock = cursor.batch.block;
 
         //build url
-        const url =
-            this.apiURL +
-            `/api?module=account&action=tokentx&address=${address}` +
-            `&startblock=${startBlock}&offset=${cursor.limit}` +
+        const url = this.apiURL +
+            `/api?module=logs&action=getLogs&address=${address}` +
+            `&fromBlock=${startBlock}&offset=${cursor.limit}` +
             `&page=1&sort=asc&apikey=` +
             this.apiKey;
-
         console.log(url);
 
         //Request Data
         const response = await axios.get(url);
         const resultData = JSON.parse(JSON.stringify(response.data));
-        const results = resultData.result;
+        const events = resultData.result;
 
-        console.log(util.inspect(results, false, null, true /* enable colors */));
+        //Map Signatures
+        const signatures: string[] = [];
+        const txnHashes: string[] = events.map((event: any) => event.transactionHash);
+        signatures.push(...new Set(txnHashes));
+        const maxBlock = Math.max(...events.map((event: any) => event.blockNumber));
+
+        //Parse Txns
+        const partialTxns: PartialBridgeTxn[] = [];
+        for (const txnID of signatures) {
+            
+            //Ensure Transaction Exists
+            if (!txnID) continue;
+
+            //Process Transaction
+            let partialTxn: PartialBridgeTxn | undefined;
+            switch (cursor.bridgeType) {
+                case BridgeType.TokenV1:
+                    throw new Error("Token V1 Not Supported for EVM");
+                    break;
+                case BridgeType.TokenV2:
+                    partialTxn = await EvmV2Parser.process(sdkServer, this.connect, txnID);
+                    break;
+                case BridgeType.USDC:
+                    partialTxn = await EvmUSDCParser.process(
+                        sdkServer,  
+                        this.connect,                      
+                        txnID
+                    );
+                    break;
+                default:
+                    throw ServerError.InvalidBridgeType(
+                        BridgeNetworks.solana,
+                        cursor.bridgeType
+                    );
+            }
+            if (CursorFilter(cursor, partialTxn)) partialTxns.push(partialTxn);
+        }
+
+        //update cursor
+        cursor = await UpdateCursor(cursor, txnHashes, maxBlock);
 
         return {
             cursor: cursor,
-            txns: [],
+            txns: partialTxns,
         };
     }
 }

@@ -1,4 +1,5 @@
 import { BridgeNetworks, BridgeType, ChainStatus, PartialBridgeTxn, TransactionType } from "@glitter-finance/sdk-core";
+import { GlitterSDKServer } from "../glitterSDKServer";
 
 export type Cursor = {
     //What to watch
@@ -48,21 +49,15 @@ export function NewCursor(network: BridgeNetworks, bridgeType: BridgeType, addre
         batch: undefined,
     };
 }
-// export function CursorValid(cursor: Cursor): boolean {
-//     if (!cursor) return false;
-//     if (!cursor.address) return false;
-//     if (!cursor.limit) return false;
-//     if (cursor.limit <= 0) return false;
-//     return true;
-// }
 
-export function CompleteBatch(cursor: Cursor): Cursor {
+export function CompleteBatch(cursor: Cursor, maxBlock?:number): Cursor {
     //Set end transaction
     cursor.end = {
         txn: cursor.beginning?.txn,
         block: cursor.beginning?.block,
         time: cursor.beginning?.time,
     };
+    if (maxBlock) cursor.end.block = maxBlock;
 
     //Reset beginning
     cursor.beginning = undefined;
@@ -79,4 +74,68 @@ export function CursorFilter(cursor: Cursor, txn:PartialBridgeTxn): PartialBridg
     if (cursor.filter.txnType && cursor.filter.txnType != txn.txnType) return undefined;
     if (cursor.filter.chainStatus && cursor.filter.chainStatus != txn.chainStatus) return undefined;
     return txn;
+}
+//Update Cursor
+export async function UpdateCursor(
+    cursor: Cursor,
+    txnIDs: string[],
+    maxBlock?: number
+): Promise<Cursor> {
+
+    //Check if we have maxxed out the limit
+    if (txnIDs && txnIDs.length == cursor.limit) {
+
+        //Check if Batch Exists
+        if (!cursor.batch) {
+
+            //Need to create new batch
+            cursor.batch = {
+                txns: txnIDs.length,
+                position: txnIDs[txnIDs.length - 1],
+                complete: false,
+                block: maxBlock,
+            };
+
+            //Need to set start position for when batch is complete
+            cursor.beginning = {
+                txn: txnIDs[0],
+            };
+
+        } else {
+
+            //Update Batch
+            cursor.batch.txns += txnIDs.length;
+            cursor.batch.position = txnIDs[txnIDs.length - 1];
+
+        }
+    } else if (!txnIDs || txnIDs.length == 0) {
+
+        //No more transactions to fetch
+        if (cursor.batch) {
+            cursor = CompleteBatch(cursor);
+        } else {
+            //No change to cursor
+        }
+
+    } else {
+
+        //We have less than the limit
+        if (cursor.batch) {
+            cursor.batch.txns += txnIDs.length;
+            cursor = CompleteBatch(cursor);
+        } else {
+
+            //Need to update the end position
+            cursor.end = {
+                txn: txnIDs[txnIDs.length - 1],
+            };
+
+            //Reset beginning
+            cursor.beginning = undefined;
+            cursor.lastBatchTxns = 0;
+        }
+
+    }
+
+    return cursor;
 }

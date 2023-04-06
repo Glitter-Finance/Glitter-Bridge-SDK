@@ -13,7 +13,7 @@ import {
     SolanaPublicNetworks,
 } from "@glitter-finance/sdk-core";
 import { GlitterSDKServer } from "../../glitterSDKServer";
-import { Cursor, NewCursor, CompleteBatch, CursorFilter } from "../../common/cursor";
+import { Cursor, NewCursor, CompleteBatch, CursorFilter, UpdateCursor } from "../../common/cursor";
 import { GlitterPoller, PollerResult } from "../../common/poller.Interface";
 import { ServerError } from "../../common/serverErrors";
 import { SolanaV1Parser } from "./poller.solana.token.v1";
@@ -130,7 +130,6 @@ export class GlitterSolanaPoller implements GlitterPoller {
         } while (attempts < 5);
 
         const partialTxns: PartialBridgeTxn[] = [];
-
         for (const txn of txnData) {
             //Ensure Transaction Exists
             if (!txn) continue;
@@ -162,7 +161,7 @@ export class GlitterSolanaPoller implements GlitterPoller {
         }
 
         //update cursor
-        cursor = await this.updateCursor(sdkServer, cursor, signatures);
+        cursor = await UpdateCursor(cursor, signatures);
 
         //Return Result
         return {
@@ -187,57 +186,5 @@ export class GlitterSolanaPoller implements GlitterPoller {
 
         return searchFilter;
     }
-
-    //Update Cursor
-    public async updateCursor(
-        sdkServer: GlitterSDKServer,
-        cursor: Cursor,
-        txnIDs: string[]
-    ): Promise<Cursor> {
-    //Check if we have maxxed out the limit
-        if (txnIDs && txnIDs.length == cursor.limit) {
-            //Check if Batch Exists
-            if (!cursor.batch) {
-                //Need to create new batch
-                cursor.batch = {
-                    txns: txnIDs.length,
-                    position: txnIDs[txnIDs.length - 1],
-                    complete: false,
-                };
-
-                //Need to set start position for when batch is complete
-                cursor.beginning = {
-                    txn: txnIDs[0],
-                };
-            } else {
-                //Update Batch
-                cursor.batch.txns += txnIDs.length;
-                cursor.batch.position = txnIDs[txnIDs.length - 1];
-            }
-        } else if (!txnIDs || txnIDs.length == 0) {
-            //No more transactions to fetch
-            if (cursor.batch) {
-                cursor = CompleteBatch(cursor);
-            } else {
-                //No change to cursor
-            }
-        } else {
-            //We have less than the limit
-            if (cursor.batch) {
-                cursor.batch.txns += txnIDs.length;
-                cursor = CompleteBatch(cursor);
-            } else {
-                //Need to update the end position
-                cursor.end = {
-                    txn: txnIDs[txnIDs.length - 1],
-                };
-
-                //Reset beginning
-                cursor.beginning = undefined;
-                cursor.lastBatchTxns = 0;
-            }
-        }
-
-        return cursor;
-    }
+   
 }
