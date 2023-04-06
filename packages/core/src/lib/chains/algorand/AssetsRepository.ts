@@ -36,24 +36,21 @@ export class AssetsRepository {
                 "url-b64": ""
             }
         })
-        if ((tokenConfig as AlgorandStandardAssetConfig).assetId) {
-            this.updateStandardAsset(tokenConfig as AlgorandStandardAssetConfig)
-        }
     }
 
-    private async updateStandardAsset(tokenConfig: AlgorandStandardAssetConfig) {
-        try {
-            const assetInfo = (await this.__algoClient
-                .getAssetByID(tokenConfig.assetId)
-                .do()) as AlgorandAssetMetadata;
+    public async updateStandardAsset(tokenConfig: AlgorandStandardAssetConfig) {
+        const assetInfo = (await this.__algoClient
+            .getAssetByID(tokenConfig.assetId)
+            .do()) as AlgorandAssetMetadata;
             
-            this.__metadata.set(assetInfo.params["unit-name"], {
-                ...assetInfo,
-                ...(tokenConfig as AlgorandStandardAssetConfig),
-            });
-        } catch (error: any) {
-            console.error('Error', error.message)
+        const metadata = {
+            ...assetInfo,
+            ...(tokenConfig as AlgorandStandardAssetConfig),
         }
+
+        this.__metadata.set(assetInfo.params["unit-name"], metadata);
+
+        return metadata
     }
 
     getAsset(
