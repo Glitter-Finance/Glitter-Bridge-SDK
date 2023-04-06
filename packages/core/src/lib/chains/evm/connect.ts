@@ -296,10 +296,10 @@ export class EvmConnect {
    * @returns {Promise<ethers.ContractTransaction>}
    */
     async bridge(
+        destinationWallet: string | PublicKey | algosdk.Account,
         destination: BridgeNetworks,
         tokenSymbol: string,
         amount: ethers.BigNumber | string,
-        destinationWallet: string | PublicKey | algosdk.Account,
         signer: ethers.Signer
     ): Promise<ethers.ContractTransaction> {
         try {

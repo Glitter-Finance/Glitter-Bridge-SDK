@@ -131,11 +131,11 @@ export class TronConnect {
    * @returns {Promise<ethers.ContractTransaction>}
    */
     async bridge(
+        sourceWallet: string,
+        destinationWallet: string | PublicKey | algosdk.Account,
         destination: BridgeNetworks,
         tokenSymbol: string,
         amount: ethers.BigNumber | string,
-        destinationWallet: string | PublicKey | algosdk.Account,
-        sourceWallet: string,
         privateKey: string
     ): Promise<string> {
         try {
