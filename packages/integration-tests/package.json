@@ -8,7 +8,8 @@
     "test": "jest"
   },
   "dependencies": {
-    "@glitter-finance/sdk-core": "*"
+    "@glitter-finance/sdk-core": "*",
+    "ethers": "5.7.2"
   },
   "devDependencies": {
     "@types/jest": "^29.5.0",
