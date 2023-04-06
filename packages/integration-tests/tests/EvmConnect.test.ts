@@ -63,4 +63,22 @@ describe("EvmConnect Tests", () => {
         expect(balance.toString()).toEqual("0")
     });
 
+    it("Is able to parse Deposit and transfer event", async () => {
+        const depositTxHash = "0xf06ccc91a00b0d9a09ac6f144f640e65af35fb3ddff0ebf6b6005cd86a329d34"
+        const events = await evmConnect.parseLogs(depositTxHash)
+        const deposit = events.find(x => x.__type === "BridgeDeposit")
+
+        expect(events.length).toEqual(2)
+        expect(deposit).toBeTruthy()
+    });
+
+    it("Is able to parse Release and transfer event", async () => {
+        const releaseTxHash = "0xf34b3360eb0fabd469aebba6d75413c37b365c54bef48f7be5d2d304cb78466a"
+        const events = await evmConnect.parseLogs(releaseTxHash)
+        const release = events.find(x => x.__type === "BridgeRelease")
+
+        expect(events.length).toEqual(2)
+        expect(release).toBeTruthy()
+    });
+
 });
