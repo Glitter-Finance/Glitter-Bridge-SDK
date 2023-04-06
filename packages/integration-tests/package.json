@@ -1,5 +1,5 @@
 {
-  "name": "integration-tests",
+  "name": "@glitter-finance/sdk-integration-tests",
   "version": "1.0.0",
   "author": "Saad Ahmed Siddiqui",
   "license": "MIT",
