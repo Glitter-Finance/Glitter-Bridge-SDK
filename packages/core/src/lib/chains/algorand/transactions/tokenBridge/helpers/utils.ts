@@ -19,6 +19,7 @@ export const buildTokenBridgeTxParams = (
     | AlgorandTokenBridgeRefundTransactions
     | AlgorandTokenBridgeReleaseTransactions,
     routing: Routing,
+    destinationOnChainAddress: string,
     tokenConfig: AlgorandStandardAssetConfig | AlgorandNativeTokenConfig
 ): Uint8Array[] => {
     if (!routing.amount) throw new Error("Amount is required");
@@ -30,7 +31,7 @@ export const buildTokenBridgeTxParams = (
             return buildDepositParams(
                 method,
                 routing.from.address,
-                routing.to.address,
+                destinationOnChainAddress,
                 bigAmount,
                 routing.from.txn_signature
             );
