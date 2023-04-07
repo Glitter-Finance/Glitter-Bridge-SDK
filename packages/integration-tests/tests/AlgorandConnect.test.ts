@@ -1,4 +1,4 @@
-import {AlgorandAccount, AlgorandConnect, BridgeNetworks, GlitterBridgeSDK, GlitterEnvironment, Sleep} from "@glitter-finance/sdk-core";
+import {AlgorandAccount, AlgorandConnect, BridgeNetworks, GlitterBridgeSDK, GlitterEnvironment} from "@glitter-finance/sdk-core";
 
 describe("AlgorandConnect", () => {
     let glitterSdk: GlitterBridgeSDK;
