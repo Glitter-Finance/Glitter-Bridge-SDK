@@ -8,7 +8,7 @@ import {walletToAddress} from "../../common/utils/utils";
 import Trc20DetailedAbi from "./abi/TRC20Detailed.json";
 import TokenBridgeAbi from "./abi/TokenBridge.json";
 import algosdk from "algosdk";
-import {BridgeTokens} from "../../";
+import {BridgeTokenConfig, BridgeTokens} from "../../";
 
 // eslint-disable-next-line @typescript-eslint/no-var-requires
 const TronWeb = require("tronweb");
@@ -343,5 +343,9 @@ export class TronConnect {
 
     public getTxnHashed(txnID: string): string {
         return ethers.utils.keccak256(`0x${txnID}`);
+    }
+
+    public getToken(tokenSymbol: string): BridgeTokenConfig | undefined {
+        return this.__tronConfig.tokens.find(x => x.symbol.toLowerCase() === tokenSymbol.toLowerCase())
     }
 }

@@ -8,7 +8,7 @@ describe("EvmConnect Tests", () => {
     const defaultEvmNetwork = BridgeNetworks.Avalanche
     const defaultToken = "USDC"
 
-    beforeAll(async () => {
+    beforeAll(() => {
         glitterSdk = new GlitterBridgeSDK();
         glitterSdk.setEnvironment(GlitterEnvironment.testnet)
         glitterSdk = glitterSdk.connect([defaultEvmNetwork]);
