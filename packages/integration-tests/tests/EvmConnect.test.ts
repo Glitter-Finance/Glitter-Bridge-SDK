@@ -1,7 +1,7 @@
 import {BridgeNetworks, EvmConnect, GlitterBridgeSDK, GlitterEnvironment} from "@glitter-finance/sdk-core";
 import {ethers} from "ethers";
 
-describe("EvmConnect Tests", () => {
+describe("EvmConnect", () => {
     let glitterSdk: GlitterBridgeSDK;
     let evmConnect: EvmConnect
     let wallet: ethers.Wallet;

@@ -1,6 +1,6 @@
 import {BridgeNetworks, TronConnect, GlitterBridgeSDK, GlitterEnvironment} from "@glitter-finance/sdk-core";
 
-describe("TronConnect Tests", () => {
+describe("TronConnect", () => {
     let glitterSdk: GlitterBridgeSDK;
     let tronConnect: TronConnect
     const network = BridgeNetworks.TRON

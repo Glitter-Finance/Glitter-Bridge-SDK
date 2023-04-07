@@ -1,6 +1,7 @@
 import {BridgeNetworks, GlitterBridgeSDK, GlitterEnvironment} from "@glitter-finance/sdk-core";
 
-describe("SDK Init Tests", () => {
+// yarn test:core -- -t GlitterBridgeSDK
+describe("GlitterBridgeSDK", () => {
     let glitterSdk: GlitterBridgeSDK;
 
     beforeEach(async () => {

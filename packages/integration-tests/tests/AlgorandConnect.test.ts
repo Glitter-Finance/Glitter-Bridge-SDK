@@ -1,6 +1,6 @@
 import {AlgorandAccount, AlgorandConnect, BridgeNetworks, GlitterBridgeSDK, GlitterEnvironment, Sleep} from "@glitter-finance/sdk-core";
 
-describe("AlgorandConnect Tests", () => {
+describe("AlgorandConnect", () => {
     let glitterSdk: GlitterBridgeSDK;
     let algoConnect: AlgorandConnect
     const supportedAssetSymbols = [
@@ -73,7 +73,7 @@ describe("AlgorandConnect Tests", () => {
         }
     });
 
-    it("Provides xALGO bridge transactions", async () => {
+    it("Provides xSOL bridge transactions", async () => {
         const transactions = await algoConnect.bridgeTransactions(
             algoAccount.addr,
             targetSolAccount,
@@ -86,7 +86,7 @@ describe("AlgorandConnect Tests", () => {
         expect(transactions.length).toEqual(3)
     });
 
-    it("Fails for xALGO transfer below limit", async () => {
+    it("Fails for xSOL transfer below limit", async () => {
         expect(algoConnect.bridgeTransactions(
             algoAccount.addr,
             targetSolAccount,
@@ -96,4 +96,74 @@ describe("AlgorandConnect Tests", () => {
         )).rejects.toEqual('Unsupported bridge transaction')
     });
 
+    it("Provides ALGO bridge transactions", async () => {
+        const transactions = await algoConnect.bridgeTransactions(
+            algoAccount.addr,
+            targetSolAccount,
+            BridgeNetworks.solana,
+            supportedAssetSymbols[2],
+            BigInt(1000000000)
+        )
+
+        expect(transactions).toBeTruthy()
+        expect(transactions.length).toEqual(3)
+    });
+
+    it("Provides ALGO bridge transactions", async () => {
+        const transactions = await algoConnect.bridgeTransactions(
+            algoAccount.addr,
+            targetSolAccount,
+            BridgeNetworks.solana,
+            supportedAssetSymbols[2],
+            BigInt(1000000000)
+        )
+
+        expect(transactions).toBeTruthy()
+        expect(transactions.length).toEqual(3)
+    });
+
+    it("Fails for a random token symbol", async () => {
+        expect(algoConnect.bridgeTransactions(
+            algoAccount.addr,
+            targetSolAccount,
+            BridgeNetworks.solana,
+            "DOGE",
+            BigInt(5000000) // 0.005
+        )).rejects.toEqual('Token unsupported')
+    });
+
+    it("Creates USDC bridge transactions", async () => {
+        const toEvm = await algoConnect.bridgeTransactions(
+            algoAccount.addr,
+            targetEvmAccount,
+            BridgeNetworks.Avalanche,
+            supportedAssetSymbols[0],
+            BigInt(2000000)
+        )
+
+        expect(toEvm).toBeTruthy()
+        expect(toEvm.length).toEqual(1)
+
+        const toSol = await algoConnect.bridgeTransactions(
+            algoAccount.addr,
+            targetSolAccount,
+            BridgeNetworks.solana,
+            supportedAssetSymbols[0],
+            BigInt(2000000)
+        )
+
+        expect(toSol).toBeTruthy()
+        expect(toSol.length).toEqual(1)
+
+        const toTron = await algoConnect.bridgeTransactions(
+            algoAccount.addr,
+            targetTronAccount,
+            BridgeNetworks.TRON,
+            supportedAssetSymbols[0],
+            BigInt(2000000)
+        )
+
+        expect(toTron).toBeTruthy()
+        expect(toTron.length).toEqual(1)
+    });
 });
