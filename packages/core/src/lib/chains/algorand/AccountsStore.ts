@@ -182,7 +182,10 @@ export class AlgorandAccountsStore {
             }
         }
 
-        throw new Error('Unable to fetch account info')
+        return {
+            balanceBn: new BigNumber(0),
+            balanceHuman: new BigNumber(0),
+        }
     }
     /**
    *

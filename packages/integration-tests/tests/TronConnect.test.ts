@@ -14,7 +14,7 @@ describe("TronConnect Tests", () => {
         tronConnect = glitterSdk.tron!
     });
 
-    it("Should provide ethers provider", async () => {
+    it("Should provide tronweb", async () => {
         const provider = tronConnect.tronWeb
         expect(provider).toBeTruthy()
     });
