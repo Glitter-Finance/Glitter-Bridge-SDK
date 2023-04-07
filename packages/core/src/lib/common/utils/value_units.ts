@@ -1,4 +1,4 @@
-import { PreciseDecimals } from "./utils";
+import {PreciseDecimals} from "./utils";
 
 /**
  * @deprecated The method should not be used. Please use RoutingHelper instead
@@ -13,7 +13,9 @@ export class ValueUnits {
             returnValue.value = value;
 
             //Note precise is used to avoid floating point errors
-            returnValue.units = BigInt(PreciseDecimals(value * Math.pow(10, decimals), 0));
+            returnValue.units = BigInt(
+                PreciseDecimals(value * Math.pow(10, decimals), 0)
+            );
             return returnValue;
         }
     }
