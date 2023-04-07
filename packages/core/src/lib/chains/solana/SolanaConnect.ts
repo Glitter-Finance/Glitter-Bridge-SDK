@@ -176,7 +176,7 @@ export class SolanaConnect {
         ) : await this.accountStore.getSPLTokenBalance(
             account,
             token,
-            this.connections[this.defaultConnection]
+            tksLowercase === "usdc" && this.defaultConnection === "testnet" ? this.connections.devnet : this.connections[this.defaultConnection]
         )
     }
 

@@ -15,7 +15,6 @@ describe("AlgorandConnect", () => {
 
     beforeAll(async () => {
         glitterSdk = new GlitterBridgeSDK();
-        glitterSdk.setRPC(BridgeNetworks.algorand, "https://hidden-fabled-sailboat.algorand-testnet.quiknode.pro/17d9f26e9db743c1425d1626ebad466c1c3d46a6/algod/")
         glitterSdk.setEnvironment(GlitterEnvironment.testnet)
         glitterSdk = glitterSdk.connect([BridgeNetworks.algorand]);
         algoConnect = glitterSdk.algorand!
