@@ -62,7 +62,7 @@ export const bridgeUSDC = async (
             address: destinationAddress,
             txn_signature: "",
         },
-        amount: amount.div(10 ** usdcConfig.decimals).toNumber(),
+        amount: amount.div(10 ** usdcConfig.decimals).dp(2).toNumber(),
         units: amount.toFixed(0),
     };
 
