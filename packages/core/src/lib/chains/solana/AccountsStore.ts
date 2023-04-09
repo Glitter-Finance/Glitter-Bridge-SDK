@@ -175,25 +175,38 @@ export class SolanaAccountsStore {
      * @param tokenConfig 
      * @returns 
      */
-    async createTokenAccount(owner: string, tokenConfig: BridgeTokenConfig, connection?: Connection): Promise<Account> {
-        const ownerAccount = this.get(owner)
-        if (!ownerAccount) return Promise.reject('Account unavailable')
-
+    async createTokenAccountTransaction(owner: string, tokenConfig: BridgeTokenConfig, connection?: Connection): Promise<solanaWeb3.Transaction> {
+        const ownerPk = new PublicKey(owner)
         const mintAddress = new PublicKey(tokenConfig.address);
-        const address = await this.getTokenAaddress(ownerAccount.pk.toString(), tokenConfig, connection);
+        const address = await this.getTokenAaddress(owner, tokenConfig, connection);
         const programId = TOKEN_PROGRAM_ID;
         const associatedTokenProgramId = ASSOCIATED_TOKEN_PROGRAM_ID;
 
         const transaction = new solanaWeb3.Transaction().add(
             createAssociatedTokenAccountInstruction(
-                ownerAccount.pk,
+                ownerPk,
                 address,
-                ownerAccount.pk,
+                ownerPk,
                 mintAddress,
                 programId,
                 associatedTokenProgramId
             )
         );
+
+        return transaction
+    }
+    /**
+     * 
+     * @param signer 
+     * @param owner 
+     * @param tokenConfig 
+     * @returns 
+     */
+    async createTokenAccount(owner: string, tokenConfig: BridgeTokenConfig, connection?: Connection): Promise<Account> {
+        const transaction = await this.createTokenAccountTransaction(owner, tokenConfig)
+
+        const ownerAccount = this.__accounts.get(owner);
+        if (!ownerAccount) throw new Error('Account unavailable')
 
         await sendAndConfirmTransaction(connection ? connection : this.__connection, transaction, [{
             secretKey: ownerAccount.sk,
