@@ -62,6 +62,20 @@ describe("BridgeTokens", () => {
         expect(exists.decimals).toEqual(usdtOnEth.decimals);
     })
 
+    it("Should not add an asset without asset id Algorand", () => {
+        const network = BridgeNetworks.algorand
+        const usdtOnAlgo = {
+            symbol: "USDT",
+            name: "USD Tether",
+            decimals: 6
+        }
+
+        BridgeTokens.add(network, [usdtOnAlgo as any])
+
+        const exists = BridgeTokens.getToken(network, usdtOnAlgo.symbol)
+        expect(exists).toBeUndefined();
+    })
+
     it("Provides token config regardless of symbol case sensitivity", () => {
         const test = ["uSDC", "UsDC"];
         for (const network of NETWORKS) {
