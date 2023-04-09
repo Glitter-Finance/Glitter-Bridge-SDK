@@ -4,7 +4,6 @@ import {AssetsRepository} from "./AssetsRepository";
 import {BridgeNetworks} from "../../../lib/common/networks";
 import BigNumber from "bignumber.js";
 import {assetOptin, bridgeDeposit, bridgeUSDC} from "./transactions";
-import SendRawTransaction from "algosdk/dist/types/client/v2/algod/sendRawTransaction";
 import {
     AlgorandNativeTokenConfig,
     AlgorandStandardAssetConfig,
