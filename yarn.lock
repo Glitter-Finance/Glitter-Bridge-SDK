@@ -704,7 +704,7 @@
 
 "@glitter-finance/sdk-core@*", "@glitter-finance/sdk-core@file:C:\\Users\\saadj\\Desktop\\github\\glitter-finance\\sdk\\SDK\\packages\\core":
   "resolved" "file:packages/core"
-  "version" "1.1.1-11"
+  "version" "1.1.1-12"
   dependencies:
     "@circle-fin/circle-sdk" "^1.3.0"
     "@solana/spl-token" "^0.3.6"
