@@ -195,8 +195,8 @@ export const bridgeDeposit = async (
             token: tokenConfig.wrappedSymbol ?? tokenConfig.symbol,
         },
         amount: new BigNumber(
-            (amount / BigInt(10 ** tokenConfig.decimals)).toString()
-        ).toNumber(),
+            amount.toString()
+        ).div(10 ** tokenConfig.decimals).dp(2).toNumber(),
         units: new BigNumber(amount.toString()).toFixed(0),
     };
 
