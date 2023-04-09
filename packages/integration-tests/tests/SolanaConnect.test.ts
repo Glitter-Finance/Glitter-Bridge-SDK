@@ -72,6 +72,9 @@ describe("SolanaConnect", () => {
         }
     })
 
+    /** This test will fail if executed with an account
+     * which does not have token account of USDC
+     */
     it("Should provide USDC Bridge transaction", async () => {
         const TOKEN = "USDC"
         const amount = BigInt(1000000)
