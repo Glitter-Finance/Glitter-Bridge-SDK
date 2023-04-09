@@ -103,18 +103,6 @@ export class AlgorandConnect {
     }
     /**
      * 
-     * @param rawsignedTxns 
-     * @returns 
-     */
-    async sendSignedTransaction(
-        rawsignedTxns: Uint8Array[]
-    ): Promise<SendRawTransaction> {
-        const txnResult = await this.client.sendRawTransaction(rawsignedTxns).do();
-        await algosdk.waitForConfirmation(this.client, txnResult, 4);
-        return txnResult;
-    }
-    /**
-     * 
      * @returns 
      */
     getAlgodIndexer(): algosdk.Indexer {
@@ -277,19 +265,28 @@ export class AlgorandConnect {
      * @param tokenSymbol 
      * @returns 
      */
-    async optinToken(signerAddres: string, tokenSymbol: string): Promise<string> {
+    async optinAssetTransaction(signerAddress: string, tokenSymbol: string): Promise<algosdk.Transaction> {
         const token = this.getAsset(tokenSymbol);
         if (!token || !(token as AlgorandStandardAssetConfig).assetId) return Promise.reject(new Error("Unsupported token"));
 
         const txn = await assetOptin(
             this.client,
-            signerAddres,
+            signerAddress,
             token as AlgorandStandardAssetConfig
+        )
+
+        return txn
+    }
+
+    async optinAsset(signerAddress: string, tokenSymbol: string): Promise<string> {
+        const txn = await this.optinAssetTransaction(
+            signerAddress,
+            tokenSymbol
         )
 
         const [txID] = await this.accountsStore.signAndSendTransactions(
             [txn],
-            signerAddres
+            signerAddress
         )
 
         return txID
