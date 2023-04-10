@@ -42,7 +42,7 @@ For full documentation, please visit [Glitter Finance Docs](https://6433e9a86502
     import { BridgeNetworks, BridgeTokens } from "@glitter-finance/sdk-core";
     ...
 
-    const supportedTokensAlgorand = BridgeTokens.getTokens(BridgeNetworks.Algorand)
-    const supportedTokensSolana = BridgeTokens.getTokens(BridgeNetworks.Solana)
+    const supportedTokensAlgorand = BridgeTokens.getTokens(BridgeNetworks.algorand)
+    const supportedTokensSolana = BridgeTokens.getTokens(BridgeNetworks.solana)
     const supportedTokensTron = BridgeTokens.getTokens(BridgeNetworks.TRON)
 ```
