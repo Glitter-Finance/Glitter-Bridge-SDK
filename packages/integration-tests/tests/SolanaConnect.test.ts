@@ -116,4 +116,14 @@ describe("SolanaConnect", () => {
         expect(bridgeTx).toBeInstanceOf(Transaction)
     })
 
+    it("Should not be opted in a new account", async () => {
+        const TOKEN = "USDC"
+        const isOptedIn = await solConnect.isOptedIn(
+            TOKEN,
+            solAccount.pk.toBase58()
+        )
+
+        expect(isOptedIn).toBeFalsy()
+    })
+
 });

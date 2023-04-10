@@ -255,8 +255,11 @@ export class SolanaConnect {
     async isOptedIn(tokenSymbol: string, address: string): Promise<boolean> {
         const token = this.getToken(tokenSymbol);
         if (!token) return Promise.reject(new Error("Unsupported token"));
-
-        const tokenAccount = await getAssociatedTokenAccount(address, token, this.getConnection(tokenSymbol))
-        return !!tokenAccount
+        try {
+            const tokenAccount = await getAssociatedTokenAccount(address, token, this.getConnection(tokenSymbol))
+            return !!tokenAccount
+        } catch (error) {
+            return false
+        }
     }
 }
