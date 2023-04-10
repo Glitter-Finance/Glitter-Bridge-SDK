@@ -46,3 +46,20 @@ For full documentation, please visit [Glitter Finance Docs](https://6433e9a86502
     const supportedTokensSolana = BridgeTokens.getTokens(BridgeNetworks.solana)
     const supportedTokensTron = BridgeTokens.getTokens(BridgeNetworks.TRON)
 ```
+
+4. Bridge Tokens
+
+```typescript
+    ...
+    
+    // Briding xALGO from Solana
+    const bridgexAlgoTxId = await sdk.solana?.bridge(
+        solAccount.addr,
+        algoAccount.addr,
+        BridgeNetworks.algorand,
+        "xALGO",
+        BigInt(10000000)
+    )
+
+    console.log(bridgexAlgoTxId)
+```
