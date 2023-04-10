@@ -29,8 +29,8 @@ export class SolanaAccountsStore {
         this.__accounts = new Map();
     }
     /**
-     * 
-     * @param args 
+     * Add an account to use for transactions
+     * @param {[sk: Uint8Array | undefined] | [mnemonic: string | undefined]} args
      * @returns 
      */
     public async add(...args: [sk: Uint8Array | undefined] | [mnemonic: string | undefined]): Promise<SolanaAccount> {
@@ -57,9 +57,9 @@ export class SolanaAccountsStore {
         return solAccount;
     }
     /**
-     * 
-     * @param accountAddress 
-     * @returns 
+     * Get SOL Balance of an address
+     * @param {string} accountAddress 
+     * @returns {Promise<{ balanceBn: BigNumber; balanceHuman: BigNumber; }>}
      */
     public async getSOLBalance(accountAddress: string, connection?: Connection): Promise<{
         balanceBn: BigNumber;
@@ -76,8 +76,8 @@ export class SolanaAccountsStore {
         }
     }
     /**
-     * 
-     * @returns 
+     * Create and add a sol account to use for transactions
+     * @returns {Promise<SolanaAccount>}
      */
     public async createNew(): Promise<SolanaAccount> {
         const mnemonic = bip39.generateMnemonic();
@@ -95,10 +95,10 @@ export class SolanaAccountsStore {
         return solAccount;
     }
     /**
-     * 
-     * @param prefix 
-     * @param tries 
-     * @returns 
+     * Create and add a sol account to use for transactions with a prefix
+     * @param {string} prefix adress prefix 
+     * @param {number} tries default  10000
+     * @returns {Promise<SolanaAccount | undefined>}
      */
     public async createNewWithPrefix(prefix: string, tries = 10000): Promise<SolanaAccount | undefined> {
         for (let i = 0; i < tries; i++) {
@@ -123,19 +123,18 @@ export class SolanaAccountsStore {
         return undefined;
     }
     /**
-     * 
-     * @param account 
-     * @returns 
+     * Returns Solana account
+     * @param {string} account 
+     * @returns {SolanaAccount | undefined}
      */
     get (account: string): SolanaAccount | undefined {
         return this.__accounts.get(account)
     }
-
     /**
-     * 
-     * @param owner 
-     * @param tokenConfig 
-     * @returns 
+     * Provides SPL token balance
+     * @param {string} owner 
+     * @param {BridgeTokenConfig} tokenConfig 
+     * @returns {Promise<{ balanceBn: BigNumber; balanceHuman: BigNumber; }>}
      */
     async getSPLTokenBalance(
         owner: string,
@@ -178,9 +177,9 @@ export class SolanaAccountsStore {
         }
     }
     /**
-     * 
-     * @param signer 
-     * @param amount 
+     * Request test SOL
+     * @param {SolanaAccount} signer 
+     * @param {number} amount default 1_000_000_000
      * @returns 
      */
     async requestAirDrop(signer: SolanaAccount, amount = 1_000_000_000, connection : Connection): Promise<string> {

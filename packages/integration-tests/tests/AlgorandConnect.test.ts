@@ -1,4 +1,4 @@
-import {AlgorandAccount, AlgorandConnect, BridgeNetworks, GlitterBridgeSDK, GlitterEnvironment} from "@glitter-finance/sdk-core";
+import {AlgorandAccount, AlgorandConnect, AlgorandStandardAssetConfig, BridgeNetworks, GlitterBridgeSDK, GlitterEnvironment} from "@glitter-finance/sdk-core";
 
 describe("AlgorandConnect", () => {
     let glitterSdk: GlitterBridgeSDK;
@@ -164,5 +164,16 @@ describe("AlgorandConnect", () => {
 
         expect(toTron).toBeTruthy()
         expect(toTron.length).toEqual(1)
+    });
+
+    it("Generated account should not be opted into asset", async () => {
+        const token = algoConnect.getAsset(supportedAssetSymbols[0]) as AlgorandStandardAssetConfig
+        
+        const isOptedIn = await algoConnect.isOptedIn(
+            token.assetId,
+            algoAccount.addr
+        )
+
+        expect(isOptedIn).toBeFalsy()
     });
 });

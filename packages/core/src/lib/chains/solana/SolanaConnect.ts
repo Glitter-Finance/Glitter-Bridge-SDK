@@ -29,18 +29,22 @@ export class SolanaConnect {
         this.solanaConfig = config.solana
         BridgeTokens.loadConfig(BridgeNetworks.solana, config.solana.tokens)
     }
-
+    /**
+     * Provides token configuration by token symbol
+     * @param {string} tokenSymbol
+     * @returns {BridgeTokenConfig | undefined}
+     */
     public getToken(tokenSymbol: string): BridgeTokenConfig | undefined {
         return BridgeTokens.getToken(BridgeNetworks.solana, tokenSymbol)
     }
     /**
-     * 
-     * @param sourceAddress 
-     * @param tokenSymbol 
-     * @param destinationNetwork 
-     * @param destinationAddress 
-     * @param amount 
-     * @returns 
+     * Create bridge token transaction
+     * @param {string} sourceAddress 
+     * @param {string} tokenSymbol 
+     * @param {BridgeNetworks} destinationNetwork 
+     * @param {string} destinationAddress 
+     * @param {bigint} amount 
+     * @returns {Promise<Transaction>}
      */
     async bridgeTransaction(
         sourceAddress: string,
@@ -109,13 +113,13 @@ export class SolanaConnect {
         }
     }
     /**
-     * 
-     * @param sourceAddress 
-     * @param tokenSymbol 
-     * @param destinationNetwork 
-     * @param destinationAddress 
-     * @param amount 
-     * @returns 
+     * Send tokens using stored account
+     * @param {string} sourceAddress 
+     * @param {string} tokenSymbol 
+     * @param {BridgeNetworks} destinationNetwork 
+     * @param {string} destinationAddress 
+     * @param {string} amount 
+     * @returns {Promise<string>} transaction id
      */
     async bridge(
         sourceAddress: string,
@@ -147,7 +151,13 @@ export class SolanaConnect {
             account
         )
     }
-
+    /**
+     * Send a transaction
+     * @param {Connection} connection 
+     * @param {Transaction} ransaction 
+     * @param {SolanaAccount} account 
+     * @returns {Promise<string>} transaction id
+     */
     private async sendTransaction(
         connection: Connection,
         transaction: Transaction,
@@ -163,7 +173,12 @@ export class SolanaConnect {
         );
         return txID
     }
-
+    /**
+     * Get balance of an account via token symbol
+     * @param {string} account 
+     * @param {string} tokenSymbol 
+     * @returns {Promise<{balanceBn: BigNumber; balanceHuman: BigNumber}>}
+     */
     public async getBalance(account: string, tokenSymbol: string) {
         const tksLowercase = tokenSymbol.trim().toLowerCase()
         const token = this.getToken(tokenSymbol)
@@ -176,7 +191,7 @@ export class SolanaConnect {
         ) : await this.accountStore.getSPLTokenBalance(
             account,
             token,
-            tksLowercase === "usdc" && this.defaultConnection === "testnet" ? this.connections.devnet : this.connections[this.defaultConnection]
+            this.getConnection(tokenSymbol)
         )
     }
 
@@ -219,12 +234,11 @@ export class SolanaConnect {
         const isTestnet = this.defaultConnection === "testnet"
         return isTestnet && isUSDC ? this.connections.devnet : this.connections[this.defaultConnection]
     }
-
     /**
-     * 
-     * @param signer 
-     * @param tokenSymbol 
-     * @returns 
+     * Prepare Create SPL Token Account Transaction on Solana
+     * @param {string} signerAddress 
+     * @param {string} tokenSymbol 
+     * @returns {Promise<Transaction>}
      */
     async optinTransaction(signerAddress: string, tokenSymbol: string): Promise<Transaction> {
         if (tokenSymbol.trim().toLowerCase() === "sol") throw new Error('Opt in is not supported for native token')
@@ -239,7 +253,12 @@ export class SolanaConnect {
 
         return txn
     }
-
+    /**
+     * Prepare and Sign,Send Create SPL Token Account Transaction on Solana
+     * @param {string} signerAddress 
+     * @param {string} tokenSymbol 
+     * @returns {Promise<Transaction>}
+     */
     async optin(signerAddress: string, tokenSymbol: string): Promise<string> {
         const signer = this.accountStore.get(signerAddress)
         if (!signer) throw new Error('Account unavailable')
@@ -252,7 +271,12 @@ export class SolanaConnect {
         const txId = await this.sendTransaction(this.getConnection(tokenSymbol), transaction, signer)
         return txId
     }
-
+    /**
+     * Check if token account exists for a token symbol
+     * @param {string} tokenSymbol 
+     * @param {string} address 
+     * @returns {Promise<boolean>}
+     */
     async isOptedIn(tokenSymbol: string, address: string): Promise<boolean> {
         if (tokenSymbol.trim().toLowerCase() === "sol") throw new Error('Opt in is not supported for native token')
         const token = this.getToken(tokenSymbol);
