@@ -232,13 +232,22 @@ export class SolanaAccountsStore {
         balanceBn: BigNumber;
         balanceHuman: BigNumber;
     }> {
-        const tokenAccount = await this.getTokenAccount(
-            owner,
-            tokenConfig
-        );
+        let tokenAccount; 
+
+        try {
+            tokenAccount = await this.getTokenAccount(
+                owner,
+                tokenConfig
+            );
+        } catch (error) {
+            console.error(error)
+        }
 
         if (!tokenAccount) {
-            return Promise.reject('Token Account unavailable')
+            return {
+                balanceBn: new BigNumber(0),
+                balanceHuman: new BigNumber(0)
+            }
         }
 
         const unitsContext = connection ? await connection.getTokenAccountBalance(
