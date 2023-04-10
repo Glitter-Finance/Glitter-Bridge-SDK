@@ -1,5 +1,0 @@
-{
-  "entryPointStrategy": "packages",
-  "entryPoints": ["packages/core", "packages/server"],
-  "tsconfig": "./tsconfig.base.json"
-}

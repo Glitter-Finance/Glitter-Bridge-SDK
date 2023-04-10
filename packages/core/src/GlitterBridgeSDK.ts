@@ -10,7 +10,9 @@ import {mainnetConfig, testnetConfig} from "./config";
 import {GlitterBridgeConfig, GlitterEnvironment} from "./types";
 
 /**
- * Glitter Bridge SDK
+ * GlitterBridgeSDK
+ * Provides access to bridging
+ * on all supported chains
  */
 export class GlitterBridgeSDK {
     private _environment: GlitterEnvironment | undefined;
@@ -23,7 +25,11 @@ export class GlitterBridgeSDK {
     private _algorand: AlgorandConnect | undefined;
     private _solana: SolanaConnect | undefined;
     private _tron: TronConnect | undefined;
-
+    /**
+     * Set environment of the SDK
+     * @param {GlitterEnvironment} environment 
+     * @returns {GlitterBridgeSDK}
+     */
     public setEnvironment(environment: GlitterEnvironment): GlitterBridgeSDK {
         this._environment = environment;
 
@@ -40,12 +46,16 @@ export class GlitterBridgeSDK {
 
         return this;
     }
-
-    public setRPC(network: BridgeNetworks, rpc: string): GlitterBridgeSDK {
-        this._rpcOverrides[network] = rpc;
+    /**
+     * Set RPC Override for the network
+     * @param {BridgeNetworks} network 
+     * @param {string} rpcUrl
+     * @returns {GlitterBridgeSDK}
+     */
+    public setRPC(network: BridgeNetworks, rpcUrl: string): GlitterBridgeSDK {
+        this._rpcOverrides[network] = rpcUrl;
         return this;
     }
-    
     /**
      * Initialize connections and SDK
      * @param {BridgeNetworks[]} networks list of
@@ -82,10 +92,7 @@ export class GlitterBridgeSDK {
 
         return this;
     }
-    /**
-   *
-   * @param {BridgeNetworks} network
-   */
+
     private preInitializeChecks(network: BridgeNetworks) {
         if (!this._bridgeConfig) throw new Error("Glitter environment not set");
         /**
