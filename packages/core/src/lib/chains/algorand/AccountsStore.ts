@@ -272,8 +272,4 @@ export class AlgorandAccountsStore {
         return txnResult;
     }
     
-    async isOptedInAsset(assetId: number, address: string): Promise<boolean> {
-        const accountInfo = await this.getAccountInfo(address)
-        return !!accountInfo.assets.find(x => x["asset-id"] === assetId)
-    }
 }

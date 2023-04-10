@@ -1,11 +1,12 @@
 import * as solanaWeb3 from "@solana/web3.js";
-import {Connection, Keypair, sendAndConfirmTransaction} from "@solana/web3.js";
+import {Connection, Keypair} from "@solana/web3.js";
 import {BridgeTokenConfig} from "../../common";
-import {ASSOCIATED_TOKEN_PROGRAM_ID, Account, TOKEN_PROGRAM_ID, createAssociatedTokenAccountInstruction, getAccount, getAssociatedTokenAddress, getMint} from "@solana/spl-token";
+import {getMint} from "@solana/spl-token";
 import {PublicKey} from "@solana/web3.js";
 import {solanaMnemonicToSecretkey} from "./utils";
 import * as bip39 from "bip39"
 import BigNumber from "bignumber.js";
+import {getAssociatedTokenAccount} from "./transactions";
 
 export type SolanaAccount = {
     addr: string;
@@ -64,9 +65,11 @@ export class SolanaAccountsStore {
         balanceBn: BigNumber;
         balanceHuman: BigNumber;
     }> {
-        const account = this.get(accountAddress);
-        if (!account) {return Promise.reject(new Error('Account has not been added to AccountStore')) }
-        const balance = connection ? await connection.getBalance(account.pk) : await this.__connection.getBalance(account.pk);
+        const balance = connection ? await connection.getBalance(
+            new PublicKey(accountAddress)
+        ) : await this.__connection.getBalance(
+            new PublicKey(accountAddress)
+        );
         return {
             balanceBn: new BigNumber(balance),
             balanceHuman: new BigNumber(balance).div(10 ** this.SOL_DECIMALS)
@@ -127,97 +130,7 @@ export class SolanaAccountsStore {
     get (account: string): SolanaAccount | undefined {
         return this.__accounts.get(account)
     }
-    /**
-     * 
-     * @param owner 
-     * @param solanaTokenConfig 
-     * @returns 
-     */
-    async getTokenAaddress(
-        owner: string,
-        solanaTokenConfig: BridgeTokenConfig,
-        connection?: Connection
-    ): Promise<PublicKey> {
-        const mintAddress = await getMint(connection ? connection : this.__connection, new PublicKey(solanaTokenConfig.address));
-        const tokenAccountAddress = await getAssociatedTokenAddress(new PublicKey(mintAddress.address), new PublicKey(owner))
-        return tokenAccountAddress
-    }
-    /**
-     * 
-     * @param owner 
-     * @param solanaTokenConfig 
-     * @returns 
-     */
-    async getTokenAccount(
-        owner: string,
-        solanaTokenConfig: BridgeTokenConfig,
-        connection?: Connection
-    ): Promise<Account> {
-        const associatedTokenAccountAddress = await this.getTokenAaddress(
-            owner, 
-            solanaTokenConfig,
-            connection
-        )
 
-        const tokenAccount = await getAccount(
-            connection ? connection : this.__connection,
-            associatedTokenAccountAddress,
-            "processed",
-            TOKEN_PROGRAM_ID
-        )
-
-        return tokenAccount
-    }
-    /**
-     * 
-     * @param signer 
-     * @param owner 
-     * @param tokenConfig 
-     * @returns 
-     */
-    async createTokenAccountTransaction(owner: string, tokenConfig: BridgeTokenConfig, connection?: Connection): Promise<solanaWeb3.Transaction> {
-        const ownerPk = new PublicKey(owner)
-        const mintAddress = new PublicKey(tokenConfig.address);
-        const address = await this.getTokenAaddress(owner, tokenConfig, connection);
-        const programId = TOKEN_PROGRAM_ID;
-        const associatedTokenProgramId = ASSOCIATED_TOKEN_PROGRAM_ID;
-
-        const transaction = new solanaWeb3.Transaction().add(
-            createAssociatedTokenAccountInstruction(
-                ownerPk,
-                address,
-                ownerPk,
-                mintAddress,
-                programId,
-                associatedTokenProgramId
-            )
-        );
-
-        return transaction
-    }
-    /**
-     * 
-     * @param signer 
-     * @param owner 
-     * @param tokenConfig 
-     * @returns 
-     */
-    async createTokenAccount(owner: string, tokenConfig: BridgeTokenConfig, connection?: Connection): Promise<Account> {
-        const transaction = await this.createTokenAccountTransaction(owner, tokenConfig)
-
-        const ownerAccount = this.__accounts.get(owner);
-        if (!ownerAccount) throw new Error('Account unavailable')
-
-        await sendAndConfirmTransaction(connection ? connection : this.__connection, transaction, [{
-            secretKey: ownerAccount.sk,
-            publicKey: ownerAccount.pk
-        }], {
-            commitment: "finalized",
-        });
-
-        const account = await this.getTokenAccount(owner.toString(), tokenConfig)
-        return account;
-    }
     /**
      * 
      * @param owner 
@@ -235,9 +148,10 @@ export class SolanaAccountsStore {
         let tokenAccount; 
 
         try {
-            tokenAccount = await this.getTokenAccount(
+            tokenAccount = await getAssociatedTokenAccount(
                 owner,
-                tokenConfig
+                tokenConfig,
+                connection
             );
         } catch (error) {
             console.error(error)
@@ -272,23 +186,6 @@ export class SolanaAccountsStore {
     async requestAirDrop(signer: SolanaAccount, amount = 1_000_000_000, connection : Connection): Promise<string> {
         const airdropTx = connection ? await connection.requestAirdrop(signer.pk, amount) : await this.__connection.requestAirdrop(signer.pk, amount);
         return airdropTx
-    }
-
-    async tokenAccountExists(
-        owner: string,
-        solanaTokenConfig: BridgeTokenConfig,
-        connection?: Connection
-    ): Promise<boolean> {
-        const mintAddress = await getMint(connection ? connection : this.__connection, new PublicKey(solanaTokenConfig.address));
-        const pk = new PublicKey(owner)
-
-        const account = connection ? await connection.getTokenAccountsByOwner(pk, {
-            mint: new PublicKey(mintAddress)
-        }) : await this.__connection.getTokenAccountsByOwner(pk, {
-            mint: new PublicKey(mintAddress)
-        });
-
-        return account.value.length > 0;
     }
 
 }

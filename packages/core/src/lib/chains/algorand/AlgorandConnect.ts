@@ -258,13 +258,14 @@ export class AlgorandConnect {
 
         return balance.balanceHuman.toNumber();
     }
+
     /**
      * 
      * @param signer 
      * @param tokenSymbol 
      * @returns 
      */
-    async optinAssetTransaction(signerAddress: string, tokenSymbol: string): Promise<algosdk.Transaction> {
+    async optinTransaction(signerAddress: string, tokenSymbol: string): Promise<algosdk.Transaction> {
         const token = this.getAsset(tokenSymbol);
         if (!token || !(token as AlgorandStandardAssetConfig).assetId) return Promise.reject(new Error("Unsupported token"));
 
@@ -277,8 +278,8 @@ export class AlgorandConnect {
         return txn
     }
 
-    async optinAsset(signerAddress: string, tokenSymbol: string): Promise<string> {
-        const txn = await this.optinAssetTransaction(
+    async optin(signerAddress: string, tokenSymbol: string): Promise<string> {
+        const txn = await this.optinTransaction(
             signerAddress,
             tokenSymbol
         )
@@ -289,5 +290,10 @@ export class AlgorandConnect {
         )
 
         return txID
+    }
+
+    async isOptedIn(assetId: number, address: string): Promise<boolean> {
+        const accountInfo = await this.accountsStore.getAccountInfo(address)
+        return !!accountInfo.assets.find(x => x["asset-id"] === assetId)
     }
 }

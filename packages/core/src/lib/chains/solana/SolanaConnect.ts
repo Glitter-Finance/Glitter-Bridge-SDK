@@ -6,7 +6,7 @@ import {SolanaAccount, SolanaAccountsStore} from "./AccountsStore";
 import {GlitterBridgeConfig, GlitterEnvironment} from "../../../types";
 import {BridgeNetworks, BridgeTokenConfig, BridgeTokens, Routing, Sleep} from "../../../lib/common";
 import BigNumber from "bignumber.js";
-import {bridgeUSDC, solBridgeTransaction, tokenBridgeTransaction} from "./transactions";
+import {bridgeUSDC, createAssociatedTokenAccountTransaction, getAssociatedTokenAccount, solBridgeTransaction, tokenBridgeTransaction} from "./transactions";
 
 export class SolanaConnect {
     readonly defaultConnection: "testnet" | "devnet" | "mainnet";
@@ -212,5 +212,51 @@ export class SolanaConnect {
             balance = balanceRes.balanceBn.toNumber()
         }
         return balance;
+    }
+
+    private getConnection(tokenSymbol: string): Connection {
+        const isUSDC = tokenSymbol.trim().toLowerCase() === "usdc"
+        const isTestnet = this.defaultConnection === "testnet"
+        return isTestnet && isUSDC ? this.connections.devnet : this.connections[this.defaultConnection]
+    }
+
+    /**
+     * 
+     * @param signer 
+     * @param tokenSymbol 
+     * @returns 
+     */
+    async optinTransaction(signerAddress: string, tokenSymbol: string): Promise<Transaction> {
+        const token = this.getToken(tokenSymbol);
+        if (!token) return Promise.reject(new Error("Unsupported token"));
+
+        const txn = await createAssociatedTokenAccountTransaction(
+            signerAddress,
+            token,
+            this.getConnection(tokenSymbol)
+        )
+
+        return txn
+    }
+
+    async optin(signerAddress: string, tokenSymbol: string): Promise<string> {
+        const signer = this.accountStore.get(signerAddress)
+        if (!signer) throw new Error('Account unavailable')
+
+        const transaction = await this.optinTransaction(
+            signerAddress,
+            tokenSymbol
+        )
+
+        const txId = await this.sendTransaction(this.getConnection(tokenSymbol), transaction, signer)
+        return txId
+    }
+
+    async isOptedIn(tokenSymbol: string, address: string): Promise<boolean> {
+        const token = this.getToken(tokenSymbol);
+        if (!token) return Promise.reject(new Error("Unsupported token"));
+
+        const tokenAccount = await getAssociatedTokenAccount(address, token, this.getConnection(tokenSymbol))
+        return !!tokenAccount
     }
 }
