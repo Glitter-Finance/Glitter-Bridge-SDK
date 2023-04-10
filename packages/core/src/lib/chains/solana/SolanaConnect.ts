@@ -227,6 +227,7 @@ export class SolanaConnect {
      * @returns 
      */
     async optinTransaction(signerAddress: string, tokenSymbol: string): Promise<Transaction> {
+        if (tokenSymbol.trim().toLowerCase() === "sol") throw new Error('Opt in is not supported for native token')
         const token = this.getToken(tokenSymbol);
         if (!token) return Promise.reject(new Error("Unsupported token"));
 
@@ -253,6 +254,7 @@ export class SolanaConnect {
     }
 
     async isOptedIn(tokenSymbol: string, address: string): Promise<boolean> {
+        if (tokenSymbol.trim().toLowerCase() === "sol") throw new Error('Opt in is not supported for native token')
         const token = this.getToken(tokenSymbol);
         if (!token) return Promise.reject(new Error("Unsupported token"));
         try {

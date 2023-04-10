@@ -118,12 +118,24 @@ describe("SolanaConnect", () => {
 
     it("Should not be opted in a new account", async () => {
         const TOKEN = "USDC"
-        const isOptedIn = await solConnect.isOptedIn(
+        let isOptedIn = await solConnect.isOptedIn(
             TOKEN,
             solAccount.pk.toBase58()
         )
 
         expect(isOptedIn).toBeFalsy()
+
+        isOptedIn = await solConnect.isOptedIn(
+            TOKEN,
+            "CXaTaTRKjXFhjfDYzAxyeQRgFcjbqAvpbhBdNDNBQjQR"
+        )
+
+        expect(isOptedIn).toBeTruthy()
+
+        expect(async () => await solConnect.isOptedIn(
+            "SOL",
+            "CXaTaTRKjXFhjfDYzAxyeQRgFcjbqAvpbhBdNDNBQjQR"
+        )).rejects.toThrowError()
     })
 
 });
