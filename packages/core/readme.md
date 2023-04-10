@@ -2,6 +2,8 @@
 
 Typescript/Javascript SDK to bridge tokens using Glitter architecture.
 
+For full documentation, please visit [Glitter Finance Docs](https://6433e9a86502fb78caa76faa--lucky-kulfi-2e833e.netlify.app/)
+
 ## Examples
 
 
