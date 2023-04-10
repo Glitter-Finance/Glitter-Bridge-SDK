@@ -19,7 +19,6 @@ export type Cursor = {
     batch?: CursorBatch;
     lastBatchTxns?: number;
 
-    nextAPIToken?: string;
 };
 export type CursorPosition = {
     txn?: string;
@@ -30,7 +29,8 @@ export type CursorBatch = {
     position?: string | number;
     block?: string | number;
     txns: number;
-    complete: boolean;
+    complete: boolean;    
+    nextAPIToken?: string;
 };
 export type CursorFilter = {
     txnType?: TransactionType;
@@ -45,7 +45,6 @@ export function NewCursor(network: BridgeNetworks, bridgeType: BridgeType, addre
         beginning: undefined,
         end: undefined,
         limit: limit,
-        nextAPIToken: undefined,
         batch: undefined,
     };
 }
@@ -79,7 +78,8 @@ export function CursorFilter(cursor: Cursor, txn:PartialBridgeTxn): PartialBridg
 export async function UpdateCursor(
     cursor: Cursor,
     txnIDs: string[],
-    maxBlock?: number
+    maxBlock?: number,
+    nextAPIToken?: string
 ): Promise<Cursor> {
 
     //Check if we have maxxed out the limit
@@ -94,6 +94,7 @@ export async function UpdateCursor(
                 position: txnIDs[txnIDs.length - 1],
                 complete: false,
                 block: maxBlock,
+                nextAPIToken: nextAPIToken,
             };
 
             //Need to set start position for when batch is complete

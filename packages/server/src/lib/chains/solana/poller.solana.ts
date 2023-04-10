@@ -74,14 +74,11 @@ export class GlitterSolanaPoller implements GlitterPoller {
         sdkServer: GlitterSDKServer,
         cursor: Cursor
     ): Promise<PollerResult> {
-    //Check Client
-        let client = sdkServer.sdk?.solana?.client;
 
+        //Check Client
+        let client = sdkServer.sdk?.solana?.client;
         if (sdkServer.sdk.environment === GlitterEnvironment.testnet) {
-            if (
-                cursor.bridgeType === BridgeType.USDC ||
-        cursor.bridgeType === BridgeType.TokenV2
-            ) {
+            if (cursor.bridgeType === BridgeType.USDC || cursor.bridgeType === BridgeType.TokenV2) {
                 client = sdkServer.sdk?.solana?.getClient(SolanaPublicNetworks.devnet);
             }
         }
@@ -129,6 +126,7 @@ export class GlitterSolanaPoller implements GlitterPoller {
             }
         } while (attempts < 5);
 
+        //Get partial transactions
         const partialTxns: PartialBridgeTxn[] = [];
         for (const txn of txnData) {
             //Ensure Transaction Exists

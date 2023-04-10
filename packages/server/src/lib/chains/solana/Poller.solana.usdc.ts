@@ -1,8 +1,4 @@
-import {
-    Connection,
-    ParsedInstruction,
-    ParsedTransactionWithMeta,
-    PartiallyDecodedInstruction,
+import { Connection, ParsedInstruction, ParsedTransactionWithMeta, PartiallyDecodedInstruction,
 } from "@solana/web3.js";
 import bs58 from "bs58";
 import {
@@ -14,19 +10,21 @@ import {
     RoutingHelper,
     TransactionType,
 } from "@glitter-finance/sdk-core";
-import {GlitterSDKServer} from "../../glitterSDKServer";
-import {Cursor} from "../../common/cursor";
-import {ServerError} from "../../common/serverErrors";
-import {SolanaPollerCommon} from "./poller.solana.common";
+import { GlitterSDKServer } from "../../glitterSDKServer";
+import { Cursor } from "../../common/cursor";
+import { ServerError } from "../../common/serverErrors";
+import { SolanaPollerCommon } from "./poller.solana.common";
 
 export class SolanaUSDCParser {
+
     public static async process(
         sdkServer: GlitterSDKServer,
         txn: ParsedTransactionWithMeta,
         client: Connection | undefined,
         cursor: Cursor
     ): Promise<PartialBridgeTxn> {
-    //Destructure Local Vars
+        
+        //Destructure Local Vars
         const txnID = txn.transaction.signatures[0];
         const address = cursor.address.toString();
 
@@ -42,6 +40,7 @@ export class SolanaUSDCParser {
 
         //Try to get txn details
         try {
+
             //get client
             if (!client) throw ServerError.ClientNotSet(BridgeNetworks.solana);
 
@@ -114,6 +113,7 @@ async function handleDeposit(
     routing: Routing | null,
     partialTxn: PartialBridgeTxn
 ): Promise<PartialBridgeTxn> {
+
     const decimals = 6;
 
     //Set type
@@ -129,19 +129,23 @@ async function handleDeposit(
     partialTxn.address = data[0] || "";
 
     if (data[1] < 0) {
-    //negative delta is a deposit from the user or transfer out
+
+        //negative delta is a deposit from the user or transfer out
         if (!routing) {
             partialTxn.txnType = TransactionType.Transfer;
         } else {
             partialTxn.txnType = TransactionType.Deposit;
         }
+
         const value = -data[1] || 0;
         partialTxn.amount = value;
         partialTxn.units = RoutingHelper.BaseUnits_FromReadableValue(
             value,
             decimals
         );
+
     } else if (data[1] > 0) {
+
         partialTxn.txnType = TransactionType.Refund; //positive delta is a refund to the user
         const value = data[1] || 0;
         partialTxn.amount = value;
@@ -149,6 +153,7 @@ async function handleDeposit(
             value,
             decimals
         );
+
     }
 
     partialTxn.routing = routing;
@@ -160,6 +165,7 @@ async function handleRelease(
     routing: Routing | null,
     partialTxn: PartialBridgeTxn
 ): Promise<PartialBridgeTxn> {
+    
     const decimals = 6;
 
     //Set type

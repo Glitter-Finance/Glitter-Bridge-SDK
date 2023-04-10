@@ -1,6 +1,6 @@
-import { BridgeDepositEvent, BridgeNetworks, BridgeReleaseEvent, BridgeType, ChainStatus, DeserializeEvmBridgeTransfer, EvmConnect, PartialBridgeTxn, Routing, RoutingHelper, TransactionType, TransferEvent } from "@glitter-finance/sdk-core/dist";
+import { BridgeType, ChainStatus, DeserializeEvmBridgeTransfer, EvmConnect, PartialBridgeTxn, Routing, RoutingHelper, TransactionType, TransferEvent } from "@glitter-finance/sdk-core/dist";
 import { GlitterSDKServer } from "src/lib/glitterSDKServer";
-import { EvmBridgeV2EventsParser, TokenBridgeV2DepositEvent, TokenBridgeV2EventGroup, TokenBridgeV2RefundEvent, TokenBridgeV2ReleaseEvent } from "./poller.evm.eventparser.v2";
+import { EvmBridgeV2EventsParser, TokenBridgeV2EventGroup } from "./poller.evm.eventparser.v2";
 import { TransactionReceipt } from "@ethersproject/abstract-provider";
 import BigNumber from "bignumber.js";
 
@@ -104,19 +104,18 @@ export class EvmV2Parser {
             partialTxn.amount = RoutingHelper.ReadableValue_FromBaseUnits(partialTxn.units, decimals);  
         }
 
-        //TODO: Check if VAULT address is same as bridge address
-        //Check Type
-        if (toAddress.toLocaleLowerCase() == connect.tokenV2BridgePollerAddress?.toString().toLocaleLowerCase()) {
-            partialTxn.txnType = TransactionType.Deposit;
-            partialTxn.address = fromAddress;
-        } else if (fromAddress.toLocaleLowerCase() == connect.tokenV2BridgePollerAddress?.toString().toLocaleLowerCase()) {
-            throw new Error("Deposited to address that is not the bridge address");        
-        }
+        //TODO: Check Address
+        //if (toAddress.toLocaleLowerCase() == connect.tokenV2BridgePollerAddress?.toString().toLocaleLowerCase()) {
+        partialTxn.txnType = TransactionType.Deposit;
+        partialTxn.address = fromAddress;
+        // } else if (fromAddress.toLocaleLowerCase() == connect.tokenV2BridgePollerAddress?.toString().toLocaleLowerCase()) {
+        //     throw new Error("Deposited to address that is not the bridge address");        
+        // }
 
         //Get Routing
         let routing: Routing | null = null;
         if (partialTxn.txnType == TransactionType.Deposit) {
-            const toNetwork = BridgeNetworks.TRON //TODO: connect.getChainFromID(events.deposit?.destinationChainId || 0);
+            const toNetwork = connect.getChainFromID(events.deposit?.destinationChainId || 0);
             toAddress = toNetwork ? DeserializeEvmBridgeTransfer.deserializeAddress(toNetwork, events.deposit?.destinationAddress || "") : "";
             routing = {
                 from: {
@@ -184,36 +183,37 @@ export class EvmV2Parser {
         }
 
         let routing: Routing | null = null;
-        if (toAddress.toLocaleLowerCase() == connect.usdcBridgeReceiverAddress?.toString().toLocaleLowerCase()) {
+        //TODO: Check Address
+        // if (toAddress.toLocaleLowerCase() == connect.usdcBridgeReceiverAddress?.toString().toLocaleLowerCase()) {
 
-            //transfer into receiver address
-            partialTxn.txnType = TransactionType.Transfer;
-            partialTxn.address = fromAddress;
+        //     //transfer into receiver address
+        //     partialTxn.txnType = TransactionType.Transfer;
+        //     partialTxn.address = fromAddress;
 
-        } else if (fromAddress.toLocaleLowerCase() == connect.usdcBridgeReceiverAddress?.toString().toLocaleLowerCase()) {
+        // } else if (fromAddress.toLocaleLowerCase() == connect.usdcBridgeReceiverAddress?.toString().toLocaleLowerCase()) {
 
-            //Transfer out of receiver address
-            partialTxn.txnType = TransactionType.Release;
-            partialTxn.address = toAddress;
+        //Transfer out of receiver address
+        partialTxn.txnType = TransactionType.Release;
+        partialTxn.address = toAddress;
 
-            //Get Routing
-            routing = {
-                from: {
-                    network: "",
-                    address: "",
-                    token: tokenName,
-                    txn_signature_hashed: events.release?.depositId,
-                },
-                to: {
-                    network: connect.network,
-                    address: partialTxn.address || "",
-                    token: tokenName,
-                    txn_signature: txnID,
-                },
-                amount: partialTxn.amount || undefined,
-                units: partialTxn.units || undefined,
-            };
-        }
+        //Get Routing
+        routing = {
+            from: {
+                network: "",
+                address: "",
+                token: tokenName,
+                txn_signature_hashed: events.release?.depositId,
+            },
+            to: {
+                network: connect.network,
+                address: partialTxn.address || "",
+                token: tokenName,
+                txn_signature: txnID,
+            },
+            amount: partialTxn.amount || undefined,
+            units: partialTxn.units || undefined,
+        };
+        // }
 
         //Set routing
         partialTxn.routing = routing;
@@ -247,6 +247,7 @@ export class EvmV2Parser {
         }
 
         let routing: Routing | null = null;
+        //TODO: Check Address
         if (fromAddress.toLocaleLowerCase() == connect.usdcBridgeReceiverAddress?.toString().toLocaleLowerCase()) {
 
             //Transfer out of receiver address
