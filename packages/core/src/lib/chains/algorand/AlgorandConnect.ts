@@ -4,7 +4,6 @@ import {AssetsRepository} from "./AssetsRepository";
 import {BridgeNetworks} from "../../../lib/common/networks";
 import BigNumber from "bignumber.js";
 import {assetOptin, bridgeDeposit, bridgeUSDC} from "./transactions";
-import SendRawTransaction from "algosdk/dist/types/client/v2/algod/sendRawTransaction";
 import {
     AlgorandNativeTokenConfig,
     AlgorandStandardAssetConfig,
@@ -100,18 +99,6 @@ export class AlgorandConnect {
             token
         )
         
-    }
-    /**
-     * 
-     * @param rawsignedTxns 
-     * @returns 
-     */
-    async sendSignedTransaction(
-        rawsignedTxns: Uint8Array[]
-    ): Promise<SendRawTransaction> {
-        const txnResult = await this.client.sendRawTransaction(rawsignedTxns).do();
-        await algosdk.waitForConfirmation(this.client, txnResult, 4);
-        return txnResult;
     }
     /**
      * 
@@ -271,27 +258,42 @@ export class AlgorandConnect {
 
         return balance.balanceHuman.toNumber();
     }
+
     /**
      * 
      * @param signer 
      * @param tokenSymbol 
      * @returns 
      */
-    async optinToken(signerAddres: string, tokenSymbol: string): Promise<string> {
+    async optinTransaction(signerAddress: string, tokenSymbol: string): Promise<algosdk.Transaction> {
         const token = this.getAsset(tokenSymbol);
         if (!token || !(token as AlgorandStandardAssetConfig).assetId) return Promise.reject(new Error("Unsupported token"));
 
         const txn = await assetOptin(
             this.client,
-            signerAddres,
+            signerAddress,
             token as AlgorandStandardAssetConfig
+        )
+
+        return txn
+    }
+
+    async optin(signerAddress: string, tokenSymbol: string): Promise<string> {
+        const txn = await this.optinTransaction(
+            signerAddress,
+            tokenSymbol
         )
 
         const [txID] = await this.accountsStore.signAndSendTransactions(
             [txn],
-            signerAddres
+            signerAddress
         )
 
         return txID
+    }
+
+    async isOptedIn(assetId: number, address: string): Promise<boolean> {
+        const accountInfo = await this.accountsStore.getAccountInfo(address)
+        return !!accountInfo.assets.find(x => x["asset-id"] === assetId)
     }
 }

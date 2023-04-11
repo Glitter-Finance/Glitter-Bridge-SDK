@@ -167,10 +167,10 @@ export class AlgorandAccountsStore {
         balanceHuman: BigNumber;
         balanceBn: BigNumber;
     }> {
-        const accountInfo = this.__accounts.get(address);
+        const accountInfo = await this.getAccountInfo(address);
 
-        if (accountInfo && accountInfo.information) {
-            const asset = accountInfo.information.assets.find(
+        if (accountInfo) {
+            const asset = accountInfo.assets.find(
                 (x) => x["asset-id"] === token.assetId
             );
             if (asset) {
@@ -271,4 +271,5 @@ export class AlgorandAccountsStore {
         );
         return txnResult;
     }
+    
 }

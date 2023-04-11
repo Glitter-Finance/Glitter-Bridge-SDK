@@ -13,7 +13,7 @@
     "release:server": "npm run build-and-release -w ./packages/server",
     "test:core": "yarn workspace @glitter-finance/sdk-core build && yarn workspace @glitter-finance/sdk-integration-tests test",
     "example:server-solana": "npm run example:solana -w ./packages/examples",
-    "docs": "npx typedoc --out docs"
+    "docs": "npx typedoc --entryPointStrategy packages . --out docs"
   },
   "devDependencies": {
     "@types/node": "^18.15.3",
