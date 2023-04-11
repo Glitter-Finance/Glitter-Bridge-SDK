@@ -174,7 +174,7 @@ export class AlgorandAccountsStore {
                 (x) => x["asset-id"] === token.assetId
             );
             if (asset) {
-                const amount = BigInt(asset.amount) / BigInt(10 ** token.decimals);
+                const amount = new BigNumber(asset.amount).div(new BigNumber(10 ** token.decimals));
                 return {
                     balanceBn: new BigNumber(asset.amount),
                     balanceHuman: new BigNumber(amount.toString())
@@ -270,6 +270,5 @@ export class AlgorandAccountsStore {
             4
         );
         return txnResult;
-    }
-    
+    }    
 }
