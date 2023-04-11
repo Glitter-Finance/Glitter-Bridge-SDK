@@ -48,7 +48,8 @@ export class AssetsRepository {
             ...(tokenConfig as AlgorandStandardAssetConfig),
         }
 
-        this.__metadata.set(assetInfo.params["unit-name"], metadata);
+        const lowerCase = assetInfo.params["unit-name"].toLowerCase()
+        this.__metadata.set(lowerCase, metadata);
 
         return metadata
     }
@@ -56,6 +57,6 @@ export class AssetsRepository {
     getAsset(
         tokenSymbol: string
     ): (AlgorandAssetMetadata & AlgorandStandardAssetConfig | AlgorandNativeTokenConfig) | undefined {
-        return this.__metadata.get(tokenSymbol);
+        return this.__metadata.get(tokenSymbol.toLowerCase());
     }
 }
