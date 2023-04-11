@@ -126,6 +126,7 @@ export const config: GlitterBridgeConfig = {
                     symbol: "USDC",
                     decimals: 6,
                     name: "USD Coin",
+                    minTransfer: 3
                 },
             ],
             depositWallet: "0xa89a90a11e20b61814da283ba906f30742a99492",
@@ -141,6 +142,7 @@ export const config: GlitterBridgeConfig = {
                     symbol: "USDC",
                     decimals: 6,
                     name: "USD Coin",
+                    minTransfer: 10
                 },
             ],
             depositWallet: "0xa89a90a11e20b61814da283ba906f30742a99492",
@@ -156,6 +158,7 @@ export const config: GlitterBridgeConfig = {
                     symbol: "USDC",
                     decimals: 6,
                     name: "USD Coin",
+                    minTransfer: 1
                 },
             ],
             depositWallet: "0xa89a90a11e20b61814da283ba906f30742a99492",
@@ -169,6 +172,7 @@ export const config: GlitterBridgeConfig = {
                 name: "USD Coin",
                 symbol: "USDC",
                 decimals: 6,
+                minTransfer: 1
             },
         ],
         fullNode: "https://api.trongrid.io",
