@@ -55,7 +55,7 @@ export class AlgorandConnect {
         tokenSymbol: string,
         amount: bigint
     ): Promise<algosdk.Transaction[]> {
-        const token = this.assetsRepo.getAsset(tokenSymbol);
+        const token = BridgeTokens.getToken(BridgeNetworks.algorand, tokenSymbol);
         if (!token) return Promise.reject("Token unsupported");
 
         const depositAddress = this.config.bridgeAccounts.usdcDeposit;
@@ -152,8 +152,11 @@ export class AlgorandConnect {
         balanceBn: BigNumber;
         balanceHuman: BigNumber
     }> {
-        const token = this.assetsRepo.getAsset(tokenSymbol) as AlgorandStandardAssetConfig | AlgorandNativeTokenConfig
-        if (!token) return Promise.reject('Asset unavailable')
+        const token = BridgeTokens.getToken(BridgeNetworks.algorand, tokenSymbol) as AlgorandStandardAssetConfig | AlgorandNativeTokenConfig
+        if (!token) {
+            throw new Error('Asset unavailable')
+        }
+
         const native = token.symbol.toLowerCase() === "algo"
 
         return native ? await this.accountsStore.getAlgoBalance(

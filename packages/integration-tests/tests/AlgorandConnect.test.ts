@@ -1,4 +1,4 @@
-import {AlgorandAccount, AlgorandConnect, AlgorandStandardAssetConfig, BridgeNetworks, GlitterBridgeSDK, GlitterEnvironment} from "@glitter-finance/sdk-core";
+import {AlgorandAccount, AlgorandConnect, AlgorandStandardAssetConfig, BridgeNetworks, BridgeTokens, GlitterBridgeSDK, GlitterEnvironment} from "@glitter-finance/sdk-core";
 
 describe("AlgorandConnect", () => {
     let glitterSdk: GlitterBridgeSDK;
@@ -68,6 +68,14 @@ describe("AlgorandConnect", () => {
         for (const assetSymbol of supportedAssetSymbols) {
             const balance = await algoConnect.getBalance(algoAccount.addr, assetSymbol)
             await algoConnect.accountsStore.updateAccountDetails(algoAccount)
+            expect(balance.balanceHuman.toString()).toEqual("0");
+        }
+    });
+
+    it("Provides asset balance", async () => {
+        const tokens = BridgeTokens.getTokens(BridgeNetworks.algorand).map(x => x.symbol)
+        for (const assetSymbol of tokens) {
+            const balance = await algoConnect.getBalance(algoAccount.addr, assetSymbol)
             expect(balance.balanceHuman.toString()).toEqual("0");
         }
     });

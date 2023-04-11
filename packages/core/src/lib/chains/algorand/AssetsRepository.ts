@@ -17,7 +17,7 @@ export class AssetsRepository {
     async addStandardAsset(
         tokenConfig: AlgorandStandardAssetConfig | AlgorandNativeTokenConfig
     ) {
-        this.__metadata.set(tokenConfig.symbol, {
+        this.__metadata.set(tokenConfig.symbol.toLowerCase(), {
             ...tokenConfig,
             index: (tokenConfig as AlgorandStandardAssetConfig).assetId,
             params: {
