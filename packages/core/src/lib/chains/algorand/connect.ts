@@ -1019,6 +1019,9 @@ export class AlgorandConnect {
     public get usdcBridgeFeeReceiver(): string | number | undefined {
         return this._config?.accounts?.feeReceiver;
     }
+    public get tokenBridge2AppID(): number | undefined {
+        return this._config?.accounts?.tokenBridgeV2Id;
+    }
     public getAssetID(symbol: string): number | undefined {
         try {
             if (!this._accounts) throw new Error("Algorand Accounts not defined");

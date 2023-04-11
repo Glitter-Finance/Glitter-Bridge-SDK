@@ -24,7 +24,7 @@ export type AlgorandAccountsConfig = {
   algoVault: string;
   usdcReceiver: string;
   usdcDeposit: string;
-  tokenBridgeV2Address: string;
+  tokenBridgeV2Id?: number;
 };
 
 export enum AlgorandProgramAccount {
