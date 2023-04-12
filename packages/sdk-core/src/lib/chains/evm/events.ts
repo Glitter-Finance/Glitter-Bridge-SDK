@@ -1,5 +1,5 @@
-import { ethers } from "ethers";
-import { BridgeDepositEvent, BridgeReleaseEvent, TransferEvent } from "./types";
+import {ethers} from "ethers";
+import {BridgeDepositEvent, BridgeReleaseEvent, TransferEvent} from "./types";
 
 export class EvmBridgeEventsParser {
     static readonly EventsABI = [
@@ -28,7 +28,7 @@ export class EvmBridgeEventsParser {
         const parsedDeposit = parsedLogs.find((x) => x.name === "BridgeDeposit");
 
         if (!parsedDeposit) return null;
-        const { destinationChainId, amount, token, destinationWallet } = parsedDeposit.args;
+        const {destinationChainId, amount, token, destinationWallet} = parsedDeposit.args;
 
         return {
             destinationChainId,
@@ -44,7 +44,7 @@ export class EvmBridgeEventsParser {
         const parsedTransfer = parsedLogs.find((x) => x.name === "Transfer");
 
         if (!parsedTransfer) return null;
-        const { from, to, value } = parsedTransfer.args;
+        const {from, to, value} = parsedTransfer.args;
 
         return {
             value,
@@ -59,7 +59,7 @@ export class EvmBridgeEventsParser {
         const parsedRelease = parsedLogs.find((x) => x.name === "BridgeRelease");
 
         if (!parsedRelease) return null;
-        const { amount, token, destinationWallet, depositTransactionHash } = parsedRelease.args;
+        const {amount, token, destinationWallet, depositTransactionHash} = parsedRelease.args;
 
         return {
             amount,
