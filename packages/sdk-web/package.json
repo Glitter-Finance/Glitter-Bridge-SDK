@@ -5,6 +5,7 @@
   "license": "MIT",
   "main": "dist/index.js",
   "typings": "dist/index.d.ts",
+  "private": "false",
   "scripts": {
     "start": "tsdx watch",
     "build": "tsdx build",
