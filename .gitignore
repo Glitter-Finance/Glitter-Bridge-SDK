@@ -109,3 +109,5 @@ dist
 
 #Ignore Docs
 docs
+
+packages/server/dev
