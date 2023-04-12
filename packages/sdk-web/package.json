@@ -13,7 +13,7 @@
     "prepare": "tsdx build",
     "size": "size-limit",
     "analyze": "size-limit --why",
-    "release": "tsdx build && release-it --no.git.tag"
+    "release": "npx release-it --no.git.tag"
   },
   "repository": {
     "type": "git",

@@ -4340,6 +4340,22 @@ algosdk@^1.24.1:
     tweetnacl "^1.0.3"
     vlq "^2.0.4"
 
+algosdk@^2.1.0:
+  version "2.2.0"
+  resolved "https://registry.yarnpkg.com/algosdk/-/algosdk-2.2.0.tgz#12f80b5f68c955b338aa5b9d5fc6cbd64ce6ea7a"
+  integrity sha512-FG3u/60DzjMK9Cffy9itst7WcfsTgZKfsD1r8pT33PfsA7r8NoXiUSL7cf0fNWFus6S3E14BpE2CY64VJ8KV1A==
+  dependencies:
+    algo-msgpack-with-bigint "^2.1.1"
+    buffer "^6.0.3"
+    cross-fetch "^3.1.5"
+    hi-base32 "^0.5.1"
+    js-sha256 "^0.9.0"
+    js-sha3 "^0.8.0"
+    js-sha512 "^0.8.0"
+    json-bigint "^1.0.0"
+    tweetnacl "^1.0.3"
+    vlq "^2.0.4"
+
 ansi-align@^3.0.1:
   version "3.0.1"
   resolved "https://registry.npmjs.org/ansi-align/-/ansi-align-3.0.1.tgz"
