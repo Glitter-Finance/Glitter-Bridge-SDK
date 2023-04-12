@@ -1,6 +1,6 @@
 {
   "name": "@glitter-finance/sdk-web",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "description": "Glitter Finance Bridge: React Support Library (Dev Version)",
   "license": "MIT",
   "main": "dist/index.js",
@@ -66,8 +66,7 @@
     "algorand-walletconnect-qrcode-modal": "^1.8.0",
     "bignumber.js": "^9.1.1",
     "bs58": "^5.0.0",
-    "tronweb": "^5.1.0",
-    "algosdk": "^1.24.1"
+    "tronweb": "^5.1.0"
   },
   "release-it": {
     "github": {
