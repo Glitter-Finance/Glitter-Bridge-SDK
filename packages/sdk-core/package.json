@@ -59,7 +59,7 @@
   "typedoc": {
     "entryPoint": "./src/index.ts",
     "readmeFile": "./redme.md",
-    "displayName": "Glitter-SDK-Core",
+    "displayName": "@glitter-finance/sdk-core",
     "tsconfig": "./tsconfig.json"
   }
 }
