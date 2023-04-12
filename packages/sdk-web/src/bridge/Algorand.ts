@@ -23,7 +23,8 @@ export class AlgorandBridge {
         if (!rawSignedTransactions) throw new Error("AlgoError.UNDEFINED_TRANSACTION");
         if (!this.sdk.algorand || !this.sdk.algorand.client) throw new Error("AlgoError.CLIENT_NOT_SET");
         const {txId} = await this.sdk.algorand.client.sendRawTransaction(rawSignedTransactions).do();
-        await algoSdk.waitForConfirmation(this.sdk.algorand?.client, txId, 4);
+        const algoClient = this.sdk.algorand?.client;
+        await algoSdk.waitForConfirmation(algoClient, txId, 4);
 
         return txId;
     }
