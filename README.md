@@ -6,4 +6,4 @@ This library provides clean wrappers around all methods exposed by Glitter deplo
 
 |Package|Version|
 |---|---|
-|[@glitter-finance/sdk-core](https://github.com/Glitter-Finance/SDK/tree/main/packages/core)|v1.1.1-15|
+|[@glitter-finance/sdk-core](https://github.com/Glitter-Finance/SDK/tree/main/packages/core)|v1.1.1|
