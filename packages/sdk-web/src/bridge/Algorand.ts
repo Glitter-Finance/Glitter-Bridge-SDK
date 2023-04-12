@@ -23,8 +23,9 @@ export class AlgorandBridge {
         if (!rawSignedTransactions) throw new Error("AlgoError.UNDEFINED_TRANSACTION");
         if (!this.sdk.algorand || !this.sdk.algorand.client) throw new Error("AlgoError.CLIENT_NOT_SET");
         const {txId} = await this.sdk.algorand.client.sendRawTransaction(rawSignedTransactions).do();
-        const algoClient = this.sdk.algorand?.client;
-        await algoSdk.waitForConfirmation(algoClient, txId, 4);
+
+        const algodv2 = new algoSdk.Algodv2("ALGO", this.sdk.algorand.config.serverUrl)
+        await algoSdk.waitForConfirmation(algodv2, txId, 4);
 
         return txId;
     }
@@ -53,7 +54,7 @@ export class AlgorandBridge {
     
     }
 
-    public async bridge(signerAddress: string, toNetwork: BridgeNetworks, toWalletAddress: string, symbol: string, amount: number) {
+    public async bridge(signerAddress: string, toNetwork: BridgeNetworks, toWalletAddress: string, symbol: string, amount: number): Promise<any[]> {
         const token = BridgeTokens.getToken(BridgeNetworks.algorand, symbol);
         if (!token) throw new Error("AlgoError.INVALID_ASSET");
         if (!token.minTransfer) throw new Error("AlgoError: Minimum Transfer Not defined in token");
