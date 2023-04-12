@@ -1,5 +1,5 @@
-import { ParsedTransactionWithMeta, TokenBalance } from "@solana/web3.js";
-import { GlitterSDKServer } from "../../glitterSDKServer";
+import {ParsedTransactionWithMeta, TokenBalance} from "@solana/web3.js";
+import {GlitterSDKServer} from "../../glitterSDKServer";
 
 export class SolanaPollerCommon {
     //Get solana address with amount

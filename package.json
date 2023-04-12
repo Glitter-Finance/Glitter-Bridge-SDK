@@ -10,7 +10,7 @@
     "prepare": "husky install",
     "build:core": "yarn workspace @glitter-finance/sdk-core build",
     "release:core": "npm run build-and-release -w ./packages/sdk-core",
-    "release:server": "npm run build-and-release -w ./packages/server",
+    "release:server": "npm run build-and-release -w ./packages/sdk-server",
     "test:core": "yarn workspace @glitter-finance/sdk-core build && yarn workspace @glitter-finance/sdk-integration-tests test",
     "example:server-solana": "npm run example:solana -w ./packages/examples",
     "docs": "npx typedoc --entryPointStrategy packages . --out docs"

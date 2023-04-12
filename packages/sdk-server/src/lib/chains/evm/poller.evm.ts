@@ -1,8 +1,8 @@
-import { BridgeNetworks, BridgeType, EvmConnect, PartialBridgeTxn } from "@glitter-finance/sdk-core";
-import { GlitterSDKServer } from "../../glitterSDKServer";
-import { Cursor, NewCursor } from "../../common/cursor";
-import { GlitterPoller, PollerResult } from "../../common/poller.Interface";
-import { ServerError } from "../../common/serverErrors";
+import {BridgeNetworks, BridgeType, EvmConnect, PartialBridgeTxn} from "@glitter-finance/sdk-core";
+import {GlitterSDKServer} from "../../glitterSDKServer";
+import {Cursor, NewCursor} from "../../common/cursor";
+import {GlitterPoller, PollerResult} from "../../common/poller.Interface";
+import {ServerError} from "../../common/serverErrors";
 import axios from "axios";
 import * as util from "util";
 

@@ -3,11 +3,11 @@ import {
     GlitterBridgeSDK,
     GlitterEnvironment,
 } from "@glitter-finance/sdk-core";
-import { GlitterPoller } from "./common/poller.Interface";
-import { GlitterAlgorandPoller } from "./chains/algorand/poller.algorand";
-import { GlitterSolanaPoller } from "./chains/solana/poller.solana";
-import { GlitterEVMPoller } from "./chains/evm/poller.evm";
-import { clusterApiUrl } from "@solana/web3.js";
+import {GlitterPoller} from "./common/poller.Interface";
+import {GlitterAlgorandPoller} from "./chains/algorand/poller.algorand";
+import {GlitterSolanaPoller} from "./chains/solana/poller.solana";
+import {GlitterEVMPoller} from "./chains/evm/poller.evm";
+import {clusterApiUrl} from "@solana/web3.js";
 
 export class GlitterSDKServer {
     private _sdk: GlitterBridgeSDK = new GlitterBridgeSDK();
@@ -57,7 +57,7 @@ export class GlitterSDKServer {
 
     //Check overrides
     private check_RPC_Overrides(): void {
-        const { ETH_RPC, POLYGON_RPC, AVAX_RPC, SOLANA_RPC } = process.env;
+        const {ETH_RPC, POLYGON_RPC, AVAX_RPC, SOLANA_RPC} = process.env;
 
         if (ETH_RPC) {
             console.log("Overriding Ethereum RPC to: " + ETH_RPC);

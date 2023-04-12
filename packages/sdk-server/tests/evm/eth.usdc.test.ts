@@ -1,14 +1,18 @@
-import { BridgeNetworks, GlitterEnvironment, Sleep } from "@glitter-finance/sdk-core";
-import { GlitterSolanaPoller } from "../../src/lib/chains/solana/poller.solana";
-import { GlitterPoller } from "../../src/lib/common/poller.Interface";
-import { GlitterSDKServer } from "../../src/lib/glitterSDKServer";
+import {BridgeNetworks, GlitterEnvironment, Sleep} from "@glitter-finance/sdk-core";
+import {GlitterSolanaPoller} from "../../src/lib/chains/solana/poller.solana";
+import {GlitterPoller} from "../../src/lib/common/poller.Interface";
+import {GlitterSDKServer} from "../../src/lib/glitterSDKServer";
 import assert from "assert";
 import * as util from "util";
+import {config} from "dotenv";
+import path from "path";
 
-describe("Solana Poller USDC Tests ", () => {
+describe("Eth Poller USDC Tests ", () => {
     //Initialize SDK
     let sdk: GlitterSDKServer;
     let poller: GlitterPoller | undefined;
+
+    const x = config({path: path.resolve(__dirname + `/../test.mainnet.env`)});
 
     //Before All tests -> create new SDK
     beforeAll(async () => {
@@ -16,10 +20,10 @@ describe("Solana Poller USDC Tests ", () => {
         sdk = new GlitterSDKServer(GlitterEnvironment.mainnet);
 
         //Create Solana Poller
-        sdk.createPollers([BridgeNetworks.solana]);
+        sdk.createPollers([BridgeNetworks.Ethereum]);
 
         //local references for ease of use
-        poller = sdk.poller(BridgeNetworks.solana);
+        poller = sdk.poller(BridgeNetworks.Ethereum);
     });
 
     //Default Cursor Test

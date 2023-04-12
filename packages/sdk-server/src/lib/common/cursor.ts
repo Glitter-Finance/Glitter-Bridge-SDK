@@ -1,4 +1,4 @@
-import { BridgeNetworks, BridgeType } from "@glitter-finance/sdk-core";
+import {BridgeNetworks, BridgeType} from "@glitter-finance/sdk-core";
 
 export type Cursor = {
     //What to watch

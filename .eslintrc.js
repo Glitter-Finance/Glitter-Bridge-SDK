@@ -5,7 +5,7 @@ module.exports = {
       "./packages/examples/tsconfig.json",
       "./packages/sdk-core/tsconfig.json",
       "./packages/sdk-web/tsconfig.json",
-      "./packages/server/tsconfig.json",
+      "./packages/sdk-server/tsconfig.json",
       "./packages/tests/tsconfig.json",
       "./tsconfig.base.json",
     ],

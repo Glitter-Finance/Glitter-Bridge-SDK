@@ -1,4 +1,4 @@
-import { ParsedInstruction, ParsedTransactionWithMeta, PartiallyDecodedInstruction } from "@solana/web3.js";
+import {ParsedInstruction, ParsedTransactionWithMeta, PartiallyDecodedInstruction} from "@solana/web3.js";
 import bs58 from "bs58";
 import {
     BridgeNetworks,
@@ -11,10 +11,10 @@ import {
     SolanaPublicNetworks,
     TransactionType,
 } from "@glitter-finance/sdk-core";
-import { GlitterSDKServer } from "../../glitterSDKServer";
-import { Cursor } from "../../common/cursor";
-import { ServerError } from "../../common/serverErrors";
-import { SolanaPollerCommon } from "./poller.solana.common";
+import {GlitterSDKServer} from "../../glitterSDKServer";
+import {Cursor} from "../../common/cursor";
+import {ServerError} from "../../common/serverErrors";
+import {SolanaPollerCommon} from "./poller.solana.common";
 
 export class SolanaUSDCParser {
     public static async process(

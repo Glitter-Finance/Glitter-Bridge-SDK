@@ -1,7 +1,7 @@
-import { BridgeNetworks, BridgeType, PartialBridgeTxn } from "@glitter-finance/sdk-core";
-import { GlitterSDKServer } from "../../glitterSDKServer";
-import { Cursor, NewCursor } from "../../common/cursor";
-import { GlitterPoller, PollerResult } from "../../common/poller.Interface";
+import {BridgeNetworks, BridgeType, PartialBridgeTxn} from "@glitter-finance/sdk-core";
+import {GlitterSDKServer} from "../../glitterSDKServer";
+import {Cursor, NewCursor} from "../../common/cursor";
+import {GlitterPoller, PollerResult} from "../../common/poller.Interface";
 
 export class GlitterAlgorandPoller implements GlitterPoller {
     //Cursors
