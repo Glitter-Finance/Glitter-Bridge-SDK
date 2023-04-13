@@ -1,3 +1,5 @@
+# editor
+.idea
 # Logs
 logs
 *.log
@@ -21,9 +23,6 @@ lib-cov
 # Coverage directory used by tools like istanbul
 coverage
 *.lcov
-
-#any local folder
-local
 
 # nyc test coverage
 .nyc_output
@@ -52,7 +51,6 @@ typings/
 
 # Optional npm cache directory
 .npm
-
 
 # Optional eslint cache
 .eslintcache
@@ -106,8 +104,3 @@ dist
 
 # TernJS port file
 .tern-port
-
-#Ignore Docs
-docs
-
-packages/server/dev
