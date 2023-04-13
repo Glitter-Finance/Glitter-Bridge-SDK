@@ -104,8 +104,8 @@ export const feeTransaction = async (
     feeRouting.to.token = feeRouting.from.token;
     feeRouting.to.address = feeCollector;
     if (routing.amount && tokenConfig.feeDivisor) {
-        feeRouting.units = new BigNumber(routing.units).div(tokenConfig.feeDivisor).toFixed(0);
-        feeRouting.amount = new BigNumber(feeRouting.units).div(10**tokenConfig.decimals).toNumber();
+        feeRouting.units = new BigNumber(routing.units).div(tokenConfig.feeDivisor);
+        feeRouting.amount = new BigNumber(feeRouting.units).div(10**tokenConfig.decimals)
 
         return await getTransferTxByAssetSymbol(client, feeRouting, tokenConfig);
     }
@@ -196,8 +196,8 @@ export const bridgeDeposit = async (
         },
         amount: new BigNumber(
             amount.toString()
-        ).div(10 ** tokenConfig.decimals).dp(2).toNumber(),
-        units: new BigNumber(amount.toString()).toFixed(0),
+        ).div(10 ** tokenConfig.decimals).dp(2),
+        units: new BigNumber(amount.toString()),
     };
 
     if (
