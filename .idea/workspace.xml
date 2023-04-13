@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="AutoImportSettings">
+    <option name="autoReloadType" value="SELECTIVE" />
+  </component>
+  <component name="ChangeListManager">
+    <list default="true" id="f905a022-4aa3-410d-8740-1cad44587788" name="Changes" comment="">
+      <change beforePath="$PROJECT_DIR$/packages/sdk-web/src/bridge/Algorand.ts" beforeDir="false" afterPath="$PROJECT_DIR$/packages/sdk-web/src/bridge/Algorand.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/packages/sdk-web/src/bridge/EVM.ts" beforeDir="false" afterPath="$PROJECT_DIR$/packages/sdk-web/src/bridge/EVM.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/packages/sdk-web/src/bridge/Solana.ts" beforeDir="false" afterPath="$PROJECT_DIR$/packages/sdk-web/src/bridge/Solana.ts" afterDir="false" />
+    </list>
+    <option name="SHOW_DIALOG" value="false" />
+    <option name="HIGHLIGHT_CONFLICTS" value="true" />
+    <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
+    <option name="LAST_RESOLUTION" value="IGNORE" />
+  </component>
+  <component name="PropertiesComponent"><![CDATA[{
+  "keyToString": {
+    "git-widget-placeholder": "staging",
+    "node.js.selected.package.tslint": "(autodetect)",
+    "prettierjs.PrettierConfiguration.Package": "/home/ali/Desktop/Glitter Finance/Projects/SDK/node_modules/prettier",
+    "ts.external.directory.path": "/home/ali/Desktop/Glitter Finance/Projects/SDK/node_modules/typescript/lib"
+  }
+}]]></component>
+  <component name="TaskManager">
+    <servers />
+  </component>
+</project>

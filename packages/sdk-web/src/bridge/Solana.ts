@@ -12,6 +12,11 @@ export class SolanaBridge {
         this.sdk.connect([BridgeNetworks.solana]);
     }
 
+    /**
+     * Sending Raw Transaction over the Solana Network
+     * @param transaction
+     * @param connection
+     */
     public async sendSignedTransaction(
         transaction: Buffer,
         connection: "testnet" | "devnet" | "mainnet"
@@ -21,6 +26,14 @@ export class SolanaBridge {
         )
     }
 
+    /**
+     * Bridging a token from Solana to other supported network
+     * @param signerAddress
+     * @param destinationAddress
+     * @param destinationNetwork
+     * @param tokenSymbol
+     * @param amount
+     */
     public async bridge(
         signerAddress: string,
         destinationAddress: string,
@@ -58,6 +71,11 @@ export class SolanaBridge {
         }
     }
 
+    /**
+     * Function for checking whether the token is already opted in the wallet address.
+     * @param address
+     * @param symbol
+     */
     public async optInAccountExists(address: string, symbol: string): Promise<boolean> {
         const token = this.sdk.solana?.getToken(symbol)
         if (symbol.toLowerCase() === "sol") return true;
@@ -66,6 +84,11 @@ export class SolanaBridge {
         return !!optinAccount
     }
 
+    /**
+     * Opting a new token in to the wallet
+     * @param address
+     * @param symbol
+     */
     public async optIn(address: string, symbol: string) {
         const transaction = await this.sdk.solana?.optinTransaction(address, symbol);
         const connection = this.sdk.solana?.connections[this.sdk.solana?.defaultConnection];
@@ -92,6 +115,10 @@ export class SolanaBridge {
         );
     }
 
+    /**
+     * Getting token balances by wallet address
+     * @param address
+     */
     public async getBalances(address: string): Promise<Map<string, {
     balanceBn: BigNumber;
     balanceHuman: BigNumber;

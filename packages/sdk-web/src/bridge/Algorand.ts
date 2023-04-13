@@ -17,6 +17,10 @@ export class AlgorandBridge {
         this.sdk.connect([BridgeNetworks.algorand]);
     }
 
+    /**
+     * Sending Raw Transaction over the Algorand Network
+     * @param rawSignedTransactions
+     */
     public async sendSignTransaction(
         rawSignedTransactions: Uint8Array[]
     ): Promise<string> {
@@ -28,7 +32,12 @@ export class AlgorandBridge {
         return txId;
     }
 
-    public async optIn(signerAddress: string, symbol: string) {
+    /**
+     * Opting a new token in to the wallet
+     * @param signerAddress
+     * @param symbol
+     */
+    public async optIn(signerAddress: string, symbol: string): Promise<{ txn: algoSdk.Transaction }[]> {
         const token: AlgorandNativeTokenConfig | AlgorandStandardAssetConfig = BridgeTokens.getToken(BridgeNetworks.algorand, symbol);
         if (!token || (token as AlgorandNativeTokenConfig).isNative) throw new Error("Unsupported asset");
 
@@ -52,6 +61,14 @@ export class AlgorandBridge {
     
     }
 
+    /**
+     * Bridging a token from Algorand to other supported network
+     * @param signerAddress
+     * @param toNetwork
+     * @param toWalletAddress
+     * @param symbol
+     * @param amount
+     */
     public async bridge(signerAddress: string, toNetwork: BridgeNetworks, toWalletAddress: string, symbol: string, amount: number): Promise<{txn: algoSdk.Transaction }[]> {
         const token = BridgeTokens.getToken(BridgeNetworks.algorand, symbol);
         if (!token) throw new Error("AlgoError.INVALID_ASSET");
@@ -83,6 +100,10 @@ export class AlgorandBridge {
         return txs;
     }
 
+    /**
+     * Getting token balances by wallet address
+     * @param address
+     */
     public async getBalances(address: string): Promise<
     Map<string, {
       balanceBn: BigNumber;
@@ -104,6 +125,11 @@ export class AlgorandBridge {
         return balances
     }
 
+    /**
+     * Function for checking whether the token is already opted in the wallet address.
+     * @param address
+     * @param symbol
+     */
     public async optInAccountExists(address: string, symbol: string): Promise<boolean> {
         const token = BridgeTokens.getToken(BridgeNetworks.algorand, symbol)
         if ((token as AlgorandNativeTokenConfig).isNative) return true;
