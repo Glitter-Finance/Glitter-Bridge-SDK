@@ -30,6 +30,12 @@ export class EVMBridge {
         return new BigNumberJS(amount).multipliedBy(bigNumberDecimals);
     }
 
+    /**
+     * Approve tokens for the bridge in to contract
+     * @param tokenSymbol
+     * @param amount
+     * @param signer
+     */
     public async approve(tokenSymbol: string, amount: number, signer: Signer) {
         const token = this.sdk[this.network]?.config.tokens.find(x => x.symbol.toLowerCase() === tokenSymbol.toLowerCase());
         let bigNumber = new BigNumberJS(0);
@@ -40,10 +46,23 @@ export class EVMBridge {
         return this.sdk[this.network]?.approveTokensForBridge(tokenSymbol, bigNumber.toString(), signer);
     }
 
+    /**
+     * Getting Bridge Allowance for a particular token
+     * @param tokenSymbol
+     * @param signer
+     */
     public async bridgeAllowance(tokenSymbol: string, signer: Signer) {
         return this.sdk[this.network]?.bridgeAllowance(tokenSymbol, signer);
     }
 
+    /**
+     * Bridging a token from supported EVM network to other supported network
+     * @param toNetwork
+     * @param tokenSymbol
+     * @param amount
+     * @param toWalletAddress
+     * @param signer
+     */
     public async bridge(toNetwork: BridgeNetworks, tokenSymbol: string, amount: number, toWalletAddress: string | PublicKey, signer: Signer) {
         const token = this.sdk[this.network]?.config.tokens.find(x => x.symbol.toLowerCase() === tokenSymbol.toLowerCase());
         let bigNumber = new BigNumberJS(0);
@@ -60,6 +79,10 @@ export class EVMBridge {
         );
     }
 
+    /**
+     * Getting token balances by wallet address
+     * @param signerAddress
+     */
     public async getBalances(signerAddress: string) {
         const result = [];
         const tokens = this.sdk[this.network]?.config.tokens;
