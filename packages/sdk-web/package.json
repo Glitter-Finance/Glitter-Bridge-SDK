@@ -81,5 +81,11 @@
   "files": [
     "dist",
     "src"
-  ]
+  ],
+  "typedoc": {
+    "entryPoint": "./src/index.ts",
+    "readmeFile": "./README.md",
+    "displayName": "@glitter-finance/sdk-web",
+    "tsconfig": "./tsconfig.json"
+  }
 }
