@@ -2,12 +2,11 @@ import {Box, Button, Grid, Modal, Stack} from "@mui/material";
 import React, {useCallback, useState} from "react";
 import Item from "./Item";
 import {Chains, RPC_URL} from "./store/type";
-import {AlgorandBridge, ChainNames, EVMBridge, Wallets as GlitterWallets} from "glitter-bridge-sdk-web-dev";
-import {SolanaBridge, Chains as BridgeChains} from "glitter-bridge-sdk-web-dev";
+import {AlgorandBridge, ChainNames, EVMBridge, Wallets as GlitterWallets, SolanaBridge, Chains as BridgeChains} from "@glitter-finance/sdk-web";
 import {ADD_DESTINATION_WALLET, ADD_SOURCE_WALLET, CONNECT_WALLET_MODAL} from "./store/actionTypes";
 import {useSelectors} from "./store/selectors";
 import {useCallbacks} from "./store/callbacks";
-import { BridgeNetworks, BridgeEvmNetworks } from "@glitter-finance/sdk-core";
+import { BridgeEvmNetworks } from "@glitter-finance/sdk-core";
 
 const style = {
   position: 'absolute' as 'absolute',
@@ -55,9 +54,13 @@ function Header() {
       let balances: { token: string; balance: number | undefined }[] = [];
       console.log(phantomProvider);
       const solanaBridge = new SolanaBridge(RPC_URL);
-      console.log("Solana");
       const balancesObj = await solanaBridge.getBalances(result?.toString() as string)
-      console.log(balancesObj, "testing");
+      balancesObj.forEach((value, key) => {
+        balances.push({
+          token: key,
+          balance: value.balanceHuman.toNumber(),
+        });
+      });
       saveWallet({
         sourceWalletAddress: result?.toString(),
         sourceWalletName: walletName,
@@ -78,9 +81,13 @@ function Header() {
       }
 
       const algorandBridge = new AlgorandBridge();
-      console.log("Algorand");
       const balancesAlgo = await algorandBridge.getBalances(algorandResponse.wallet[0] as string)
-      console.log(balancesAlgo.keys(), balancesAlgo.values());
+      balancesAlgo.forEach((value, key) => {
+        balances.push({
+          token: key,
+          balance: value.balanceHuman.toNumber(),
+        });
+      });
       saveWallet({
         sourceWalletAddress: algorandResponse.wallet[0],
         sourceWalletName: typeWalletName,
