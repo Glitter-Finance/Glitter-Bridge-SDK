@@ -1,0 +1,1 @@
+# Getting Started Example with Glitter Finance Web SDK

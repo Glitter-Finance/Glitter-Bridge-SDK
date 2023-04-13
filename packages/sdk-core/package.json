@@ -1,6 +1,6 @@
 {
   "name": "@glitter-finance/sdk-core",
-  "version": "1.1.2",
+  "version": "1.1.3",
   "description": "Glitter Finance SDK: Core Functions",
   "main": "dist/index.js",
   "module": "dist/index.js",
@@ -59,7 +59,7 @@
   "typedoc": {
     "entryPoint": "./src/index.ts",
     "readmeFile": "./redme.md",
-    "displayName": "Glitter-SDK-Core",
+    "displayName": "@glitter-finance/sdk-core",
     "tsconfig": "./tsconfig.json"
   }
 }
