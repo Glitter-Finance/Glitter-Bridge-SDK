@@ -13,7 +13,7 @@ import {
 import Item from "../Item";
 import React, {useEffect, useState} from "react";
 import {useSelectors} from "../store/selectors";
-import {AlgorandBridge, ChainNames, EVMBridge, SolanaBridge} from "glitter-bridge-sdk-web-dev";
+import {AlgorandBridge, ChainNames, EVMBridge, SolanaBridge} from "@glitter-finance/sdk-web";
 import {BridgeMapping, RPC_URL} from "../store/type";
 import {ethers} from "ethers";
 import {toast} from 'react-toastify';
@@ -133,27 +133,59 @@ function Bridge() {
         if (wallet.sourceNetworkName === ChainNames.SOLANA) {
             const bridge = new SolanaBridge(RPC_URL);
             const balances = await bridge.getBalances(wallet.sourceWalletAddress as string)
+            const response: { token: string; balance: number | undefined }[] = [];
+            balances.forEach((value, key) => {
+                console.log(value, key);
+                response.push({
+                    token: key,
+                    balance: value.balanceHuman.toNumber(),
+                });
+            });
             saveWallet({
-                sourceTokens: balances
+                sourceTokens: response
             }, ADD_SOURCE_WALLET);
         } else if (wallet.destinationNetworkName === ChainNames.SOLANA) {
             const bridge = new SolanaBridge(RPC_URL);
             const balances = await bridge.getBalances(wallet.destinationWalletAddress as string)
+            const response: { token: string; balance: number | undefined }[] = [];
+            balances.forEach((value, key) => {
+                console.log(value, key);
+                response.push({
+                    token: key,
+                    balance: value.balanceHuman.toNumber(),
+                });
+            });
             saveWallet({
-                destinationTokens: balances
+                destinationTokens: response
             }, ADD_SOURCE_WALLET);
         }
         if (wallet.sourceNetworkName === ChainNames.ALGORAND) {
             const bridge = new AlgorandBridge();
             const balances = await bridge.getBalances(wallet.sourceWalletAddress as string)
+            const response: { token: string; balance: number | undefined }[] = [];
+            balances.forEach((value, key) => {
+                console.log(value, key);
+                response.push({
+                    token: key,
+                    balance: value.balanceHuman.toNumber(),
+                });
+            });
             saveWallet({
-                sourceTokens: balances
+                sourceTokens: response
             }, ADD_SOURCE_WALLET);
         } else if (wallet.destinationNetworkName === ChainNames.ALGORAND) {
             const bridge = new AlgorandBridge();
             const balances = await bridge.getBalances(wallet.destinationWalletAddress as string)
+            const response: { token: string; balance: number | undefined }[] = [];
+            balances.forEach((value, key) => {
+                console.log(value, key);
+                response.push({
+                    token: key,
+                    balance: value.balanceHuman.toNumber(),
+                });
+            });
             saveWallet({
-                destinationTokens: balances
+                destinationTokens: response
             }, ADD_SOURCE_WALLET);
         }
     }
@@ -163,7 +195,7 @@ function Bridge() {
             if (wallet.sourceNetworkName === ChainNames.SOLANA) {
                 const bridge = new SolanaBridge(RPC_URL);
                 console.log(wallet.sourceWalletAddress as string, sourceTokenSymbol, wallet.destinationNetworkName, wallet.destinationWalletAddress as string, destinationTokenSymbol, sourceTokenAmount);
-                const bridgeTransaction = await bridge.bridge(wallet.sourceWalletAddress as string, sourceTokenSymbol, wallet.destinationNetworkName as string, wallet.destinationWalletAddress as string, destinationTokenSymbol, sourceTokenAmount);
+                const bridgeTransaction = await bridge.bridge(wallet.sourceWalletAddress as string, wallet.destinationWalletAddress as string, wallet.destinationNetworkName as BridgeNetworks, sourceTokenSymbol, sourceTokenAmount);
                 let transaction;
                 if (wallet.sourceWalletName === "phantom") {
                     transaction = await wallet.sourceWalletProvider.signAndSendTransaction(bridgeTransaction);
