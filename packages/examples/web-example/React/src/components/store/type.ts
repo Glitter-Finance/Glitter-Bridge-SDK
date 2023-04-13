@@ -1,4 +1,4 @@
-import {ChainNames} from "glitter-bridge-sdk-web-dev";
+import {ChainNames} from "@glitter-finance/sdk-web";
 
 export interface IWallet {
     sourceWalletAddress?: string;
