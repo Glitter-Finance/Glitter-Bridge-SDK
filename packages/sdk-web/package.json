@@ -54,7 +54,7 @@
   "dependencies": {
     "@blockshake/defly-connect": "^1.1.1",
     "@coin98-com/connect-sdk": "^1.0.9",
-    "@glitter-finance/sdk-core": "1.1.3",
+    "@glitter-finance/sdk-core": "1.1.4-2",
     "@json-rpc-tools/utils": "^1.7.6",
     "@metamask/onboarding": "^1.0.1",
     "@perawallet/connect": "^1.2.1",
