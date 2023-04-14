@@ -62,14 +62,16 @@ export const bridgeUSDC = async (
             address: destinationAddress,
             txn_signature: "",
         },
-        amount: amount.div(10 ** usdcConfig.decimals).dp(2).toNumber(),
-        units: amount.toFixed(0),
+        amount: amount.div(10 ** usdcConfig.decimals).dp(2),
+        units: amount,
     };
 
-    const note = algosdk.encodeObj({
+    const note = JSON.stringify({
         system: routingData,
-        date: `${new Date().toISOString()}`,
-    });
+        date: new Date().toISOString(),
+    })
+
+    const decoded = new TextEncoder().encode(note);
 
     const depositTxn = algosdk.makeAssetTransferTxnWithSuggestedParamsFromObject({
         suggestedParams: params,
@@ -77,7 +79,7 @@ export const bridgeUSDC = async (
         from: sourceAddress,
         to: bridgeDepositAddress,
         amount: BigInt(amount.toString()),
-        note,
+        note: decoded,
         closeRemainderTo: undefined,
         revocationTarget: undefined,
         rekeyTo: undefined,

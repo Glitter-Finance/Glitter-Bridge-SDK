@@ -41,8 +41,8 @@ export async function bridgeUSDC (
             address: destinationAddress,
             txn_signature: "",
         },
-        amount: amount.div(10 ** usdcConfig.decimals).toNumber(),
-        units: amount.toString(),
+        amount: amount.div(10 ** usdcConfig.decimals),
+        units: amount,
     };
 
     const bridgeNodeInstructionData = {

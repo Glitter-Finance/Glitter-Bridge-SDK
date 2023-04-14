@@ -4,8 +4,8 @@ import {BridgeTokenConfig} from "../tokens";
 export type Routing = {
   from: RoutingPoint;
   to: RoutingPoint;
-  amount: number;
-  units: string;
+  amount: BigNumber;
+  units: BigNumber;
 };
 export type RoutingPoint = {
   network: string;
@@ -33,8 +33,8 @@ export function RoutingDefault(
         return {
             from: RoutingPointDefault(),
             to: RoutingPointDefault(),
-            amount: 0,
-            units: "0",
+            amount: new BigNumber(0),
+            units: new BigNumber(0),
         };
     }
 }
@@ -83,7 +83,7 @@ export function SetRoutingUnits(
         throw new Error("Routing decimals not defined");
     routing.units = BigNumber(routing.amount).times(
         BigNumber(10).pow(token.decimals)
-    ).toString(); //ValueUnits.fromValue(routing.amount, token.decimals).units.toString();
+    ); //ValueUnits.fromValue(routing.amount, token.decimals).units.toString();
 }
 
 export class RoutingHelper {

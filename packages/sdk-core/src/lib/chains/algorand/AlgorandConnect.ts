@@ -68,8 +68,8 @@ export class AlgorandConnect {
         routing.to.network = destinationNetwork.toString().toLowerCase();
         routing.amount = new BigNumber(amount.toString()).div(
             10**token.decimals
-        ).dp(2).toNumber();
-        routing.units = amount.toString();
+        ).dp(2);
+        routing.units = new BigNumber(amount.toString());
 
         const isUSDC = token.symbol.trim().toLowerCase() === "usdc"
         if (isUSDC) {
