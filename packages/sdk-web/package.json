@@ -18,12 +18,12 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/Glitter-Finance/Glitter-Bridge-SDK-Web.git"
+    "url": "https://github.com/Glitter-Finance/SDK.git"
   },
   "keywords": [],
   "author": "Glitter Finance",
   "bugs": {
-    "url": "https://github.com/Glitter-Finance/Glitter-Bridge-SDK-Web/issues"
+    "url": "https://github.com/Glitter-Finance/SDK/issues"
   },
   "engines": {
     "node": ">=10"
@@ -38,7 +38,7 @@
       "limit": "10 KB"
     }
   ],
-  "homepage": "https://github.com/Glitter-Finance/Glitter-Bridge-SDK-Web#readme",
+  "homepage": "https://github.com/Glitter-Finance/SDK/tree/main/packages/sdk-web",
   "devDependencies": {
     "@size-limit/preset-small-lib": "^8.2.4",
     "@types/jest": "^29.4.0",
