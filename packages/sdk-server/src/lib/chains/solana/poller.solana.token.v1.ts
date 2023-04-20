@@ -16,6 +16,7 @@ import {
     Routing,
     RoutingHelper,
     TransactionType,
+    getHashedTransactionId,
 } from "@glitter-finance/sdk-core";
 import { GlitterSDKServer } from "../../glitterSDKServer";
 import { ServerError } from "../../common/serverErrors";
@@ -32,9 +33,10 @@ export class SolanaV1Parser {
         const txnID = txn.transaction.signatures[0];
 
         //Set Partial Txn
+        const txnHashed = getHashedTransactionId(BridgeNetworks.algorand, txnID);
         let partialTxn: PartialBridgeTxn = {
             txnID: txnID,
-            txnIDHashed: sdkServer.sdk?.solana?.getTxnHashedFromBase58(txnID),
+            txnIDHashed: txnHashed,
             bridgeType: BridgeType.TokenV1,
             txnType: TransactionType.Unknown,
             network: BridgeNetworks.solana,
@@ -44,7 +46,7 @@ export class SolanaV1Parser {
         try {
 
             //get client
-            const client = sdkServer.sdk?.solana?.client;
+            const client = sdkServer.sdk?.solana?.connections[sdkServer.sdk?.solana?.defaultConnection];
             if (!client) throw ServerError.ClientNotSet(BridgeNetworks.solana);
 
             //Check txn status

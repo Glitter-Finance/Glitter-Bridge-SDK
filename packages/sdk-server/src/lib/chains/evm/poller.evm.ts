@@ -60,7 +60,7 @@ export class GlitterEVMPoller implements GlitterPoller {
             );
 
         //Add Token V2 Cursor
-        const tokenV2Address = this.connect?.tokenV2BridgePollerAddress?.toString();       
+        const tokenV2Address = this.connect?.getAddress("tokenBridge");       
         if (tokenV2Address)
             this.tokenV2Cursor = NewCursor(
                 this.network,
@@ -71,8 +71,8 @@ export class GlitterEVMPoller implements GlitterPoller {
 
         //Add USDC Cursors
         const usdcAddresses = [
-            this.connect?.usdcBridgeDepositAddress?.toString(),
-            this.connect?.usdcBridgeReceiverAddress?.toString(),
+            this.connect?.getAddress("depositWallet"),
+            this.connect?.getAddress("releaseWallet"),
         ];
         this.usdcCursors = [];
         usdcAddresses.forEach((address) => {

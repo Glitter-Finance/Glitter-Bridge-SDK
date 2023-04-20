@@ -11,8 +11,11 @@ export class EvmUSDCParser {
         txnID: string
     ): Promise<PartialBridgeTxn> {
 
+        //ensure connect is defined
+        if (!connect) throw Error("EVM Connect is undefined");
+
         //Get Bridge Address
-        const bridgeID = connect?.tokenV2BridgePollerAddress;
+        const bridgeID = connect?.getAddress("bridge");
         if (!bridgeID || typeof bridgeID !== "string")
             throw Error("Bridge ID is undefined");
             
@@ -96,16 +99,18 @@ export class EvmUSDCParser {
             toAddress = events.transfer.to;
             partialTxn.units = BigNumber(events.transfer.value.toString());
             partialTxn.amount = RoutingHelper.ReadableValue_FromBaseUnits(partialTxn.units, decimals);  
+        } else {
+            throw new Error("No transfer event found");   
         }
 
         //Check Type
-        if (toAddress.toLocaleLowerCase() == connect.usdcBridgeDepositAddress?.toString().toLocaleLowerCase()) {
+        if (toAddress.toLocaleLowerCase() == connect.getAddress("depositWallet")?.toLocaleLowerCase()) {
 
             //transfer into deposit address
             partialTxn.txnType = TransactionType.Deposit;
             partialTxn.address = fromAddress;
 
-        } else if (fromAddress.toLocaleLowerCase() == connect.usdcBridgeDepositAddress?.toString().toLocaleLowerCase()) {
+        } else if (fromAddress.toLocaleLowerCase() == connect.getAddress("depositWallet").toLocaleLowerCase()) {
 
             //Transfer out of deposit address
             if (events.deposit || events.release) {
@@ -134,8 +139,8 @@ export class EvmUSDCParser {
                     address: toAddress,
                     token: "usdc"
                 },
-                amount: partialTxn.amount || undefined,
-                units: partialTxn.units || undefined,
+                amount: partialTxn.amount || BigNumber(0),
+                units: partialTxn.units || BigNumber(0),
             };
         } else if (partialTxn.txnType == TransactionType.Refund) {
             routing = {
@@ -180,17 +185,19 @@ export class EvmUSDCParser {
             toAddress = events.transfer.to;
             partialTxn.units = BigNumber(events.transfer.value.toString());
             partialTxn.amount = RoutingHelper.ReadableValue_FromBaseUnits(partialTxn.units, decimals);  
+        } else {
+            throw new Error("No transfer event found");
         }
 
         //Get Routing
         let routing: Routing | null = null;
-        if (toAddress.toLocaleLowerCase() == connect.usdcBridgeReceiverAddress?.toString().toLocaleLowerCase()) {
+        if (toAddress.toLocaleLowerCase() == connect.getAddress("releaseWallet").toLocaleLowerCase()) {
 
             //transfer into receiver address
             partialTxn.txnType = TransactionType.Transfer;
             partialTxn.address = fromAddress;
 
-        } else if (fromAddress.toLocaleLowerCase() == connect.usdcBridgeReceiverAddress?.toString().toLocaleLowerCase()) {
+        } else if (fromAddress.toLocaleLowerCase() == connect.getAddress("releaseWallet").toLocaleLowerCase()) {
 
             //Transfer out of receiver address
             partialTxn.txnType = TransactionType.Release;
@@ -210,8 +217,8 @@ export class EvmUSDCParser {
                     token: "usdc",
                     txn_signature: txnID,
                 },
-                amount: partialTxn.amount || undefined,
-                units: partialTxn.units || undefined,
+                amount: partialTxn.amount || BigNumber(0),
+                units: partialTxn.units || BigNumber(0),
             };
         }
 

@@ -94,7 +94,8 @@ export class SolanaV2Parser {
         const txnID = txn.transaction.signatures[0];
 
         //Get Bridge Address
-        const bridgeID = sdkServer.sdk.solana?.tokenBridgeV2Address;
+        //TODO:
+        const bridgeID = ""//sdkServer.sdk.solana?.tokenBridgeV2Address;
         if (!bridgeID || typeof bridgeID !== "string")
             throw Error("Bridge ID is undefined");
 

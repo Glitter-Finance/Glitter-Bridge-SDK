@@ -76,10 +76,10 @@ export class GlitterSolanaPoller implements GlitterPoller {
     ): Promise<PollerResult> {
 
         //Check Client
-        let client = sdkServer.sdk?.solana?.client;
+        let client = sdkServer.sdk?.solana?.connections[sdkServer.sdk?.solana?.defaultConnection];
         if (sdkServer.sdk.environment === GlitterEnvironment.testnet) {
             if (cursor.bridgeType === BridgeType.USDC || cursor.bridgeType === BridgeType.TokenV2) {
-                client = sdkServer.sdk?.solana?.getClient(SolanaPublicNetworks.devnet);
+                client = sdkServer.sdk?.solana?.connections["devnet"];
             }
         }
         if (!client) throw ServerError.ClientNotSet(BridgeNetworks.solana);

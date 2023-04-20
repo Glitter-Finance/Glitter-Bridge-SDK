@@ -1,12 +1,12 @@
 import {
     Connection, Keypair, PublicKey, Transaction
 } from "@solana/web3.js";
-import {SolanaConfig, SolanaPublicNetworks} from "./types";
-import {SolanaAccount, SolanaAccountsStore} from "./AccountsStore";
-import {GlitterBridgeConfig, GlitterEnvironment} from "../../../types";
-import {BridgeNetworks, BridgeTokenConfig, BridgeTokens, Routing, Sleep} from "../../../lib/common";
+import { SolanaConfig, SolanaPublicNetworks } from "./types";
+import { SolanaAccount, SolanaAccountsStore } from "./AccountsStore";
+import { GlitterBridgeConfig, GlitterEnvironment } from "../../../types";
+import { BridgeNetworks, BridgeTokenConfig, BridgeTokens, Routing, Sleep } from "../../../lib/common";
 import BigNumber from "bignumber.js";
-import {bridgeUSDC, createAssociatedTokenAccountTransaction, getAssociatedTokenAccount, solBridgeTransaction, tokenBridgeTransaction} from "./transactions";
+import { bridgeUSDC, createAssociatedTokenAccountTransaction, getAssociatedTokenAccount, solBridgeTransaction, tokenBridgeTransaction } from "./transactions";
 
 export class SolanaConnect {
     readonly defaultConnection: "testnet" | "devnet" | "mainnet";
@@ -296,5 +296,14 @@ export class SolanaConnect {
         } catch (error) {
             return false
         }
+    }
+
+    /**
+     * 
+     * @param key 
+     * @returns 
+     */
+    getAddress(key: keyof SolanaConfig["accounts"]): string {
+        return this.solanaConfig.accounts[key];
     }
 }

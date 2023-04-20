@@ -1,5 +1,6 @@
 import { ParsedTransactionWithMeta, TokenBalance } from "@solana/web3.js";
 import { GlitterSDKServer } from "../../glitterSDKServer";
+import { BridgeNetworks, BridgeTokens } from "@glitter-finance/sdk-core/dist";
 
 export class SolanaPollerCommon {
     //Get solana address with amount
@@ -14,8 +15,11 @@ export class SolanaPollerCommon {
         let max_delta = 0;
 
         if (token) {
+
             //Get mint address
-            const mintAddress = sdkServer.sdk?.solana?.getMintAddress(token) || "";
+            //const mintAddress = sdkServer.sdk?.solana?.getMintAddress(token) || "";
+            const mintAddress = BridgeTokens.getToken(BridgeNetworks.solana, token)?.address || "";
+
             if (mintAddress === "") {
                 console.log("Mint Address not found for token: " + token);
                 return ["", 0];
