@@ -1,6 +1,6 @@
-import {ethers} from "ethers";
-import {BridgeEvmNetworks} from "../../common/networks";
-import {BridgeTokenConfig} from "../../common";
+import { ethers } from "ethers";
+import { BridgeEvmNetworks } from "../../common/networks";
+import { BridgeTokenConfig } from "../../common";
 
 export type TokenConfig = {
   symbol: string;
@@ -17,6 +17,7 @@ export type EvmConfig = {
     tokens: BridgeTokenConfig[];
     depositWallet: string;
     releaseWallet: string;
+    tokenBridge: string;
   };
 };
 

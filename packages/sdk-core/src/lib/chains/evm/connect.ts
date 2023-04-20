@@ -4,25 +4,25 @@ import {
     EvmNetworkConfig,
     TransferEvent,
 } from "./types";
-import {ethers, providers} from "ethers";
+import { ethers, providers } from "ethers";
 import {
     ERC20,
     ERC20__factory,
     TokenBridge,
     TokenBridge__factory,
 } from "glitter-evm-contracts";
-import {EvmBridgeEventsParser} from "./events";
-import {PublicKey} from "@solana/web3.js";
+import { EvmBridgeEventsParser } from "./events";
+import { PublicKey } from "@solana/web3.js";
 import algosdk from "algosdk";
-import {SerializeEvmBridgeTransfer} from "./serde";
+import { SerializeEvmBridgeTransfer } from "./serde";
 import {
     BridgeEvmNetworks,
     BridgeNetworks,
     NetworkIdentifiers,
 } from "../../common/networks";
-import {ChainStatus} from "../../common/transactions";
-import {walletToAddress} from "../../common/utils/utils";
-import {BridgeTokens, BridgeTokenConfig} from "../../../lib/common";
+import { ChainStatus } from "../../common/transactions";
+import { walletToAddress } from "../../common/utils/utils";
+import { BridgeTokens, BridgeTokenConfig } from "../../../lib/common";
 
 type Connection = {
   rpcProvider: providers.BaseProvider;
@@ -77,15 +77,16 @@ export class EvmConnect {
     get network(): BridgeEvmNetworks {
         return this.__network;
     }
+
     /**
    * Provide address of bridge
    * component
-   * @param {"tokens" | "bridge" | "depositWallet" | "releaseWallet"} entity
+   * @param {"tokens" | "bridge" | "depositWallet" | "releaseWallet"| "tokenBridge"} entity The type of address to provide
    * @param {"USDC"} tokenSymbol only USDC for now
-   * @returns {string}
+   * @returns {string} returns the address for the given entity
    */
     getAddress(
-        entity: "tokens" | "bridge" | "depositWallet" | "releaseWallet",
+        entity: "tokens" | "bridge" | "depositWallet" | "releaseWallet"| "tokenBridge",
         tokenSymbol?: string
     ): string {
         if (entity === "tokens") {
@@ -112,6 +113,7 @@ export class EvmConnect {
     private isValidToken(tokenSymbol: string): boolean {
         return !!this.__providers.tokens.get(tokenSymbol.toLowerCase());
     }
+    
     /**
    * Provide token balance of an address
    * on the connected evm network
@@ -279,13 +281,14 @@ export class EvmConnect {
    * Check if provided wallet is
    * connected to same chain as EvmConnect
    * to execute a transaction
-   * @param {ethers.Wallet} wallet
-   * @returns {Promise<boolean>}
+   * @param {ethers.Wallet} wallet the wallet to check
+   * @returns {Promise<boolean>} true if wallet is connected to correct chain
    */
     private async isCorrectChain(wallet: ethers.Signer): Promise<boolean> {
         const chainId = await wallet.getChainId();
         return this.__config.chainId === chainId;
     }
+
     /**
    * Bridge tokens to another supported chain
    * @param {BridgeNetworks} destination

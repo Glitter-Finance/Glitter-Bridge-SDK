@@ -1,5 +1,5 @@
-import {GlitterBridgeConfig, GlitterEnvironment} from "../types";
-import {BridgeNetworks} from "../lib/common";
+import { GlitterBridgeConfig, GlitterEnvironment } from "../types";
+import { BridgeNetworks } from "../lib/common";
 
 export const config: GlitterBridgeConfig = {
     name: GlitterEnvironment.testnet,
@@ -109,6 +109,7 @@ export const config: GlitterBridgeConfig = {
             ],
             depositWallet: "0x2f34c32e1380306bc3f359d836d6c937cbe90337",
             releaseWallet: "0x6D57268BE8EBa2dF18f07267cfF4e114933da429",
+            tokenBridge: "",
             chainId: 43113,
         },
         [BridgeNetworks.Ethereum]: {
@@ -125,6 +126,7 @@ export const config: GlitterBridgeConfig = {
             ],
             depositWallet: "0x6f5990a1b679190bcd0670f5006f14621f88805d",
             releaseWallet: "0x7c10Ee260F6d408aC0c9f297A16808ca407e469E",
+            tokenBridge: "0xfB06c714DDD5330bb790Fd82a34B83dd28FbA7A2",
             chainId: 5,
         },
         [BridgeNetworks.Polygon]: {
@@ -141,6 +143,7 @@ export const config: GlitterBridgeConfig = {
             ],
             depositWallet: "0x8eb550b1958e716c4051469425d56e79282afa2f",
             releaseWallet: "0xEAFA843b04A5847ec463358FC499347435354D3D",
+            tokenBridge: "",
             chainId: 80001,
         },
     },

@@ -2,7 +2,8 @@ module.exports = {
   parser: "@typescript-eslint/parser",
   parserOptions: {
     project: [
-      "./packages/examples/tsconfig.json",
+      "./packages/examples/core-example/tsconfig.json",
+      "./packages/examples/web-example/React/tsconfig.json",
       "./packages/sdk-core/tsconfig.json",
       "./packages/sdk-web/tsconfig.json",
       "./packages/sdk-server/tsconfig.json",
@@ -40,6 +41,7 @@ module.exports = {
       { checksVoidReturn: false },
     ],
     "prefer-const": "warn",
+    "valid-jsdoc": "warn",
 
     //Formatting Rules
     "no-multiple-empty-lines": ["warn", { max: 1, maxEOF: 0, maxBOF: 0 }],
@@ -49,6 +51,7 @@ module.exports = {
     "object-curly-spacing": ["warn", "never"],
     "array-bracket-spacing": ["warn", "never"],
     "space-in-parens": ["warn", "never"],
+    "object-curly-spacing": ["warn", "always"],
   },
   ignorePatterns: ["dist", "node_modules", "scripts", ".eslintrc.js"],
 };

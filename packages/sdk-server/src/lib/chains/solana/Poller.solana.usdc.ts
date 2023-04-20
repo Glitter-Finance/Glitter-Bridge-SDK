@@ -1,27 +1,29 @@
-import {ParsedInstruction, ParsedTransactionWithMeta, PartiallyDecodedInstruction} from "@solana/web3.js";
+import { Connection, ParsedInstruction, ParsedTransactionWithMeta, PartiallyDecodedInstruction,
+} from "@solana/web3.js";
 import bs58 from "bs58";
 import {
     BridgeNetworks,
     BridgeType,
     ChainStatus,
-    GlitterEnvironment,
     PartialBridgeTxn,
     Routing,
     RoutingHelper,
-    SolanaPublicNetworks,
     TransactionType,
 } from "@glitter-finance/sdk-core";
-import {GlitterSDKServer} from "../../glitterSDKServer";
-import {Cursor} from "../../common/cursor";
-import {ServerError} from "../../common/serverErrors";
-import {SolanaPollerCommon} from "./poller.solana.common";
+import { GlitterSDKServer } from "../../glitterSDKServer";
+import { Cursor } from "../../common/cursor";
+import { ServerError } from "../../common/serverErrors";
+import { SolanaPollerCommon } from "./poller.solana.common";
 
 export class SolanaUSDCParser {
+
     public static async process(
         sdkServer: GlitterSDKServer,
         txn: ParsedTransactionWithMeta,
+        client: Connection | undefined,
         cursor: Cursor
     ): Promise<PartialBridgeTxn> {
+        
         //Destructure Local Vars
         const txnID = txn.transaction.signatures[0];
         const address = cursor.address.toString();
@@ -38,11 +40,8 @@ export class SolanaUSDCParser {
 
         //Try to get txn details
         try {
+
             //get client
-            let client = sdkServer.sdk?.solana?.client;
-            if (sdkServer.sdk?.environment == GlitterEnvironment.testnet) {
-                client = sdkServer.sdk?.solana?.getPublicConnection(SolanaPublicNetworks.devnet);
-            }
             if (!client) throw ServerError.ClientNotSet(BridgeNetworks.solana);
 
             //Check txn status
@@ -61,9 +60,7 @@ export class SolanaUSDCParser {
             let depositNote;
             for (let i = 0; i < txn.transaction.message.instructions.length; i++) {
                 try {
-                    const data_bytes =
-                        bs58.decode((txn.transaction.message.instructions[i] as PartiallyDecodedInstruction).data) ||
-                        "{}";
+                    const data_bytes = bs58.decode((txn.transaction.message.instructions[ i ] as PartiallyDecodedInstruction).data) || "{}";
                     const object = JSON.parse(Buffer.from(data_bytes).toString("utf8"));
                     if (object.system && object.date) {
                         depositNote = object;
@@ -80,7 +77,9 @@ export class SolanaUSDCParser {
             }
 
             //Get Routing Data
-            const routing: Routing | null = depositNote ? JSON.parse(depositNote.system) : null;
+            const routing: Routing | null = depositNote
+                ? JSON.parse(depositNote.system)
+                : null;
 
             //Check deposit vs release
             if (
@@ -114,30 +113,47 @@ async function handleDeposit(
     routing: Routing | null,
     partialTxn: PartialBridgeTxn
 ): Promise<PartialBridgeTxn> {
+
     const decimals = 6;
 
     //Set type
     partialTxn.tokenSymbol = "usdc";
 
     //Get Address
-    const data = SolanaPollerCommon.getSolanaAddressWithAmount(sdkServer, txn, "usdc", true);
+    const data = SolanaPollerCommon.getSolanaAddressWithAmount(
+        sdkServer,
+        txn,
+        "usdc",
+        true
+    );
     partialTxn.address = data[0] || "";
 
     if (data[1] < 0) {
+
         //negative delta is a deposit from the user or transfer out
         if (!routing) {
             partialTxn.txnType = TransactionType.Transfer;
         } else {
             partialTxn.txnType = TransactionType.Deposit;
         }
+
         const value = -data[1] || 0;
         partialTxn.amount = value;
-        partialTxn.units = RoutingHelper.BaseUnits_FromReadableValue(value, decimals);
+        partialTxn.units = RoutingHelper.BaseUnits_FromReadableValue(
+            value,
+            decimals
+        );
+
     } else if (data[1] > 0) {
+
         partialTxn.txnType = TransactionType.Refund; //positive delta is a refund to the user
         const value = data[1] || 0;
         partialTxn.amount = value;
-        partialTxn.units = RoutingHelper.BaseUnits_FromReadableValue(value, decimals);
+        partialTxn.units = RoutingHelper.BaseUnits_FromReadableValue(
+            value,
+            decimals
+        );
+
     }
 
     partialTxn.routing = routing;
@@ -149,6 +165,7 @@ async function handleRelease(
     routing: Routing | null,
     partialTxn: PartialBridgeTxn
 ): Promise<PartialBridgeTxn> {
+    
     const decimals = 6;
 
     //Set type
@@ -161,7 +178,12 @@ async function handleRelease(
     }
 
     //Get Address
-    const data = SolanaPollerCommon.getSolanaAddressWithAmount(sdkServer, txn, "usdc", false);
+    const data = SolanaPollerCommon.getSolanaAddressWithAmount(
+        sdkServer,
+        txn,
+        "usdc",
+        false
+    );
     partialTxn.address = data[0] || "";
     const value = data[1] || 0;
     partialTxn.amount = value;
