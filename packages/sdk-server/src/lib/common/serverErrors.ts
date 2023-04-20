@@ -1,8 +1,11 @@
-import {BridgeNetworks} from "@glitter-finance/sdk-core";
+import { BridgeNetworks } from "@glitter-finance/sdk-core";
 
 export class ServerError {
     static ClientNotSet(network: BridgeNetworks): Error {
         return new Error(`The client for ${network} has not been set`);
+    }
+    static IndexerNotSet(network: BridgeNetworks): Error {
+        return new Error(`The indexer for ${network} has not been set`);
     }
     static CursorNotSet(network: BridgeNetworks): Error {
         return new Error(`The cursor for ${network} has not been set`);
