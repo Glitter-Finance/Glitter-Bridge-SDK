@@ -1624,7 +1624,7 @@
 
 "@glitter-finance/sdk-core@1.1.4":
   version "1.1.4"
-  resolved "https://registry.yarnpkg.com/@glitter-finance/sdk-core/-/sdk-core-1.1.4.tgz#9dbb5edd9748ed0808566ac1119fe9cf185d23e4"
+  resolved "https://registry.npmjs.org/@glitter-finance/sdk-core/-/sdk-core-1.1.4.tgz"
   integrity sha512-CVznnuCpQ/smUGhmoJq3PEgQPojxKEKeevU6BjdgdZybh6EO3f9EbXNg+z4vc5VvNu3Extu5mXrGLpG+hUT6dw==
   dependencies:
     "@circle-fin/circle-sdk" "^1.3.0"
@@ -1640,10 +1640,10 @@
     tronweb "^5.1.0"
     tweetnacl "^1.0.3"
 
-"@glitter-finance/sdk-core@1.2.0-1":
-  version "1.2.0-1"
-  resolved "https://registry.yarnpkg.com/@glitter-finance/sdk-core/-/sdk-core-1.2.0-1.tgz#71f43508aa4b32ee20843afce3ae070cde4cb534"
-  integrity sha512-Dli2dHaeEc4M27U6IrJEqfQ8hVQCqr4YKF/YGFTR4pIXQj5IK2vfhMxm97iJbqlONpm9KI/N1FTA4Q7tYfKCAw==
+"@glitter-finance/sdk-core@1.2.0-3":
+  version "1.2.0-3"
+  resolved "https://registry.yarnpkg.com/@glitter-finance/sdk-core/-/sdk-core-1.2.0-3.tgz#40d00e4b1205147d165a24d9385dc29245fe51f9"
+  integrity sha512-mTAF5t1etoCbSieKQtu8vrPqh/Wu4TVvHsFp6gi9ANMoPeRvYJiSuaXFa2azjVJ9gG7VifeU+uAFfWaQo/tFww==
   dependencies:
     "@circle-fin/circle-sdk" "^1.3.0"
     "@solana/spl-token" "^0.3.6"

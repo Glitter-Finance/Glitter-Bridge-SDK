@@ -4,11 +4,13 @@ import {
     PublicKey,
 } from "@solana/web3.js";
 import {
+    BridgeNetworks,
     BridgeType,
     ChainStatus,
     PartialBridgeTxn,
     Routing,
     TransactionType,
+    getHashedTransactionId,
 } from "@glitter-finance/sdk-core";
 import { GlitterSDKServer } from "../../glitterSDKServer";
 import BigNumber from "bignumber.js";
@@ -95,14 +97,15 @@ export class SolanaV2Parser {
 
         //Get Bridge Address
         //TODO:
-        const bridgeID = ""//sdkServer.sdk.solana?.tokenBridgeV2Address;
+        const bridgeID = sdkServer.sdk.solana?.getAddress("tokenBridgeV2Address") ;
         if (!bridgeID || typeof bridgeID !== "string")
             throw Error("Bridge ID is undefined");
 
         //Get Solana Transaction data
+        const txnHashed = getHashedTransactionId(BridgeNetworks.algorand, txnID);
         let partialTxn: PartialBridgeTxn = {
             txnID: txnID,
-            txnIDHashed: sdkServer.sdk?.solana?.getTxnHashedFromBase58(txnID),
+            txnIDHashed: txnHashed,
             bridgeType: BridgeType.TokenV2,
             txnType: TransactionType.Unknown,
             network: "solana",

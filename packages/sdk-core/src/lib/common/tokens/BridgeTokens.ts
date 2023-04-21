@@ -1,4 +1,4 @@
-import {BridgeNetworks} from "../networks";
+import { BridgeNetworks } from "../networks";
 import {
     BridgeTokenConfig,
     AlgorandStandardAssetConfig,
@@ -54,6 +54,35 @@ export class BridgeTokens {
         }
     }
 
+    public static getFromAddress(network: BridgeNetworks.algorand, address: string): AlgorandStandardAssetConfig | AlgorandNativeTokenConfig;
+    public static getFromAddress(network: BridgeNetworks.solana | BridgeNetworks.Ethereum | BridgeNetworks.TRON | BridgeNetworks.Polygon | BridgeNetworks.Avalanche, address: string): BridgeTokenConfig;
+    public static getFromAddress(network: BridgeNetworks, address: string): BridgeTokenConfig | AlgorandStandardAssetConfig | AlgorandNativeTokenConfig | undefined;
+    public static getFromAddress(network: BridgeNetworks, address: string) {
+        const configToFind = this.tokenConfig.get(network);
+        if (!configToFind) return undefined;
+        
+        let token ;
+        switch (network) {
+            case BridgeNetworks.solana:
+                token = (configToFind as BridgeTokenConfig[]).find((x) => x.address.toLowerCase() === address.toLowerCase());
+                return token as BridgeTokenConfig;
+            case BridgeNetworks.algorand:
+                token = (configToFind as (AlgorandStandardAssetConfig | AlgorandNativeTokenConfig)[]).find((x) => {
+                    if ((x as AlgorandStandardAssetConfig).assetId) {
+                        return (x as AlgorandStandardAssetConfig).assetId.toString() === address;
+                    } else {
+                        return (x as AlgorandNativeTokenConfig).isNative;
+                    }                    
+                }); 
+                return token as AlgorandStandardAssetConfig | AlgorandNativeTokenConfig;
+            case BridgeNetworks.Ethereum:
+            case BridgeNetworks.Polygon:
+            case BridgeNetworks.Avalanche:
+            case BridgeNetworks.TRON:
+                token = (configToFind as BridgeTokenConfig[]).find((x) => x.address.toLowerCase() === address.toLowerCase());
+                return token as BridgeTokenConfig;
+        }
+    }
     public static add(
         network: BridgeNetworks.algorand,
         config: Array<AlgorandStandardAssetConfig
