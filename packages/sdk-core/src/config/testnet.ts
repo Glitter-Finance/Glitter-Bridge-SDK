@@ -155,7 +155,7 @@ export const config: GlitterBridgeConfig = {
             tokenBridge: "0x2f3f655daf9deee82dfca0b065126dfd0fdad5b5",
             chainId: 421613,
         },
-        [BridgeNetworks.BNB]: {           
+        [BridgeNetworks.Binance]: {           
             bridge:"",     
             rpcUrl: "",
             tokens: [],

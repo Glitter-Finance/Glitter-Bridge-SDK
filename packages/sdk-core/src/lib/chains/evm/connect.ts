@@ -461,6 +461,6 @@ export class EvmConnect {
     }
 
     public getToken(tokenSymbol: string): BridgeTokenConfig | undefined {
-        return BridgeTokens.getToken(this.__network, tokenSymbol);
+        return BridgeTokens.getToken(this.__network, tokenSymbol) as BridgeTokenConfig | undefined; 
     }
 }

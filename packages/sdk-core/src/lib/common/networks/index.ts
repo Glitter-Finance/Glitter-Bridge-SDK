@@ -6,7 +6,7 @@ export enum BridgeNetworks {
     Avalanche = "avalanche",
     TRON = "tron",
     Arbitrum = "arbitrum",
-    BNB = "bnb",
+    Binance = "binance",
     Zkevm = "zkevm",
 }
 
@@ -15,7 +15,7 @@ export type BridgeEvmNetworks =
     | typeof BridgeNetworks.Ethereum
     | typeof BridgeNetworks.Polygon
     | typeof BridgeNetworks.Arbitrum
-    | typeof BridgeNetworks.BNB
+    | typeof BridgeNetworks.Binance
     | typeof BridgeNetworks.Zkevm;
 
 /**
@@ -34,7 +34,7 @@ export const NetworkIdentifiers: {
     5: BridgeNetworks.Polygon,
     6: BridgeNetworks.TRON,
     7: BridgeNetworks.Arbitrum,
-    8: BridgeNetworks.BNB,
+    8: BridgeNetworks.Binance,
     9: BridgeNetworks.Zkevm
 };
 

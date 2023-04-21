@@ -167,6 +167,33 @@ export const config: GlitterBridgeConfig = {
             releaseWallet: "0xfdc9Af7852F9b2d234b96B1F53804BC781Ce26b3",
             tokenBridge: "",
         },
+        [BridgeNetworks.Arbitrum]: {      
+            bridge:"",     
+            rpcUrl: "",
+            tokens: [],
+            depositWallet: "",
+            releaseWallet: "",
+            tokenBridge: "",
+            chainId: 421613,
+        },
+        [BridgeNetworks.Binance]: {           
+            bridge:"",     
+            rpcUrl: "",
+            tokens: [],
+            depositWallet: "",
+            releaseWallet: "",
+            tokenBridge: "",
+            chainId: 97,
+        },
+        [BridgeNetworks.Zkevm]: {           
+            bridge:"",     
+            rpcUrl: "",
+            tokens: [],
+            depositWallet: "",
+            releaseWallet: "",
+            tokenBridge: "",
+            chainId: 1442,
+        },
     },
     tron: {
         tokens: [

@@ -1,6 +1,6 @@
-import {PublicKey} from "@solana/web3.js";
-import {ethers} from "ethers";
-import {fromHexString} from "../../common/utils/bytes";
+import { PublicKey } from "@solana/web3.js";
+import { ethers } from "ethers";
+import { fromHexString } from "../../common/utils/bytes";
 import algoSdk from "algosdk";
 import {
     BridgeEvmNetworks,
@@ -29,6 +29,9 @@ export class SerializeEvmBridgeTransfer {
             case BridgeNetworks.Polygon:
             case BridgeNetworks.Avalanche:
             case BridgeNetworks.Ethereum:
+            case BridgeNetworks.Binance:
+            case BridgeNetworks.Arbitrum:
+            case BridgeNetworks.Zkevm:
                 return address;
             case BridgeNetworks.algorand:
                 return ethers.utils.hexZeroPad(algoSdk.decodeAddress(address).publicKey, 32).toString();
@@ -88,6 +91,9 @@ export class DeserializeEvmBridgeTransfer {
             case BridgeNetworks.Polygon:
             case BridgeNetworks.Avalanche:
             case BridgeNetworks.Ethereum:
+            case BridgeNetworks.Binance:
+            case BridgeNetworks.Arbitrum:
+            case BridgeNetworks.Zkevm:
                 return `0x${data.toLowerCase()}`;
             case BridgeNetworks.solana:
                 return new PublicKey(fromHexString(data) as Uint8Array).toString();
