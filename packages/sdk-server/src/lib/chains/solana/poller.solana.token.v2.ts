@@ -96,7 +96,6 @@ export class SolanaV2Parser {
         const txnID = txn.transaction.signatures[0];
 
         //Get Bridge Address
-        //TODO:
         const bridgeID = sdkServer.sdk.solana?.getAddress("tokenBridgeV2Address") ;
         if (!bridgeID || typeof bridgeID !== "string")
             throw Error("Bridge ID is undefined");
@@ -204,7 +203,7 @@ export class SolanaV2Parser {
 
         //Get token Information
         const tokenAddress = depositEvent.data.mint.toBase58();
-        const token = BridgeTokens.getFromAddress("solana", tokenAddress);
+        const token = BridgeTokens.getFromAddress(BridgeNetworks.solana, tokenAddress);
         if (!token) throw Error("Token not found");
         partialTxn.tokenSymbol = token?.symbol || "";
 

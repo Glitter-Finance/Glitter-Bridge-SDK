@@ -5,12 +5,18 @@ export enum BridgeNetworks {
     Polygon = "polygon",
     Avalanche = "avalanche",
     TRON = "tron",
+    Arbitrum = "arbitrum",
+    BNB = "bnb",
+    Zkevm = "zkevm",
 }
 
 export type BridgeEvmNetworks =
     | typeof BridgeNetworks.Avalanche
     | typeof BridgeNetworks.Ethereum
-    | typeof BridgeNetworks.Polygon;
+    | typeof BridgeNetworks.Polygon
+    | typeof BridgeNetworks.Arbitrum
+    | typeof BridgeNetworks.BNB
+    | typeof BridgeNetworks.Zkevm;
 
 /**
  * These IDs will be stored
@@ -27,6 +33,9 @@ export const NetworkIdentifiers: {
     4: BridgeNetworks.solana,
     5: BridgeNetworks.Polygon,
     6: BridgeNetworks.TRON,
+    7: BridgeNetworks.Arbitrum,
+    8: BridgeNetworks.BNB,
+    9: BridgeNetworks.Zkevm
 };
 
 export const getNumericNetworkId = (chain: BridgeNetworks): number => {
