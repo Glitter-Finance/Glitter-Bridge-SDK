@@ -17,20 +17,13 @@ export class SolanaConnect {
     constructor(config: GlitterBridgeConfig) {
         this.defaultConnection = config.name === GlitterEnvironment.mainnet ? 
             "mainnet" : "testnet"
-        
+
         this.connections = {
-            devnet: new Connection(SolanaPublicNetworks.devnet.toString()),
-            mainnet: new Connection(
-                this.defaultConnection === "testnet" ?
-                    SolanaPublicNetworks.mainnet_beta.toString() :
-                    config.solana.server
-            ),
-            testnet: new Connection(
-                this.defaultConnection === "mainnet" ?
-                    SolanaPublicNetworks.testnet.toString() :
-                    config.solana.server
-            )
-        }
+            devnet : new Connection(SolanaPublicNetworks.devnet.toString()),
+            testnet : new Connection(SolanaPublicNetworks.testnet.toString()),
+            mainnet : new Connection(SolanaPublicNetworks.mainnet_beta.toString())
+        };
+       
         this.accountStore = new SolanaAccountsStore(
             config.name === GlitterEnvironment.mainnet ?
                 this.connections.mainnet : this.connections.testnet
@@ -306,4 +299,14 @@ export class SolanaConnect {
     getAddress(key: keyof SolanaConfig["accounts"]): string {
         return this.solanaConfig.accounts[key];
     }
+
+    /**
+     * 
+     */
+    reconnect() {
+        this.connections.devnet = new Connection(SolanaPublicNetworks.devnet.toString());
+        this.connections.testnet = new Connection(SolanaPublicNetworks.testnet.toString());
+        this.connections.mainnet = new Connection(SolanaPublicNetworks.mainnet_beta.toString());
+    }
+
 }

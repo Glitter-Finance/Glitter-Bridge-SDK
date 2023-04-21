@@ -29,7 +29,7 @@ export class GlitterSolanaPoller implements GlitterPoller {
     //Initialize
     public initialize(sdkServer: GlitterSDKServer): void {
     //Add Token Cursor
-        const tokenAddress = sdkServer.sdk?.solana?.tokenBridgePollerAddress?.toString();
+        const tokenAddress = sdkServer.sdk?.solana?.getAddress("bridgeProgram");
         if (tokenAddress)
             this.tokenV1Cursor = NewCursor(
                 BridgeNetworks.solana,
@@ -39,7 +39,7 @@ export class GlitterSolanaPoller implements GlitterPoller {
             );
 
         //Add Token V2 Cursor
-        const tokenV2Address = sdkServer.sdk?.solana?.tokenBridgeV2Address?.toString();
+        const tokenV2Address = sdkServer.sdk?.solana?.getAddress("tokenBridgeV2Address");
         if (tokenV2Address)
             this.tokenV2Cursor = NewCursor(
                 BridgeNetworks.solana,
@@ -50,10 +50,10 @@ export class GlitterSolanaPoller implements GlitterPoller {
 
         //Add USDC Cursors
         const usdcAddresses = [
-            sdkServer.sdk?.solana?.usdcBridgeDepositAddress?.toString(),
-            sdkServer.sdk?.solana?.usdcBridgeDepositTokenAddress?.toString(),
-            sdkServer.sdk?.solana?.usdcBridgeReceiverAddress?.toString(),
-            sdkServer.sdk?.solana?.usdcBridgeReceiverTokenAddress?.toString(),
+            sdkServer.sdk?.solana?.getAddress("usdcReceiver"),
+            sdkServer.sdk?.solana?.getAddress("usdcReceiverTokenAccount"),
+            sdkServer.sdk?.solana?.getAddress("usdcDeposit"),
+            sdkServer.sdk?.solana?.getAddress("usdcDepositTokenAccount"),
         ];
         this.usdcCursors = [];
         usdcAddresses.forEach((address) => {
