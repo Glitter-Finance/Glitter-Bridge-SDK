@@ -1,22 +1,30 @@
+import { Token2ConfigList } from "../lib";
 import { config as mConfig } from "./mainnet"
 import { config as tConfig } from "./testnet"
 
-import { Token2ConfigList } from "../lib";
+import axios from "axios";
 
 export const mainnetConfig = mConfig;
 export const testnetConfig = tConfig;
 
-export const mainnetTokenConfig = loadJSON('./mainnet-tokens.json')as Token2ConfigList;
-export const testnetTokenConfig = loadJSON('./testnet-tokens.json')as Token2ConfigList;
+let mainnetTokenConfig: Token2ConfigList;
+let testnetTokenConfig: Token2ConfigList;
 
 function loadJSON(filename: string) {
-    const xhr = new XMLHttpRequest();
-    xhr.open('GET', filename, false);
-    xhr.send();
-    if (xhr.status === 200) {
-        const data = JSON.parse(xhr.responseText);
-        return data;
-    } else {
-        throw new Error('Error loading JSON file');
-    }
+    return axios.get(filename)
+        .then(response => response.data);
+}
+
+async function main(){
+    mainnetTokenConfig = await loadJSON("./mainnet-tokens.json") as Token2ConfigList;
+    testnetTokenConfig = await loadJSON("./testnet-tokens.json") as Token2ConfigList;
+}
+
+main();
+
+export function GetMainnetTokenConfig(){
+    return mainnetTokenConfig;
+}
+export function GetTestnetTokenConfig(){
+    return testnetTokenConfig;
 }

@@ -1,5 +1,6 @@
 import { BridgeNetworks } from "../networks";
 import { BridgeTokenConfig, AlgorandStandardAssetConfig, AlgorandNativeTokenConfig, Token2Config, Token2ConfigList, Token2ChainConfig, } from "./types";
+import axios from 'axios';
 
 export class BridgeV2Tokens {
 

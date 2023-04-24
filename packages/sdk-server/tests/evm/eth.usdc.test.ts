@@ -77,7 +77,8 @@ describe("Eth Poller USDC Tests ", () => {
 
     it("Default TokenV2 Cursor Test", async () => {
 
-        const token = BridgeV2Tokens.get("usdc");
+        const token = BridgeV2Tokens.getToken("usdc");
+        console.log(util.inspect(token, false, null, true));
 
         //Ensure Poller & Cursor is defined
         if (!poller) throw Error("Poller is undefined");
