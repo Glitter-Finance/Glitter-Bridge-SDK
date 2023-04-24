@@ -6,7 +6,7 @@ import {
     BridgeEvmNetworks,
     BridgeNetworks,
 } from "./lib/common/networks";
-import { mainnetConfig, testnetConfig, GetMainnetTokenConfig, GetTestnetTokenConfig } from "./config";
+import { mainnetConfig, testnetConfig, mainnetTokenConfig, testnetTokenConfig } from "./config";
 import { GlitterBridgeConfig, GlitterEnvironment } from "./types";
 import { BridgeV2Tokens } from "./lib/common/tokens/BridgeV2Tokens";
 
@@ -43,11 +43,11 @@ export class GlitterBridgeSDK {
         switch (environment) {
             case GlitterEnvironment.mainnet:
                 this._bridgeConfig = mainnetConfig;
-                BridgeV2Tokens.loadConfig(GetMainnetTokenConfig());
+                BridgeV2Tokens.loadConfig(mainnetTokenConfig);
                 break;
             case GlitterEnvironment.testnet:
                 this._bridgeConfig = testnetConfig;
-                BridgeV2Tokens.loadConfig(GetTestnetTokenConfig());
+                BridgeV2Tokens.loadConfig(testnetTokenConfig);
                 break;
             default:
                 throw new Error("Environment not found");

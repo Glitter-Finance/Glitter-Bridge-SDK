@@ -7,24 +7,30 @@ import axios from "axios";
 export const mainnetConfig = mConfig;
 export const testnetConfig = tConfig;
 
-let mainnetTokenConfig: Token2ConfigList;
-let testnetTokenConfig: Token2ConfigList;
+//export const mainnetTokenConfig = require('./mainnet-tokens.json');
+//export const testnetTokenConfig = require('./testnet-tokens.json');
 
-function loadJSON(filename: string) {
-    return axios.get(filename)
-        .then(response => response.data);
-}
+export { default as mainnetTokenConfig } from "./mainnet-tokens.json";
+export { default as testnetTokenConfig } from "./testnet-tokens.json";
 
-async function main(){
-    mainnetTokenConfig = await loadJSON("./mainnet-tokens.json") as Token2ConfigList;
-    testnetTokenConfig = await loadJSON("./testnet-tokens.json") as Token2ConfigList;
-}
+// let mainnetTokenConfig: Token2ConfigList;
+// let testnetTokenConfig: Token2ConfigList;
 
-main();
+// function loadJSON(filename: string) {
+//     return axios.get(filename)
+//         .then(response => response.data);
+// }
 
-export function GetMainnetTokenConfig(){
-    return mainnetTokenConfig;
-}
-export function GetTestnetTokenConfig(){
-    return testnetTokenConfig;
-}
+// async function main(){
+//     mainnetTokenConfig = await loadJSON("./mainnet-tokens.json") as Token2ConfigList;
+//     testnetTokenConfig = await loadJSON("./testnet-tokens.json") as Token2ConfigList;
+// }
+
+// main();
+
+// export function GetMainnetTokenConfig(){
+//     return mainnetTokenConfig;
+// }
+// export function GetTestnetTokenConfig(){
+//     return testnetTokenConfig;
+// }
