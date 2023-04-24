@@ -1,4 +1,4 @@
-import { BridgeNetworks, GlitterEnvironment, Sleep } from "@glitter-finance/sdk-core";
+import { BridgeNetworks, BridgeTokens, BridgeV2Tokens, GlitterEnvironment, Sleep } from "@glitter-finance/sdk-core";
 import { GlitterSolanaPoller } from "../../src/lib/chains/solana/poller.solana";
 import { GlitterPoller } from "../../src/lib/common/poller.Interface";
 import { GlitterSDKServer } from "../../src/lib/glitterSDKServer";
@@ -76,6 +76,8 @@ describe("Eth Poller USDC Tests ", () => {
     // }, 30000);
 
     it("Default TokenV2 Cursor Test", async () => {
+
+        const token = BridgeV2Tokens.get("usdc");
 
         //Ensure Poller & Cursor is defined
         if (!poller) throw Error("Poller is undefined");
