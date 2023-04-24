@@ -2,4 +2,9 @@
 module.exports = {
   preset: 'ts-jest',
   testEnvironment: 'node',
+  "types": [
+    "node",
+    "jest",
+    "assert"
+  ],
 };

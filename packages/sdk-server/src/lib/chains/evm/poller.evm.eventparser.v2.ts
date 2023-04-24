@@ -16,6 +16,7 @@ export type TokenBridgeV2Event = {
 }
 export type TokenBridgeV2DepositEvent = TokenBridgeV2Event & {
     destinationChainId: number;
+    protocolId: number;
 }
 export type TokenBridgeV2ReleaseEvent = TokenBridgeV2Event & {
     feeRate: number;
@@ -27,9 +28,9 @@ export type TokenBridgeV2RefundEvent = TokenBridgeV2Event & {
 
 export class EvmBridgeV2EventsParser {
     static readonly EventsABI = [
-        "event BridgeDeposit(uint32 vaultId, uint256 amount, uint16 destinationChainId, bytes destinationAddress)",
+        "event BridgeDeposit(uint32 vaultId, uint256 amount, uint16 destinationChainId, bytes destinationAddress, uint32 protocolId)",
         "event BridgeRelease(uint32 vaultId, address destinationAddress, uint256 amount, uint8 feeRate,bytes32 depositId)",
-        "event BridgeRefund(uint32 vaultId, address destinationAddress, uint256 amount)",
+        "event BridgeRefund(uint32 vaultId, address destinationAddress, uint256 amount,bytes32 depositId)",
         "event Transfer(address indexed from, address indexed to, uint256 value)",
     ];
 
@@ -52,7 +53,7 @@ export class EvmBridgeV2EventsParser {
         const parsedDeposit = parsedLogs.find((x) => x.name === "BridgeDeposit");
 
         if (!parsedDeposit) return null;
-        const { vaultId, amount, destinationChainId, destinationAddress } = parsedDeposit.args;
+        const { vaultId, amount, destinationChainId, destinationAddress, protocolId } = parsedDeposit.args;
 
         return {
             vaultId,
@@ -60,6 +61,7 @@ export class EvmBridgeV2EventsParser {
             destinationChainId,
             destinationAddress,
             type: "BridgeDeposit",
+            protocolId,
         };
     }   
 
@@ -83,14 +85,14 @@ export class EvmBridgeV2EventsParser {
         const parsedRefund = parsedLogs.find((x) => x.name === "BridgeRefund");
 
         if (!parsedRefund) return null;
-        const { vaultId, destinationAddress, amount } = parsedRefund.args;
+        const { vaultId, destinationAddress, amount, depositId } = parsedRefund.args;
 
         return {
             vaultId,
             amount,
             destinationAddress,
             type: "BridgeRefund",
-            depositId: ""
+            depositId
         };
     }
 

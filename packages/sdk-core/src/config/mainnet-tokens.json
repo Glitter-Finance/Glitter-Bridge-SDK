@@ -1,0 +1,144 @@
+{
+    "tokens": [
+        {
+            "asset_id": 1,
+            "asset_name": "Algorand ALGO",
+            "asset_symbol": "ALGO",
+            "chains": [
+                {
+                    "chain": "Algorand",
+                    "symbol": "ALGO",
+                    "name": "Native Algo",
+                    "decimals": 6,
+                    "isNative": true,
+                    "min_transfer": 5
+                },
+                {
+                    "chain": "Solana",
+                    "symbol": "xALGO",
+                    "name": "Glitter Wrapped Algo",
+                    "decimals": 6,
+                    "address": "xALGoH1zUfRmpCriy94qbfoMXHtK6NDnMKzT4Xdvgms",
+                    "min_transfer": 5
+                }
+            ]
+        },
+        {
+            "asset_id": 2,
+            "asset_name": "Solana SOL",
+            "asset_symbol": "Sol",
+            "chains": [
+                {
+                    "chain": "Algorand",
+                    "symbol": "xSOL",
+                    "name": "Glitter Wrapped Solana",
+                    "decimals": 9,
+                    "asset_id": 792313023,
+                    "min_transfer": 0.05
+                },
+                {
+                    "chain": "Solana",
+                    "symbol": "SOL",
+                    "name": "Native Solana",
+                    "isNative": true,
+                    "decimals": 9,
+                    "address": "11111111111111111111111111111111",
+                    "min_transfer": 0.05
+                }
+            ]
+        },
+        {
+            "asset_id": 3,
+            "asset_name": "USD Coin",
+            "asset_symbol": "USDC",
+            "chains": [
+                {
+                    "chain": "Algorand",
+                    "symbol": "USDC",
+                    "name": "USD Coin",
+                    "decimals": 6,
+                    "asset_id": 31566704,
+                    "min_transfer": 1
+                },
+                {
+                    "chain": "Solana",
+                    "symbol": "USDC",
+                    "name": "USD Coin",
+                    "decimals": 6,
+                    "address": "EPjFWdd5AufqSSqeM2qN1xzybapC8G4wEGGkZwyTDt1v",
+                    "min_transfer": 1
+                },
+                {
+                    "chain": "Avalanche",
+                    "symbol": "USDC",
+                    "name": "USD Coin",
+                    "decimals": 6,
+                    "address": "0xB97EF9Ef8734C71904D8002F8b6Bc66Dd9c48a6E",
+                    "min_transfer": 3
+                },
+                {
+                    "chain": "Ethereum",
+                    "symbol": "USDC",
+                    "name": "USD Coin",
+                    "decimals": 6,
+                    "address": "0xA0b86991c6218b36c1d19D4a2e9Eb0cE3606eB48",
+                    "min_transfer": 20
+                },
+                {
+                    "chain": "Polygon",
+                    "symbol": "USDC",
+                    "name": "USD Coin",
+                    "decimals": 6,
+                    "address": "0x2791Bca1f2de4661ED88A30C99A7a9449Aa84174",
+                    "min_transfer": 1
+                },
+                {
+                    "chain": "Tron",
+                    "symbol": "USDC",
+                    "name": "USD Coin",
+                    "decimals": 6,
+                    "address": "TEkxiTehnzSmSe2XqrBj4w32RUN966rdz8",
+                    "min_transfer": 1
+                }
+            ]
+        },
+        {
+            "asset_id": 4,
+            "asset_name": "Glitter Dao Token",
+            "asset_symbol": "xGLI",
+            "chains": [
+                {
+                    "chain": "Algorand",
+                    "symbol": "xGLI",
+                    "name": "Native Glitter Dao Token",
+                    "decimals": 6,
+                    "asset_id": 607591690,
+                    "min_transfer": 200
+                },
+                {
+                    "chain": "Solana",
+                    "symbol": "xGLI",
+                    "name": "Native Glitter Dao Token",
+                    "decimals": 6,
+                    "address": "FsPncBfeDV3Uv9g6yyx1NnKidvUeCaAiT2NtBAPy17xg",
+                    "min_transfer": 200
+                }
+            ]
+        },
+        {
+            "asset_id": 5,
+            "asset_name": "Raydium",
+            "asset_symbol": "RAY",
+            "chains": [
+                {
+                    "chain": "Solana",
+                    "symbol": "RAY",
+                    "name": "Native Raydium",
+                    "decimals": 6,
+                    "address": "4k3Dyjzvzp8eMZWUXbBCjEvwSkkk59S5iCNLY3QrkX6R",
+                    "min_transfer": 5
+                }
+            ]
+        }
+    ]
+}

@@ -1,14 +1,14 @@
-import {PublicKey} from "@solana/web3.js";
-import {BigNumber, ethers} from "ethers";
-import {BridgeNetworks} from "../../common/networks";
-import {BridgeDepositEvent, BridgeReleaseEvent, TransferEvent} from "../evm";
-import {TronConfig} from "./types";
-import {decodeEventData, getLogByEventSignature, hexToBytes} from "./utils";
-import {walletToAddress} from "../../common/utils/utils";
+import { PublicKey } from "@solana/web3.js";
+import { BigNumber, ethers } from "ethers";
+import { BridgeNetworks } from "../../common/networks";
+import { BridgeDepositEvent, BridgeReleaseEvent, TransferEvent } from "../evm";
+import { TronConfig } from "./types";
+import { decodeEventData, getLogByEventSignature, hexToBytes } from "./utils";
+import { walletToAddress } from "../../common/utils/utils";
 import Trc20DetailedAbi from "./abi/TRC20Detailed.json";
 import TokenBridgeAbi from "./abi/TokenBridge.json";
 import algosdk from "algosdk";
-import {BridgeTokenConfig, BridgeTokens} from "../../";
+import { BridgeTokenConfig, BridgeTokens } from "../../";
 
 // eslint-disable-next-line @typescript-eslint/no-var-requires
 const TronWeb = require("tronweb");
@@ -33,7 +33,7 @@ export class TronConnect {
     }
 
     public setApiKey(apiKey: string) {
-        this.__tronWeb.setHeader({"TRON-PRO-API-KEY": apiKey});
+        this.__tronWeb.setHeader({ "TRON-PRO-API-KEY": apiKey });
     }
 
     private async initContracts(): Promise<void> {
@@ -158,8 +158,8 @@ export class TronConnect {
             const depositAddress = this.getAddress("depositWallet");
 
             const trc20Params = [
-                {type: "address", value: TronWeb.address.fromHex(depositAddress)},
-                {type: "uint256", value: amount.toString()},
+                { type: "address", value: TronWeb.address.fromHex(depositAddress) },
+                { type: "uint256", value: amount.toString() },
             ];
 
             const destinationInStr: string = walletToAddress(destinationWallet);
@@ -225,8 +225,8 @@ export class TronConnect {
             const depositAddress = this.getAddress("depositWallet");
 
             const trc20Params = [
-                {type: "address", value: TronWeb.address.fromHex(depositAddress)},
-                {type: "uint256", value: amount.toString()},
+                { type: "address", value: TronWeb.address.fromHex(depositAddress) },
+                { type: "uint256", value: amount.toString() },
             ];
 
             const destinationInStr: string = walletToAddress(destinationWallet);

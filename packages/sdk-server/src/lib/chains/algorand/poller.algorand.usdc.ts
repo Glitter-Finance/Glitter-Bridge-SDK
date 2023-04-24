@@ -4,8 +4,8 @@ import { AlgorandStandardAssetConfig } from "@glitter-finance/sdk-core/dist/lib/
 import algosdk from "algosdk";
 import AlgodClient from "algosdk/dist/types/client/v2/algod/algod";
 import IndexerClient from "algosdk/dist/types/client/v2/indexer/indexer";
-import { Cursor } from "src/lib/common/cursor";
-import { GlitterSDKServer } from "src/lib/glitterSDKServer";
+import { Cursor } from "../../common/cursor";
+import { GlitterSDKServer } from "../../glitterSDKServer";
 
 export class AlgorandUSDCParser {
     public static async process(

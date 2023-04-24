@@ -102,7 +102,7 @@ export class GlitterSolanaPoller implements GlitterPoller {
                 attempts++;
                 console.log(`Error getting signatures for address: ${e.message}`);
                 console.log(`Retrying ${attempts} of 5`);
-                await sdkServer.sdk.solana?.Reconnect();
+                await sdkServer.sdk.solana?.reconnect();
             }
         } while (attempts < 5);
 
@@ -122,7 +122,7 @@ export class GlitterSolanaPoller implements GlitterPoller {
                 attempts++;
                 console.log(`Error getting signatures for address: ${e.message}`);
                 console.log(`Retrying ${attempts} of 5`);
-                await sdkServer.sdk.solana?.Reconnect();
+                await sdkServer.sdk.solana?.reconnect();
             }
         } while (attempts < 5);
 

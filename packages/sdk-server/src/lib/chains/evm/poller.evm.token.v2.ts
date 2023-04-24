@@ -1,5 +1,5 @@
 import { BridgeType, ChainStatus, DeserializeEvmBridgeTransfer, EvmConnect, PartialBridgeTxn, Routing, RoutingHelper, TransactionType, TransferEvent } from "@glitter-finance/sdk-core/dist";
-import { GlitterSDKServer } from "src/lib/glitterSDKServer";
+import { GlitterSDKServer } from "../../glitterSDKServer";
 import { EvmBridgeV2EventsParser, TokenBridgeV2EventGroup } from "./poller.evm.eventparser.v2";
 import { TransactionReceipt } from "@ethersproject/abstract-provider";
 import BigNumber from "bignumber.js";
@@ -16,7 +16,7 @@ export class EvmV2Parser {
         if (!connect) throw Error("EVM Connect is undefined");
 
         //Get Bridge Address
-        const bridgeID = null;// connect?.getAddress("tokenBridge") ;   
+        const bridgeID = connect?.getAddress("tokenBridge") ;   
         if (!bridgeID || typeof bridgeID !== "string")
             throw Error("Bridge ID is undefined");
             

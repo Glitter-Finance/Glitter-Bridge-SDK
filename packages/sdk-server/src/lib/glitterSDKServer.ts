@@ -7,10 +7,10 @@ import { GlitterPoller } from "./common/poller.Interface";
 import { GlitterAlgorandPoller } from "./chains/algorand/poller.algorand";
 import { GlitterSolanaPoller } from "./chains/solana/poller.solana";
 import { GlitterEVMPoller } from "./chains/evm/poller.evm";
-import { ChainAPIConfig, GlitterServerConfig } from "./configs/config";
 
-import { ServerMainnet } from "./configs/networks/mainnet";
-import { ServerTestnet } from "./configs/networks/testnet";
+//Configs
+import { ChainAPIConfig, GlitterServerConfig } from "../configs/config";
+import { ServerTestnet } from "../configs/networks/testnet";
 
 export class GlitterSDKServer {
 
@@ -22,12 +22,13 @@ export class GlitterSDKServer {
     private _apiOverrides: { [key: string]: ChainAPIConfig } = {};
     private _apis: { [key: string]: ChainAPIConfig } = {};
 
-    constructor(environment?: GlitterEnvironment) {
+    constructor(environment?: GlitterEnvironment, mainnetConfig?: GlitterServerConfig) {
         if (environment) this._sdk = this._sdk.setEnvironment(environment);
 
         switch (environment) {
             case GlitterEnvironment.mainnet:
-                this._serverConfig = ServerMainnet;
+                if (!mainnetConfig) throw new Error("Mainnet Config not found");
+                this._serverConfig = mainnetConfig;
                 break;
             case GlitterEnvironment.testnet:
                 this._serverConfig = ServerTestnet;

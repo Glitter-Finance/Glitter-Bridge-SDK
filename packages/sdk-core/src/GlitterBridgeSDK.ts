@@ -1,13 +1,13 @@
-import {AlgorandConnect} from "./lib/chains/algorand";
-import {EvmConnect} from "./lib/chains/evm";
-import {SolanaConnect} from "./lib/chains/solana";
-import {TronConnect} from "./lib/chains/tron/connect";
+import { AlgorandConnect } from "./lib/chains/algorand";
+import { EvmConnect } from "./lib/chains/evm";
+import { SolanaConnect } from "./lib/chains/solana";
+import { TronConnect } from "./lib/chains/tron/connect";
 import {
     BridgeEvmNetworks,
     BridgeNetworks,
 } from "./lib/common/networks";
-import {mainnetConfig, testnetConfig} from "./config";
-import {GlitterBridgeConfig, GlitterEnvironment} from "./types";
+import { mainnetConfig, testnetConfig } from "./config";
+import { GlitterBridgeConfig, GlitterEnvironment } from "./types";
 
 /**
  * GlitterBridgeSDK
@@ -15,16 +15,22 @@ import {GlitterBridgeConfig, GlitterEnvironment} from "./types";
  * on all supported chains
  */
 export class GlitterBridgeSDK {
+
     private _environment: GlitterEnvironment | undefined;
     /** Bridge Configuration */
+
     private _bridgeConfig: GlitterBridgeConfig | undefined;
+
     /** RPC URL Override */
+
     private _rpcOverrides: { [key: string]: string } = {};
+
     /** Chain Specific SDKs */
     private _evm: Map<BridgeEvmNetworks, EvmConnect | undefined> = new Map();
     private _algorand: AlgorandConnect | undefined;
     private _solana: SolanaConnect | undefined;
     private _tron: TronConnect | undefined;
+    
     /**
      * Set environment of the SDK
      * @param {GlitterEnvironment} environment 

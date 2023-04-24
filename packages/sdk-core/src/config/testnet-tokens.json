@@ -1,0 +1,252 @@
+{
+    "tokens": [
+        {
+            "asset_id": 1,
+            "asset_name": "Algorand ALGO",
+            "asset_symbol": "ALGO",
+            "chains": [
+                {
+                    "chain": "Algorand",
+                    "symbol": "ALGO",
+                    "name": "Native Algo",
+                    "decimals": 6,
+                    "isNative": true,
+                    "min_transfer": 5
+                },
+                {
+                    "chain": "Solana",
+                    "symbol": "xALGO",
+                    "name": "Glitter Wrapped Algo",
+                    "decimals": 6,
+                    "address": "xALGoH1zUfRmpCriy94qbfoMXHtK6NDnMKzT4Xdvgms",
+                    "min_transfer": 5
+                }
+            ]
+        },
+        {
+            "asset_id": 2,
+            "asset_name": "Sol",
+            "asset_symbol": "Solana SOL",
+            "chains": [
+                {
+                    "chain": "Algorand",
+                    "symbol": "xSOL",
+                    "name": "Glitter Wrapped Solana",
+                    "decimals": 9,
+                    "asset_id": 97628726,
+                    "min_transfer": 0.05
+                },
+                {
+                    "chain": "Solana",
+                    "symbol": "SOL",
+                    "name": "Native Solana",
+                    "isNative": true,
+                    "decimals": 9,
+                    "address": "11111111111111111111111111111111",
+                    "min_transfer": 0.05
+                }
+            ]
+        },
+        {
+            "asset_id": 3,
+            "asset_name": "USD Coin",
+            "asset_symbol": "USDC",
+            "chains": [
+                {
+                    "chain": "Algorand",
+                    "symbol": "USDC",
+                    "name": "USD Coin",
+                    "decimals": 6,
+                    "asset_id": 10458941,
+                    "min_transfer": 1
+                },
+                {
+                    "chain": "Solana",
+                    "symbol": "USDC",
+                    "name": "USD Coin",
+                    "decimals": 6,
+                    "address": "4zMMC9srt5Ri5X14GAgXhaHii3GnPAEERYPJgZJDncDU",
+                    "min_transfer": 1
+                },
+                {
+                    "chain": "Avalanche",
+                    "symbol": "USDC",
+                    "name": "USD Coin",
+                    "decimals": 6,
+                    "address": "0x5425890298aed601595a70AB815c96711a31Bc65",
+                    "min_transfer": 3
+                },
+                {
+                    "chain": "Ethereum",
+                    "symbol": "USDC",
+                    "name": "USD Coin",
+                    "decimals": 6,
+                    "address": "0x07865c6E87B9F70255377e024ace6630C1Eaa37F",
+                    "min_transfer": 20
+                },
+                {
+                    "chain": "Polygon",
+                    "symbol": "USDC",
+                    "name": "USD Coin",
+                    "decimals": 6,
+                    "address": "0x0fa8781a83e46826621b3bc094ea2a0212e71b23",
+                    "min_transfer": 1
+                },
+                {
+                    "chain": "Tron",
+                    "symbol": "USDC",
+                    "name": "USD Coin",
+                    "decimals": 6,
+                    "address": "TFGBSrddCjLJAwuryZ9DUxtEmKv13BPjnh",
+                    "min_transfer": 1
+                }
+            ]
+        },
+        {
+            "asset_id": 4,
+            "asset_name": "Glitter Dao Token",
+            "asset_symbol": "xGLI",
+            "chains": []
+        },
+        {
+            "asset_id": 5,
+            "asset_name": "Raydium",
+            "asset_symbol": "RAY",
+            "chains": []
+        },
+        {
+            "asset_id": 6,
+            "asset_name": "Glitter Test USDT",
+            "asset_symbol": "Glitter Test Tether",
+            "chains": [
+                {
+                    "chain": "Avalanche",
+                    "symbol": "USDT",
+                    "name": "Glitter Wrapped Tether",
+                    "decimals": 18,
+                    "address": "0x27251d4bEC1F5b38244724ec63EBD2885306bfA3",
+                    "min_transfer": 20,
+                    "vault_id": 2,
+                    "vault_type": "outgoing"
+                },
+                {
+                    "chain": "Ethereum",
+                    "symbol": "USDT",
+                    "name": "Glitter Wrapped Tether",
+                    "decimals": 18,
+                    "address": "0x1AaB5DD50B24FbED4bf9b27BB02054147E384923",
+                    "min_transfer": 20,
+                    "vault_id": 2,
+                    "vault_type": "outgoing"
+                },
+                {
+                    "chain": "Polygon",
+                    "symbol": "USDT",
+                    "name": "Glitter Wrapped Tether",
+                    "decimals": 18,
+                    "address": "0x7E465F0950A78275CaE99655ACBd89BFD579B83F",
+                    "min_transfer": 20,
+                    "vault_id": 2,
+                    "vault_type": "outgoing"
+                },
+                {
+                    "chain": "Arbitrum",
+                    "symbol": "USDT",
+                    "name": "Glitter Wrapped Tether",
+                    "decimals": 18,
+                    "address": "0xbb6c04533D36db8aEec00A973989C0f2e64f7747",
+                    "min_transfer": 20,
+                    "vault_id": 2,
+                    "vault_type": "outgoing"
+                },
+                {
+                    "chain": "Binance",
+                    "symbol": "USDT",
+                    "name": "Glitter Wrapped Tether",
+                    "decimals": 18,
+                    "address": "0xbb6c04533D36db8aEec00A973989C0f2e64f7747",
+                    "min_transfer": 20,
+                    "vault_id": 2,
+                    "vault_type": "outgoing"
+                },
+                {
+                    "chain": "Zkevm",
+                    "symbol": "USDT",
+                    "name": "Glitter Wrapped Tether",
+                    "decimals": 18,
+                    "address": "0x7E465F0950A78275CaE99655ACBd89BFD579B83F",
+                    "min_transfer": 20,
+                    "vault_id": 2,
+                    "vault_type": "outgoing"
+                }
+            ]
+        },
+        {
+            "asset_id": 7,
+            "asset_name": "Glitter Test USDC",
+            "asset_symbol": "Glitter Test USDC",
+            "chains": [
+                {
+                    "chain": "Avalanche",
+                    "symbol": "USDC",
+                    "name": "Glitter Test USD Coin",
+                    "decimals": 18,
+                    "address": "0x10fb20373405eA1f3c5f47A6c0C89f8aD23a7049",
+                    "min_transfer": 3,
+                    "vault_id": 1,
+                    "vault_type": "incoming"
+                },
+                {
+                    "chain": "Ethereum",
+                    "symbol": "USDC",
+                    "name": "Glitter Test USD Coin",
+                    "decimals": 18,
+                    "address": "0xbb6c04533D36db8aEec00A973989C0f2e64f7747",
+                    "min_transfer": 20,
+                    "vault_id": 1,
+                    "vault_type": "incoming"
+                },
+                {
+                    "chain": "Polygon",
+                    "symbol": "USDC",
+                    "name": "Glitter Test USD Coin",
+                    "decimals": 18,
+                    "address": "0x13ea1e3774Ecb929f437Cbbb5f9AeAA2616dc93E",
+                    "min_transfer": 1,
+                    "vault_id": 1,
+                    "vault_type": "incoming"
+                },
+                {
+                    "chain": "Arbitrum",
+                    "symbol": "USDC",
+                    "name": "Glitter Test USD Coin",
+                    "decimals": 18,
+                    "address": "0xCCd286f98ce9ccCf006C365D11b0af0c3e7881e1",
+                    "min_transfer": 1,
+                    "vault_id": 1,
+                    "vault_type": "incoming"
+                },
+                {
+                    "chain": "Binance",
+                    "symbol": "USDC",
+                    "name": "Glitter Test USD Coin",
+                    "decimals": 18,
+                    "address": "0xCCd286f98ce9ccCf006C365D11b0af0c3e7881e1",
+                    "min_transfer": 1,
+                    "vault_id": 1,
+                    "vault_type": "incoming"
+                },
+                {
+                    "chain": "Zkevm",
+                    "symbol": "USDC",
+                    "name": "Glitter Test USD Coin",
+                    "decimals": 18,
+                    "address": "0x13ea1e3774Ecb929f437Cbbb5f9AeAA2616dc93E",
+                    "min_transfer": 1,
+                    "vault_id": 1,
+                    "vault_type": "incoming"
+                }
+            ]
+        }
+    ]
+}

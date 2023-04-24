@@ -9,6 +9,7 @@ import {
     Routing,
     RoutingHelper,
     TransactionType,
+    getHashedTransactionId,
 } from "@glitter-finance/sdk-core";
 import { GlitterSDKServer } from "../../glitterSDKServer";
 import { Cursor } from "../../common/cursor";
@@ -29,9 +30,10 @@ export class SolanaUSDCParser {
         const address = cursor.address.toString();
 
         //Get Solana Transaction data
+        const txnHashed = getHashedTransactionId(BridgeNetworks.algorand, txnID);
         let partialTxn: PartialBridgeTxn = {
             txnID: txnID,
-            txnIDHashed: sdkServer.sdk?.solana?.getTxnHashedFromBase58(txnID),
+            txnIDHashed: txnHashed,
             bridgeType: BridgeType.USDC,
             txnType: TransactionType.Unknown,
             network: "solana",
@@ -83,14 +85,14 @@ export class SolanaUSDCParser {
 
             //Check deposit vs release
             if (
-                (address && address === sdkServer.sdk?.solana?.usdcBridgeDepositAddress?.toString()) ||
-                (address && address === sdkServer.sdk?.solana?.usdcBridgeDepositTokenAddress?.toString())
+                (address && address === sdkServer.sdk?.solana?.getAddress("usdcDeposit")) ||
+                (address && address === sdkServer.sdk?.solana?.getAddress("usdcDepositTokenAccount"))
             ) {
                 console.info(`Transaction ${txnID} is a deposit`);
                 partialTxn = await handleDeposit(sdkServer, txn, routing, partialTxn);
             } else if (
-                (address && address === sdkServer.sdk?.solana?.usdcBridgeReceiverAddress?.toString()) ||
-                (address && address === sdkServer.sdk?.solana?.usdcBridgeReceiverTokenAddress?.toString())
+                (address && address === sdkServer.sdk?.solana?.getAddress("usdcReceiver")) ||
+                (address && address === sdkServer.sdk?.solana?.getAddress("usdcReceiverTokenAccount"))
             ) {
                 console.info(`Transaction ${txnID} is a release`);
                 partialTxn = await handleRelease(sdkServer, txn, routing, partialTxn);
