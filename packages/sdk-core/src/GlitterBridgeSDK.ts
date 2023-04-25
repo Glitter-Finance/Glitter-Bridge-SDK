@@ -7,7 +7,7 @@ import {
     BridgeNetworks,
 } from "./lib/common/networks";
 import { mainnetConfig, testnetConfig, mainnetTokenConfig, testnetTokenConfig } from "./config";
-import { GlitterBridgeConfig, GlitterEnvironment } from "./types";
+import { ChainRPCConfigs, GlitterBridgeConfig, GlitterEnvironment } from "./types";
 import { BridgeV2Tokens } from "./lib/common/tokens/BridgeV2Tokens";
 
 /**
@@ -71,8 +71,12 @@ export class GlitterBridgeSDK {
      * networks to connect to
      * @returns {GlitterBridgeSDK}
     */
-    public connect(networks: BridgeNetworks[]): GlitterBridgeSDK {
+    public connect(networks: BridgeNetworks[], rpcList?:ChainRPCConfigs): GlitterBridgeSDK {
         networks.forEach((network) => {
+           
+            //Get rpcoverride for the network
+            this._rpcOverrides[network] = rpcList?.chainAPIs.find((chain) => chain.network.toLocaleLowerCase() === network.toLocaleLowerCase())?.RPC || this._rpcOverrides[network];
+           
             /**
              * TODO: Have a single method
              * for each chain e.g

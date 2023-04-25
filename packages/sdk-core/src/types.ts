@@ -1,7 +1,8 @@
-import {AlgorandConfig} from "./lib/chains/algorand";
-import {EvmConfig} from "./lib/chains/evm";
-import {SolanaConfig} from "./lib/chains/solana";
-import {TronConfig} from "./lib/chains/tron";
+import { BridgeNetworks } from "./lib";
+import { AlgorandConfig } from "./lib/chains/algorand";
+import { EvmConfig } from "./lib/chains/evm";
+import { SolanaConfig } from "./lib/chains/solana";
+import { TronConfig } from "./lib/chains/tron";
 
 export type GlitterBridgeConfig = {
   name: GlitterEnvironment;
@@ -14,4 +15,14 @@ export type GlitterBridgeConfig = {
 export enum GlitterEnvironment {
   mainnet = "mainnet",
   testnet = "testnet",
+}
+
+export type ChainRPCConfigs = {
+    chainAPIs: ChainRPCConfig[];
+}
+export type ChainRPCConfig = {
+    network: BridgeNetworks;
+    API_KEY: string;
+    API_URL: string;
+    RPC: string;
 }
