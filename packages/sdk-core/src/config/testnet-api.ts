@@ -19,7 +19,7 @@ export const testnetAPI:ChainRPCConfigs = {
             network: BridgeNetworks.Avalanche,
             API_KEY:"FAPX56GH9C9XK5W4XIP2TM59DQJT2M7T52",
             API_URL:"https://api-testnet.snowtrace.io/",
-            RPC:"https://rpc.ankr.com/avalanche_fuji-c/16a70be27401891b383d43c3e3f1f453ed3daef7c55dc89f051ff1e2fd3c770c",
+            RPC:"https://attentive-lively-valley.avalanche-testnet.quiknode.pro/640f6c698344a27b8b315ec966593ab86fc5514c/ext/bc/C/rpc",
         },
         {
             network: BridgeNetworks.Polygon,

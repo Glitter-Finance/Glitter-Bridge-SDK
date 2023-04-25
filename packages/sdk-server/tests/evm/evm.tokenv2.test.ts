@@ -51,7 +51,7 @@ describe("Eth Poller USDC Tests ", () => {
         Promise.resolve();
     }, 120_000);
     
-    it("Default Arbitrum ", async () => {
+    it("Default Arbitrum", async () => {
 
         //Initialize SDK
         const sdk = new GlitterSDKServer(GlitterEnvironment.testnet);
@@ -71,7 +71,7 @@ describe("Eth Poller USDC Tests ", () => {
             "0x57a146dcb281f27eb87e6aff0bd703281238b50d1a0e0f77ff5e50f492907ff4"
         ];
 
-        await common(sdk, poller, TransactionType.Deposit, expected, "");
+        await common(sdk, poller, TransactionType.Deposit, expected, "0xae2e173fff1c0bcb65ff9b62a1b7ff10294b736874ab00e77ff716cbbad4b4f0");
                 
         //Releases
         expected = [
@@ -79,7 +79,7 @@ describe("Eth Poller USDC Tests ", () => {
             "0x1de9a443fe63c4c6d64e4a50bd9095403ee2ef8d0fd2664df02450cd1daf9c57",
         ];
 
-        await common(sdk, poller, TransactionType.Release, expected, "");
+        await common(sdk, poller, TransactionType.Release, expected, "0xae2e173fff1c0bcb65ff9b62a1b7ff10294b736874ab00e77ff716cbbad4b4f0");
 
         //Refunds
         expected = [
@@ -87,7 +87,48 @@ describe("Eth Poller USDC Tests ", () => {
             "0xae2e173fff1c0bcb65ff9b62a1b7ff10294b736874ab00e77ff716cbbad4b4f0",
         ];
 
-        await common(sdk, poller, TransactionType.Refund, expected, "");
+        await common(sdk, poller, TransactionType.Refund, expected, "0xae2e173fff1c0bcb65ff9b62a1b7ff10294b736874ab00e77ff716cbbad4b4f0");
+        
+        Promise.resolve();
+    }, 120_000);
+
+    it("Default Avalanche", async () => {
+
+        //Initialize SDK
+        const sdk = new GlitterSDKServer(GlitterEnvironment.testnet);
+
+        //Create Solana Poller
+        sdk.createPollers([BridgeNetworks.Avalanche]);
+
+        //local references for ease of use
+        const poller = sdk.poller(BridgeNetworks.Avalanche);
+        if (!poller) throw Error("Poller is undefined");
+
+        //Deposits
+        let expected = [
+            "0x8b0013511478ebfc56d8b54a01bb9f1953a961a02f34986b76a4923993b75ead",
+            "0xe74a9418fe81da8af9874fad786c1cc24c8e24192e924f368bb0564ee8c837b6",
+            "0x9a081f111c4619c4ca47dfea796e8bcbabd79ee0001f002abc58450b7aa7bfce",
+            "0xda1318e11458d53c7bb546ecfff648113e35c96a2cf2229fd619ce45addf8fea"
+        ];
+
+        await common(sdk, poller, TransactionType.Deposit, expected, "0xae2e173fff1c0bcb65ff9b62a1b7ff10294b736874ab00e77ff716cbbad4b4f0");
+                
+        //Releases
+        expected = [
+            "0x407ccaa4fa846c252e9000beca457a7751ab57489eaecabf4e14b07f47dcbbde",
+            "0x342f118861cc798f851ac612cbc24753ce5956ac5cf90ed6f35e4129df7952f2",
+        ];
+
+        await common(sdk, poller, TransactionType.Release, expected, "0xae2e173fff1c0bcb65ff9b62a1b7ff10294b736874ab00e77ff716cbbad4b4f0");
+
+        //Refunds
+        expected = [
+            "0x2a1f1fff79aa7721132dc8c185b509db6e889ab20e60c7d58f52ccbe5686c6dc",
+            "0x2e4bfd010dfe7ae083fd31becde6ec78e7d2702192682022292887956a71b31c",
+        ];
+
+        await common(sdk, poller, TransactionType.Refund, expected, "0xae2e173fff1c0bcb65ff9b62a1b7ff10294b736874ab00e77ff716cbbad4b4f0");
         
         Promise.resolve();
     }, 120_000);
@@ -108,6 +149,8 @@ describe("Eth Poller USDC Tests ", () => {
             
         //Get Results
         const result = await poller.poll(sdk, localCursor);
+
+        console.log(util.inspect(result, false, null, true /* enable colors */));
         
         //Grab all Txn IDs
         const txnIds = result.txns.map((txn) => txn.txnID);
