@@ -25,6 +25,7 @@ export class GlitterBridgeSDK {
     /** RPC URL Override */
 
     private _rpcOverrides: { [key: string]: string } = {};
+    private _rpcList: ChainRPCConfigs | undefined;
 
     /** Chain Specific SDKs */
     private _evm: Map<BridgeEvmNetworks, EvmConnect | undefined> = new Map();
@@ -211,5 +212,9 @@ export class GlitterBridgeSDK {
     }
     get tron(): TronConnect | undefined {
         return this._tron;
+    }
+
+    get rpcList(): ChainRPCConfigs|undefined {
+        return this._rpcList;
     }
 }
