@@ -18,6 +18,8 @@ export type EvmConfig = {
     depositWallet: string;
     releaseWallet: string;
     tokenBridge: string;
+    tokenMintBurnVault: string;
+    tokenLockReleaseVault: string;
   };
 };
 
