@@ -10,7 +10,7 @@ import {bridgeUSDC, createAssociatedTokenAccountTransaction, getAssociatedTokenA
 
 export class SolanaConnect {
     readonly defaultConnection: "testnet" | "devnet" | "mainnet";
-    readonly accountStore: SolanaAccountsStore;
+    readonly accountsStore: SolanaAccountsStore;
     readonly solanaConfig: SolanaConfig;
     readonly connections: Record<"testnet" | "devnet" | "mainnet", Connection>;
 
@@ -31,7 +31,7 @@ export class SolanaConnect {
                     config.solana.server
             )
         }
-        this.accountStore = new SolanaAccountsStore(
+        this.accountsStore = new SolanaAccountsStore(
             config.name === GlitterEnvironment.mainnet ?
                 this.connections.mainnet : this.connections.testnet
         )
@@ -145,7 +145,7 @@ export class SolanaConnect {
             amount
         )
         let connection = this.connections[this.defaultConnection]
-        const account = this.accountStore.get(sourceAddress)
+        const account = this.accountsStore.get(sourceAddress)
         if (tokenSymbol.toLowerCase() === "usdc" && this.defaultConnection === "testnet") {
             connection = this.connections.devnet
         }
@@ -194,10 +194,10 @@ export class SolanaConnect {
         if (!token) return Promise.reject(new Error('Token Config unavailable'))
         const isNative = tksLowercase === "sol"
 
-        return isNative ? await this.accountStore.getSOLBalance(
+        return isNative ? await this.accountsStore.getSOLBalance(
             account,
             this.connections[this.defaultConnection]
-        ) : await this.accountStore.getSPLTokenBalance(
+        ) : await this.accountsStore.getSPLTokenBalance(
             account,
             token,
             this.getConnection(tokenSymbol)
@@ -269,7 +269,7 @@ export class SolanaConnect {
      * @returns {Promise<Transaction>}
      */
     async optin(signerAddress: string, tokenSymbol: string): Promise<string> {
-        const signer = this.accountStore.get(signerAddress)
+        const signer = this.accountsStore.get(signerAddress)
         if (!signer) throw new Error('Account unavailable')
 
         const transaction = await this.optinTransaction(

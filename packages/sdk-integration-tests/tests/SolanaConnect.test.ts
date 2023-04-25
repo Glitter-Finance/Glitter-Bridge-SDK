@@ -19,7 +19,7 @@ describe("SolanaConnect", () => {
         glitterSdk.setEnvironment(GlitterEnvironment.testnet)
         glitterSdk = glitterSdk.connect([BridgeNetworks.solana]);
         solConnect = glitterSdk.solana!
-        solAccount = await solConnect.accountStore.createNew()
+        solAccount = await solConnect.accountsStore.createNew()
     });
 
     it("Provides solana network connections", async () => {
@@ -47,7 +47,7 @@ describe("SolanaConnect", () => {
     })
 
     it("Provides Solana AccountStore", async () => {
-        expect(solConnect.accountStore).toBeTruthy()
+        expect(solConnect.accountsStore).toBeTruthy()
     })
 
     it("Provides supported tokens", async () => {
