@@ -84,8 +84,10 @@ export class GlitterSDKServer {
             case BridgeNetworks.Ethereum:
             case BridgeNetworks.Avalanche:
             case BridgeNetworks.Polygon:
+            case BridgeNetworks.Arbitrum:
+            case BridgeNetworks.Binance:
+            case BridgeNetworks.Zkevm:  
                 return new GlitterEVMPoller(this, network);
-
             default:
                 throw new Error("Network not supported");
         }

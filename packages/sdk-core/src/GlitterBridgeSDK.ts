@@ -86,13 +86,13 @@ export class GlitterBridgeSDK {
                     this.connectToSolana();
                     break;
                 case BridgeNetworks.Ethereum:
-                    this.connectToEvmNetwork(BridgeNetworks.Ethereum);
-                    break;
                 case BridgeNetworks.Polygon:
-                    this.connectToEvmNetwork(BridgeNetworks.Polygon);
-                    break;
                 case BridgeNetworks.Avalanche:
-                    this.connectToEvmNetwork(BridgeNetworks.Avalanche);
+                case BridgeNetworks.Arbitrum:
+                case BridgeNetworks.Binance:
+                case BridgeNetworks.Zkevm:
+                case BridgeNetworks.Optimism:
+                    this.connectToEvmNetwork(network);
                     break;
                 case BridgeNetworks.TRON:
                     this.connectToTron();
@@ -192,6 +192,18 @@ export class GlitterBridgeSDK {
     }
     get avalanche(): EvmConnect | undefined {
         return this._evm.get(BridgeNetworks.Avalanche);
+    }
+    get arbitrum(): EvmConnect | undefined {
+        return this._evm.get(BridgeNetworks.Arbitrum);
+    }
+    get binance(): EvmConnect | undefined {
+        return this._evm.get(BridgeNetworks.Binance);
+    }
+    get zkevm(): EvmConnect | undefined {
+        return this._evm.get(BridgeNetworks.Zkevm);
+    }
+    get optimism(): EvmConnect | undefined {
+        return this._evm.get(BridgeNetworks.Optimism);
     }
     get tron(): TronConnect | undefined {
         return this._tron;

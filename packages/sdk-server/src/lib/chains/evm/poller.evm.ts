@@ -40,6 +40,15 @@ export class GlitterEVMPoller implements GlitterPoller {
             case BridgeNetworks.Polygon:
                 this.connect = sdkServer.sdk?.polygon;
                 break;
+            case BridgeNetworks.Arbitrum:
+                this.connect = sdkServer.sdk?.arbitrum;
+                break;
+            case BridgeNetworks.Binance:
+                this.connect = sdkServer.sdk?.binance;
+                break;
+            case BridgeNetworks.Zkevm:
+                this.connect = sdkServer.sdk?.zkevm;
+                break;
             default:
                 throw new Error("Invalid Network");
         }

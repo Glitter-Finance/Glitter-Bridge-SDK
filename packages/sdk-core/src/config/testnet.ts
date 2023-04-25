@@ -185,6 +185,17 @@ export const config: GlitterBridgeConfig = {
             tokenLockReleaseVault: "0x6b9eb86d3e741d20135f908c1b6a241aee2d256a",
             chainId: 1442,
         },
+        [BridgeNetworks.Optimism]: {           
+            bridge:"",     
+            rpcUrl: "",
+            tokens: [],
+            depositWallet: "",
+            releaseWallet: "",
+            tokenBridge: "",
+            tokenMintBurnVault: "",
+            tokenLockReleaseVault: "",
+            chainId: 10,
+        }
     },
     tron: {
         tokens: [
