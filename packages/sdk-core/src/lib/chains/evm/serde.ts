@@ -32,6 +32,7 @@ export class SerializeEvmBridgeTransfer {
             case BridgeNetworks.Binance:
             case BridgeNetworks.Arbitrum:
             case BridgeNetworks.Zkevm:
+            case BridgeNetworks.Optimism:
                 return address;
             case BridgeNetworks.algorand:
                 return ethers.utils.hexZeroPad(algoSdk.decodeAddress(address).publicKey, 32).toString();
@@ -94,6 +95,7 @@ export class DeserializeEvmBridgeTransfer {
             case BridgeNetworks.Binance:
             case BridgeNetworks.Arbitrum:
             case BridgeNetworks.Zkevm:
+            case BridgeNetworks.Optimism:
                 return `0x${data.toLowerCase()}`;
             case BridgeNetworks.solana:
                 return new PublicKey(fromHexString(data) as Uint8Array).toString();
