@@ -42,8 +42,8 @@ describe("Eth Poller USDC Tests ", () => {
 
         //Refunds
         expected = [
-            "0x118b728d4a4fd23d8efc34bf5671292e78fe47cd9f061f279664f08f75462755",
-            "0x68a2f7ceec9d598ebc4c4505e77657220ac4d835c6d791b755098d736526312c",
+            "0x5ae60b28670eedf5b31abea5d8328ddd94eef200852bbcb5a3838386360fc767",
+            "0xcc7c1e17c5f4acfd18817c57656c494966b4e8dd0d8746461143833c81ea260e",
         ];
 
         await common(sdk, poller, TransactionType.Refund, expected, "0xcc7c1e17c5f4acfd18817c57656c494966b4e8dd0d8746461143833c81ea260e");
@@ -112,7 +112,7 @@ describe("Eth Poller USDC Tests ", () => {
             "0xda1318e11458d53c7bb546ecfff648113e35c96a2cf2229fd619ce45addf8fea"
         ];
 
-        await common(sdk, poller, TransactionType.Deposit, expected, "0xae2e173fff1c0bcb65ff9b62a1b7ff10294b736874ab00e77ff716cbbad4b4f0");
+        await common(sdk, poller, TransactionType.Deposit, expected, "0x2e4bfd010dfe7ae083fd31becde6ec78e7d2702192682022292887956a71b31c");
                 
         //Releases
         expected = [
@@ -120,7 +120,7 @@ describe("Eth Poller USDC Tests ", () => {
             "0x342f118861cc798f851ac612cbc24753ce5956ac5cf90ed6f35e4129df7952f2",
         ];
 
-        await common(sdk, poller, TransactionType.Release, expected, "0xae2e173fff1c0bcb65ff9b62a1b7ff10294b736874ab00e77ff716cbbad4b4f0");
+        await common(sdk, poller, TransactionType.Release, expected, "0x2e4bfd010dfe7ae083fd31becde6ec78e7d2702192682022292887956a71b31c");
 
         //Refunds
         expected = [
@@ -128,7 +128,130 @@ describe("Eth Poller USDC Tests ", () => {
             "0x2e4bfd010dfe7ae083fd31becde6ec78e7d2702192682022292887956a71b31c",
         ];
 
-        await common(sdk, poller, TransactionType.Refund, expected, "0xae2e173fff1c0bcb65ff9b62a1b7ff10294b736874ab00e77ff716cbbad4b4f0");
+        await common(sdk, poller, TransactionType.Refund, expected, "0x2e4bfd010dfe7ae083fd31becde6ec78e7d2702192682022292887956a71b31c");
+        
+        Promise.resolve();
+    }, 120_000);
+
+    it("Default Binance", async () => {
+
+        //Initialize SDK
+        const sdk = new GlitterSDKServer(GlitterEnvironment.testnet);
+
+        //Create Solana Poller
+        sdk.createPollers([BridgeNetworks.Binance]);
+
+        //local references for ease of use
+        const poller = sdk.poller(BridgeNetworks.Binance);
+        if (!poller) throw Error("Poller is undefined");
+
+        //Deposits
+        let expected = [
+            "0x242e9ab22bc2d9b13b44ded233453bbd2c038f1ce962185c3732d78bfc7f6936",
+            "0x99113c5cb66b8a230d97acfcdee89d2ceae3fed234da357dd90db21b3903c558",
+            "0xc4aae92b7a73a2c15b9e87790b53ace20d350afba904afd742471a5fc7a4ce08",
+            "0x18cbf7fce2f4dcc1b5dbd65bf44808ef25e93e2bb144bb8b83d47173d3ed4e34"
+        ];
+
+        await common(sdk, poller, TransactionType.Deposit, expected, "0x729cd3176b09ca14d6997d697d15e2d315d317aebcfcd729aa643331c99b883e");
+                
+        //Releases
+        expected = [
+            "0xe19ce137536c3400db77d1c94a88daac2d912382ca98c095a44bd8460e377e43",
+            "0xb1e7953ea625579a5f9e7b83f0626692d6ff6bcdd1bf7f388f95b15942be6372",
+        ];
+
+        await common(sdk, poller, TransactionType.Release, expected, "0x729cd3176b09ca14d6997d697d15e2d315d317aebcfcd729aa643331c99b883e");
+
+        //Refunds
+        expected = [
+            "0xcda2b268e5c23e3570e888d367f6a872fc67018c325ac4637bc09716a16ecf68",
+            "0x729cd3176b09ca14d6997d697d15e2d315d317aebcfcd729aa643331c99b883e",
+        ];
+
+        await common(sdk, poller, TransactionType.Refund, expected, "0x729cd3176b09ca14d6997d697d15e2d315d317aebcfcd729aa643331c99b883e");
+        
+        Promise.resolve();
+    }, 240_000);
+
+    it("Default Zkevm", async () => {
+
+        //Initialize SDK
+        const sdk = new GlitterSDKServer(GlitterEnvironment.testnet);
+
+        //Create Solana Poller
+        sdk.createPollers([BridgeNetworks.Zkevm]);
+
+        //local references for ease of use
+        const poller = sdk.poller(BridgeNetworks.Zkevm);
+        if (!poller) throw Error("Poller is undefined");
+
+        //Deposits
+        let expected = [
+            "0x502c7ce9b41f11d0d403fa882a2489ba3fe1846e2704799084e7c4dce7955ef5",
+            "0xeb2e093caaf8019fbc104ff389b77ea52d92114b38dd7df98f12b0a2a20c83a2",
+            "0x0d757976b5906b8986f3f41aa05a46dddce36de534e5e9861aaacfaabffaa4de",
+            "0x5f1feca45e5682c90ffdf204ce985bf051bbc1c33cf1fd20b6272ee4eaaf3a45"
+        ];
+
+        await common(sdk, poller, TransactionType.Deposit, expected, "0xd376ebf784e7d9abd0c8e505f132b037afb091d5264c04e2e092c27828d06364");
+                
+        //Releases
+        expected = [
+            "0x7969126d2f0451274337de025e5c637551be1ca038b912071961f9ef025ab4de",
+            "0x793ae3cad13ba29abb4e2e77afde697ee6aec72a3cf03f692d54813b3052dec9",
+        ];
+
+        await common(sdk, poller, TransactionType.Release, expected, "0xd376ebf784e7d9abd0c8e505f132b037afb091d5264c04e2e092c27828d06364");
+
+        //Refunds
+        expected = [
+            "0xe46fd0fc4541f8f31390ecbc00295c5554c7d979b0bf6471d2da55738db2c000",
+            "0xd376ebf784e7d9abd0c8e505f132b037afb091d5264c04e2e092c27828d06364",
+        ];
+
+        await common(sdk, poller, TransactionType.Refund, expected, "0xd376ebf784e7d9abd0c8e505f132b037afb091d5264c04e2e092c27828d06364");
+        
+        Promise.resolve();
+    }, 240_000);
+
+    it("Default Polygon", async () => {
+
+        //Initialize SDK
+        const sdk = new GlitterSDKServer(GlitterEnvironment.testnet);
+
+        //Create Solana Poller
+        sdk.createPollers([BridgeNetworks.Polygon]);
+
+        //local references for ease of use
+        const poller = sdk.poller(BridgeNetworks.Polygon);
+        if (!poller) throw Error("Poller is undefined");
+
+        //Deposits
+        let expected = [
+            "0xe65e143cee9f5cffb9cfc81efdb003275de727e6d677a50be18d298766d1c4be",
+            "0xba1a278b8e5985bd4d12b5d2c635bfac66c9c76ed180af1de7ce4587dd4d3f74",
+            "0xb7c54e7d9ca3a0bfa0eed5c4c34cc5183cf1646bc7f260977a956623a407a148",
+            "0x81f8eac312cebafd0b94f638c4399acb07239a8d4149bc2d1cd35a8862133391"
+        ];
+
+        await common(sdk, poller, TransactionType.Deposit, expected, "0xa3200c0915787a0efe41b14010d1a36396959a2b52b02d9566dd720008fed428");
+                
+        //Releases
+        expected = [
+            "0x2cc7a1827df92342d43b476c0a8c231d4b4d96cc28ff534686da2cb82d80667c",
+            "0x9a42048b8cfbc295463574ca51b1847de2fc1bc569bbc486217bb38aa4a8b865",
+        ];
+
+        await common(sdk, poller, TransactionType.Release, expected, "0xa3200c0915787a0efe41b14010d1a36396959a2b52b02d9566dd720008fed428");
+
+        //Refunds
+        expected = [
+            "0xb558e13f6e80362714a5fd1cbaae1890916851a9ffc583d838eab439a96a3402",
+            "0xa3200c0915787a0efe41b14010d1a36396959a2b52b02d9566dd720008fed428",
+        ];
+
+        await common(sdk, poller, TransactionType.Refund, expected, "0xa3200c0915787a0efe41b14010d1a36396959a2b52b02d9566dd720008fed428");
         
         Promise.resolve();
     }, 120_000);
