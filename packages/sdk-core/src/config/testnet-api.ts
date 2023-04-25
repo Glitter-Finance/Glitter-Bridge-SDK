@@ -1,4 +1,4 @@
-import { BridgeNetworks } from "@glitter-finance/sdk-core";
+import { BridgeNetworks } from "../lib";
 import { ChainRPCConfigs } from "../types";
 
 export const testnetAPI:ChainRPCConfigs = {
