@@ -119,17 +119,15 @@ export class EvmV2Parser {
         } else if (token?.vault_type?.toLocaleLowerCase() === "outgoing"){
 
             //This is a lock/release.  To Address is the vault address
+            const vaultAddress = connect?.getAddress("tokenLockReleaseVault") || "";
+            if (toAddress.toLocaleLowerCase() != vaultAddress.toLocaleLowerCase()){
+                throw new Error(`Invalid to address. Expected ${vaultAddress} for outgoing vault`);
+            }
 
         }
-
-        //TODO: Check Address
-        //if (toAddress.toLocaleLowerCase() == connect.tokenV2BridgePollerAddress?.toString().toLocaleLowerCase()) {
         partialTxn.txnType = TransactionType.Deposit;
         partialTxn.address = fromAddress;
-        // } else if (fromAddress.toLocaleLowerCase() == connect.tokenV2BridgePollerAddress?.toString().toLocaleLowerCase()) {
-        //     throw new Error("Deposited to address that is not the bridge address");        
-        // }
-
+       
         //Get Routing
         let routing: Routing | null = null;
         if (partialTxn.txnType == TransactionType.Deposit) {
@@ -211,23 +209,16 @@ export class EvmV2Parser {
 
         } else if (token?.vault_type?.toLocaleLowerCase() === "outgoing"){
 
-            //This is a lock/release.  From address is the vault address
-            if (fromAddress.toLocaleLowerCase() != "0x0000000000000000000000000000000000000000"){
-                throw new Error("Invalid from address. Expected 0x0 for incoming vault");
+            //This is a lock/release.  From Address is the vault address
+            const vaultAddress = connect?.getAddress("tokenLockReleaseVault") || "";
+            if (fromAddress.toLocaleLowerCase() != vaultAddress.toLocaleLowerCase()){
+                throw new Error(`Invalid from address. Expected ${vaultAddress} for outgoing vault`);
             }
 
         }
 
         let routing: Routing | null = null;
-        //TODO: Check Address
-        // if (toAddress.toLocaleLowerCase() == connect.usdcBridgeReceiverAddress?.toString().toLocaleLowerCase()) {
-
-        //     //transfer into receiver address
-        //     partialTxn.txnType = TransactionType.Transfer;
-        //     partialTxn.address = fromAddress;
-
-        // } else if (fromAddress.toLocaleLowerCase() == connect.usdcBridgeReceiverAddress?.toString().toLocaleLowerCase()) {
-
+      
         //Transfer out of receiver address
         partialTxn.txnType = TransactionType.Release;
         partialTxn.address = toAddress;
@@ -295,9 +286,10 @@ export class EvmV2Parser {
 
         } else if (token?.vault_type?.toLocaleLowerCase() === "outgoing"){
 
-            //This is a lock/release.  From address is the vault address
-            if (fromAddress.toLocaleLowerCase() != "0x0000000000000000000000000000000000000000"){
-                throw new Error("Invalid from address. Expected 0x0 for incoming vault");
+            //This is a lock/release.  From Address is the vault address
+            const vaultAddress = connect?.getAddress("tokenLockReleaseVault") || "";
+            if (fromAddress.toLocaleLowerCase() != vaultAddress.toLocaleLowerCase()){
+                throw new Error(`Invalid from address. Expected ${vaultAddress} for outgoing vault`);
             }
 
         }
