@@ -9,6 +9,7 @@ import {
 import { mainnetConfig, testnetConfig, mainnetTokenConfig, testnetTokenConfig } from "./config";
 import { ChainRPCConfigs, GlitterBridgeConfig, GlitterEnvironment } from "./types";
 import { BridgeV2Tokens } from "./lib/common/tokens/BridgeV2Tokens";
+import { testnetAPI } from "./config/testnet-api";
 
 /**
  * GlitterBridgeSDK
@@ -43,11 +44,12 @@ export class GlitterBridgeSDK {
 
         switch (environment) {
             case GlitterEnvironment.mainnet:
-                this._bridgeConfig = mainnetConfig;
+                this._bridgeConfig = mainnetConfig;                
                 BridgeV2Tokens.loadConfig(mainnetTokenConfig);
                 break;
             case GlitterEnvironment.testnet:
                 this._bridgeConfig = testnetConfig;
+                this._rpcList = testnetAPI;
                 BridgeV2Tokens.loadConfig(testnetTokenConfig);
                 break;
             default:
@@ -72,11 +74,14 @@ export class GlitterBridgeSDK {
      * networks to connect to
      * @returns {GlitterBridgeSDK}
     */
-    public connect(networks: BridgeNetworks[], rpcList?:ChainRPCConfigs): GlitterBridgeSDK {
+    public connect(networks: BridgeNetworks[], rpcListOverride?:ChainRPCConfigs): GlitterBridgeSDK {
+
+        if (rpcListOverride) this._rpcList = rpcListOverride;
+
         networks.forEach((network) => {
            
             //Get rpcoverride for the network
-            this._rpcOverrides[network] = rpcList?.chainAPIs.find((chain) => chain.network.toLocaleLowerCase() === network.toLocaleLowerCase())?.RPC || this._rpcOverrides[network];
+            this._rpcOverrides[network] = this._rpcList?.chainAPIs.find((chain) => chain.network.toLocaleLowerCase() === network.toLocaleLowerCase())?.RPC || this._rpcOverrides[network];
            
             /**
              * TODO: Have a single method
