@@ -31,6 +31,20 @@ export class BridgeV2Tokens {
         const chainToken = token.chains?.find((x) => x.chain.toLowerCase() === network.toLowerCase());
         return chainToken;
     }
+    public static getTokenByVault(network: BridgeNetworks, vaultID: number): Token2ChainConfig | undefined {
+    
+        //Fail safe
+        if (!this._tokenConfig || !this._tokenConfig.tokens) return undefined;
+
+        for (const token of this._tokenConfig?.tokens ?? []) {
+            for (const chain of token.chains ?? []) {
+                if (chain.chain.toLowerCase() === network.toLowerCase() && chain.vault_id == vaultID) {
+                    return chain;
+                }
+            }
+        }
+      
+    }
     public static getFromAddress(network: BridgeNetworks, address: string): Token2Config | undefined {
        
         //Fail safe
