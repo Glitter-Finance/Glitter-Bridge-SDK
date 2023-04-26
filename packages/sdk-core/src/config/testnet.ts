@@ -21,6 +21,7 @@ export const config: GlitterBridgeConfig = {
             bridge: "XJQ25THCV734QIUZARPZGG3NPRFZXTIIU77JSJBT23TJMGL3FXJWVR57OQ",
             asaVault: "U4A3YARBVMT7PORTC3OWXNC75BMGF6TCHFOQY4ZSIIECC5RW25SVKNKV3U",
             algoVault: "R7VCOR74LCUIFH5WKCCMZOS7ADLSDBQJ42YURFPDT3VGYTVNBNG7AIYTCQ",
+            tokenBridgeProgramID: "98624397",
             tokenBridgeV2ProgramID: "205483806",
         },
         assets: [

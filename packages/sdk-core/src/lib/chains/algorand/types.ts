@@ -22,7 +22,8 @@ export type AlgorandConfig = {
     asaVault: string;
     algoVault: string;
     usdcReceiver: string;
-    usdcDeposit: string;
+    usdcDeposit: string;    
+    tokenBridgeProgramID: string;
     tokenBridgeV2ProgramID: string;
   };
   assets: Array<AlgorandNativeTokenConfig | AlgorandStandardAssetConfig>;
