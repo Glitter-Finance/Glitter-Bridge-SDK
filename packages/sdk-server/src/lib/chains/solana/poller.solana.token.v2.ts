@@ -81,6 +81,94 @@ const idl = {
                 },
             ],
         },
+        {
+            name: "ReleaseEvent",
+            fields: [
+                {
+                    name: "amount",
+                    type: "f64" as const,
+                    index: false,
+                },
+                {
+                    name: "amount_units",
+                    type: "u64" as const,
+                    index: false,
+                },
+                {
+                    name: "fee",
+                    type: "f64" as const,
+                    index: false,
+                },
+                {
+                    name: "fee_units",
+                    type: "u64" as const,
+                    index: false,
+                },
+                {
+                    name: "deposit_hash",
+                    type: "bytes" as const,
+                    index: false,
+                },
+                {
+                    name: "mint",
+                    type: "publicKey" as const,
+                    index: false,
+                },
+                {
+                    name: "from",
+                    type: {
+                        defined: "RoutingInfo",
+                    },
+                    index: false,
+                },
+                {
+                    name: "to",
+                    type: {
+                        defined: "RoutingInfo",
+                    },
+                    index: false,
+                },
+            ],
+        },
+        {
+            name: "RefundEvent",
+            fields: [
+                {
+                    name: "amount",
+                    type: "f64" as const,
+                    index: false,
+                },
+                {
+                    name: "units",
+                    type: "u64" as const,
+                    index: false,
+                },
+                {
+                    name: "deposit_hash",
+                    type: "bytes" as const,
+                    index: false,
+                },
+                {
+                    name: "mint",
+                    type: "publicKey" as const,
+                    index: false,
+                },
+                {
+                    name: "from",
+                    type: {
+                        defined: "RoutingInfo",
+                    },
+                    index: false,
+                },
+                {
+                    name: "to",
+                    type: {
+                        defined: "RoutingInfo",
+                    },
+                    index: false,
+                },
+            ],
+        },
     ],
 };
 
@@ -101,7 +189,7 @@ export class SolanaV2Parser {
             throw Error("Bridge ID is undefined");
 
         //Get Solana Transaction data
-        const txnHashed = getHashedTransactionId(BridgeNetworks.algorand, txnID);
+        const txnHashed = getHashedTransactionId(BridgeNetworks.solana, txnID);
         let partialTxn: PartialBridgeTxn = {
             txnID: txnID,
             txnIDHashed: txnHashed,

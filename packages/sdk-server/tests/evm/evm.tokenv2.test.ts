@@ -1,12 +1,8 @@
-import { BridgeNetworks, BridgeTokens, BridgeV2Tokens, ChainStatus, GlitterEnvironment, Sleep, TransactionType } from "@glitter-finance/sdk-core";
-import { GlitterSolanaPoller } from "../../src/lib/chains/solana/poller.solana";
+import { BridgeNetworks, ChainStatus, GlitterEnvironment, TransactionType } from "@glitter-finance/sdk-core";
 import { GlitterPoller } from "../../src/lib/common/poller.Interface";
 import { GlitterSDKServer } from "../../src/lib/glitterSDKServer";
 import * as util from "util";
-import { config } from "dotenv";
-import path from "path";
 import * as assert from "assert";
-//import { done } from 'jest';
 
 describe("Eth Poller USDC Tests ", () => {
 

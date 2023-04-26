@@ -1,4 +1,4 @@
-import {MultisigMetadata} from "algosdk";
+import { MultisigMetadata } from "algosdk";
 import {
     AlgorandNativeTokenConfig,
     AlgorandStandardAssetConfig,
@@ -23,7 +23,7 @@ export type AlgorandConfig = {
     algoVault: string;
     usdcReceiver: string;
     usdcDeposit: string;
-    tokenBridgeV2Address: string;
+    tokenBridgeV2ProgramID: string;
   };
   assets: Array<AlgorandNativeTokenConfig | AlgorandStandardAssetConfig>;
 };
