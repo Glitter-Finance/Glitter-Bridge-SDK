@@ -192,9 +192,9 @@ export const config: GlitterBridgeConfig = {
             tokens: [],
             depositWallet: "",
             releaseWallet: "",
-            tokenBridge: "",
-            tokenMintBurnVault: "",
-            tokenLockReleaseVault: "",
+            tokenBridge: "0x9682835474a9d363c7b6ff7d6b59b67705f85e6f",
+            tokenMintBurnVault: "0xbb6c04533d36db8aeec00a973989c0f2e64f7747",
+            tokenLockReleaseVault: "0x1aab5dd50b24fbed4bf9b27bb02054147e384923",
             chainId: 10,
         }
     },

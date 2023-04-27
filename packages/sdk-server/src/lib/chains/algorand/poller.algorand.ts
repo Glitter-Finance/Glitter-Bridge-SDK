@@ -14,10 +14,10 @@ export class GlitterAlgorandPoller implements GlitterPoller {
     public usdcCursors: Cursor[] | undefined;
 
     //Initialize
-    initialize(sdkServer: GlitterSDKServer, tokenV2Address?: string): void {
+    initialize(sdkServer: GlitterSDKServer): void {
 
         //Add Token Cursor
-        const tokenAddress = sdkServer.sdk?.algorand?.getAddress("bridge");
+        const tokenAddress = parseInt(sdkServer.sdk?.algorand?.getAddress("tokenBridgeProgramID")?.toString() || "");
         if (tokenAddress)
             this.tokenV1Cursor = NewCursor(
                 BridgeNetworks.algorand,
@@ -27,6 +27,7 @@ export class GlitterAlgorandPoller implements GlitterPoller {
             );
 
         //Add Token V2 Cursor
+        const tokenV2Address = parseInt(sdkServer.sdk?.algorand?.getAddress("tokenBridgeV2ProgramID")?.toString() || "");
         if (tokenV2Address)
             this.tokenV2Cursor = NewCursor(
                 BridgeNetworks.algorand,

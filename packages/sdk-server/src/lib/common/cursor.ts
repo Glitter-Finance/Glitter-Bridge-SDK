@@ -36,7 +36,7 @@ export type CursorFilter = {
     chainStatus?: ChainStatus;
 }
 
-export function NewCursor(network: BridgeNetworks, bridgeType: BridgeType, address: string, limit: number): Cursor {
+export function NewCursor(network: BridgeNetworks, bridgeType: BridgeType, address: string|number, limit: number): Cursor {
     return {
         network: network,
         bridgeType: bridgeType,

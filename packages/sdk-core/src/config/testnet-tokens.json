@@ -178,6 +178,26 @@
                     "min_transfer": 20,
                     "vault_id": 2,
                     "vault_type": "outgoing"
+                },
+                {
+                    "chain": "Optimism",
+                    "symbol": "USDT",
+                    "name": "Glitter Wrapped Tether",
+                    "decimals": 18,
+                    "address": "0x13ea1e3774Ecb929f437Cbbb5f9AeAA2616dc93E",
+                    "min_transfer": 20,
+                    "vault_id": 2,
+                    "vault_type": "outgoing"
+                },
+                {
+                    "chain": "Solana",
+                    "symbol": "USDT",
+                    "name": "Glitter Wrapped Tether",
+                    "decimals": 18,
+                    "address": "3enc5jAJM9f3QDTe1ShYRAcCh96TXVy4BcUePFoaDGzQ",
+                    "min_transfer": 20,
+                    "vault_id": 2,
+                    "vault_type": "outgoing"
                 }
             ]
         },
@@ -242,6 +262,26 @@
                     "name": "Glitter Test USD Coin",
                     "decimals": 18,
                     "address": "0x13ea1e3774Ecb929f437Cbbb5f9AeAA2616dc93E",
+                    "min_transfer": 1,
+                    "vault_id": 1,
+                    "vault_type": "incoming"
+                },
+                {
+                    "chain": "Optimism",
+                    "symbol": "USDC",
+                    "name": "Glitter Test USD Coin",
+                    "decimals": 18,
+                    "address": "0xbb6c04533D36db8aEec00A973989C0f2e64f7747",
+                    "min_transfer": 1,
+                    "vault_id": 1,
+                    "vault_type": "incoming"
+                },
+                {
+                    "chain": "Solana",
+                    "symbol": "USDC",
+                    "name": "Glitter Test USD Coin",
+                    "decimals": 18,
+                    "address": "PifvwY9mHnPqFkExBdmEywDCJqYWXcPX7dL7cUMZpMr",
                     "min_transfer": 1,
                     "vault_id": 1,
                     "vault_type": "incoming"
