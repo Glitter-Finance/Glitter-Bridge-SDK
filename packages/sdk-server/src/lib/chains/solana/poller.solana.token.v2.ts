@@ -40,7 +40,7 @@ const idl = {
                     },
                     {
                         name: "network",
-                        type: "string" as const,
+                        type: "u16" as const,
                     },
                 ],
             },

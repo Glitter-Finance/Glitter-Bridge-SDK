@@ -89,6 +89,7 @@ export class GlitterSDKServer {
             case BridgeNetworks.Arbitrum:
             case BridgeNetworks.Binance:
             case BridgeNetworks.Zkevm:  
+            case BridgeNetworks.Optimism:
                 return new GlitterEVMPoller(this, network);
             default:
                 throw new Error("Network not supported");

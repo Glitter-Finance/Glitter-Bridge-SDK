@@ -49,6 +49,9 @@ export class GlitterEVMPoller implements GlitterPoller {
             case BridgeNetworks.Zkevm:
                 this.connect = sdkServer.sdk?.zkevm;
                 break;
+            case BridgeNetworks.Optimism:
+                this.connect = sdkServer.sdk?.optimism;
+                break;
             default:
                 throw new Error("Invalid Network");
         }

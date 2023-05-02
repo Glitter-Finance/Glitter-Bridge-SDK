@@ -55,7 +55,8 @@ describe("Eth Poller USDC Tests ", () => {
             ];
 
             //Check if all expected txns are present
-            assert(txnIds.every((val, index) => val === expected[index]), `Txn ${txnIds} does not match ${expected}`);             
+            assert(txnIds.every((val, index) => val === expected[index]), `Txn ${txnIds} does not match ${expected}`);     
+            console.log("txnIds match expected") ;
 
             //Check if next cursor is defined
             assert(result.cursor != undefined, "Next Cursor is undefined");
