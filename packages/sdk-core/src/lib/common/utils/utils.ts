@@ -37,7 +37,7 @@ export function LogProgress(progress: string) {
 }
 
 export const base64ToString = (encoded: any) => {
-    return Buffer.from(encoded, "base64").toString();
+    return Buffer.from(encoded, "base64").toString("hex");
 };
 export const base64To0xString = (encoded: any) => {
     return `0x${Buffer.from(encoded, "base64").toString("hex")}`;

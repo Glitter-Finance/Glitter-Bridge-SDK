@@ -11,7 +11,8 @@ export function getHashedTransactionId(
         case BridgeNetworks.solana:
             return ethers.utils.keccak256(base58.decode(hash));
         case BridgeNetworks.algorand:
-            return ethers.utils.keccak256(base64ToString(hash));
+            const base64String = base64ToString(hash);
+            return ethers.utils.keccak256(`0x${base64String}`);
         case BridgeNetworks.TRON:
             return ethers.utils.keccak256(`0x${hash}`);
         default:
