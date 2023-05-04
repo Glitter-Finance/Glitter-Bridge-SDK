@@ -1,4 +1,4 @@
-import {AlgorandAccount, AlgorandConnect, AlgorandStandardAssetConfig, BridgeNetworks, BridgeTokens, GlitterBridgeSDK, GlitterEnvironment} from "@glitter-finance/sdk-core";
+import {AlgorandAccount, AlgorandConnect, AlgorandStandardAssetConfig, BridgeNetworks, BridgeTokens, GlitterBridgeSDK, GlitterEnvironment, getHashedTransactionId} from "@glitter-finance/sdk-core";
 
 describe("AlgorandConnect", () => {
     let glitterSdk: GlitterBridgeSDK;
@@ -183,5 +183,11 @@ describe("AlgorandConnect", () => {
         )
 
         expect(isOptedIn).toBeFalsy()
+    });
+
+    it("Get Transaction hash by Id", async () => {
+        const txId = getHashedTransactionId(BridgeNetworks.algorand, "MPCJAXL5KCAI5DLCBBF35CO2ESRGU6GINQDMNL2MZ5BTQZFR4FBQ");
+        console.log("TXID", txId);
+        expect(txId).toBeTruthy();
     });
 });
