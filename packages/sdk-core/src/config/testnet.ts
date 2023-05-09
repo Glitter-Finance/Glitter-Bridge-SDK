@@ -111,8 +111,6 @@ export const config: GlitterBridgeConfig = {
             depositWallet: "0x2f34c32e1380306bc3f359d836d6c937cbe90337",
             releaseWallet: "0x6D57268BE8EBa2dF18f07267cfF4e114933da429",
             tokenBridge: "0x1aab5dd50b24fbed4bf9b27bb02054147e384923",
-            tokenMintBurnVault: "0x10fb20373405ea1f3c5f47a6c0c89f8ad23a7049",
-            tokenLockReleaseVault: "0x559aa25f5f24d0aab2358c242c8b86797fc6649f",
             chainId: 43113,
         },
         [BridgeNetworks.Ethereum]: {
@@ -130,8 +128,6 @@ export const config: GlitterBridgeConfig = {
             depositWallet: "0x6f5990a1b679190bcd0670f5006f14621f88805d",
             releaseWallet: "0x7c10Ee260F6d408aC0c9f297A16808ca407e469E",
             tokenBridge: "0x9682835474a9d363c7b6ff7d6b59b67705f85e6f",
-            tokenMintBurnVault: "0xbb6c04533d36db8aeec00a973989c0f2e64f7747",
-            tokenLockReleaseVault: "0x55b2b9b08bdc9a0390c024af83382cd1af199475",
             chainId: 5,
         },
         [BridgeNetworks.Polygon]: {
@@ -148,9 +144,7 @@ export const config: GlitterBridgeConfig = {
             ],
             depositWallet: "0x8eb550b1958e716c4051469425d56e79282afa2f",
             releaseWallet: "0xEAFA843b04A5847ec463358FC499347435354D3D",
-            tokenBridge: "0xccd286f98ce9cccf006c365d11b0af0c3e7881e1",
-            tokenMintBurnVault: "0x13ea1e3774ecb929f437cbbb5f9aeaa2616dc93e",
-            tokenLockReleaseVault: "0x6b9eb86d3e741d20135f908c1b6a241aee2d256a",
+            tokenBridge: "0xccd286f98ce9cccf006c365d11b0af0c3e7881e1",           
             chainId: 80001,
         },
         [BridgeNetworks.Arbitrum]: {      
@@ -159,9 +153,7 @@ export const config: GlitterBridgeConfig = {
             tokens: [],
             depositWallet: "",
             releaseWallet: "",
-            tokenBridge: "0x2f3f655daf9deee82dfca0b065126dfd0fdad5b5",
-            tokenMintBurnVault: "0xccd286f98ce9cccf006c365d11b0af0c3e7881e1",
-            tokenLockReleaseVault: "0x7e465f0950a78275cae99655acbd89bfd579b83f",
+            tokenBridge: "0x2f3f655daf9deee82dfca0b065126dfd0fdad5b5",          
             chainId: 421613,
         },
         [BridgeNetworks.Binance]: {           
@@ -170,9 +162,7 @@ export const config: GlitterBridgeConfig = {
             tokens: [],
             depositWallet: "",
             releaseWallet: "",
-            tokenBridge: "0x2f3f655daf9deee82dfca0b065126dfd0fdad5b5",
-            tokenMintBurnVault: "0xccd286f98ce9cccf006c365d11b0af0c3e7881e1",
-            tokenLockReleaseVault: "0x7e465f0950a78275cae99655acbd89bfd579b83f",
+            tokenBridge: "0x2f3f655daf9deee82dfca0b065126dfd0fdad5b5",           
             chainId: 97,
         },
         [BridgeNetworks.Zkevm]: {           
@@ -181,9 +171,7 @@ export const config: GlitterBridgeConfig = {
             tokens: [],
             depositWallet: "",
             releaseWallet: "",
-            tokenBridge: "0xccd286f98ce9cccf006c365d11b0af0c3e7881e1",
-            tokenMintBurnVault: "0x13ea1e3774ecb929f437cbbb5f9aeaa2616dc93e",
-            tokenLockReleaseVault: "0x6b9eb86d3e741d20135f908c1b6a241aee2d256a",
+            tokenBridge: "0xccd286f98ce9cccf006c365d11b0af0c3e7881e1",           
             chainId: 1442,
         },
         [BridgeNetworks.Optimism]: {           
@@ -193,8 +181,6 @@ export const config: GlitterBridgeConfig = {
             depositWallet: "",
             releaseWallet: "",
             tokenBridge: "0x9682835474a9d363c7b6ff7d6b59b67705f85e6f",
-            tokenMintBurnVault: "0xbb6c04533d36db8aeec00a973989c0f2e64f7747",
-            tokenLockReleaseVault: "0x1aab5dd50b24fbed4bf9b27bb02054147e384923",
             chainId: 10,
         }
     },

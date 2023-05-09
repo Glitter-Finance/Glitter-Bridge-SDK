@@ -43,4 +43,5 @@ export type Token2ChainConfig = {
   isNative?: boolean;
   vault_id?: number;
   vault_type?: string;
+  vault_address?: string;
 }

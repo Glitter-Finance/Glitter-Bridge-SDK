@@ -287,6 +287,24 @@
                     "vault_type": "incoming"
                 }
             ]
+        },
+        {
+            "asset_id": 8,
+            "asset_name": "Glitter Test Token",
+            "asset_symbol": "GTT",
+            "chains": [
+                {
+                    "chain": "Ethereum",
+                    "symbol": "GTT",
+                    "name": "Glitter Test Token",
+                    "decimals": 18,
+                    "address": "0x3aEE2ca29df1EdB741c299ca1903C5cE2DFC0F9d",
+                    "min_transfer": 20,
+                    "vault_id": 1,
+                    "vault_type": "outgoing",
+                    "vault_address": "0x4d23A780C6Ebc05145bF28d81B0013519b28253E"
+                }
+            ]
         }
     ]
 }
