@@ -30,7 +30,7 @@ export class SolanaUSDCParser {
         const address = cursor.address.toString();
 
         //Get Solana Transaction data
-        const txnHashed = getHashedTransactionId(BridgeNetworks.algorand, txnID);
+        const txnHashed = getHashedTransactionId(BridgeNetworks.solana, txnID);
         let partialTxn: PartialBridgeTxn = {
             txnID: txnID,
             txnIDHashed: txnHashed,
