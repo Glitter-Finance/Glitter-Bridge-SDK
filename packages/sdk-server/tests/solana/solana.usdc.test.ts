@@ -2,7 +2,7 @@ import { BridgeNetworks, GlitterEnvironment, Sleep } from "@glitter-finance/sdk-
 import { GlitterSolanaPoller } from "../../src/lib/chains/solana/poller.solana";
 import { GlitterPoller } from "../../src/lib/common/poller.Interface";
 import { GlitterSDKServer } from "../../src/lib/glitterSDKServer";
-import assert from "assert";
+import * as assert from "assert";
 import * as util from "util";
 
 describe("Solana Poller USDC Tests ", () => {
@@ -13,7 +13,7 @@ describe("Solana Poller USDC Tests ", () => {
     //Before All tests -> create new SDK
     beforeAll(async () => {
         //Initialize SDK
-        sdk = new GlitterSDKServer(GlitterEnvironment.mainnet);
+        sdk = new GlitterSDKServer(GlitterEnvironment.testnet);
 
         //Create Solana Poller
         sdk.createPollers([BridgeNetworks.solana]);
@@ -26,7 +26,7 @@ describe("Solana Poller USDC Tests ", () => {
     it("Default Cursor Test", async () => {
         if (!poller) throw Error("Poller is undefined");
         const cursor = poller.usdcCursors;
-        assert(cursor);
+        assert(cursor != undefined, "Cursor is undefined");
 
         for await (const localCursor of cursor) {
             assert(poller);
@@ -34,7 +34,7 @@ describe("Solana Poller USDC Tests ", () => {
             console.log(util.inspect(result, false, null, true /* enable colors */));
             await Sleep(5000);
         }
-    });
+    }, 120_000);
 
     afterAll(async () => {
         console.log("Closing SDK");

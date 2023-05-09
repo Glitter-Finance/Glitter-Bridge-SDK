@@ -24,3 +24,6 @@ yarn run example:solana
 ```
 npx ts-node examples/solana.interactive -v -s 20
 ```
+
+//Tests
+
