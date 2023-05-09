@@ -120,7 +120,7 @@ export class EvmV2Parser {
         } else if (token?.vault_type?.toLocaleLowerCase() === "outgoing"){
 
             //This is a lock/release.  To Address is the vault address
-            const vaultAddress = connect?.getAddress("tokenLockReleaseVault") || "";
+            const vaultAddress = token.vault_address || "";
             if (toAddress.toLocaleLowerCase() != vaultAddress.toLocaleLowerCase()){
                 throw new Error(`Invalid to address. Expected ${vaultAddress} for outgoing vault`);
             }
@@ -211,7 +211,7 @@ export class EvmV2Parser {
         } else if (token?.vault_type?.toLocaleLowerCase() === "outgoing"){
 
             //This is a lock/release.  From Address is the vault address
-            const vaultAddress = connect?.getAddress("tokenLockReleaseVault") || "";
+            const vaultAddress = token.vault_address || "";
             if (fromAddress.toLocaleLowerCase() != vaultAddress.toLocaleLowerCase()){
                 throw new Error(`Invalid from address. Expected ${vaultAddress} for outgoing vault`);
             }
@@ -288,7 +288,7 @@ export class EvmV2Parser {
         } else if (token?.vault_type?.toLocaleLowerCase() === "outgoing"){
 
             //This is a lock/release.  From Address is the vault address
-            const vaultAddress = connect?.getAddress("tokenLockReleaseVault") || "";
+            const vaultAddress = token.vault_address || "";
             if (fromAddress.toLocaleLowerCase() != vaultAddress.toLocaleLowerCase()){
                 throw new Error(`Invalid from address. Expected ${vaultAddress} for outgoing vault`);
             }

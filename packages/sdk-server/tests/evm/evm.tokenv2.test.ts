@@ -5,6 +5,9 @@ import * as util from "util";
 import * as assert from "assert";
 import { Cursor } from "../../src/lib/common/cursor";
 
+//const oldestTxn = "0x32a0294ba8c8f11af87f02cd7388b1de100edfefad70da6514bae984401273bb";
+const oldestBlock = 8961658;
+
 describe("Eth Poller USDC Tests ", () => {
 
     it("Default Ethereum", async () => {
@@ -312,10 +315,14 @@ describe("Eth Poller USDC Tests ", () => {
         //Ensure Poller & Cursor is defined
         if (!poller) throw Error("Poller is undefined");
         const localCursor = { ...poller.tokenV2Cursor } as Cursor;
-        assert(localCursor != undefined, "Cursor is undefined");
+        assert.ok(localCursor != undefined, "Cursor is undefined");
 
         //Set limit to 20 // Token bridge needs to larger since multiple logs are emitted on some blocks
         localCursor.limit = limit;
+        localCursor.end = {
+            //txn: oldestTxn,
+            block: oldestBlock,
+        }
         localCursor.filter = {
             txnType: txnType,
             chainStatus: ChainStatus.Completed,
@@ -328,10 +335,10 @@ describe("Eth Poller USDC Tests ", () => {
         
         //Grab all Txn IDs
         const txnIds = result.txns.map((txn) => txn.txnID);
-        assert(txnIds.length == expected.length, `Txn IDs are not ${expected.length}`)
+        assert.ok(txnIds.length == expected.length, `Txn IDs are not ${expected.length}`)
 
         //Check if all expected txns are present
-        assert(txnIds.every((val, index) => val === expected[index]), `Txn ${txnIds} does not match ${expected}`);             
+        assert.ok(txnIds.every((val, index) => val === expected[index]), `Txn ${txnIds} does not match ${expected}`);             
 
         //Check if next cursor is defined
         //assert(result.cursor != undefined, "Next Cursor is undefined");
