@@ -27,3 +27,4 @@ npx ts-node examples/solana.interactive -v -s 20
 
 //Tests
 
+yarn jest packages/sdk-server/tests/evm/evm.gtt.test --testNamePattern 'Ethereum GTT Deposits'

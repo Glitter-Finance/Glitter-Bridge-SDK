@@ -5,10 +5,10 @@ import { GlitterSDKServer } from "../../src/lib/glitterSDKServer";
 import * as assert from "assert";
 import * as util from "util";
 
-import test1Expected from './solana.usdc.Av47VxT8GpGXHYc3aG7fKddgZjCuZEb5yF3BCaXyE7wu.json'
-import test2Expected from './solana.usdc.HrrpuLCq2ewozVZU5sFrWL6oRvFe8KH1VMhVQLCcWpdy.json'
-import test3Expected from './solana.usdc.8Cb6eKCiowqsfYoLeaQf9voTHv1nV6rKjBvMQwLEGoDJ.json'
-import test4Expected from './solana.usdc.CWmY521qXB29Hwp3WBzyX1huApRdQu4kjrcxZpa2St7d.json'
+import test1Expected from './results/solana.usdc.Av47VxT8GpGXHYc3aG7fKddgZjCuZEb5yF3BCaXyE7wu.json'
+import test2Expected from './results/solana.usdc.HrrpuLCq2ewozVZU5sFrWL6oRvFe8KH1VMhVQLCcWpdy.json'
+import test3Expected from './results/solana.usdc.8Cb6eKCiowqsfYoLeaQf9voTHv1nV6rKjBvMQwLEGoDJ.json'
+import test4Expected from './results/solana.usdc.CWmY521qXB29Hwp3WBzyX1huApRdQu4kjrcxZpa2St7d.json'
 import { Cursor } from "../../src/lib/common/cursor";
 
 describe("Solana Poller USDC Tests ", () => {
