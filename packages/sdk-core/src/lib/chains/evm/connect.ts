@@ -81,12 +81,12 @@ export class EvmConnect {
     /**
    * Provide address of bridge
    * component
-   * @param {"tokens" | "bridge" | "depositWallet" | "releaseWallet"| "tokenBridge"| "tokenMintBurnVault"| "tokenLockReleaseVault"} entity The type of address to provide
+   * @param {"tokens" | "bridge" | "depositWallet" | "releaseWallet"| "tokenBridge"} entity The type of address to provide
    * @param {"USDC"} tokenSymbol only USDC for now
    * @returns {string} returns the address for the given entity
    */
     getAddress(
-        entity: "tokens" | "bridge" | "depositWallet" | "releaseWallet"| "tokenBridge"| "tokenMintBurnVault"| "tokenLockReleaseVault",
+        entity: "tokens" | "bridge" | "depositWallet" | "releaseWallet"| "tokenBridge",
         tokenSymbol?: string
     ): string {
         if (entity === "tokens") {
