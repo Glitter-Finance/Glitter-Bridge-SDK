@@ -108,7 +108,7 @@ export class GlitterAlgorandPoller implements GlitterPoller {
                         break;
                     default:
                         throw ServerError.InvalidBridgeType(
-                            BridgeNetworks.solana,
+                            BridgeNetworks.algorand,
                             cursor.bridgeType
                         );
                 }
