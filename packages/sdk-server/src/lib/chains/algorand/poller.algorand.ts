@@ -90,28 +90,32 @@ export class GlitterAlgorandPoller implements GlitterPoller {
         //Get partial transactions
         const partialTxns: PartialBridgeTxn[] = [];
         for (const txnID of signatures) {
-            //Ensure Transaction Exists
-            if (!txnID) continue;
-
-            //Process Transaction
-            let partialTxn: PartialBridgeTxn | undefined;
-            switch (cursor.bridgeType) {
-                case BridgeType.TokenV1:
-                    partialTxn = await AlgorandTokenV1Parser.process(sdkServer, txnID, client, indexer);
-                    break;
-                case BridgeType.TokenV2:
-                    partialTxn = await AlgorandTokenV2Parser.process(sdkServer, txnID, client, indexer, cursor);
-                    break;
-                case BridgeType.USDC:
-                    partialTxn = await AlgorandUSDCParser.process(sdkServer, txnID, client, indexer, cursor);
-                    break;
-                default:
-                    throw ServerError.InvalidBridgeType(
-                        BridgeNetworks.solana,
-                        cursor.bridgeType
-                    );
+            try {
+                //Ensure Transaction Exists
+                if (!txnID) continue;
+    
+                //Process Transaction
+                let partialTxn: PartialBridgeTxn | undefined;
+                switch (cursor.bridgeType) {
+                    case BridgeType.TokenV1:
+                        partialTxn = await AlgorandTokenV1Parser.process(sdkServer, txnID, client, indexer);
+                        break;
+                    case BridgeType.TokenV2:
+                        partialTxn = await AlgorandTokenV2Parser.process(sdkServer, txnID, client, indexer, cursor);
+                        break;
+                    case BridgeType.USDC:
+                        partialTxn = await AlgorandUSDCParser.process(sdkServer, txnID, client, indexer, cursor);
+                        break;
+                    default:
+                        throw ServerError.InvalidBridgeType(
+                            BridgeNetworks.solana,
+                            cursor.bridgeType
+                        );
+                }
+                if (CursorFilter(cursor, partialTxn)) partialTxns.push(partialTxn);                
+            } catch (error) {
+                console.error((error as Error).message)
             }
-            if (CursorFilter(cursor, partialTxn)) partialTxns.push(partialTxn);
         }
 
         //update cursor
