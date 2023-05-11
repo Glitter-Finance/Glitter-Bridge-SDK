@@ -115,42 +115,45 @@ export class GlitterEVMPoller implements GlitterPoller {
         const resultData = JSON.parse(JSON.stringify(response.data));
         const events = resultData.result;
 
-        //Map Signatures
-        const signatures: string[] = [];
+        //Map Signatures        
         const txnHashes: string[] = events.map((event: any) => event.transactionHash);
-        signatures.push(...new Set(txnHashes));
+        const signatures= new Set(txnHashes)
         const maxBlock = Math.max(...events.map((event: any) => event.blockNumber));
 
         //Parse Txns
         const partialTxns: PartialBridgeTxn[] = [];
         for (const txnID of signatures) {
-            
-            //Ensure Transaction Exists
-            if (!txnID) continue;
-
-            //Process Transaction
-            let partialTxn: PartialBridgeTxn | undefined;
-            switch (cursor.bridgeType) {
-                case BridgeType.TokenV1:
-                    throw new Error("Token V1 Not Supported for EVM");
-                    break;
-                case BridgeType.TokenV2:
-                    partialTxn = await EvmV2Parser.process(sdkServer, this.connect, txnID);
-                    break;
-                case BridgeType.USDC:
-                    partialTxn = await EvmUSDCParser.process(
-                        sdkServer,  
-                        this.connect,                      
-                        txnID
-                    );
-                    break;
-                default:
-                    throw ServerError.InvalidBridgeType(
-                        BridgeNetworks.solana,
-                        cursor.bridgeType
-                    );
+            try { // ensure failing to parse a single tx does not fail the entire batch           
+                //Ensure Transaction Exists
+                if (!txnID) continue;
+    
+                //Process Transaction
+                let partialTxn: PartialBridgeTxn | undefined;
+                switch (cursor.bridgeType) {
+                    case BridgeType.TokenV1:
+                        throw new Error("Token V1 Not Supported for EVM");
+                        break;
+                    case BridgeType.TokenV2:
+                        partialTxn = await EvmV2Parser.process(sdkServer, this.connect, txnID);
+                        break;
+                    case BridgeType.USDC:
+                        partialTxn = await EvmUSDCParser.process(
+                            sdkServer,  
+                            this.connect,                      
+                            txnID
+                        );
+                        break;
+                    default:
+                        throw ServerError.InvalidBridgeType(
+                            BridgeNetworks.solana,
+                            cursor.bridgeType
+                        );
+                }
+                if (CursorFilter(cursor, partialTxn)) partialTxns.push(partialTxn);
+                
+            } catch (error) {
+                console.error((error as Error).message)
             }
-            if (CursorFilter(cursor, partialTxn)) partialTxns.push(partialTxn);
         }
 
         //update cursor
