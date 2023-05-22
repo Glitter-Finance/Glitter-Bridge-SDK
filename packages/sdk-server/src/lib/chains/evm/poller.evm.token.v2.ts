@@ -95,14 +95,11 @@ export class EvmV2Parser {
         let toAddress = txn.to;
         let fromAddress = txn.from;
 
-        //get token name
+        //get token info
         const fromToken = BridgeV2Tokens.getChainConfigByVault(connect?.network, events.deposit?.vaultId || 0);
         if (!fromToken) throw new Error("From token not found")
         const baseToken = BridgeV2Tokens.getChainConfigParent(fromToken);
         if (!baseToken) throw new Error("Base token not found")
-
-        //const tokenName = token?.symbol || "Unknown";
-        //const decimals = token?.decimals || 0;
        
         //Get transfer amount
         if (events.transfer) {
@@ -135,7 +132,7 @@ export class EvmV2Parser {
         partialTxn.address = fromAddress;
        
         //Get Routing
-        let routing: Routing | null = null;
+        let routing: Routing2 | null = null;
         if (partialTxn.txnType == TransactionType.Deposit) {
 
             //Get To Network
@@ -144,6 +141,7 @@ export class EvmV2Parser {
 
             //Get To Token
             const toToken = BridgeV2Tokens.getTokenConfigChild(baseToken, toNetwork);
+            if (!toToken) throw new Error("To token not found");
 
             toAddress = toNetwork ? DeserializeEvmBridgeTransfer.deserializeAddress(toNetwork, events.deposit?.destinationAddress || "") : "";
             routing = {
@@ -151,33 +149,34 @@ export class EvmV2Parser {
                     network: connect.network,
                     address: events.transfer?.from || "",
                     local_symbol: fromToken.symbol,
-                    base_units = partialTxn.units,
+                    base_units: partialTxn.units,
                     txn_signature: txnID,
                 },
                 to: {
                     network: toNetwork?.toString() || "",
                     address: toAddress,
-                    token: tokenName
+                    local_symbol: toToken?.symbol || "",
+                    base_units: RoutingHelper.BaseUnits_Shift(partialTxn.units, fromToken.decimals, toToken.decimals),
                 },
                 amount: partialTxn.amount || BigNumber(0),
-                units: partialTxn.units || undefined,
-            }as Routing2;
+            };
         } else if (partialTxn.txnType == TransactionType.Refund) {
             routing = {
                 from: {
                     network: "",
                     address: "",
-                    token: tokenName,
+                    local_symbol: "",
+                    base_units: BigNumber(0),
                     txn_signature_hashed: events.release?.depositId,
                 },
                 to: {
                     network: connect.network,
                     address: partialTxn.address || "",
-                    token: tokenName,
+                    local_symbol: fromToken.symbol,
                     txn_signature: txnID,
+                    base_units: partialTxn.units,
                 },
-                amount: partialTxn.amount || undefined,
-                units: partialTxn.units || undefined,
+                amount: partialTxn.amount || undefined
             }as Routing2;
         }
 
@@ -199,39 +198,40 @@ export class EvmV2Parser {
         let fromAddress = txn.from;
 
         //get token name
-        const token = await BridgeV2Tokens.getChainConfigByVault(connect?.network, events.release?.vaultId || 0);
-        const tokenName = token?.symbol || "Unknown";
-        const decimals = token?.decimals || 0;
+        const toToken = BridgeV2Tokens.getChainConfigByVault(connect?.network, events.deposit?.vaultId || 0);
+        if (!toToken) throw new Error("From token not found")
+        const baseToken = BridgeV2Tokens.getChainConfigParent(toToken);
+        if (!baseToken) throw new Error("Base token not found")
       
         //Get transfer amount
         if (events.transfer) {
             fromAddress = events.transfer.from;
             toAddress = events.transfer.to;
             partialTxn.units = BigNumber(events.transfer.value.toString());
-            partialTxn.amount = RoutingHelper.ReadableValue_FromBaseUnits(partialTxn.units, decimals);  
+            partialTxn.amount = RoutingHelper.ReadableValue_FromBaseUnits(partialTxn.units, toToken.decimals);  
         } else {
             throw new Error("Transfer event not found");
         }
 
         //Check address
-        if (token?.vault_type?.toLocaleLowerCase() === "incoming"){
+        if (toToken?.vault_type?.toLocaleLowerCase() === "incoming"){
             
             //This is a burn/mint.  From address is the 0x0 address
             if (fromAddress.toLocaleLowerCase() != "0x0000000000000000000000000000000000000000"){
                 throw new Error("Invalid from address. Expected 0x0 for incoming vault");
             }
 
-        } else if (token?.vault_type?.toLocaleLowerCase() === "outgoing"){
+        } else if (toToken?.vault_type?.toLocaleLowerCase() === "outgoing"){
 
             //This is a lock/release.  From Address is the vault address
-            const vaultAddress = token.vault_address || "";
+            const vaultAddress = toToken.vault_address || "";
             if (fromAddress.toLocaleLowerCase() != vaultAddress.toLocaleLowerCase()){
                 throw new Error(`Invalid from address. Expected ${vaultAddress} for outgoing vault`);
             }
 
         }
 
-        let routing: Routing | null = null;
+        let routing: Routing2 | null = null;
       
         //Transfer out of receiver address
         partialTxn.txnType = TransactionType.Release;
@@ -242,17 +242,18 @@ export class EvmV2Parser {
             from: {
                 network: "",
                 address: "",
-                token: tokenName,
+                local_symbol: "",
+                base_units: BigNumber(0),
                 txn_signature_hashed: events.release?.depositId,
             },
             to: {
                 network: connect.network,
                 address: partialTxn.address || "",
-                token: tokenName,
+                local_symbol: toToken.name,
+                base_units: partialTxn.units,
                 txn_signature: txnID,
             },
-            amount: partialTxn.amount || undefined,
-            units: partialTxn.units || undefined,
+            amount: partialTxn.amount || undefined
         };
         // }
 

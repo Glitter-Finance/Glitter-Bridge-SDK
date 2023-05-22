@@ -10,7 +10,7 @@ export type Routing2Point = {
   network: string;
   local_symbol: string;
   address: string;
-  base_units: BigNumber;
+  base_units?: BigNumber;
   txn_signature?: string;
   txn_signature_hashed?: string;
 };
