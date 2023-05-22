@@ -1,6 +1,5 @@
 import { BridgeNetworks } from "../networks";
-import { BridgeTokenConfig, AlgorandStandardAssetConfig, AlgorandNativeTokenConfig, Token2Config, Token2ConfigList, Token2ChainConfig, } from "./types";
-import axios from 'axios';
+import { Token2Config, Token2ConfigList, Token2ChainConfig, } from "./types";
 
 export class BridgeV2Tokens {
 
@@ -12,26 +11,55 @@ export class BridgeV2Tokens {
         this.isLoaded = true;
     }  
 
-    public static getToken(nativeSymbol: string): Token2Config | undefined {
-
+    //Get Token Configs
+    public static getTokenConfig(nativeSymbol: string): Token2Config | undefined;
+    public static getTokenConfig(network: BridgeNetworks, localSymbol: string): Token2Config | undefined;
+    public static getTokenConfig(nativeSymbolOrNetwork: string | BridgeNetworks, localSymbolOrUndefined?: string): Token2Config | undefined {
         //Fail safe
         if (!this._tokenConfig || !this._tokenConfig.tokens) return undefined;
 
+        //Get Token Config
+        if (Object.values(BridgeNetworks).includes(nativeSymbolOrNetwork as BridgeNetworks) && localSymbolOrUndefined !== undefined) {
+           
+            //Passed in network:
+            for (const token of this._tokenConfig?.tokens ?? []) {
+                for (const chain of token.chains ?? []) {
+                    if (chain.chain.toLowerCase() === (nativeSymbolOrNetwork as BridgeNetworks).toString().toLowerCase() && chain.symbol == localSymbolOrUndefined) {
+                        return token;
+                    }
+                }
+            }         
+
+        } else {
+
+            //Passed in native symbol:
+            const token = this._tokenConfig.tokens?.find((x) => x.asset_symbol.toLowerCase() === nativeSymbolOrNetwork.toLowerCase());
+            return token;        
+                   
+        }
+    }    
+    public static getTokenConfigChild(tokenConfig: Token2Config, network: BridgeNetworks): Token2ChainConfig | undefined {
+            
+        //Fail safe
+        if (!this._tokenConfig || !this._tokenConfig.tokens) return undefined;
+    
         //Get the token
-        const token = this._tokenConfig.tokens?.find((x) => x.asset_symbol.toLowerCase() === nativeSymbol.toLowerCase());
-        return token;
+        const chainToken = tokenConfig.chains?.find((x) => x.chain.toLowerCase() === network.toLowerCase());
+        return chainToken;
     }
-    public static getTokenByChain(network: BridgeNetworks, symbol: string): Token2ChainConfig | undefined {
+ 
+    //Get Chain Configs
+    public static getChainConfig(network: BridgeNetworks, localSymbol: string): Token2ChainConfig | undefined {
         
         //Get the token
-        const token = this.getToken(symbol);
+        const token = this.getTokenConfig(network, localSymbol);
         if (!token) return undefined;
        
         //get chain version
         const chainToken = token.chains?.find((x) => x.chain.toLowerCase() === network.toLowerCase());
         return chainToken;
     }
-    public static getTokenByVault(network: BridgeNetworks, vaultID: number): Token2ChainConfig | undefined {
+    public static getChainConfigByVault(network: BridgeNetworks, vaultID: number): Token2ChainConfig | undefined {
     
         //Fail safe
         if (!this._tokenConfig || !this._tokenConfig.tokens) return undefined;
@@ -45,7 +73,7 @@ export class BridgeV2Tokens {
         }
       
     }
-    public static getFromAddress(network: BridgeNetworks, address: string): Token2Config | undefined {
+    public static getChainConfigByAddress(network: BridgeNetworks, address: string): Token2ChainConfig | undefined {
        
         //Fail safe
         if (!this._tokenConfig || !this._tokenConfig.tokens) return undefined;
@@ -53,12 +81,12 @@ export class BridgeV2Tokens {
         for (const token of this._tokenConfig?.tokens ?? []) {
             for (const chain of token.chains ?? []) {
                 if (chain.chain.toLowerCase() === network.toLowerCase() && chain.address?.toLowerCase() === address.toLowerCase()) {
-                    return token;
+                    return chain;
                 }
             }
         }
     }
-    public static getFromAssetID(network: BridgeNetworks, assetId: number): Token2Config | undefined {
+    public static getChainConfigByAssetID(network: BridgeNetworks, assetId: number): Token2ChainConfig | undefined {
        
         //Fail safe
         if (!this._tokenConfig || !this._tokenConfig.tokens) return undefined;
@@ -66,10 +94,34 @@ export class BridgeV2Tokens {
         for (const token of this._tokenConfig?.tokens ?? []) {
             for (const chain of token.chains ?? []) {
                 if (chain.chain.toLowerCase() === network.toLowerCase() && chain.asset_id === assetId) {
-                    return token;
+                    return chain;
                 }
             }
         }
+    }
+    public static getChainConfigParent(chainConfig:Token2ChainConfig): Token2Config | undefined {
+
+        //Fail safe
+        if (!this._tokenConfig || !this._tokenConfig.tokens) return undefined;
+       
+        //Get the token where the chain config is a child
+        const parentToken = this._tokenConfig.tokens?.find((x) => x.chains?.find((y) => y === chainConfig));
+
+        return parentToken;
+    }
+
+    //Check Chain Configs
+    public static areDerivatives(tokenChainConfig_A: Token2ChainConfig, tokenChainConfig_B: Token2ChainConfig): boolean {
+        //get config_A parent
+        const tokenConfig_A = this.getChainConfigParent(tokenChainConfig_A);
+        if (!tokenConfig_A) return false;
+
+        //get config_B parent
+        const tokenConfig_B = this.getChainConfigParent(tokenChainConfig_B);
+        if (!tokenConfig_B) return false;
+
+        //Check if the parents are the same
+        return (tokenConfig_A === tokenConfig_B);
     }
    
 }
