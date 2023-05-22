@@ -1,222 +1,229 @@
-    {
-        "cursor": {
-            "network": "ethereum",
+{
+    "cursor": {
+        "network": "ethereum",
+        "bridgeType": "TokenV2",
+        "address": "0x9682835474a9d363c7b6ff7d6b59b67705f85e6f",
+        "beginning": {
+            "txn": "0x756975944324a3d34f3170e558c2f6318fdf915a8c249b17c9337fb35f0462cf"
+        },
+        "end": {
+            "block": 8961658
+        },
+        "limit": 7,
+        "batch": {
+            "txns": 7,
+            "position": "0x71c80fc8aacff25f4250d97e089637a818063416eb2e22ef434ca43234781f07",
+            "complete": false,
+            "block": 8962697
+        },
+        "filter": {
+            "txnType": "Deposit",
+            "chainStatus": "Completed"
+        }
+    },
+    "txns": [
+        {
+            "txnID": "0x756975944324a3d34f3170e558c2f6318fdf915a8c249b17c9337fb35f0462cf",
+            "txnIDHashed": "0x713fc9dcea62a6c00c953cfcfb6ef6ae0a4ed6e8483ffd92f868da1e81784c29",
             "bridgeType": "TokenV2",
-            "address": "0x9682835474a9d363c7b6ff7d6b59b67705f85e6f",
-            "beginning": {
-                "txn": "0x756975944324a3d34f3170e558c2f6318fdf915a8c249b17c9337fb35f0462cf"
-            },
-            "end": {
-                "block": 8961658
-            },
-            "limit": 7,
-            "batch": {
-                "txns": 7,
-                "position": "0x71c80fc8aacff25f4250d97e089637a818063416eb2e22ef434ca43234781f07",
-                "complete": false,
-                "block": 8962697
-            },
-            "filter": {
-                "txnType": "Deposit",
-                "chainStatus": "Completed"
+            "txnType": "Deposit",
+            "network": "ethereum",
+            "address": "0xEC28e6671Bcb93979DFB1734e5240c0cF52bC152",
+            "block": 8961658,
+            "txnTimestamp": "2023-05-08T03:30:48.000Z",
+            "chainStatus": "Completed",
+            "units": "40",
+            "amount": "4e-17",
+            "routing": {
+                "from": {
+                    "network": "ethereum",
+                    "address": "0xEC28e6671Bcb93979DFB1734e5240c0cF52bC152",
+                    "local_symbol": "GTT",
+                    "base_units": "40",
+                    "txn_signature": "0x756975944324a3d34f3170e558c2f6318fdf915a8c249b17c9337fb35f0462cf"
+                },
+                "to": {
+                    "network": "avalanche",
+                    "address": "0x0x307834313345616439393933326531664637666539383632333433383943666232663236434538616342",
+                    "local_symbol": "xGTT",
+                    "base_units": "40"
+                },
+                "amount": "4e-17"
             }
         },
-        "txns": [
-            {
-                "txnID": "0x756975944324a3d34f3170e558c2f6318fdf915a8c249b17c9337fb35f0462cf",
-                "txnIDHashed": "0x713fc9dcea62a6c00c953cfcfb6ef6ae0a4ed6e8483ffd92f868da1e81784c29",
-                "bridgeType": "TokenV2",
-                "txnType": "Deposit",
-                "network": "ethereum",
-                "address": "0xEC28e6671Bcb93979DFB1734e5240c0cF52bC152",
-                "block": 8961658,
-                "txnTimestamp": "2023-05-08T03:30:48.000Z",
-                "chainStatus": "Completed",
-                "units": "40",
-                "amount": "4e-17",
-                "routing": {
-                    "from": {
-                        "network": "ethereum",
-                        "address": "0xEC28e6671Bcb93979DFB1734e5240c0cF52bC152",
-                        "token": "GTT",
-                        "txn_signature": "0x756975944324a3d34f3170e558c2f6318fdf915a8c249b17c9337fb35f0462cf"
-                    },
-                    "to": {
-                        "network": "avalanche",
-                        "address": "0x0x307834313345616439393933326531664637666539383632333433383943666232663236434538616342",
-                        "token": "GTT"
-                    },
-                    "amount": "4e-17",
-                    "units": "40"
-                }
-            },
-            {
-                "txnID": "0x44bbf3039aabc1c0322dd3e6e44f87176e9c8fee269bae34d3aea0d84f6e621c",
-                "txnIDHashed": "0x8fe135277b6fb13fad0244c6c8b69ca475c1a8fa99ab38817b75e16f2a46b9d6",
-                "bridgeType": "TokenV2",
-                "txnType": "Deposit",
-                "network": "ethereum",
-                "address": "0xEC28e6671Bcb93979DFB1734e5240c0cF52bC152",
-                "block": 8961756,
-                "txnTimestamp": "2023-05-08T03:53:48.000Z",
-                "chainStatus": "Completed",
-                "units": "4000000000000000000",
-                "amount": "4",
-                "routing": {
-                    "from": {
-                        "network": "ethereum",
-                        "address": "0xEC28e6671Bcb93979DFB1734e5240c0cF52bC152",
-                        "token": "GTT",
-                        "txn_signature": "0x44bbf3039aabc1c0322dd3e6e44f87176e9c8fee269bae34d3aea0d84f6e621c"
-                    },
-                    "to": {
-                        "network": "avalanche",
-                        "address": "0x0x307834313345616439393933326531664637666539383632333433383943666232663236434538616342",
-                        "token": "GTT"
-                    },
-                    "amount": "4",
-                    "units": "4000000000000000000"
-                }
-            },
-            {
-                "txnID": "0x5682e1aabaac7147ac7ca4510f9e0fbc2f5a1ca3075f942db9c6cdb7a5c2b518",
-                "txnIDHashed": "0x153676105c7f9d166161adbeed3af3141de5be20b2e40d4d514d7701248c80a2",
-                "bridgeType": "TokenV2",
-                "txnType": "Deposit",
-                "network": "ethereum",
-                "address": "0xEC28e6671Bcb93979DFB1734e5240c0cF52bC152",
-                "block": 8962381,
-                "txnTimestamp": "2023-05-08T06:28:48.000Z",
-                "chainStatus": "Completed",
-                "units": "4000000000000000000",
-                "amount": "4",
-                "routing": {
-                    "from": {
-                        "network": "ethereum",
-                        "address": "0xEC28e6671Bcb93979DFB1734e5240c0cF52bC152",
-                        "token": "GTT",
-                        "txn_signature": "0x5682e1aabaac7147ac7ca4510f9e0fbc2f5a1ca3075f942db9c6cdb7a5c2b518"
-                    },
-                    "to": {
-                        "network": "avalanche",
-                        "address": "0x0x307834313345616439393933326531664637666539383632333433383943666232663236434538616342",
-                        "token": "GTT"
-                    },
-                    "amount": "4",
-                    "units": "4000000000000000000"
-                }
-            },
-            {
-                "txnID": "0xda718e7858dc94bd28fe7989a80136f369ea86e714a75d0b3e126a3a1ce72865",
-                "txnIDHashed": "0x0b935a19398f51e2bfd2e1f78be5c8d9bd7fc9051157269a6dee3981ae928571",
-                "bridgeType": "TokenV2",
-                "txnType": "Deposit",
-                "network": "ethereum",
-                "address": "0xEC28e6671Bcb93979DFB1734e5240c0cF52bC152",
-                "block": 8962469,
-                "txnTimestamp": "2023-05-08T06:50:48.000Z",
-                "chainStatus": "Completed",
-                "units": "4000000000000000000",
-                "amount": "4",
-                "routing": {
-                    "from": {
-                        "network": "ethereum",
-                        "address": "0xEC28e6671Bcb93979DFB1734e5240c0cF52bC152",
-                        "token": "GTT",
-                        "txn_signature": "0xda718e7858dc94bd28fe7989a80136f369ea86e714a75d0b3e126a3a1ce72865"
-                    },
-                    "to": {
-                        "network": "avalanche",
-                        "address": "0x0x307834313345616439393933326531664637666539383632333433383943666232663236434538616342",
-                        "token": "GTT"
-                    },
-                    "amount": "4",
-                    "units": "4000000000000000000"
-                }
-            },
-            {
-                "txnID": "0x6e4149c27b90feedefb1e811caebf2226db12fd035dd68b2dd65cd97f8b726ba",
-                "txnIDHashed": "0x4e8f4bdf1608d8d7e211c36fa5ffdaca6019bac1f15d45bee64ee6c7cbb28607",
-                "bridgeType": "TokenV2",
-                "txnType": "Deposit",
-                "network": "ethereum",
-                "address": "0xEC28e6671Bcb93979DFB1734e5240c0cF52bC152",
-                "block": 8962528,
-                "txnTimestamp": "2023-05-08T07:05:36.000Z",
-                "chainStatus": "Completed",
-                "units": "4000000000000000000",
-                "amount": "4",
-                "routing": {
-                    "from": {
-                        "network": "ethereum",
-                        "address": "0xEC28e6671Bcb93979DFB1734e5240c0cF52bC152",
-                        "token": "GTT",
-                        "txn_signature": "0x6e4149c27b90feedefb1e811caebf2226db12fd035dd68b2dd65cd97f8b726ba"
-                    },
-                    "to": {
-                        "network": "avalanche",
-                        "address": "0x0x307834313345616439393933326531664637666539383632333433383943666232663236434538616342",
-                        "token": "GTT"
-                    },
-                    "amount": "4",
-                    "units": "4000000000000000000"
-                }
-            },
-            {
-                "txnID": "0x1d6890b29eb811cd01c81223cbf28b291a0010c987f3644a1cc371705b996847",
-                "txnIDHashed": "0x317ac946a3c81c6c4b160efc2cebc796936ada23cc2fac8126ea283a8e247de0",
-                "bridgeType": "TokenV2",
-                "txnType": "Deposit",
-                "network": "ethereum",
-                "address": "0xEC28e6671Bcb93979DFB1734e5240c0cF52bC152",
-                "block": 8962587,
-                "txnTimestamp": "2023-05-08T07:19:24.000Z",
-                "chainStatus": "Completed",
-                "units": "4000000000000000000",
-                "amount": "4",
-                "routing": {
-                    "from": {
-                        "network": "ethereum",
-                        "address": "0xEC28e6671Bcb93979DFB1734e5240c0cF52bC152",
-                        "token": "GTT",
-                        "txn_signature": "0x1d6890b29eb811cd01c81223cbf28b291a0010c987f3644a1cc371705b996847"
-                    },
-                    "to": {
-                        "network": "avalanche",
-                        "address": "0x0x307834313345616439393933326531664637666539383632333433383943666232663236434538616342",
-                        "token": "GTT"
-                    },
-                    "amount": "4",
-                    "units": "4000000000000000000"
-                }
-            },
-            {
-                "txnID": "0x71c80fc8aacff25f4250d97e089637a818063416eb2e22ef434ca43234781f07",
-                "txnIDHashed": "0xbd66b69a7470f9b1f5d15ad73f5b9d382a2cfafe806f0849b4d9d03cdb64d84f",
-                "bridgeType": "TokenV2",
-                "txnType": "Deposit",
-                "network": "ethereum",
-                "address": "0xEC28e6671Bcb93979DFB1734e5240c0cF52bC152",
-                "block": 8962697,
-                "txnTimestamp": "2023-05-08T07:45:00.000Z",
-                "chainStatus": "Completed",
-                "units": "4000000000000000000",
-                "amount": "4",
-                "routing": {
-                    "from": {
-                        "network": "ethereum",
-                        "address": "0xEC28e6671Bcb93979DFB1734e5240c0cF52bC152",
-                        "token": "GTT",
-                        "txn_signature": "0x71c80fc8aacff25f4250d97e089637a818063416eb2e22ef434ca43234781f07"
-                    },
-                    "to": {
-                        "network": "avalanche",
-                        "address": "0x0x307834313345616439393933326531664637666539383632333433383943666232663236434538616342",
-                        "token": "GTT"
-                    },
-                    "amount": "4",
-                    "units": "4000000000000000000"
-                }
+        {
+            "txnID": "0x44bbf3039aabc1c0322dd3e6e44f87176e9c8fee269bae34d3aea0d84f6e621c",
+            "txnIDHashed": "0x8fe135277b6fb13fad0244c6c8b69ca475c1a8fa99ab38817b75e16f2a46b9d6",
+            "bridgeType": "TokenV2",
+            "txnType": "Deposit",
+            "network": "ethereum",
+            "address": "0xEC28e6671Bcb93979DFB1734e5240c0cF52bC152",
+            "block": 8961756,
+            "txnTimestamp": "2023-05-08T03:53:48.000Z",
+            "chainStatus": "Completed",
+            "units": "4000000000000000000",
+            "amount": "4",
+            "routing": {
+                "from": {
+                    "network": "ethereum",
+                    "address": "0xEC28e6671Bcb93979DFB1734e5240c0cF52bC152",
+                    "local_symbol": "GTT",
+                    "base_units": "4000000000000000000",
+                    "txn_signature": "0x44bbf3039aabc1c0322dd3e6e44f87176e9c8fee269bae34d3aea0d84f6e621c"
+                },
+                "to": {
+                    "network": "avalanche",
+                    "address": "0x0x307834313345616439393933326531664637666539383632333433383943666232663236434538616342",
+                    "local_symbol": "xGTT",
+                    "base_units": "4000000000000000000"
+                },
+                "amount": "4"
             }
-        ]
-    }
+        },
+        {
+            "txnID": "0x5682e1aabaac7147ac7ca4510f9e0fbc2f5a1ca3075f942db9c6cdb7a5c2b518",
+            "txnIDHashed": "0x153676105c7f9d166161adbeed3af3141de5be20b2e40d4d514d7701248c80a2",
+            "bridgeType": "TokenV2",
+            "txnType": "Deposit",
+            "network": "ethereum",
+            "address": "0xEC28e6671Bcb93979DFB1734e5240c0cF52bC152",
+            "block": 8962381,
+            "txnTimestamp": "2023-05-08T06:28:48.000Z",
+            "chainStatus": "Completed",
+            "units": "4000000000000000000",
+            "amount": "4",
+            "routing": {
+                "from": {
+                    "network": "ethereum",
+                    "address": "0xEC28e6671Bcb93979DFB1734e5240c0cF52bC152",
+                    "local_symbol": "GTT",
+                    "base_units": "4000000000000000000",
+                    "txn_signature": "0x5682e1aabaac7147ac7ca4510f9e0fbc2f5a1ca3075f942db9c6cdb7a5c2b518"
+                },
+                "to": {
+                    "network": "avalanche",
+                    "address": "0x0x307834313345616439393933326531664637666539383632333433383943666232663236434538616342",
+                    "local_symbol": "xGTT",
+                    "base_units": "4000000000000000000"
+                },
+                "amount": "4"
+            }
+        },
+        {
+            "txnID": "0xda718e7858dc94bd28fe7989a80136f369ea86e714a75d0b3e126a3a1ce72865",
+            "txnIDHashed": "0x0b935a19398f51e2bfd2e1f78be5c8d9bd7fc9051157269a6dee3981ae928571",
+            "bridgeType": "TokenV2",
+            "txnType": "Deposit",
+            "network": "ethereum",
+            "address": "0xEC28e6671Bcb93979DFB1734e5240c0cF52bC152",
+            "block": 8962469,
+            "txnTimestamp": "2023-05-08T06:50:48.000Z",
+            "chainStatus": "Completed",
+            "units": "4000000000000000000",
+            "amount": "4",
+            "routing": {
+                "from": {
+                    "network": "ethereum",
+                    "address": "0xEC28e6671Bcb93979DFB1734e5240c0cF52bC152",
+                    "local_symbol": "GTT",
+                    "base_units": "4000000000000000000",
+                    "txn_signature": "0xda718e7858dc94bd28fe7989a80136f369ea86e714a75d0b3e126a3a1ce72865"
+                },
+                "to": {
+                    "network": "avalanche",
+                    "address": "0x0x307834313345616439393933326531664637666539383632333433383943666232663236434538616342",
+                    "local_symbol": "xGTT",
+                    "base_units": "4000000000000000000"
+                },
+                "amount": "4"
+            }
+        },
+        {
+            "txnID": "0x6e4149c27b90feedefb1e811caebf2226db12fd035dd68b2dd65cd97f8b726ba",
+            "txnIDHashed": "0x4e8f4bdf1608d8d7e211c36fa5ffdaca6019bac1f15d45bee64ee6c7cbb28607",
+            "bridgeType": "TokenV2",
+            "txnType": "Deposit",
+            "network": "ethereum",
+            "address": "0xEC28e6671Bcb93979DFB1734e5240c0cF52bC152",
+            "block": 8962528,
+            "txnTimestamp": "2023-05-08T07:05:36.000Z",
+            "chainStatus": "Completed",
+            "units": "4000000000000000000",
+            "amount": "4",
+            "routing": {
+                "from": {
+                    "network": "ethereum",
+                    "address": "0xEC28e6671Bcb93979DFB1734e5240c0cF52bC152",
+                    "local_symbol": "GTT",
+                    "base_units": "4000000000000000000",
+                    "txn_signature": "0x6e4149c27b90feedefb1e811caebf2226db12fd035dd68b2dd65cd97f8b726ba"
+                },
+                "to": {
+                    "network": "avalanche",
+                    "address": "0x0x307834313345616439393933326531664637666539383632333433383943666232663236434538616342",
+                    "local_symbol": "xGTT",
+                    "base_units": "4000000000000000000"
+                },
+                "amount": "4"
+            }
+        },
+        {
+            "txnID": "0x1d6890b29eb811cd01c81223cbf28b291a0010c987f3644a1cc371705b996847",
+            "txnIDHashed": "0x317ac946a3c81c6c4b160efc2cebc796936ada23cc2fac8126ea283a8e247de0",
+            "bridgeType": "TokenV2",
+            "txnType": "Deposit",
+            "network": "ethereum",
+            "address": "0xEC28e6671Bcb93979DFB1734e5240c0cF52bC152",
+            "block": 8962587,
+            "txnTimestamp": "2023-05-08T07:19:24.000Z",
+            "chainStatus": "Completed",
+            "units": "4000000000000000000",
+            "amount": "4",
+            "routing": {
+                "from": {
+                    "network": "ethereum",
+                    "address": "0xEC28e6671Bcb93979DFB1734e5240c0cF52bC152",
+                    "local_symbol": "GTT",
+                    "base_units": "4000000000000000000",
+                    "txn_signature": "0x1d6890b29eb811cd01c81223cbf28b291a0010c987f3644a1cc371705b996847"
+                },
+                "to": {
+                    "network": "avalanche",
+                    "address": "0x0x307834313345616439393933326531664637666539383632333433383943666232663236434538616342",
+                    "local_symbol": "xGTT",
+                    "base_units": "4000000000000000000"
+                },
+                "amount": "4"
+            }
+        },
+        {
+            "txnID": "0x71c80fc8aacff25f4250d97e089637a818063416eb2e22ef434ca43234781f07",
+            "txnIDHashed": "0xbd66b69a7470f9b1f5d15ad73f5b9d382a2cfafe806f0849b4d9d03cdb64d84f",
+            "bridgeType": "TokenV2",
+            "txnType": "Deposit",
+            "network": "ethereum",
+            "address": "0xEC28e6671Bcb93979DFB1734e5240c0cF52bC152",
+            "block": 8962697,
+            "txnTimestamp": "2023-05-08T07:45:00.000Z",
+            "chainStatus": "Completed",
+            "units": "4000000000000000000",
+            "amount": "4",
+            "routing": {
+                "from": {
+                    "network": "ethereum",
+                    "address": "0xEC28e6671Bcb93979DFB1734e5240c0cF52bC152",
+                    "local_symbol": "GTT",
+                    "base_units": "4000000000000000000",
+                    "txn_signature": "0x71c80fc8aacff25f4250d97e089637a818063416eb2e22ef434ca43234781f07"
+                },
+                "to": {
+                    "network": "avalanche",
+                    "address": "0x0x307834313345616439393933326531664637666539383632333433383943666232663236434538616342",
+                    "local_symbol": "xGTT",
+                    "base_units": "4000000000000000000"
+                },
+                "amount": "4"
+            }
+        }
+    ]
+}

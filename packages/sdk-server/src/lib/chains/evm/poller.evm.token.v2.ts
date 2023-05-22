@@ -166,7 +166,7 @@ export class EvmV2Parser {
                     network: "",
                     address: "",
                     local_symbol: "",
-                    base_units: BigNumber(0),
+                    base_units: undefined,
                     txn_signature_hashed: events.release?.depositId,
                 },
                 to: {
@@ -243,7 +243,7 @@ export class EvmV2Parser {
                 network: "",
                 address: "",
                 local_symbol: "",
-                base_units: BigNumber(0),
+                base_units: undefined,
                 txn_signature_hashed: events.release?.depositId,
             },
             to: {
