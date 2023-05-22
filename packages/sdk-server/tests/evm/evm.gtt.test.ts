@@ -59,7 +59,7 @@ describe("Eth Poller USDC Tests ", () => {
 
         assert.ok(stringify === expected, `Result ${stringify} does not match ${expected}`);         
 
-        console.log("Test Completed Successfully");
+        console.log("Test Completed Successfully with " + result.txns.length + " results");
         
     }
 

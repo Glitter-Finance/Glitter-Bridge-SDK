@@ -1,5 +1,6 @@
 import BigNumber from "bignumber.js";
-import {Routing} from "../routing";
+import { Routing } from "../routing";
+import { Routing2 } from "../routing/routing.v2";
 
 export enum TransactionType {
     Unknown = "Unknown",
@@ -39,4 +40,19 @@ export type PartialBridgeTxn = {
     units?: BigNumber | null;
     amount?: BigNumber | number | null;
     routing?: Routing | null;
+};
+export type PartialBridge2Txn = {
+    txnID: string;
+    txnIDHashed?: string;
+    bridgeType?: BridgeType;
+    txnTimestamp?: Date;
+    block?: number;
+    txnType: TransactionType;
+    chainStatus?: ChainStatus | null;
+    network?: string | null;
+    tokenSymbol?: string | null;
+    address?: string | null;
+    units?: BigNumber | null;
+    amount?: BigNumber | number | null;
+    routing?: Routing2 | null;
 };
