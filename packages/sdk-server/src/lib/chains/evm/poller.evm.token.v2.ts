@@ -3,6 +3,7 @@ import { GlitterSDKServer } from "../../glitterSDKServer";
 import { EvmBridgeV2EventsParser, TokenBridgeV2EventGroup } from "./poller.evm.eventparser.v2";
 import { TransactionReceipt } from "@ethersproject/abstract-provider";
 import BigNumber from "bignumber.js";
+import { Routing2 } from "@glitter-finance/sdk-core/dist/lib/common/routing/routing.v2";
 
 export class EvmV2Parser {
 
@@ -95,32 +96,36 @@ export class EvmV2Parser {
         let fromAddress = txn.from;
 
         //get token name
-        const token = await BridgeV2Tokens.getChainConfigByVault(connect?.network, events.deposit?.vaultId || 0);
-        const tokenName = token?.symbol || "Unknown";
-        const decimals = token?.decimals || 0;
+        const fromToken = BridgeV2Tokens.getChainConfigByVault(connect?.network, events.deposit?.vaultId || 0);
+        if (!fromToken) throw new Error("From token not found")
+        const baseToken = BridgeV2Tokens.getChainConfigParent(fromToken);
+        if (!baseToken) throw new Error("Base token not found")
+
+        //const tokenName = token?.symbol || "Unknown";
+        //const decimals = token?.decimals || 0;
        
         //Get transfer amount
         if (events.transfer) {
             fromAddress = events.transfer.from;
             toAddress = events.transfer.to;
             partialTxn.units = BigNumber(events.transfer.value.toString());
-            partialTxn.amount = RoutingHelper.ReadableValue_FromBaseUnits(partialTxn.units, decimals);  
+            partialTxn.amount = RoutingHelper.ReadableValue_FromBaseUnits(partialTxn.units, fromToken.decimals);  
         } else {
             throw new Error("Transfer event not found");
         }
 
         //Check address
-        if (token?.vault_type?.toLocaleLowerCase() === "incoming"){
+        if (fromToken?.vault_type?.toLocaleLowerCase() === "incoming"){
 
             //This is a burn/mint.  To address is the 0x0 address
             if (toAddress.toLocaleLowerCase() != "0x0000000000000000000000000000000000000000"){
                 throw new Error("Invalid to address. Expected 0x0 for incoming vault");
             }
 
-        } else if (token?.vault_type?.toLocaleLowerCase() === "outgoing"){
+        } else if (fromToken?.vault_type?.toLocaleLowerCase() === "outgoing"){
 
             //This is a lock/release.  To Address is the vault address
-            const vaultAddress = token.vault_address || "";
+            const vaultAddress = fromToken.vault_address || "";
             if (toAddress.toLocaleLowerCase() != vaultAddress.toLocaleLowerCase()){
                 throw new Error(`Invalid to address. Expected ${vaultAddress} for outgoing vault`);
             }
@@ -132,13 +137,21 @@ export class EvmV2Parser {
         //Get Routing
         let routing: Routing | null = null;
         if (partialTxn.txnType == TransactionType.Deposit) {
+
+            //Get To Network
             const toNetwork = connect.getChainFromID(events.deposit?.destinationChainId || 0);
+            if (!toNetwork) throw new Error("To network not found");
+
+            //Get To Token
+            const toToken = BridgeV2Tokens.getTokenConfigChild(baseToken, toNetwork);
+
             toAddress = toNetwork ? DeserializeEvmBridgeTransfer.deserializeAddress(toNetwork, events.deposit?.destinationAddress || "") : "";
             routing = {
                 from: {
                     network: connect.network,
                     address: events.transfer?.from || "",
-                    token: tokenName,
+                    local_symbol: fromToken.symbol,
+                    base_units = partialTxn.units,
                     txn_signature: txnID,
                 },
                 to: {
@@ -148,7 +161,7 @@ export class EvmV2Parser {
                 },
                 amount: partialTxn.amount || BigNumber(0),
                 units: partialTxn.units || undefined,
-            };
+            }as Routing2;
         } else if (partialTxn.txnType == TransactionType.Refund) {
             routing = {
                 from: {
@@ -165,7 +178,7 @@ export class EvmV2Parser {
                 },
                 amount: partialTxn.amount || undefined,
                 units: partialTxn.units || undefined,
-            };
+            }as Routing2;
         }
 
         //Set routing

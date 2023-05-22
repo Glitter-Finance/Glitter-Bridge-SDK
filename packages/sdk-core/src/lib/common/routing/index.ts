@@ -101,4 +101,15 @@ export class RoutingHelper {
         const baseRaw = BigNumber(baseUnits).div(BigNumber(10).pow(decimals));
         return baseRaw;
     }
+
+    public static BaseUnits_Shift(
+        original_base_units: BigNumber,
+        original_decimals: number,
+        new_decimals: number
+    ): BigNumber {
+        const baseRaw = BigNumber(original_base_units)
+            .times(BigNumber(10).pow(new_decimals))
+            .div(BigNumber(10).pow(original_decimals));
+        return baseRaw.decimalPlaces(0, BigNumber.ROUND_DOWN);
+    }
 }
