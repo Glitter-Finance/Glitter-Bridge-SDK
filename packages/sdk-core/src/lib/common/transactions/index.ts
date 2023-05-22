@@ -39,20 +39,5 @@ export type PartialBridgeTxn = {
     address?: string | null;
     units?: BigNumber | null;
     amount?: BigNumber | number | null;
-    routing?: Routing | null;
-};
-export type PartialBridge2Txn = {
-    txnID: string;
-    txnIDHashed?: string;
-    bridgeType?: BridgeType;
-    txnTimestamp?: Date;
-    block?: number;
-    txnType: TransactionType;
-    chainStatus?: ChainStatus | null;
-    network?: string | null;
-    tokenSymbol?: string | null;
-    address?: string | null;
-    units?: BigNumber | null;
-    amount?: BigNumber | number | null;
-    routing?: Routing2 | null;
+    routing?: Routing | Routing2 | null;
 };
