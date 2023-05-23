@@ -3,23 +3,15 @@
         "network": "ethereum",
         "bridgeType": "TokenV2",
         "address": "0x9682835474a9d363c7b6ff7d6b59b67705f85e6f",
-        "beginning": {
-            "txn": "0x756975944324a3d34f3170e558c2f6318fdf915a8c249b17c9337fb35f0462cf"
-        },
         "end": {
-            "block": 8961658
+            "txn": "0x0ac6b08b132bfa7d166a5b5be0c0b06c433e84ba9ade15e51cb787356dbaac01"
         },
-        "limit": 7,
-        "batch": {
-            "txns": 7,
-            "position": "0x71c80fc8aacff25f4250d97e089637a818063416eb2e22ef434ca43234781f07",
-            "complete": false,
-            "block": 8962697
-        },
+        "limit": 20,
         "filter": {
             "txnType": "Deposit",
             "chainStatus": "Completed"
-        }
+        },
+        "lastBatchTxns": 0
     },
     "txns": [
         {
@@ -44,7 +36,7 @@
                 },
                 "to": {
                     "network": "avalanche",
-                    "address": "0x0x307834313345616439393933326531664637666539383632333433383943666232663236434538616342",
+                    "address": "0x307834313345616439393933326531664637666539383632333433383943666232663236434538616342",
                     "local_symbol": "xGTT",
                     "base_units": "40"
                 },
@@ -73,7 +65,7 @@
                 },
                 "to": {
                     "network": "avalanche",
-                    "address": "0x0x307834313345616439393933326531664637666539383632333433383943666232663236434538616342",
+                    "address": "0x307834313345616439393933326531664637666539383632333433383943666232663236434538616342",
                     "local_symbol": "xGTT",
                     "base_units": "4000000000000000000"
                 },
@@ -102,7 +94,7 @@
                 },
                 "to": {
                     "network": "avalanche",
-                    "address": "0x0x307834313345616439393933326531664637666539383632333433383943666232663236434538616342",
+                    "address": "0x307834313345616439393933326531664637666539383632333433383943666232663236434538616342",
                     "local_symbol": "xGTT",
                     "base_units": "4000000000000000000"
                 },
@@ -131,7 +123,7 @@
                 },
                 "to": {
                     "network": "avalanche",
-                    "address": "0x0x307834313345616439393933326531664637666539383632333433383943666232663236434538616342",
+                    "address": "0x307834313345616439393933326531664637666539383632333433383943666232663236434538616342",
                     "local_symbol": "xGTT",
                     "base_units": "4000000000000000000"
                 },
@@ -160,7 +152,7 @@
                 },
                 "to": {
                     "network": "avalanche",
-                    "address": "0x0x307834313345616439393933326531664637666539383632333433383943666232663236434538616342",
+                    "address": "0x307834313345616439393933326531664637666539383632333433383943666232663236434538616342",
                     "local_symbol": "xGTT",
                     "base_units": "4000000000000000000"
                 },
@@ -189,7 +181,7 @@
                 },
                 "to": {
                     "network": "avalanche",
-                    "address": "0x0x307834313345616439393933326531664637666539383632333433383943666232663236434538616342",
+                    "address": "0x307834313345616439393933326531664637666539383632333433383943666232663236434538616342",
                     "local_symbol": "xGTT",
                     "base_units": "4000000000000000000"
                 },
@@ -218,7 +210,152 @@
                 },
                 "to": {
                     "network": "avalanche",
-                    "address": "0x0x307834313345616439393933326531664637666539383632333433383943666232663236434538616342",
+                    "address": "0x307834313345616439393933326531664637666539383632333433383943666232663236434538616342",
+                    "local_symbol": "xGTT",
+                    "base_units": "4000000000000000000"
+                },
+                "amount": "4"
+            }
+        },
+        {
+            "txnID": "0x3b3c10101f270e363c282a312a0331dc94b7c980b2822f5c10b2ca9b5f32131b",
+            "txnIDHashed": "0xbe0277fdbd89aa0c730d7735f6a4924a87667508c4d591daac8d27427e5df699",
+            "bridgeType": "TokenV2",
+            "txnType": "Deposit",
+            "network": "ethereum",
+            "address": "0xEC28e6671Bcb93979DFB1734e5240c0cF52bC152",
+            "block": 9013953,
+            "txnTimestamp": "2023-05-17T04:27:00.000Z",
+            "chainStatus": "Completed",
+            "units": "4000000000000000000",
+            "amount": "4",
+            "routing": {
+                "from": {
+                    "network": "ethereum",
+                    "address": "0xEC28e6671Bcb93979DFB1734e5240c0cF52bC152",
+                    "local_symbol": "GTT",
+                    "base_units": "4000000000000000000",
+                    "txn_signature": "0x3b3c10101f270e363c282a312a0331dc94b7c980b2822f5c10b2ca9b5f32131b"
+                },
+                "to": {
+                    "network": "avalanche",
+                    "address": "0x307834313345616439393933326531664637666539383632333433383943666232663236434538616342",
+                    "local_symbol": "xGTT",
+                    "base_units": "4000000000000000000"
+                },
+                "amount": "4"
+            }
+        },
+        {
+            "txnID": "0xbd792dfee452c54ff04900bb84345dbad4a5805df2e560780fa9aacb2fd95ffa",
+            "txnIDHashed": "0xdc85c50717f0206e2436b08d00325e2989d2303d2dc672f3b3d53ec6da04cbd2",
+            "bridgeType": "TokenV2",
+            "txnType": "Deposit",
+            "network": "ethereum",
+            "address": "0xEC28e6671Bcb93979DFB1734e5240c0cF52bC152",
+            "block": 9041258,
+            "txnTimestamp": "2023-05-22T01:06:36.000Z",
+            "chainStatus": "Completed",
+            "units": "4000000000000000000",
+            "amount": "4",
+            "routing": {
+                "from": {
+                    "network": "ethereum",
+                    "address": "0xEC28e6671Bcb93979DFB1734e5240c0cF52bC152",
+                    "local_symbol": "GTT",
+                    "base_units": "4000000000000000000",
+                    "txn_signature": "0xbd792dfee452c54ff04900bb84345dbad4a5805df2e560780fa9aacb2fd95ffa"
+                },
+                "to": {
+                    "network": "avalanche",
+                    "address": "0x307834313345616439393933326531664637666539383632333433383943666232663236434538616342",
+                    "local_symbol": "xGTT",
+                    "base_units": "4000000000000000000"
+                },
+                "amount": "4"
+            }
+        },
+        {
+            "txnID": "0x2d10b7c48f4dcb8ae75e7370549645709adf592d7fbb0c7b0a2c50425e7fb2b3",
+            "txnIDHashed": "0xa1436df58a7bee83fe78781e79fb8b02f7731eaca35e157fdfdb3c81f9c86f49",
+            "bridgeType": "TokenV2",
+            "txnType": "Deposit",
+            "network": "ethereum",
+            "address": "0xEC28e6671Bcb93979DFB1734e5240c0cF52bC152",
+            "block": 9041301,
+            "txnTimestamp": "2023-05-22T01:18:48.000Z",
+            "chainStatus": "Completed",
+            "units": "4000000000000000000",
+            "amount": "4",
+            "routing": {
+                "from": {
+                    "network": "ethereum",
+                    "address": "0xEC28e6671Bcb93979DFB1734e5240c0cF52bC152",
+                    "local_symbol": "GTT",
+                    "base_units": "4000000000000000000",
+                    "txn_signature": "0x2d10b7c48f4dcb8ae75e7370549645709adf592d7fbb0c7b0a2c50425e7fb2b3"
+                },
+                "to": {
+                    "network": "avalanche",
+                    "address": "0x307834313345616439393933326531664637666539383632333433383943666232663236434538616342",
+                    "local_symbol": "xGTT",
+                    "base_units": "4000000000000000000"
+                },
+                "amount": "4"
+            }
+        },
+        {
+            "txnID": "0xc0df8f73de24ea5c98cc52a4417b3b7c7954315a68c0bb6395a0ad0897c456d0",
+            "txnIDHashed": "0x30014c4696d50d9da4d3264acd27b726385243c16bfad75b29bda72f9d58464d",
+            "bridgeType": "TokenV2",
+            "txnType": "Deposit",
+            "network": "ethereum",
+            "address": "0xEC28e6671Bcb93979DFB1734e5240c0cF52bC152",
+            "block": 9048951,
+            "txnTimestamp": "2023-05-23T09:38:48.000Z",
+            "chainStatus": "Completed",
+            "units": "4000000000000000000",
+            "amount": "4",
+            "routing": {
+                "from": {
+                    "network": "ethereum",
+                    "address": "0xEC28e6671Bcb93979DFB1734e5240c0cF52bC152",
+                    "local_symbol": "GTT",
+                    "base_units": "4000000000000000000",
+                    "txn_signature": "0xc0df8f73de24ea5c98cc52a4417b3b7c7954315a68c0bb6395a0ad0897c456d0"
+                },
+                "to": {
+                    "network": "avalanche",
+                    "address": "0x307834313345616439393933326531664637666539383632333433383943666232663236434538616342",
+                    "local_symbol": "xGTT",
+                    "base_units": "4000000000000000000"
+                },
+                "amount": "4"
+            }
+        },
+        {
+            "txnID": "0x0ac6b08b132bfa7d166a5b5be0c0b06c433e84ba9ade15e51cb787356dbaac01",
+            "txnIDHashed": "0x31a911203ec4e35c6a3eda04a0d536e1c44caaac9be0192e8b78bd4a002d4710",
+            "bridgeType": "TokenV2",
+            "txnType": "Deposit",
+            "network": "ethereum",
+            "address": "0xEC28e6671Bcb93979DFB1734e5240c0cF52bC152",
+            "block": 9049126,
+            "txnTimestamp": "2023-05-23T10:22:36.000Z",
+            "chainStatus": "Completed",
+            "units": "4000000000000000000",
+            "amount": "4",
+            "routing": {
+                "from": {
+                    "network": "ethereum",
+                    "address": "0xEC28e6671Bcb93979DFB1734e5240c0cF52bC152",
+                    "local_symbol": "GTT",
+                    "base_units": "4000000000000000000",
+                    "txn_signature": "0x0ac6b08b132bfa7d166a5b5be0c0b06c433e84ba9ade15e51cb787356dbaac01"
+                },
+                "to": {
+                    "network": "avalanche",
+                    "address": "0x413ead99932e1ff7fe986234389cfb2f26ce8acb",
                     "local_symbol": "xGTT",
                     "base_units": "4000000000000000000"
                 },

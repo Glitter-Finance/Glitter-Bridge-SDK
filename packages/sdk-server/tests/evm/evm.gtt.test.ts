@@ -26,7 +26,7 @@ describe("Eth Poller USDC Tests ", () => {
         //Expected
         const expected = JSON.stringify(ethereumDeposits);
 
-        await common(sdk, poller, TransactionType.Deposit, expected, 8961658, 7);
+        await common(sdk, poller, TransactionType.Deposit, expected, 8961658, 20);
  
         Promise.resolve();
     }, 240_000);
@@ -57,7 +57,11 @@ describe("Eth Poller USDC Tests ", () => {
         //Grab all Txn IDs
         const stringify = JSON.stringify(result);
 
-        assert.ok(stringify === expected, `Result ${stringify} does not match ${expected}`);         
+        assert.ok(stringify === expected, `Result ${stringify}
+        ========================================================
+         does not match          
+        ========================================================
+         ${expected}`);         
 
         console.log("Test Completed Successfully with " + result.txns.length + " results");
         
