@@ -96,7 +96,7 @@ export class DeserializeEvmBridgeTransfer {
             case BridgeNetworks.Arbitrum:
             case BridgeNetworks.Zkevm:
             case BridgeNetworks.Optimism:
-                return `0x${data.toLowerCase()}`;
+                return `${data.toLowerCase()}`;
             case BridgeNetworks.solana:
                 return new PublicKey(fromHexString(data) as Uint8Array).toString();
         }
