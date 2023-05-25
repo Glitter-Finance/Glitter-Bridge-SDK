@@ -28,9 +28,9 @@ export type TokenBridgeV2RefundEvent = TokenBridgeV2Event & {
 
 export class EvmBridgeV2EventsParser {
     static readonly EventsABI = [
-        "event BridgeDeposit(uint32 vaultId, uint256 amount, uint16 destinationChainId, bytes destinationAddress, uint32 protocolId)",
-        "event BridgeRelease(uint32 vaultId, address destinationAddress, uint256 amount, uint8 feeRate,bytes32 depositId)",
-        "event BridgeRefund(uint32 vaultId, address destinationAddress, uint256 amount,bytes32 depositId)",
+        "event BridgeDeposit(uint256 nonce, address vault, uint256 amount, uint16 destinationChainId, bytes destinationAddress, uint32 protocolId)",
+        "event BridgeRelease(uint256 nonce, address vault, address destinationAddress, uint256 amount, uint8 feeRate,bytes32 depositId)",
+        "event BridgeRefund(uint256 nonce, address vault, address destinationAddress, uint256 amount,bytes32 depositId)",
         "event Transfer(address indexed from, address indexed to, uint256 value)",
     ];
 
