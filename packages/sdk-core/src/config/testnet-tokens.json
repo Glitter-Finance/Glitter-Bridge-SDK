@@ -302,73 +302,73 @@
                     "min_transfer": 0,
                     "vault_id": 15,
                     "vault_type": "outgoing",
-                    "vault_address": "0x4d23A780C6Ebc05145bF28d81B0013519b28253E"
+                    "vault_address": "0xdcddf3b27d95118423aea3c0508d8d41e34f0572"
                 },
                 {
                     "chain": "Arbitrum",
                     "symbol": "xGTT",
                     "name": "Glitter Wrapped Test Token",
                     "decimals": 18,
-                    "address": "0x248e44481DB39EEF6F805badAEdBAbaF439Be2B2",
+                    "address": "0x934431bcf93a48fc608872c00098c6aa5ffbe1ce",
                     "min_transfer": 0,
                     "vault_id": 4,
                     "vault_type": "incoming",
-                    "vault_address": "0x248e44481DB39EEF6F805badAEdBAbaF439Be2B2"
+                    "vault_address": "0x934431bcf93a48fc608872c00098c6aa5ffbe1ce"
                 },
                 {
                     "chain": "zkEVM",
                     "symbol": "xGTT",
                     "name": "Glitter Wrapped Test Token",
                     "decimals": 18,
-                    "address": "0x248e44481DB39EEF6F805badAEdBAbaF439Be2B2",
+                    "address": "0x9002dee328872d6b8245d0fd4cb8ad7b4d00fe2e",
                     "min_transfer": 0,
                     "vault_id": 4,
                     "vault_type": "incoming",
-                    "vault_address": "0x248e44481DB39EEF6F805badAEdBAbaF439Be2B2"
+                    "vault_address": "0x9002dee328872d6b8245d0fd4cb8ad7b4d00fe2e"
                 },
                 {
                     "chain": "Polygon",
                     "symbol": "xGTT",
                     "name": "Glitter Wrapped Test Token",
                     "decimals": 18,
-                    "address": "0x248e44481DB39EEF6F805badAEdBAbaF439Be2B2",
+                    "address": "0x934431bcf93a48fc608872c00098c6aa5ffbe1ce",
                     "min_transfer": 0,
                     "vault_id": 4,
                     "vault_type": "incoming",
-                    "vault_address": "0x248e44481DB39EEF6F805badAEdBAbaF439Be2B2"
+                    "vault_address": "0x934431bcf93a48fc608872c00098c6aa5ffbe1ce"
                 },
                 {
                     "chain": "Avalanche",
                     "symbol": "xGTT",
                     "name": "Glitter Wrapped Test Token",
                     "decimals": 18,
-                    "address": "0x248e44481DB39EEF6F805badAEdBAbaF439Be2B2",
+                    "address": "0x9002dee328872d6b8245d0fd4cb8ad7b4d00fe2e",
                     "min_transfer": 0,
                     "vault_id": 4,
                     "vault_type": "incoming",
-                    "vault_address": "0x248e44481DB39EEF6F805badAEdBAbaF439Be2B2"
+                    "vault_address": "0x9002dee328872d6b8245d0fd4cb8ad7b4d00fe2e"
                 },
                 {
                     "chain": "Binance",
                     "symbol": "xGTT",
                     "name": "Glitter Wrapped Test Token",
                     "decimals": 18,
-                    "address": "0x511f17EBC47B0316e6E934c1E0166F37376B1C59",
+                    "address": "0xb5480b6d228965455cf2a8aef395dbd7cfa3e7c8",
                     "min_transfer": 0,
                     "vault_id": 4,
                     "vault_type": "incoming",
-                    "vault_address": "0x511f17EBC47B0316e6E934c1E0166F37376B1C59"
+                    "vault_address": "0xb5480b6d228965455cf2a8aef395dbd7cfa3e7c8"
                 },
                 {
                     "chain": "Optimism",
                     "symbol": "xGTT",
                     "name": "Glitter Wrapped Test Token",
                     "decimals": 18,
-                    "address": "0x08486dEf8dfDe9Fe0C7e3A80fC399d86e3177C6b",
+                    "address": "0x40905d7e5aba26541f29578eee6158bb7d3fd70d",
                     "min_transfer": 0,
                     "vault_id": 4,
                     "vault_type": "incoming",
-                    "vault_address": "0x08486dEf8dfDe9Fe0C7e3A80fC399d86e3177C6b"
+                    "vault_address": "0x40905d7e5aba26541f29578eee6158bb7d3fd70d"
                 }
             ]
         }
