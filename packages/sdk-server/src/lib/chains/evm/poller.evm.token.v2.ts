@@ -96,7 +96,7 @@ export class EvmV2Parser {
         let fromAddress = txn.from;
 
         //get token info
-        const fromToken = BridgeV2Tokens.getChainConfigByVault(connect?.network, events.deposit?.vaultId || 0);
+        const fromToken = BridgeV2Tokens.getChainConfigByVault(connect?.network, events.deposit?.vault || "");
         if (!fromToken) throw new Error("From token not found")
         const baseToken = BridgeV2Tokens.getChainConfigParent(fromToken);
         if (!baseToken) throw new Error("Base token not found")
@@ -198,7 +198,7 @@ export class EvmV2Parser {
         let fromAddress = txn.from;
 
         //get token name
-        const toToken = BridgeV2Tokens.getChainConfigByVault(connect?.network, events.deposit?.vaultId || 0);
+        const toToken = BridgeV2Tokens.getChainConfigByVault(connect?.network, events.deposit?.vault || "");
         if (!toToken) throw new Error("From token not found")
         const baseToken = BridgeV2Tokens.getChainConfigParent(toToken);
         if (!baseToken) throw new Error("Base token not found")
@@ -275,7 +275,7 @@ export class EvmV2Parser {
         let fromAddress = txn.from;
 
         //get token name
-        const token = await BridgeV2Tokens.getChainConfigByVault(connect?.network, events.refund?.vaultId || 0);
+        const token = await BridgeV2Tokens.getChainConfigByVault(connect?.network, events.deposit?.vault || "");
         const tokenName = token?.symbol || "Unknown";
         const decimals = token?.decimals || 0;
       

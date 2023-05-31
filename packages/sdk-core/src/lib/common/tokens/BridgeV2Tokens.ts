@@ -66,7 +66,7 @@ export class BridgeV2Tokens {
 
         for (const token of this._tokenConfig?.tokens ?? []) {
             for (const chain of token.chains ?? []) {
-                if (chain.chain.toLowerCase() === network.toLowerCase() && chain.vault_address == vaultAddress) {
+                if (chain.chain.toLowerCase() === network.toLowerCase() && chain.vault_address?.toLowerCase() == vaultAddress.toLowerCase()) {
                     return chain;
                 }
             }
