@@ -81,4 +81,12 @@ describe("EvmConnect", () => {
         expect(release).toBeTruthy()
     });
 
+    it("EUROC Support", async () => {
+        // EURC is not available on testnet
+        let _glitterSdk = new GlitterBridgeSDK();
+        _glitterSdk.setEnvironment(GlitterEnvironment.mainnet)
+        _glitterSdk = _glitterSdk.connect([defaultEvmNetwork]);
+        const euroc = _glitterSdk.avalanche!.getToken("EURC");
+        expect(euroc).toBeTruthy();
+    });
 });
