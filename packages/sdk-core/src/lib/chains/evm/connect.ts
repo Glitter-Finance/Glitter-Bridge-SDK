@@ -59,6 +59,22 @@ export class EvmConnect {
         };
     }
 
+    private isValidToken(tokenSymbol: string): boolean {
+        return !!this.__providers.tokens.get(tokenSymbol.toLowerCase());
+    }
+
+    /**
+     * Check if provided Signer is
+     * connected to same chain as EvmConnect
+     * to execute a transaction
+     * @param {ethers.Signer} signer
+     * @returns {Promise<boolean>}
+     */
+    private async isCorrectChain(signer: ethers.Signer): Promise<boolean> {
+        const chainId = await signer.getChainId();
+        return this.__config.chainId === chainId;
+    }
+
     constructor(network: BridgeEvmNetworks, config: EvmNetworkConfig) {
         this.__config = config;
         this.__network = network;
@@ -77,13 +93,14 @@ export class EvmConnect {
     get network(): BridgeEvmNetworks {
         return this.__network;
     }
+
     /**
-   * Provide address of bridge
-   * component
-   * @param {"tokens" | "bridge" | "depositWallet" | "releaseWallet"} entity
-   * @param {"USDC"} tokenSymbol only USDC for now
-   * @returns {string}
-   */
+     * Provide address of bridge
+     * component
+     * @param {"tokens" | "bridge" | "depositWallet" | "releaseWallet"} entity
+     * @param {"USDC" | "EURC"} tokenSymbol only USDC for now
+     * @returns {string}
+     */
     getAddress(
         entity: "tokens" | "bridge" | "depositWallet" | "releaseWallet",
         tokenSymbol?: string
@@ -109,16 +126,13 @@ export class EvmConnect {
         return this.__config[entity].toLowerCase();
     }
 
-    private isValidToken(tokenSymbol: string): boolean {
-        return !!this.__providers.tokens.get(tokenSymbol.toLowerCase());
-    }
     /**
-   * Provide token balance of an address
-   * on the connected evm network
-   * @param {"USDC"} tokenSymbol only USDC for now
-   * @param {string} address
-   * @returns {ethers.BigNumber}
-   */
+     * Provide token balance of an address
+     * on the connected evm network
+     * @param {"USDC"} tokenSymbol only USDC for now
+     * @param {string} address
+     * @returns {ethers.BigNumber}
+     */
     async getTokenBalanceOnNetwork(
         tokenSymbol: string,
         address: string
@@ -131,16 +145,17 @@ export class EvmConnect {
         const balance = await erc20!.balanceOf(address);
         return balance;
     }
+    
     /**
-   * Before bridging tokens we need to check
-   * if tokens are approved for bridge to use
-   * if not, we can use this method to sign
-   * and approve transaction
-   * @param {"USDC"} tokenSymbol only USDC for now
-   * @param {ethers.BigNumber | string} amount in BigNumber units e.g 1_000_000 for 1USDC
-   * @param {ethers.Signer} signer to sign the transaction
-   * @returns {ethers.ContractTransaction}
-   */
+     * Before bridging tokens we need to check
+     * if tokens are approved for bridge to use
+     * if not, we can use this method to sign
+     * and approve transaction
+     * @param {"USDC"} tokenSymbol only USDC for now
+     * @param {ethers.BigNumber | string} amount in BigNumber units e.g 1_000_000 for 1USDC
+     * @param {ethers.Signer} signer to sign the transaction
+     * @returns {ethers.ContractTransaction}
+     */
     async approveTokensForBridge(
         tokenSymbol: string,
         amount: ethers.BigNumber | string,
@@ -153,15 +168,16 @@ export class EvmConnect {
         const tokenAddress = this.getAddress("tokens", tokenSymbol);
 
         const token = ERC20__factory.connect(tokenAddress, signer);
-        return await token.increaseAllowance(bridgeAddress, amount);
+        return await token.approve(bridgeAddress, amount);
     }
+    
     /**
-   * Get the amount of tokens approved
-   * to be used by the bridge
-   * @param {"USDC"} tokenSymbol only USDC for now
-   * @param {ethers.Signer} signer to sign the transaction
-   * @returns {ethers.BigNumber}
-   */
+     * Get the amount of tokens approved
+     * to be used by the bridge
+     * @param {"USDC"} tokenSymbol only USDC for now
+     * @param {ethers.Signer} signer to sign the transaction
+     * @returns {ethers.BigNumber}
+     */
     async bridgeAllowance(
         tokenSymbol: string,
         signer: ethers.Signer
@@ -179,12 +195,13 @@ export class EvmConnect {
 
         return allowance;
     }
+
     /**
-   * Parse transaction receipts to retrieve
-   * bridge transfer data
-   * @param {string} txHash transaction hash of deposit or release event on evm chain
-   * @returns {Array<TransferEvent | BridgeDepositEvent | BridgeReleaseEvent>}
-   */
+     * Parse transaction receipts to retrieve
+     * bridge transfer data
+     * @param {string} txHash transaction hash of deposit or release event on evm chain
+     * @returns {Array<TransferEvent | BridgeDepositEvent | BridgeReleaseEvent>}
+     */
     async parseLogs(
         txHash: string
     ): Promise<Array<TransferEvent | BridgeDepositEvent | BridgeReleaseEvent>> {
@@ -276,25 +293,14 @@ export class EvmConnect {
     }
 
     /**
-   * Check if provided wallet is
-   * connected to same chain as EvmConnect
-   * to execute a transaction
-   * @param {ethers.Wallet} wallet
-   * @returns {Promise<boolean>}
-   */
-    private async isCorrectChain(wallet: ethers.Signer): Promise<boolean> {
-        const chainId = await wallet.getChainId();
-        return this.__config.chainId === chainId;
-    }
-    /**
-   * Bridge tokens to another supported chain
-   * @param {BridgeNetworks} destination
-   * @param {"USDC"} tokenSymbol only USDC for now
-   * @param {string | ethers.BigNumber} amount in BigNumber units e.g 1_000_000 for 1USDC
-   * @param {string | PublicKey | algosdk.Account} destinationWallet provide USDC reciever address on destination chain
-   * @param {ethers.Wallet} wallet to sign transaction
-   * @returns {Promise<ethers.ContractTransaction>}
-   */
+     * Bridge tokens to another supported chain
+     * @param {BridgeNetworks} destination
+     * @param {"USDC"} tokenSymbol only USDC for now
+     * @param {string | ethers.BigNumber} amount in BigNumber units e.g 1_000_000 for 1USDC
+     * @param {string | PublicKey | algosdk.Account} destinationWallet provide USDC reciever address on destination chain
+     * @param {ethers.Wallet} wallet to sign transaction
+     * @returns {Promise<ethers.ContractTransaction>}
+     */
     async bridge(
         destinationWallet: string | PublicKey | algosdk.Account,
         destination: BridgeNetworks,
@@ -309,6 +315,7 @@ export class EvmConnect {
                 throw new Error(
                     `[EvmConnect] Signer should be connected to network ${this.__network}`
                 );
+
             if (!this.isValidToken(tokenSymbol)) {
                 throw new Error(`[EvmConnect] Unsupported token symbol.`);
             }
@@ -322,7 +329,14 @@ export class EvmConnect {
                 signer
             );
 
-            const tokenAddress = this.getAddress("tokens", tokenSymbol);
+            const token = this.getToken(tokenSymbol)!;
+
+            if (token.supportedDestination) {
+                if (!token.supportedDestination.includes(destination)) {
+                    throw new Error('[EvmConnect] Token unsupported on destination chain.');
+                }
+            }
+
             const depositAddress = this.getAddress("depositWallet");
             const _amount =
         typeof amount === "string" ? ethers.BigNumber.from(amount) : amount;
@@ -339,13 +353,14 @@ export class EvmConnect {
                 serlized.destinationChain,
                 serlized.amount,
                 depositAddress,
-                tokenAddress,
+                token.address,
                 serlized.destinationWallet
             );
         } catch (error) {
             return Promise.reject(error);
         }
     }
+
     public getTxnHashed(txnID: string): string {
         return ethers.utils.keccak256(txnID);
     }
@@ -453,6 +468,7 @@ export class EvmConnect {
     //   }
     //   return Promise.resolve(returnTxn);
     // }
+
     public get generateWallet(): ethers.Wallet {
         return ethers.Wallet.createRandom();
     }
