@@ -9,7 +9,8 @@ export type TokenBridgeV2EventGroup = {
     transfer?: TransferEvent;
 }
 export type TokenBridgeV2Event = {
-    vaultId: number;
+    nonce:BigNumber;
+    vault: string;
     amount: BigNumber;
     destinationAddress: string;
     type: "BridgeDeposit" | "BridgeRelease" | "BridgeRefund";
@@ -53,10 +54,11 @@ export class EvmBridgeV2EventsParser {
         const parsedDeposit = parsedLogs.find((x) => x.name === "BridgeDeposit");
 
         if (!parsedDeposit) return null;
-        const { vaultId, amount, destinationChainId, destinationAddress, protocolId } = parsedDeposit.args;
+        const { nonce, vault, amount, destinationChainId, destinationAddress, protocolId } = parsedDeposit.args;
 
         return {
-            vaultId,
+            nonce,
+            vault,
             amount,
             destinationChainId,
             destinationAddress,
@@ -69,10 +71,11 @@ export class EvmBridgeV2EventsParser {
         const parsedRelease = parsedLogs.find((x) => x.name === "BridgeRelease");
 
         if (!parsedRelease) return null;
-        const { vaultId, destinationAddress, amount, feeRate, depositId } = parsedRelease.args;
+        const { nonce, vault, destinationAddress, amount, feeRate, depositId } = parsedRelease.args;
 
         return {
-            vaultId,
+            nonce,
+            vault,
             amount,
             destinationAddress,
             type: "BridgeRelease",
@@ -85,10 +88,11 @@ export class EvmBridgeV2EventsParser {
         const parsedRefund = parsedLogs.find((x) => x.name === "BridgeRefund");
 
         if (!parsedRefund) return null;
-        const { vaultId, destinationAddress, amount, depositId } = parsedRefund.args;
+        const { nonce, vault, destinationAddress, amount, depositId } = parsedRefund.args;
 
         return {
-            vaultId,
+            nonce,
+            vault,
             amount,
             destinationAddress,
             type: "BridgeRefund",
