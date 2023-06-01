@@ -32,6 +32,7 @@ export type PartialBridgeTxn = {
     bridgeType?: BridgeType;
     txnTimestamp?: Date;
     block?: number;
+    confirmations?: number;
     txnType: TransactionType;
     chainStatus?: ChainStatus | null;
     network?: string | null;

@@ -35,6 +35,7 @@ export class EvmV2Parser {
         const txnReceipt = await connect.provider.getTransactionReceipt(txnID);
         if (!txnReceipt) return partialTxn;
         partialTxn.block = txnReceipt.blockNumber;
+        partialTxn.confirmations = txnReceipt.confirmations;
 
         //Get timestamp
         const timestamp_s = partialTxn.block ? (await connect.getTimeStampFromBlockNumber(partialTxn.block)) : 0;
