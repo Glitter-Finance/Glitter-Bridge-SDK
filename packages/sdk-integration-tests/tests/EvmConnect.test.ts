@@ -89,4 +89,19 @@ describe("EvmConnect", () => {
         const euroc = _glitterSdk.avalanche!.getToken("EURC");
         expect(euroc).toBeTruthy();
     });
+
+    it("EUROC Error on invalid destination", async () => {
+        // EURC is not available on testnet
+        let _glitterSdk = new GlitterBridgeSDK();
+        _glitterSdk.setEnvironment(GlitterEnvironment.mainnet)
+        _glitterSdk = _glitterSdk.connect([defaultEvmNetwork]);
+        const _wallet = await _glitterSdk.avalanche?.generateWallet;
+        const addr = await _wallet?.getAddress()
+
+        if (addr && _wallet) {
+            expect(
+                _glitterSdk.avalanche?.bridge(addr, BridgeNetworks.algorand, "EURC", '1000000', _wallet)
+            ).toThrow()
+        }
+    });
 });
