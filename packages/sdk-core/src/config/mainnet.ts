@@ -130,7 +130,7 @@ export const config: GlitterBridgeConfig = {
                 },
                 {
                     address: "0xc891eb4cbdeff6e073e859e987815ed1505c2acd",
-                    symbol: "EURC",
+                    symbol: "EUROC",
                     decimals: 6,
                     name: "Euro Coin",
                     minTransfer: 3,
@@ -154,7 +154,7 @@ export const config: GlitterBridgeConfig = {
                 },
                 {
                     address: "0x1aBaEA1f7C830bD89Acc67eC4af516284b1bC33c",
-                    symbol: "EURC",
+                    symbol: "EUROC",
                     decimals: 6,
                     name: "Euro Coin",
                     minTransfer: 3,

@@ -98,7 +98,7 @@ export class EvmConnect {
      * Provide address of bridge
      * component
      * @param {"tokens" | "bridge" | "depositWallet" | "releaseWallet"} entity
-     * @param {"USDC" | "EURC"} tokenSymbol only USDC for now
+     * @param {"USDC" | "EUROC"} tokenSymbol only USDC for now
      * @returns {string}
      */
     getAddress(
