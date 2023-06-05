@@ -301,7 +301,7 @@
                     "address": "0x3aEE2ca29df1EdB741c299ca1903C5cE2DFC0F9d",
                     "min_transfer": 0,
                     "vault_type": "outgoing",
-                    "vault_address": "0xdcddf3b27d95118423aea3c0508d8d41e34f0572"
+                    "vault_address": "0x7cdb52a40f703f2f8d9006e98cf408942d1a2595"
                 },
                 {
                     "chain": "Arbitrum",
@@ -311,7 +311,7 @@
                     "address": "0x934431bcf93a48fc608872c00098c6aa5ffbe1ce",
                     "min_transfer": 0,
                     "vault_type": "incoming",
-                    "vault_address": "0x934431bcf93a48fc608872c00098c6aa5ffbe1ce"
+                    "vault_address": "0x961388fe63d3134a2d83b9dba4b771f738bf8d8d"
                 },
                 {
                     "chain": "zkEVM",
@@ -321,7 +321,7 @@
                     "address": "0x9002dee328872d6b8245d0fd4cb8ad7b4d00fe2e",
                     "min_transfer": 0,
                     "vault_type": "incoming",
-                    "vault_address": "0x9002dee328872d6b8245d0fd4cb8ad7b4d00fe2e"
+                    "vault_address": "0xb36a5accccac48e3ae3207ece4d1cdfd693dd77f"
                 },
                 {
                     "chain": "Polygon",
@@ -331,7 +331,7 @@
                     "address": "0x934431bcf93a48fc608872c00098c6aa5ffbe1ce",
                     "min_transfer": 0,
                     "vault_type": "incoming",
-                    "vault_address": "0x934431bcf93a48fc608872c00098c6aa5ffbe1ce"
+                    "vault_address": "0xfb5e89d2d9f33e7e5736a6bd40ffe3ddee3fab5d"
                 },
                 {
                     "chain": "Avalanche",
@@ -341,7 +341,7 @@
                     "address": "0x9002dee328872d6b8245d0fd4cb8ad7b4d00fe2e",
                     "min_transfer": 0,
                     "vault_type": "incoming",
-                    "vault_address": "0x9002dee328872d6b8245d0fd4cb8ad7b4d00fe2e"
+                    "vault_address": "0x1aee85ab59f6f9aa79e9b1cee76926dc81ecf7bb"
                 },
                 {
                     "chain": "Binance",
@@ -351,7 +351,7 @@
                     "address": "0xb5480b6d228965455cf2a8aef395dbd7cfa3e7c8",
                     "min_transfer": 0,
                     "vault_type": "incoming",
-                    "vault_address": "0xb5480b6d228965455cf2a8aef395dbd7cfa3e7c8"
+                    "vault_address": "0xf83a807849965419c5c9e36b12d5a5da03c34307"
                 },
                 {
                     "chain": "Optimism",
@@ -361,7 +361,7 @@
                     "address": "0x40905d7e5aba26541f29578eee6158bb7d3fd70d",
                     "min_transfer": 0,
                     "vault_type": "incoming",
-                    "vault_address": "0x40905d7e5aba26541f29578eee6158bb7d3fd70d"
+                    "vault_address": "0x4c412833bef9c911c57ec0441f7d8a2c482fd81b"
                 }
             ]
         }
