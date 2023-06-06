@@ -86,7 +86,7 @@ describe("EvmConnect", () => {
         let _glitterSdk = new GlitterBridgeSDK();
         _glitterSdk.setEnvironment(GlitterEnvironment.mainnet)
         _glitterSdk = _glitterSdk.connect([defaultEvmNetwork]);
-        const euroc = _glitterSdk.avalanche!.getToken("EURC");
+        const euroc = _glitterSdk.avalanche!.getToken("EUROC");
         expect(euroc).toBeTruthy();
     });
 
@@ -95,13 +95,33 @@ describe("EvmConnect", () => {
         let _glitterSdk = new GlitterBridgeSDK();
         _glitterSdk.setEnvironment(GlitterEnvironment.mainnet)
         _glitterSdk = _glitterSdk.connect([defaultEvmNetwork]);
-        const _wallet = await _glitterSdk.avalanche?.generateWallet;
+        let _wallet = await _glitterSdk.avalanche?.generateWallet;
+        _wallet = _wallet?.connect(_glitterSdk.avalanche!.provider)
         const addr = await _wallet?.getAddress()
 
         if (addr && _wallet) {
-            expect(
-                _glitterSdk.avalanche?.bridge(addr, BridgeNetworks.algorand, "EURC", '1000000', _wallet)
-            ).toThrow()
+            await expect(
+                _glitterSdk.avalanche?.bridge(addr, BridgeNetworks.algorand, "EURC", '1000000', _wallet!)
+            ).rejects.toThrow()
         }
+    });
+
+    it("EUROC bridge mainnet", async () => {
+        // EURC is not available on testnet
+        let _glitterSdk = new GlitterBridgeSDK();
+        _glitterSdk.setEnvironment(GlitterEnvironment.mainnet)
+        _glitterSdk = _glitterSdk.connect([defaultEvmNetwork]);
+        let _wallet = await _glitterSdk.avalanche?.generateWallet;
+        _wallet = _wallet?.connect(_glitterSdk.avalanche!.provider)
+        const addr = await _wallet?.getAddress()
+
+        await expect(_glitterSdk.avalanche?.bridge(
+                    addr!,
+                    BridgeNetworks.Ethereum,
+                    'EUROC',
+                    '1000000',
+                    _wallet!
+        )).rejects.toThrow()
+
     });
 });
