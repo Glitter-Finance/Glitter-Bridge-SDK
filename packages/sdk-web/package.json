@@ -1,6 +1,6 @@
 {
   "name": "@glitter-finance/sdk-web",
-  "version": "1.0.1",
+  "version": "1.0.3",
   "description": "Glitter Finance Bridge: React Support Library (Dev Version)",
   "license": "MIT",
   "main": "dist/index.js",
@@ -18,12 +18,12 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/Glitter-Finance/Glitter-Bridge-SDK-Web.git"
+    "url": "https://github.com/Glitter-Finance/SDK.git"
   },
   "keywords": [],
   "author": "Glitter Finance",
   "bugs": {
-    "url": "https://github.com/Glitter-Finance/Glitter-Bridge-SDK-Web/issues"
+    "url": "https://github.com/Glitter-Finance/SDK/issues"
   },
   "engines": {
     "node": ">=10"
@@ -38,7 +38,7 @@
       "limit": "10 KB"
     }
   ],
-  "homepage": "https://github.com/Glitter-Finance/Glitter-Bridge-SDK-Web#readme",
+  "homepage": "https://github.com/Glitter-Finance/SDK/tree/main/packages/sdk-web",
   "devDependencies": {
     "@size-limit/preset-small-lib": "^8.2.4",
     "@types/jest": "^29.4.0",
@@ -54,7 +54,7 @@
   "dependencies": {
     "@blockshake/defly-connect": "^1.1.1",
     "@coin98-com/connect-sdk": "^1.0.9",
-    "@glitter-finance/sdk-core": "1.1.3",
+    "@glitter-finance/sdk-core": "1.1.4",
     "@json-rpc-tools/utils": "^1.7.6",
     "@metamask/onboarding": "^1.0.1",
     "@perawallet/connect": "^1.2.1",
