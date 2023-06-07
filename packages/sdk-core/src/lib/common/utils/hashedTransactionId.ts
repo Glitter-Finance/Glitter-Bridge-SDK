@@ -1,7 +1,6 @@
 import base58 from "bs58";
 import {ethers} from "ethers";
 import {BridgeNetworks} from "../networks";
-import {base64ToString} from "./utils";
 
 export function getHashedTransactionId(
     sourceNetwork: BridgeNetworks,
@@ -11,8 +10,7 @@ export function getHashedTransactionId(
         case BridgeNetworks.solana:
             return ethers.utils.keccak256(base58.decode(hash));
         case BridgeNetworks.algorand:
-            const base64String = base64ToString(hash);
-            return ethers.utils.keccak256(`0x${base64String}`);
+            return ethers.utils.keccak256('0x' + Buffer.from(hash, "base64").toString("hex"));
         case BridgeNetworks.TRON:
             return ethers.utils.keccak256(`0x${hash}`);
         default:

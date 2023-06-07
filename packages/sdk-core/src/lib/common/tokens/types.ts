@@ -1,3 +1,5 @@
+import {BridgeNetworks} from "../networks";
+
 interface BaseTokenConfig {
   symbol: string;
   name: string;
@@ -6,7 +8,8 @@ interface BaseTokenConfig {
   minTransfer?: number;
   maxTransfer?: number;
   totalSupply?: bigint;
-  wrappedSymbol?: string
+  wrappedSymbol?: string;
+  supportedDestination?: BridgeNetworks[];
 }
 
 export type BridgeTokenConfig = { 
