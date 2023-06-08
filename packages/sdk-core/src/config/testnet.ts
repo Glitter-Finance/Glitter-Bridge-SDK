@@ -143,6 +143,22 @@ export const config: GlitterBridgeConfig = {
             releaseWallet: "0xEAFA843b04A5847ec463358FC499347435354D3D",
             chainId: 80001,
         },
+        [BridgeNetworks.Arbitrum]: {
+            chainId: 421613, //Arbitrum Goerli Testnet
+            bridge: "",
+            rpcUrl: "",
+            tokens: [
+                {
+                    address: "0xfd064A18f3BF249cf1f87FC203E90D8f650f2d63",
+                    symbol: "USDC",
+                    decimals: 6,
+                    name: "USD Coin",
+                    minTransfer: 5
+                }
+            ],
+            depositWallet: "",
+            releaseWallet: "",
+        },
     },
     tron: {
         tokens: [

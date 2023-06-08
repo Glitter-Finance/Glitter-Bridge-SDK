@@ -180,6 +180,22 @@ export const config: GlitterBridgeConfig = {
             depositWallet: "0xa89a90a11e20b61814da283ba906f30742a99492",
             releaseWallet: "0xfdc9Af7852F9b2d234b96B1F53804BC781Ce26b3",
         },
+        [BridgeNetworks.Arbitrum]: {
+            chainId: 42161,
+            bridge: "",
+            rpcUrl: "",
+            tokens: [
+                {
+                    address: "0xaf88d065e77c8cC2239327C5EDb3A432268e5831",
+                    symbol: "USDC",
+                    decimals: 6,
+                    name: "USD Coin",
+                    minTransfer: 5
+                }
+            ],
+            depositWallet: "0x602454064339ddb5ef9f8eafc8c453dbc24aa243",
+            releaseWallet: "0xfdc41b43d544252c16E8C8498B4bC3C85905C040",
+        },
     },
     tron: {
         tokens: [
