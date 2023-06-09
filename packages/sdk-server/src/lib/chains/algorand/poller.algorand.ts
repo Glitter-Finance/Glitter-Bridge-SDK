@@ -1,13 +1,14 @@
 import { BridgeNetworks, BridgeType, PartialBridgeTxn } from "@glitter-finance/sdk-core";
 import { GlitterSDKServer } from "../../glitterSDKServer";
 import { Cursor, CursorFilter, NewCursor, UpdateCursor } from "../../common/cursor";
-import { GlitterPoller, PollerResult } from "../../common/poller.Interface";
+import { GlitterPoller, PollerResult, pollAllDefault } from "../../common/poller.Interface";
 import { ServerError } from "../../common/serverErrors";
 import { AlgorandUSDCParser } from "./poller.algorand.usdc";
 import { AlgorandTokenV2Parser } from "./poller.algorand.token.v2";
 import { AlgorandTokenV1Parser } from "./poller.algorand.token.v1";
 
 export class GlitterAlgorandPoller implements GlitterPoller {
+
     //Cursors
     public tokenV1Cursor: Cursor | undefined;
     public tokenV2Cursor: Cursor | undefined;
@@ -51,6 +52,9 @@ export class GlitterAlgorandPoller implements GlitterPoller {
     }
 
     //Poll
+    async pollAll(sdkServer: GlitterSDKServer): Promise<PollerResult[]> {
+        return pollAllDefault(sdkServer, this);
+    }
     async poll(sdkServer: GlitterSDKServer, cursor: Cursor): Promise<PollerResult> {
        
         //get indexer

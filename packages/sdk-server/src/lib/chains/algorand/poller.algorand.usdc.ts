@@ -1,4 +1,4 @@
-import { BridgeTokens, BridgeNetworks, BridgeType, ChainStatus, DepositNote, PartialBridgeTxn, Routing, RoutingHelper, TransactionType, ValueUnits } from "@glitter-finance/sdk-core/dist";
+import { BridgeTokens, BridgeNetworks, BridgeType, ChainStatus, DepositNote, PartialBridgeTxn, Routing, RoutingHelper, TransactionType } from "@glitter-finance/sdk-core/dist";
 import { getHashedTransactionId } from "@glitter-finance/sdk-core";
 import { AlgorandStandardAssetConfig } from "@glitter-finance/sdk-core/dist/lib/common/tokens";
 import algosdk from "algosdk";

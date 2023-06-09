@@ -1,10 +1,9 @@
 import { BridgeNetworks, BridgeType, EvmConnect, PartialBridgeTxn } from "@glitter-finance/sdk-core";
 import { GlitterSDKServer } from "../../glitterSDKServer";
 import { Cursor, CursorFilter, NewCursor, UpdateCursor } from "../../common/cursor";
-import { GlitterPoller, PollerResult } from "../../common/poller.Interface";
+import { GlitterPoller, PollerResult, pollAllDefault } from "../../common/poller.Interface";
 import { ServerError } from "../../common/serverErrors";
 import axios from "axios";
-import * as util from "util";
 import { EvmV2Parser } from "./poller.evm.token.v2";
 import { EvmUSDCParser } from "./poller.evm.usdc";
 
@@ -96,6 +95,9 @@ export class GlitterEVMPoller implements GlitterPoller {
     }
 
     //Poll
+    async pollAll(sdkServer: GlitterSDKServer): Promise<PollerResult[]> {
+        return pollAllDefault(sdkServer, this);
+    }
     async poll(sdkServer: GlitterSDKServer, cursor: Cursor): Promise<PollerResult> {
         const address = cursor.address;
         let startBlock = cursor.end?.block;

@@ -20,54 +20,22 @@ export class GlitterSDKServer {
     private _sdk: GlitterBridgeSDK = new GlitterBridgeSDK();
     private _pollers: Map<BridgeNetworks, GlitterPoller> = new Map< BridgeNetworks, GlitterPoller >();
     private _defaultLimit = 5;
-    // private _serverConfig: GlitterServerConfig;
-    // private _apiOverrides: { [key: string]: ChainAPIConfig } = {};
-    // private _apis: { [key: string]: ChainAPIConfig } = {};
+    private _customRPCConfig?: ChainRPCConfigs;
 
-    constructor(environment?: GlitterEnvironment, mainnetConfig?:ChainRPCConfigs) {
+    constructor(environment?: GlitterEnvironment, customRPCConfig?:ChainRPCConfigs) {
         if (environment) this._sdk = this._sdk.setEnvironment(environment);
 
-        // switch (environment) {
-        //     case GlitterEnvironment.mainnet:
-        //         if (!mainnetConfig) throw new Error("Mainnet Config not found");
-        //         this._serverConfig = mainnetConfig;
-        //         break;
-        //     case GlitterEnvironment.testnet:
-        //         this._serverConfig = ServerTestnet;
-        //         break;
-        //     default:
-        //         throw new Error("Environment not found");
-        // }
+        this._customRPCConfig = customRPCConfig;       
     }
-    
-    // public setChainAPIs(network: BridgeNetworks, api: ChainAPIConfig): GlitterSDKServer {
-    //     this._apiOverrides[network] = api;
-    //     return this;
-    // }
 
     //Create Pollers
     public createPollers(networks: BridgeNetworks[]): GlitterSDKServer {
     
-        //Check for RPC overrides
-        //this.check_API_Overrides();
-
         //Connect Core SDK to networks
-        this.sdk.connect(networks);
+        this.sdk.connect(networks, this._customRPCConfig);
 
         //Create Pollers for each network
-        networks.forEach((network) => {
-
-            //Set API Config list
-            // const apiConfig = this._serverConfig.chainAPIs.find((api) => api.network === network);
-            // if (apiConfig) {
-            //     const overrideConfig = this._apiOverrides[network];
-            //     if (overrideConfig) {
-            //         if (overrideConfig.API_KEY) apiConfig.API_KEY = overrideConfig.API_KEY;
-            //         if (overrideConfig.API_URL) apiConfig.API_URL = overrideConfig.API_URL;
-            //         if (overrideConfig.RPC) apiConfig.RPC = overrideConfig.RPC;
-            //     }
-            //     this._apis[network] = apiConfig;
-            // }
+        networks.forEach((network) => {           
 
             //Create poller:
             const poller = this.createPoller(network);
@@ -94,17 +62,7 @@ export class GlitterSDKServer {
             default:
                 throw new Error("Network not supported");
         }
-    }
-
-    //Check overrides
-    // private check_API_Overrides(): void {
-
-    //     for (const key in this._apiOverrides) {
-    //         const api = this._apiOverrides[key];
-    //         console.log("Overriding " + api.network + " RPC to: " + api.RPC);
-    //         this.sdk.setRPC(api.network, api.RPC);         
-    //     }        
-    // }
+    }  
 
     public get sdk(): GlitterBridgeSDK {
         return this._sdk;

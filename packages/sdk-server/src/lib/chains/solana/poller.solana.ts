@@ -10,11 +10,10 @@ import {
     BridgeType,
     GlitterEnvironment,
     PartialBridgeTxn,
-    SolanaPublicNetworks,
 } from "@glitter-finance/sdk-core";
 import { GlitterSDKServer } from "../../glitterSDKServer";
-import { Cursor, NewCursor, CompleteBatch, CursorFilter, UpdateCursor } from "../../common/cursor";
-import { GlitterPoller, PollerResult } from "../../common/poller.Interface";
+import { Cursor, NewCursor, CursorFilter, UpdateCursor } from "../../common/cursor";
+import { GlitterPoller, PollerResult, pollAllDefault } from "../../common/poller.Interface";
 import { ServerError } from "../../common/serverErrors";
 import { SolanaV1Parser } from "./poller.solana.token.v1";
 import { SolanaUSDCParser } from "./Poller.solana.usdc";
@@ -70,6 +69,9 @@ export class GlitterSolanaPoller implements GlitterPoller {
     }
 
     //Poll
+    async pollAll(sdkServer: GlitterSDKServer): Promise<PollerResult[]> {
+        return pollAllDefault(sdkServer, this);
+    }
     public async poll(
         sdkServer: GlitterSDKServer,
         cursor: Cursor
