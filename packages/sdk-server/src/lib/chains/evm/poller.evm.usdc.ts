@@ -1,4 +1,4 @@
-import { BridgeNetworks, BridgeType, ChainStatus, DeserializeEvmBridgeTransfer, EvmConnect, NetworkIdentifiers, PartialBridgeTxn, Routing, RoutingHelper, TransactionType, TransferEvent } from "@glitter-finance/sdk-core/dist";
+import { BridgeNetworks, BridgeType, ChainStatus, DeserializeEvmBridgeTransfer, EvmConnect, NetworkIdentifiers, PartialBridgeTxn, Routing, RoutingHelper, TransactionType } from "@glitter-finance/sdk-core/dist";
 import { GlitterSDKServer } from "../../glitterSDKServer";
 import { EvmBridgeUSDCEventsParser, USDCBridgeEventGroup } from "./poller.evm.eventparser.usdc";
 import { TransactionReceipt } from "@ethersproject/abstract-provider";
