@@ -9,6 +9,7 @@ import { GlitterPoller } from "./common/poller.Interface";
 import { GlitterAlgorandPoller } from "./chains/algorand/poller.algorand";
 import { GlitterSolanaPoller } from "./chains/solana/poller.solana";
 import { GlitterEVMPoller } from "./chains/evm/poller.evm";
+import { GlitterTronPoller } from "./chains/tron/poller.tron";
 
 //Configs
 //import { ChainAPIConfig, GlitterServerConfig } from "../configs/config";
@@ -59,6 +60,8 @@ export class GlitterSDKServer {
             case BridgeNetworks.Zkevm:  
             case BridgeNetworks.Optimism:
                 return new GlitterEVMPoller(this, network);
+            case BridgeNetworks.TRON:
+                return new GlitterTronPoller();
             default:
                 throw new Error("Network not supported");
         }
