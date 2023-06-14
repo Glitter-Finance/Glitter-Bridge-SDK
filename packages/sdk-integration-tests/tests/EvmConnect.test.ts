@@ -128,7 +128,7 @@ describe("EvmConnect", () => {
     it("should instantiate Arbitrum", async () =>{
         const _glitterSdk = new GlitterBridgeSDK();
         _glitterSdk.setEnvironment(GlitterEnvironment.mainnet)
-        _glitterSdk.connect([defaultEvmNetwork]);
+        _glitterSdk.connect([BridgeNetworks.Arbitrum]);
         evmConnect = glitterSdk.arbitrum!
         expect(evmConnect).toBeTruthy()
     })
