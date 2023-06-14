@@ -126,13 +126,10 @@ describe("EvmConnect", () => {
     });
 
     it("should instantiate Arbitrum", async () =>{
-
         const _glitterSdk = new GlitterBridgeSDK();
         _glitterSdk.setEnvironment(GlitterEnvironment.mainnet)
         _glitterSdk.connect([defaultEvmNetwork]);
         evmConnect = glitterSdk.arbitrum!
-        wallet = evmConnect.generateWallet
-        wallet = wallet.connect(evmConnect.provider)
-
+        expect(evmConnect).toBeTruthy()
     })
 });
