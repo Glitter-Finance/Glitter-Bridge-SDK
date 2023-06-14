@@ -34,7 +34,7 @@ export class BridgeTokens {
     }
 
     public static getToken(network: BridgeNetworks.algorand, symbol: string): AlgorandStandardAssetConfig | AlgorandNativeTokenConfig;
-    public static getToken(network: BridgeNetworks.solana | BridgeNetworks.Ethereum | BridgeNetworks.TRON | BridgeNetworks.Polygon | BridgeNetworks.Avalanche, symbol: string): BridgeTokenConfig;
+    public static getToken(network: BridgeNetworks.solana | BridgeNetworks.Ethereum | BridgeNetworks.TRON | BridgeNetworks.Polygon | BridgeNetworks.Avalanche | BridgeNetworks.Arbitrum, symbol: string): BridgeTokenConfig;
     public static getToken(network: BridgeNetworks, symbol: string): BridgeTokenConfig | AlgorandStandardAssetConfig | AlgorandNativeTokenConfig | undefined;
     public static getToken(network: BridgeNetworks, symbol: string) {
         const configToFind = this.tokenConfig.get(network);
