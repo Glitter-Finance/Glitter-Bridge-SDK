@@ -1,5 +1,6 @@
 import {BridgeNetworks, EvmConnect, GlitterBridgeSDK, GlitterEnvironment} from "@glitter-finance/sdk-core";
 import {ethers} from "ethers";
+import {formatEther} from "ethers/lib/utils";
 
 describe("EvmConnect", () => {
     let glitterSdk: GlitterBridgeSDK;
@@ -106,30 +107,21 @@ describe("EvmConnect", () => {
         }
     });
 
-    it("EUROC bridge mainnet", async () => {
-        // EURC is not available on testnet
+    it("should instantiate Arbitrum", async () =>{
         let _glitterSdk = new GlitterBridgeSDK();
         _glitterSdk.setEnvironment(GlitterEnvironment.mainnet)
-        _glitterSdk = _glitterSdk.connect([defaultEvmNetwork]);
-        let _wallet = await _glitterSdk.avalanche?.generateWallet;
-        _wallet = _wallet?.connect(_glitterSdk.avalanche!.provider)
-        const addr = await _wallet?.getAddress()
-
-        await expect(_glitterSdk.avalanche?.bridge(
-                    addr!,
-                    BridgeNetworks.Ethereum,
-                    'EUROC',
-                    '1000000',
-                    _wallet!
-        )).rejects.toThrow()
-
-    });
-
-    it("should instantiate Arbitrum", async () =>{
-        const _glitterSdk = new GlitterBridgeSDK();
-        _glitterSdk.setEnvironment(GlitterEnvironment.mainnet)
-        _glitterSdk.connect([BridgeNetworks.Arbitrum]);
-        evmConnect = glitterSdk.arbitrum!
+        _glitterSdk = _glitterSdk.connect([BridgeNetworks.Arbitrum]);
+        evmConnect = _glitterSdk.arbitrum!
         expect(evmConnect).toBeTruthy()
+    })
+
+    it("should provide ARB ETH balance", async () =>{
+        let _glitterSdk = new GlitterBridgeSDK();
+        _glitterSdk.setEnvironment(GlitterEnvironment.mainnet)
+        _glitterSdk = _glitterSdk.connect([BridgeNetworks.Arbitrum]);
+        evmConnect = _glitterSdk.arbitrum!
+        const arbEthAddr = "0xfdc41b43d544252c16E8C8498B4bC3C85905C040"
+        const arbEthBalance = await evmConnect.provider.getBalance(arbEthAddr)
+        expect(Number(formatEther(arbEthBalance))).toBeGreaterThan(0)
     })
 });

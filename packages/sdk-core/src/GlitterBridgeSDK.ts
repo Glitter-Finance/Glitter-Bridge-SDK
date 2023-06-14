@@ -150,13 +150,14 @@ export class GlitterBridgeSDK {
         this.preInitializeChecks(network);
 
         if (this._rpcOverrides[network]) {
-      this._bridgeConfig!.evm[network].rpcUrl = this._rpcOverrides[network];
+            this._bridgeConfig!.evm[network].rpcUrl = this._rpcOverrides[network];
         }
 
         this._evm.set(
             network,
             new EvmConnect(network, this._bridgeConfig!.evm[network])
         );
+
         return this;
     }
 
