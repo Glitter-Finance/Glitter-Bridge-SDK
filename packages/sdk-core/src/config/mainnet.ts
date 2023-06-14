@@ -192,7 +192,7 @@ export const config: GlitterBridgeConfig = {
             tokens: [],
             depositWallet: "",
             releaseWallet: "",
-            tokenBridge: "",
+            tokenBridge: "0x72decebe0597740551396d3c9e7546cfc97971e9",
             chainId: 1101,
         },
         [BridgeNetworks.Optimism]: {           
