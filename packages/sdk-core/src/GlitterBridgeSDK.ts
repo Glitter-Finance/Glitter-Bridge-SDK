@@ -76,15 +76,13 @@ export class GlitterBridgeSDK {
                 case BridgeNetworks.solana:
                     this.connectToSolana();
                     break;
-                case BridgeNetworks.Ethereum:
-                    this.connectToEvmNetwork(BridgeNetworks.Ethereum);
-                    break;
-                case BridgeNetworks.Polygon:
-                    this.connectToEvmNetwork(BridgeNetworks.Polygon);
-                    break;
+                case BridgeNetworks.Arbitrum:
                 case BridgeNetworks.Avalanche:
-                    this.connectToEvmNetwork(BridgeNetworks.Avalanche);
+                case BridgeNetworks.Ethereum:
+                case BridgeNetworks.Polygon:
+                    this.connectToEvmNetwork(network);
                     break;
+                
                 case BridgeNetworks.TRON:
                     this.connectToTron();
                     break;
@@ -95,13 +93,14 @@ export class GlitterBridgeSDK {
 
     private preInitializeChecks(network: BridgeNetworks) {
         if (!this._bridgeConfig) throw new Error("Glitter environment not set");
+        const EVMs = [BridgeNetworks.Arbitrum, BridgeNetworks.Avalanche, BridgeNetworks.Ethereum, BridgeNetworks.Polygon]
         /**
          * TODO: have config keys in such
          * a way that we directly check
          * using JS this._bridgeConfig[network]
          */
         const unavailableConfigError = `${network} Configuration unavailable`;
-        const isEvmInvalid = [BridgeNetworks.Avalanche, BridgeNetworks.Ethereum, BridgeNetworks.Polygon].includes(network) && !this._bridgeConfig.evm[network as BridgeEvmNetworks]
+        const isEvmInvalid = EVMs.includes(network) && !this._bridgeConfig.evm[network as BridgeEvmNetworks]
         const isTronInvalid = network === BridgeNetworks.TRON && !this._bridgeConfig.tron
         const isSolInvalid = network === BridgeNetworks.solana && !this._bridgeConfig.solana
         const isAlgoInvalid = network === BridgeNetworks.algorand && !this._bridgeConfig.algorand
@@ -146,7 +145,7 @@ export class GlitterBridgeSDK {
         this.preInitializeChecks(network);
 
         if (this._rpcOverrides[network]) {
-      this._bridgeConfig!.evm[network].rpcUrl = this._rpcOverrides[network];
+            this._bridgeConfig!.evm[network].rpcUrl = this._rpcOverrides[network];
         }
 
         this._evm.set(
@@ -183,6 +182,9 @@ export class GlitterBridgeSDK {
     }
     get avalanche(): EvmConnect | undefined {
         return this._evm.get(BridgeNetworks.Avalanche);
+    }
+    get arbitrum(): EvmConnect | undefined {
+        return this._evm.get(BridgeNetworks.Arbitrum);
     }
     get tron(): TronConnect | undefined {
         return this._tron;
