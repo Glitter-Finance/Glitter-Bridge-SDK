@@ -183,7 +183,7 @@ export const config: GlitterBridgeConfig = {
         [BridgeNetworks.Arbitrum]: {
             chainId: 42161,
             bridge: "",
-            rpcUrl: "",
+            rpcUrl: "https://endpoints.omniatech.io/v1/arbitrum/one/public",
             tokens: [
                 {
                     address: "0xaf88d065e77c8cC2239327C5EDb3A432268e5831",
