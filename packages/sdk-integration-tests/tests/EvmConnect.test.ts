@@ -124,4 +124,16 @@ describe("EvmConnect", () => {
         const arbEthBalance = await evmConnect.provider.getBalance(arbEthAddr)
         expect(Number(formatEther(arbEthBalance))).toBeGreaterThan(0)
     })
+
+    it("should provide ARB USDC", async () =>{
+        let _sdk = new GlitterBridgeSDK();
+        _sdk.setEnvironment(GlitterEnvironment.mainnet)
+        _sdk = _sdk.connect([BridgeNetworks.Arbitrum]);
+        const arbEthAddr = "0xfdc41b43d544252c16E8C8498B4bC3C85905C040"
+        const connect = _sdk.arbitrum!
+        const tokenAddress = connect.getAddress('tokens', "USDC");
+        expect(tokenAddress).toBeTruthy()
+        const tokenBalance = await connect.getTokenBalanceOnNetwork('USDC', arbEthAddr);
+        expect(Number(formatEther(tokenBalance))).toBeGreaterThanOrEqual(0)
+    })
 });
