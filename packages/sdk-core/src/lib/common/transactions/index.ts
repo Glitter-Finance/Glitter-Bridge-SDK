@@ -21,7 +21,7 @@ export enum ChainStatus {
 }
 export enum BridgeType {
     Unknown = "Unknown",
-    USDC = "USDC",
+    Circle = "Circle",
     TokenV1 = "TokenV1",
     TokenV2 = "TokenV2",
 }
