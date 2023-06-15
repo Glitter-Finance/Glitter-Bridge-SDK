@@ -16,7 +16,7 @@ export type Cursor = {
 
     //Batching
     batch?: CursorBatch;
-    lastBatchTxns?: number;
+    lastBatchTxns?: Set<string>;
 
 };
 export type CursorPosition = {
@@ -27,7 +27,7 @@ export type CursorPosition = {
 export type CursorBatch = {
     position?: string | number;
     block?: string | number;
-    txns: number;
+    txns: Set<string>;
     complete: boolean;    
     nextAPIToken?: string;
 };
@@ -89,7 +89,7 @@ export async function UpdateCursor(
 
             //Need to create new batch
             cursor.batch = {
-                txns: txnIDs.length,
+                txns: new Set<string>(txnIDs),
                 position: txnIDs[txnIDs.length - 1],
                 complete: false,
                 block: maxBlock,
@@ -104,7 +104,7 @@ export async function UpdateCursor(
         } else {
 
             //Update Batch
-            cursor.batch.txns += txnIDs.length;
+            txnIDs.forEach(txnID => cursor.batch?.txns.add(txnID));
             cursor.batch.position = txnIDs[txnIDs.length - 1];
 
             if (maxBlock) cursor.batch.block = maxBlock;
@@ -124,7 +124,7 @@ export async function UpdateCursor(
 
         //We have less than the limit
         if (cursor.batch) {
-            cursor.batch.txns += txnIDs.length;
+            txnIDs.forEach(txnID => cursor.batch?.txns.add(txnID));
             cursor = CompleteBatch(cursor);
         } else {
 
@@ -135,7 +135,8 @@ export async function UpdateCursor(
 
             //Reset beginning
             cursor.beginning = undefined;
-            cursor.lastBatchTxns = 0;
+            cursor.lastBatchTxns = new Set<string>(txnIDs);
+            
         }
 
     }
