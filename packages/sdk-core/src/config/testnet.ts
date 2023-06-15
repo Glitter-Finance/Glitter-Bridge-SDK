@@ -4,8 +4,8 @@ import { BridgeNetworks } from "../lib/common";
 export const config: GlitterBridgeConfig = {
     name: GlitterEnvironment.testnet,
     algorand: {
-        serverUrl: "https://node.testnet.algoexplorerapi.io",
-        indexerUrl: "https://algoindexer.testnet.algoexplorerapi.io",
+        serverUrl: "https://testnet-api.algonode.cloud",
+        indexerUrl: "https://testnet-idx.algonode.cloud",
         indexerPort: "",
         nativeTokenSymbol: "ALGO",
         bridgeProgramId: 98624397,
