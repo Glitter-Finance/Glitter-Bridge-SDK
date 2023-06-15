@@ -128,6 +128,10 @@ export class GlitterEVMPoller implements GlitterPoller {
             try { // ensure failing to parse a single tx does not fail the entire batch           
                 //Ensure Transaction Exists
                 if (!txnID) continue;
+
+                //Check if transaction was previously processed
+                if (cursor.batch?.txns?.has(txnID)) continue;
+                if (cursor.lastBatchTxns?.has(txnID)) continue;
     
                 //Process Transaction
                 let partialTxn: PartialBridgeTxn | undefined;

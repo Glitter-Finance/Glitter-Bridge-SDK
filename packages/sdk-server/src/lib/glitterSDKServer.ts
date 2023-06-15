@@ -20,7 +20,7 @@ export class GlitterSDKServer {
     //Local Params
     private _sdk: GlitterBridgeSDK = new GlitterBridgeSDK();
     private _pollers: Map<BridgeNetworks, GlitterPoller> = new Map< BridgeNetworks, GlitterPoller >();
-    private _defaultLimit = 5;
+    private _defaultLimit = 25;
     private _customRPCConfig?: ChainRPCConfigs;
 
     constructor(environment?: GlitterEnvironment, customRPCConfig?:ChainRPCConfigs) {

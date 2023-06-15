@@ -97,6 +97,10 @@ export class GlitterAlgorandPoller implements GlitterPoller {
             try {
                 //Ensure Transaction Exists
                 if (!txnID) continue;
+
+                //Check if transaction was previously processed
+                if (cursor.batch?.txns?.has(txnID)) continue;
+                if (cursor.lastBatchTxns?.has(txnID)) continue;
     
                 //Process Transaction
                 let partialTxn: PartialBridgeTxn | undefined;

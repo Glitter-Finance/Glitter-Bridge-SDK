@@ -110,7 +110,13 @@ export class GlitterSolanaPoller implements GlitterPoller {
 
         //Map Signatures
         const signatures: string[] = [];
-        signatures.push(...newTxns.map((txn) => txn.signature));
+
+        //Check if transaction was previously processed
+        for (const txn of newTxns) {
+            if (cursor.batch?.txns?.has(txn.signature)) continue;
+            if (cursor.lastBatchTxns?.has(txn.signature)) continue;
+            signatures.push(txn.signature);
+        }
 
         //Get Transaction Data
         let txnData: (ParsedTransactionWithMeta | null)[] = [];
