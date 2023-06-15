@@ -1,6 +1,6 @@
 {
   "name": "@glitter-finance/sdk-server",
-  "version": "1.0.1-21",
+  "version": "1.0.1-22",
   "description": "Glitter Finance: SDK (Server)",
   "main": "dist/index.js",
   "module": "dist/index.js",
