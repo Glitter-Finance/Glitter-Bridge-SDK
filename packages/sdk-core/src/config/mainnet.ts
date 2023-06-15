@@ -132,7 +132,7 @@ export const config: GlitterBridgeConfig = {
             ],
             depositWallet: "0xa89a90a11e20b61814da283ba906f30742a99492",
             releaseWallet: "0xfdc25702b67201107ab4aFDb4DC87E3F8F50a7b8",
-            tokenBridge: "",          
+            tokenBridge: "0x52d71eef6846b1c7047b0bd1804d304f9a6ad1d1",          
         },
         [BridgeNetworks.Ethereum]: {
             chainId: 1,
@@ -149,7 +149,7 @@ export const config: GlitterBridgeConfig = {
             ],
             depositWallet: "0xa89a90a11e20b61814da283ba906f30742a99492",
             releaseWallet: "0xfdc027af59e3D118a19B8D1E754a090c95587438",
-            tokenBridge: "",         
+            tokenBridge: "0xb393c3f26765173b8896a3c1014204dc44115ff2",         
         },
         [BridgeNetworks.Polygon]: {
             chainId: 137,
@@ -166,7 +166,7 @@ export const config: GlitterBridgeConfig = {
             ],
             depositWallet: "0xa89a90a11e20b61814da283ba906f30742a99492",
             releaseWallet: "0xfdc9Af7852F9b2d234b96B1F53804BC781Ce26b3",
-            tokenBridge: "",
+            tokenBridge: "0x446c264ed8888dad27f5452094d2ceadb1e038ea",
         },
         [BridgeNetworks.Arbitrum]: {      
             bridge:"",     
@@ -174,8 +174,8 @@ export const config: GlitterBridgeConfig = {
             tokens: [],
             depositWallet: "",
             releaseWallet: "",
-            tokenBridge: "",
-            chainId: 421613,
+            tokenBridge: "0xb393c3f26765173b8896a3c1014204dc44115ff2",
+            chainId: 42161,
         },
         [BridgeNetworks.Binance]: {           
             bridge:"",     
@@ -183,8 +183,8 @@ export const config: GlitterBridgeConfig = {
             tokens: [],
             depositWallet: "",
             releaseWallet: "",
-            tokenBridge: "",
-            chainId: 97,
+            tokenBridge: "0xb393c3f26765173b8896a3c1014204dc44115ff2",
+            chainId: 56,
         },
         [BridgeNetworks.Zkevm]: {           
             bridge:"",     
@@ -192,8 +192,8 @@ export const config: GlitterBridgeConfig = {
             tokens: [],
             depositWallet: "",
             releaseWallet: "",
-            tokenBridge: "",
-            chainId: 1442,
+            tokenBridge: "0x72decebe0597740551396d3c9e7546cfc97971e9",
+            chainId: 1101,
         },
         [BridgeNetworks.Optimism]: {           
             bridge:"",     
@@ -201,7 +201,7 @@ export const config: GlitterBridgeConfig = {
             tokens: [],
             depositWallet: "",
             releaseWallet: "",
-            tokenBridge: "",
+            tokenBridge: "0xb393c3f26765173b8896a3c1014204dc44115ff2",
             chainId: 10,
         }
     },
