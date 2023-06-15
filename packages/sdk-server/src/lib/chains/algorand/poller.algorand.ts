@@ -1,9 +1,9 @@
 import { BridgeNetworks, BridgeType, PartialBridgeTxn } from "@glitter-finance/sdk-core";
-import { GlitterSDKServer } from "../../glitterSDKServer";
+import { GlitterSDKServer } from "../../../glitterSDKServer";
 import { Cursor, CursorFilter, NewCursor, UpdateCursor } from "../../common/cursor";
 import { GlitterPoller, PollerResult } from "../../common/poller.Interface";
 import { ServerError } from "../../common/serverErrors";
-import { AlgorandUSDCParser } from "./poller.algorand.usdc";
+import { AlgorandUSDCParser } from "./poller.algorand.circle";
 import { AlgorandTokenV2Parser } from "./poller.algorand.token.v2";
 import { AlgorandTokenV1Parser } from "./poller.algorand.token.v1";
 

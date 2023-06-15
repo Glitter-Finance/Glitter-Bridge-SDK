@@ -1,11 +1,11 @@
 import { BridgeNetworks, BridgeType, EvmConnect, PartialBridgeTxn } from "@glitter-finance/sdk-core";
-import { GlitterSDKServer } from "../../glitterSDKServer";
+import { GlitterSDKServer } from "../../../glitterSDKServer";
 import { Cursor, CursorFilter, NewCursor, UpdateCursor } from "../../common/cursor";
 import { GlitterPoller, PollerResult } from "../../common/poller.Interface";
 import { ServerError } from "../../common/serverErrors";
 import axios from "axios";
 import { EvmV2Parser } from "./poller.evm.token.v2";
-import { EvmUSDCParser } from "./poller.evm.usdc";
+import { EvmUSDCParser } from "./poller.evm.circle";
 
 export class GlitterEVMPoller implements GlitterPoller {
     //EVM Connect

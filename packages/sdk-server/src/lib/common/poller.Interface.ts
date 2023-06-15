@@ -1,5 +1,5 @@
 import { BridgeType, PartialBridgeTxn } from "@glitter-finance/sdk-core";
-import { GlitterSDKServer } from "../glitterSDKServer";
+import { GlitterSDKServer } from "../../glitterSDKServer";
 import { Cursor } from "./cursor";
 
 export interface GlitterPoller {

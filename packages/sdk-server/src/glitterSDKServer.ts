@@ -5,11 +5,11 @@ import {
     GlitterBridgeSDK,
     GlitterEnvironment,
 } from "@glitter-finance/sdk-core";
-import { GlitterPoller } from "./common/poller.Interface";
-import { GlitterAlgorandPoller } from "./chains/algorand/poller.algorand";
-import { GlitterSolanaPoller } from "./chains/solana/poller.solana";
-import { GlitterEVMPoller } from "./chains/evm/poller.evm";
-import { GlitterTronPoller } from "./chains/tron/poller.tron";
+import { GlitterPoller } from "./lib/common/poller.Interface";
+import { GlitterAlgorandPoller } from "./lib/chains/algorand/poller.algorand";
+import { GlitterSolanaPoller } from "./lib/chains/solana/poller.solana";
+import { GlitterEVMPoller } from "./lib/chains/evm/poller.evm";
+import { GlitterTronPoller } from "./lib/chains/tron/poller.tron";
 
 //Configs
 //import { ChainAPIConfig, GlitterServerConfig } from "../configs/config";

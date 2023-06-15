@@ -1,5 +1,5 @@
 import { ParsedTransactionWithMeta, TokenBalance } from "@solana/web3.js";
-import { GlitterSDKServer } from "../../glitterSDKServer";
+import { GlitterSDKServer } from "../../../glitterSDKServer";
 import { BridgeNetworks, BridgeTokens } from "@glitter-finance/sdk-core/dist";
 
 export class SolanaPollerCommon {

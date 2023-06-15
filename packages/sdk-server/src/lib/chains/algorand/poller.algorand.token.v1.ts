@@ -4,7 +4,7 @@ import { base64ToBigUIntString, base64ToString } from "@glitter-finance/sdk-core
 import AlgodClient from "algosdk/dist/types/client/v2/algod/algod";
 import IndexerClient from "algosdk/dist/types/client/v2/indexer/indexer";
 import BigNumber from "bignumber.js";
-import { GlitterSDKServer } from "../../glitterSDKServer";
+import { GlitterSDKServer } from "../../../glitterSDKServer";
 
 export class AlgorandTokenV1Parser {
     public static async process(

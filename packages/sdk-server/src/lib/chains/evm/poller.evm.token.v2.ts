@@ -1,5 +1,5 @@
 import { BridgeType, BridgeV2Tokens, ChainStatus, DeserializeEvmBridgeTransfer, EvmConnect, PartialBridgeTxn, Routing, RoutingHelper, TransactionType, TransferEvent } from "@glitter-finance/sdk-core/dist";
-import { GlitterSDKServer } from "../../glitterSDKServer";
+import { GlitterSDKServer } from "../../../glitterSDKServer";
 import { EvmBridgeV2EventsParser, TokenBridgeV2EventGroup } from "./poller.evm.eventparser.v2";
 import { TransactionReceipt } from "@ethersproject/abstract-provider";
 import BigNumber from "bignumber.js";

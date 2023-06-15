@@ -5,7 +5,7 @@ import algosdk from "algosdk";
 import AlgodClient from "algosdk/dist/types/client/v2/algod/algod";
 import IndexerClient from "algosdk/dist/types/client/v2/indexer/indexer";
 import { Cursor } from "../../common/cursor";
-import { GlitterSDKServer } from "../../glitterSDKServer";
+import { GlitterSDKServer } from "../../../glitterSDKServer";
 
 export class AlgorandUSDCParser {
     public static async process(

@@ -18,7 +18,7 @@ import {
     TransactionType,
     getHashedTransactionId,
 } from "@glitter-finance/sdk-core";
-import { GlitterSDKServer } from "../../glitterSDKServer";
+import { GlitterSDKServer } from "../../../glitterSDKServer";
 import { ServerError } from "../../common/serverErrors";
 import { SolanaPollerCommon } from "./poller.solana.common";
 

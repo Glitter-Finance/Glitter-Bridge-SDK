@@ -11,12 +11,12 @@ import {
     GlitterEnvironment,
     PartialBridgeTxn,
 } from "@glitter-finance/sdk-core";
-import { GlitterSDKServer } from "../../glitterSDKServer";
+import { GlitterSDKServer } from "../../../glitterSDKServer";
 import { Cursor, NewCursor, CursorFilter, UpdateCursor } from "../../common/cursor";
 import { GlitterPoller, PollerResult } from "../../common/poller.Interface";
 import { ServerError } from "../../common/serverErrors";
 import { SolanaV1Parser } from "./poller.solana.token.v1";
-import { SolanaUSDCParser } from "./Poller.solana.usdc";
+import { SolanaUSDCParser } from "./Poller.solana.circle";
 import { SolanaV2Parser } from "./poller.solana.token.v2";
 
 export class GlitterSolanaPoller implements GlitterPoller {

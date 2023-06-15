@@ -12,7 +12,7 @@ import {
     TransactionType,
     getHashedTransactionId,
 } from "@glitter-finance/sdk-core";
-import { GlitterSDKServer } from "../../glitterSDKServer";
+import { GlitterSDKServer } from "../../../glitterSDKServer";
 import BigNumber from "bignumber.js";
 import { BorshCoder, EventParser } from "@project-serum/anchor";
 import { BridgeTokens, RoutingHelper } from "@glitter-finance/sdk-core";
