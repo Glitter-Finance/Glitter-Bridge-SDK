@@ -34,7 +34,7 @@ export class SolanaUSDCParser {
         let partialTxn: PartialBridgeTxn = {
             txnID: txnID,
             txnIDHashed: txnHashed,
-            bridgeType: BridgeType.USDC,
+            bridgeType: BridgeType.Circle,
             txnType: TransactionType.Unknown,
             network: "solana",
             address: address,

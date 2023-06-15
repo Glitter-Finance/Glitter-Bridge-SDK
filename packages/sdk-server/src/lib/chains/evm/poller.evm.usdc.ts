@@ -23,7 +23,7 @@ export class EvmUSDCParser {
         let partialTxn: PartialBridgeTxn = {
             txnID: txnID,
             txnIDHashed: connect?.getTxnHashed(txnID),
-            bridgeType: BridgeType.USDC,
+            bridgeType: BridgeType.Circle,
             txnType: TransactionType.Unknown,
             network: connect?.network,
             address: bridgeID || "",

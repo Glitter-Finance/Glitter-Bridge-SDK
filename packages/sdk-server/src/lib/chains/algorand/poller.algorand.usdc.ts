@@ -24,7 +24,7 @@ export class AlgorandUSDCParser {
         let partialTxn: PartialBridgeTxn = {
             txnID: txnID,
             txnIDHashed: txnHashed,
-            bridgeType: BridgeType.USDC,
+            bridgeType: BridgeType.Circle,
             txnType: TransactionType.Unknown,
             network: "algorand",
             chainStatus: ChainStatus.Completed,

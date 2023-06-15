@@ -1,7 +1,7 @@
 import { BridgeNetworks, BridgeType, PartialBridgeTxn } from "@glitter-finance/sdk-core";
 import { GlitterSDKServer } from "../../glitterSDKServer";
 import { Cursor, CursorFilter, NewCursor, UpdateCursor } from "../../common/cursor";
-import { GlitterPoller, PollerResult, pollAllDefault } from "../../common/poller.Interface";
+import { GlitterPoller, PollerResult } from "../../common/poller.Interface";
 import { ServerError } from "../../common/serverErrors";
 import { AlgorandUSDCParser } from "./poller.algorand.usdc";
 import { AlgorandTokenV2Parser } from "./poller.algorand.token.v2";
@@ -10,31 +10,51 @@ import { AlgorandTokenV1Parser } from "./poller.algorand.token.v1";
 export class GlitterAlgorandPoller implements GlitterPoller {
 
     //Cursors
-    public tokenV1Cursor: Cursor | undefined;
-    public tokenV2Cursor: Cursor | undefined;
-    public usdcCursors: Cursor[] | undefined;
+    public cursors: Record<BridgeType, Cursor[]>;
+    public get tokenV1Cursor(): Cursor | undefined{
+        return this.cursors?.[BridgeType.TokenV1]?.[0];
+    }
+    public get tokenV2Cursor(): Cursor | undefined{
+        return this.cursors?.[BridgeType.TokenV2]?.[0];
+    }
+    public get usdcCursors(): Cursor[] | undefined{
+        return this.cursors?.[BridgeType.Circle];
+    }
+
+    constructor() {
+        this.cursors = {
+            [BridgeType.TokenV1]: [],
+            [BridgeType.TokenV2]: [],
+            [BridgeType.Circle]: [],
+            [BridgeType.Unknown]: []
+        };
+    }
 
     //Initialize
     initialize(sdkServer: GlitterSDKServer): void {
-
+      
         //Add Token Cursor
         const tokenAddress = parseInt(sdkServer.sdk?.algorand?.getAddress("tokenBridgeProgramID")?.toString() || "");
         if (tokenAddress)
-            this.tokenV1Cursor = NewCursor(
-                BridgeNetworks.algorand,
-                BridgeType.TokenV1,
-                tokenAddress,
-                sdkServer.defaultLimit
+            this.cursors[BridgeType.TokenV1].push(
+                NewCursor(
+                    BridgeNetworks.algorand,
+                    BridgeType.TokenV1,
+                    tokenAddress,
+                    sdkServer.defaultLimit
+                )
             );
 
         //Add Token V2 Cursor
         const tokenV2Address = parseInt(sdkServer.sdk?.algorand?.getAddress("tokenBridgeV2ProgramID")?.toString() || "");
         if (tokenV2Address)
-            this.tokenV2Cursor = NewCursor(
-                BridgeNetworks.algorand,
-                BridgeType.TokenV2,
-                tokenV2Address,
-                sdkServer.defaultLimit
+            this.cursors[BridgeType.TokenV2].push(
+                NewCursor(
+                    BridgeNetworks.algorand,
+                    BridgeType.TokenV2,
+                    tokenV2Address,
+                    sdkServer.defaultLimit
+                )
             );
 
         //Add USDC Cursors
@@ -42,19 +62,15 @@ export class GlitterAlgorandPoller implements GlitterPoller {
             sdkServer.sdk?.algorand?.getAddress("usdcDeposit"),
             sdkServer.sdk?.algorand?.getAddress("usdcReceiver"),
         ];
-        this.usdcCursors = [];
         usdcAddresses.forEach((address) => {
             if (address)
-                this.usdcCursors?.push(
-                    NewCursor(BridgeNetworks.algorand, BridgeType.USDC, address, sdkServer.defaultLimit)
+                this.cursors[BridgeType.Circle]?.push(
+                    NewCursor(BridgeNetworks.algorand, BridgeType.Circle, address, sdkServer.defaultLimit)
                 );
         });
     }
 
     //Poll
-    async pollAll(sdkServer: GlitterSDKServer): Promise<PollerResult[]> {
-        return pollAllDefault(sdkServer, this);
-    }
     async poll(sdkServer: GlitterSDKServer, cursor: Cursor): Promise<PollerResult> {
        
         //get indexer
@@ -111,7 +127,7 @@ export class GlitterAlgorandPoller implements GlitterPoller {
                     case BridgeType.TokenV2:
                         partialTxn = await AlgorandTokenV2Parser.process(sdkServer, txnID, client, indexer, cursor);
                         break;
-                    case BridgeType.USDC:
+                    case BridgeType.Circle:
                         partialTxn = await AlgorandUSDCParser.process(sdkServer, txnID, client, indexer, cursor);
                         break;
                     default:

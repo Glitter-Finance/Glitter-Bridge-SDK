@@ -13,38 +13,59 @@ import {
 } from "@glitter-finance/sdk-core";
 import { GlitterSDKServer } from "../../glitterSDKServer";
 import { Cursor, NewCursor, CursorFilter, UpdateCursor } from "../../common/cursor";
-import { GlitterPoller, PollerResult, pollAllDefault } from "../../common/poller.Interface";
+import { GlitterPoller, PollerResult } from "../../common/poller.Interface";
 import { ServerError } from "../../common/serverErrors";
 import { SolanaV1Parser } from "./poller.solana.token.v1";
 import { SolanaUSDCParser } from "./Poller.solana.usdc";
 import { SolanaV2Parser } from "./poller.solana.token.v2";
 
 export class GlitterSolanaPoller implements GlitterPoller {
+    
     //Cursors
-    public tokenV1Cursor: Cursor | undefined;
-    public tokenV2Cursor: Cursor | undefined;
-    public usdcCursors: Cursor[] | undefined;
+    public cursors: Record<BridgeType, Cursor[]> ;
+    public get tokenV1Cursor(): Cursor | undefined{
+        return this.cursors?.[BridgeType.TokenV1]?.[0];
+    }
+    public get tokenV2Cursor(): Cursor | undefined{
+        return this.cursors?.[BridgeType.TokenV2]?.[0];
+    }
+    public get usdcCursors(): Cursor[] | undefined{
+        return this.cursors?.[BridgeType.Circle];
+    }
 
+    constructor() {
+        this.cursors = {
+            [BridgeType.TokenV1]: [],
+            [BridgeType.TokenV2]: [],
+            [BridgeType.Circle]: [],
+            [BridgeType.Unknown]: []
+        };
+    }
+    
     //Initialize
     public initialize(sdkServer: GlitterSDKServer): void {
     //Add Token Cursor
         const tokenAddress = sdkServer.sdk?.solana?.getAddress("bridgeProgram");
         if (tokenAddress)
-            this.tokenV1Cursor = NewCursor(
-                BridgeNetworks.solana,
-                BridgeType.TokenV1,
-                tokenAddress,
-                sdkServer.defaultLimit
+            this.cursors[BridgeType.TokenV1].push(
+                NewCursor(
+                    BridgeNetworks.solana,
+                    BridgeType.TokenV1,
+                    tokenAddress,
+                    sdkServer.defaultLimit
+                )
             );
 
         //Add Token V2 Cursor
         const tokenV2Address = sdkServer.sdk?.solana?.getAddress("tokenBridgeV2Address");
         if (tokenV2Address)
-            this.tokenV2Cursor = NewCursor(
-                BridgeNetworks.solana,
-                BridgeType.TokenV2,
-                tokenV2Address,
-                sdkServer.defaultLimit
+            this.cursors[BridgeType.TokenV2].push(
+                NewCursor(
+                    BridgeNetworks.solana,
+                    BridgeType.TokenV2,
+                    tokenV2Address,
+                    sdkServer.defaultLimit
+                )
             );
 
         //Add USDC Cursors
@@ -54,13 +75,12 @@ export class GlitterSolanaPoller implements GlitterPoller {
             sdkServer.sdk?.solana?.getAddress("usdcDeposit"),
             sdkServer.sdk?.solana?.getAddress("usdcDepositTokenAccount"),
         ];
-        this.usdcCursors = [];
         usdcAddresses.forEach((address) => {
             if (address)
-                this.usdcCursors?.push(
+                this.cursors[BridgeType.Circle]?.push(
                     NewCursor(
                         BridgeNetworks.solana,
-                        BridgeType.USDC,
+                        BridgeType.Circle,
                         address,
                         sdkServer.defaultLimit
                     )
@@ -68,10 +88,7 @@ export class GlitterSolanaPoller implements GlitterPoller {
         });
     }
 
-    //Poll
-    async pollAll(sdkServer: GlitterSDKServer): Promise<PollerResult[]> {
-        return pollAllDefault(sdkServer, this);
-    }
+    //Poll   
     public async poll(
         sdkServer: GlitterSDKServer,
         cursor: Cursor
@@ -80,7 +97,7 @@ export class GlitterSolanaPoller implements GlitterPoller {
         //Check Client
         let client = sdkServer.sdk?.solana?.connections[sdkServer.sdk?.solana?.defaultConnection];
         if (sdkServer.sdk.environment === GlitterEnvironment.testnet) {
-            if (cursor.bridgeType === BridgeType.USDC || cursor.bridgeType === BridgeType.TokenV2) {
+            if (cursor.bridgeType === BridgeType.Circle || cursor.bridgeType === BridgeType.TokenV2) {
                 client = sdkServer.sdk?.solana?.connections["devnet"];
             }
         }
@@ -150,7 +167,7 @@ export class GlitterSolanaPoller implements GlitterPoller {
                     case BridgeType.TokenV2:
                         partialTxn = await SolanaV2Parser.process(sdkServer, client, txn);
                         break;
-                    case BridgeType.USDC:
+                    case BridgeType.Circle:
                         partialTxn = await SolanaUSDCParser.process(
                             sdkServer,
                             txn,

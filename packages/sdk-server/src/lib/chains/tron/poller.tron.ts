@@ -1,16 +1,32 @@
 import { BridgeNetworks, BridgeType, PartialBridgeTxn } from "@glitter-finance/sdk-core";
 import { GlitterSDKServer } from "../../glitterSDKServer";
 import { Cursor, CursorFilter, NewCursor, UpdateCursor } from "../../common/cursor";
-import { GlitterPoller, PollerResult, pollAllDefault } from "../../common/poller.Interface";
+import { GlitterPoller, PollerResult } from "../../common/poller.Interface";
 import { ServerError } from "../../common/serverErrors";
 
 export class GlitterTronPoller implements GlitterPoller {
-
+   
     //Cursors
-    public tokenV1Cursor: Cursor | undefined;
-    public tokenV2Cursor: Cursor | undefined;
-    public usdcCursors: Cursor[] | undefined;
+    public cursors: Record<BridgeType, Cursor[]> ;
+    public get tokenV1Cursor(): Cursor | undefined{
+        return this.cursors?.[BridgeType.TokenV1]?.[0];
+    }
+    public get tokenV2Cursor(): Cursor | undefined{
+        return this.cursors?.[BridgeType.TokenV2]?.[0];
+    }
+    public get usdcCursors(): Cursor[] | undefined{
+        return this.cursors?.[BridgeType.Circle];
+    }
 
+    constructor() {
+        this.cursors = {
+            [BridgeType.TokenV1]: [],
+            [BridgeType.TokenV2]: [],
+            [BridgeType.Circle]: [],
+            [BridgeType.Unknown]: []
+        };
+    }
+    
     //Initialize
     initialize(sdkServer: GlitterSDKServer): void {
 
@@ -18,20 +34,17 @@ export class GlitterTronPoller implements GlitterPoller {
         const usdcAddresses = [
             sdkServer.sdk?.tron?.getAddress("depositWallet"),
             sdkServer.sdk?.tron?.getAddress("releaseWallet"),
-        ];
-        this.usdcCursors = [];
+        ];      
+
         usdcAddresses.forEach((address) => {
             if (address)
-                this.usdcCursors?.push(
-                    NewCursor(BridgeNetworks.TRON, BridgeType.USDC, address, sdkServer.defaultLimit)
+                this.cursors[BridgeType.Circle]?.push(
+                    NewCursor(BridgeNetworks.TRON, BridgeType.Circle, address, sdkServer.defaultLimit)
                 );
         });
     }
 
     //Poll
-    async pollAll(sdkServer: GlitterSDKServer): Promise<PollerResult[]> {
-        return pollAllDefault(sdkServer, this);
-    }
     async poll(sdkServer: GlitterSDKServer, cursor: Cursor): Promise<PollerResult> {
        
         return {

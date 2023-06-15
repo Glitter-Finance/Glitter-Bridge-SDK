@@ -1,7 +1,7 @@
 import { BridgeNetworks, BridgeType, EvmConnect, PartialBridgeTxn } from "@glitter-finance/sdk-core";
 import { GlitterSDKServer } from "../../glitterSDKServer";
 import { Cursor, CursorFilter, NewCursor, UpdateCursor } from "../../common/cursor";
-import { GlitterPoller, PollerResult, pollAllDefault } from "../../common/poller.Interface";
+import { GlitterPoller, PollerResult } from "../../common/poller.Interface";
 import { ServerError } from "../../common/serverErrors";
 import axios from "axios";
 import { EvmV2Parser } from "./poller.evm.token.v2";
@@ -13,15 +13,28 @@ export class GlitterEVMPoller implements GlitterPoller {
     private apiURL: string | undefined;
     private connect: EvmConnect | undefined;
     private network: BridgeNetworks | undefined;
-
+    
     //Cursors
-    public tokenV1Cursor: Cursor | undefined;
-    public tokenV2Cursor: Cursor | undefined;
-    public usdcCursors: Cursor[] | undefined;
-
+    public cursors: Record<BridgeType, Cursor[]> ;
+    public get tokenV1Cursor(): Cursor | undefined{
+        return this.cursors?.[BridgeType.TokenV1]?.[0];
+    }
+    public get tokenV2Cursor(): Cursor | undefined{
+        return this.cursors?.[BridgeType.TokenV2]?.[0];
+    }
+    public get usdcCursors(): Cursor[] | undefined{
+        return this.cursors?.[BridgeType.Circle];
+    }
     //Construct class with network
     constructor(sdkServer: GlitterSDKServer, network: BridgeNetworks) {
         this.network = network;
+
+        this.cursors = {
+            [BridgeType.TokenV1]: [],
+            [BridgeType.TokenV2]: [],
+            [BridgeType.Circle]: [],
+            [BridgeType.Unknown]: []
+        };
 
         const apiConfig = sdkServer.API_Config(network);
 
@@ -63,41 +76,39 @@ export class GlitterEVMPoller implements GlitterPoller {
         //Add Token Cursor
         const tokenAddress = undefined;
         if (tokenAddress)
-            this.tokenV1Cursor = NewCursor(
-                this.network, 
-                BridgeType.TokenV1, 
-                tokenAddress, 
-                sdkServer.defaultLimit
+            this.cursors[BridgeType.TokenV1].push(
+                NewCursor(
+                    this.network, 
+                    BridgeType.TokenV1, 
+                    tokenAddress, 
+                    sdkServer.defaultLimit
+                )
             );
 
         //Add Token V2 Cursor
         const tokenV2Address = this.connect?.getAddress("tokenBridge");       
         if (tokenV2Address)
-            this.tokenV2Cursor = NewCursor(
-                this.network,
-                BridgeType.TokenV2,
-                tokenV2Address,
-                sdkServer.defaultLimit
+            this.cursors[BridgeType.TokenV2].push(
+                NewCursor(
+                    this.network,
+                    BridgeType.TokenV2,
+                    tokenV2Address,
+                    sdkServer.defaultLimit
+                )
             );
 
         //Add USDC Cursors
         const usdcAddresses = [
-            // this.connect?.getAddress("depositWallet"),
-            // this.connect?.getAddress("releaseWallet"),
             this.connect?.getAddress("bridge")
         ];
-        this.usdcCursors = [];
         usdcAddresses.forEach((address) => {
             if (this.network === undefined) throw ServerError.NetworkNotSet();
             if (address)
-                this.usdcCursors?.push(NewCursor(this.network, BridgeType.USDC, address, sdkServer.defaultLimit));
+                this.cursors[BridgeType.Circle]?.push(NewCursor(this.network, BridgeType.Circle, address, sdkServer.defaultLimit));
         });
     }
 
     //Poll
-    async pollAll(sdkServer: GlitterSDKServer): Promise<PollerResult[]> {
-        return pollAllDefault(sdkServer, this);
-    }
     async poll(sdkServer: GlitterSDKServer, cursor: Cursor): Promise<PollerResult> {
         const address = cursor.address;
         let startBlock = cursor.end?.block;
@@ -142,7 +153,7 @@ export class GlitterEVMPoller implements GlitterPoller {
                     case BridgeType.TokenV2:
                         partialTxn = await EvmV2Parser.process(sdkServer, this.connect, txnID);
                         break;
-                    case BridgeType.USDC:
+                    case BridgeType.Circle:
                         partialTxn = await EvmUSDCParser.process(
                             sdkServer,  
                             this.connect,                      
