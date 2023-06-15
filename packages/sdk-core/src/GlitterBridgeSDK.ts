@@ -76,15 +76,14 @@ export class GlitterBridgeSDK {
                 case BridgeNetworks.solana:
                     this.connectToSolana();
                     break;
-                case BridgeNetworks.Arbitrum:
-                case BridgeNetworks.Avalanche:
-                case BridgeNetworks.Ethereum:
-                case BridgeNetworks.Polygon:
-                    this.connectToEvmNetwork(network);
-                    break;
-                
                 case BridgeNetworks.TRON:
                     this.connectToTron();
+                    break;
+                case BridgeNetworks.Arbitrum:
+                case BridgeNetworks.Avalanche:
+                case BridgeNetworks.Polygon:
+                case BridgeNetworks.Ethereum:
+                    this.connectToEvmNetwork(network);
                     break;
             }});
 
@@ -93,7 +92,13 @@ export class GlitterBridgeSDK {
 
     private preInitializeChecks(network: BridgeNetworks) {
         if (!this._bridgeConfig) throw new Error("Glitter environment not set");
-        const EVMs = [BridgeNetworks.Arbitrum, BridgeNetworks.Avalanche, BridgeNetworks.Ethereum, BridgeNetworks.Polygon]
+
+        const EVMs = [
+            BridgeNetworks.Arbitrum, 
+            BridgeNetworks.Avalanche, 
+            BridgeNetworks.Ethereum, 
+            BridgeNetworks.Polygon
+        ]
         /**
          * TODO: have config keys in such
          * a way that we directly check
@@ -152,6 +157,7 @@ export class GlitterBridgeSDK {
             network,
             new EvmConnect(network, this._bridgeConfig!.evm[network])
         );
+
         return this;
     }
 
