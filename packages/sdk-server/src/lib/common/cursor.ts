@@ -107,6 +107,9 @@ export async function UpdateCursor(
             cursor.batch.txns += txnIDs.length;
             cursor.batch.position = txnIDs[txnIDs.length - 1];
 
+            if (maxBlock) cursor.batch.block = maxBlock;
+            if (nextAPIToken) cursor.batch.nextAPIToken = nextAPIToken;
+
         }
     } else if (!txnIDs || txnIDs.length == 0) {
 
