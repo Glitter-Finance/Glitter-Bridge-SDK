@@ -146,6 +146,9 @@ export class GlitterAlgorandPoller implements GlitterPoller {
             }
         }
 
+        //Ensure that max block is really max in the case of backward counting batches
+        maxBlock = Math.max(maxBlock, cursor.batch?.block as number || 0);
+
         //update cursor        
         cursor = await UpdateCursor(cursor, signatures, maxBlock, nextToken);
 
