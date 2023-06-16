@@ -55,7 +55,7 @@ export function CompleteBatch(cursor: Cursor, maxBlock?:number): Cursor {
         block: cursor.beginning?.block,
         time: cursor.beginning?.time,
     };
-    if (maxBlock) cursor.end.block = maxBlock;
+    if (maxBlock && maxBlock > 0) cursor.end.block = maxBlock;
 
     //Reset beginning
     cursor.beginning = undefined;
@@ -134,6 +134,7 @@ export async function UpdateCursor(
                 block: cursor.beginning?.block,
                 time: cursor.beginning?.time,
             };
+            if (maxBlock && maxBlock > 0) cursor.end.block = maxBlock;
 
             //Reset beginning
             cursor.beginning = undefined;

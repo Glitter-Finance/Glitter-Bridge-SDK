@@ -109,7 +109,7 @@ export class GlitterAlgorandPoller implements GlitterPoller {
 
         //Get partial transactions
         const partialTxns: PartialBridgeTxn[] = [];
-        let maxBlock = 0;
+        let maxBlock = cursor.end?.block as number || 0;
         for (const txnID of signatures) {
             try {
                 //Ensure Transaction Exists
