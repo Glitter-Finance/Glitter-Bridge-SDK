@@ -131,6 +131,8 @@ export async function UpdateCursor(
             //Need to update the end position
             cursor.end = {
                 txn: txnIDs[txnIDs.length - 1],
+                block: cursor.beginning?.block,
+                time: cursor.beginning?.time,
             };
 
             //Reset beginning
