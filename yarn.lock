@@ -1559,9 +1559,9 @@
 
 "@glitter-finance/sdk-server@file:C:\\Users\\Andrew\\Documents\\Github\\Glitter Finance\\Bridge\\Glitter\\SDK\\packages\\sdk-server":
   "resolved" "file:packages/sdk-server"
-  "version" "1.0.1-23"
+  "version" "1.0.1-24"
   dependencies:
-    "@glitter-finance/sdk-core" "1.2.0-46"
+    "@glitter-finance/sdk-core" "1.2.0-47"
     "@project-serum/anchor" "^0.26.0"
     "@solana/web3.js" "^1.65.0"
     "algosdk" "^2.1.0"

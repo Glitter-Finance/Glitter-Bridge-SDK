@@ -109,6 +109,7 @@ export class GlitterAlgorandPoller implements GlitterPoller {
 
         //Get partial transactions
         const partialTxns: PartialBridgeTxn[] = [];
+        let maxBlock = 0;
         for (const txnID of signatures) {
             try {
                 //Ensure Transaction Exists
@@ -136,14 +137,17 @@ export class GlitterAlgorandPoller implements GlitterPoller {
                             cursor.bridgeType
                         );
                 }
-                if (CursorFilter(cursor, partialTxn)) partialTxns.push(partialTxn);                
+                if (CursorFilter(cursor, partialTxn)) partialTxns.push(partialTxn);    
+                
+                //Update max block
+                if (partialTxn?.block) maxBlock = Math.max(maxBlock, partialTxn.block);
             } catch (error) {
                 console.error((error as Error).message)
             }
         }
 
-        //update cursor
-        cursor = await UpdateCursor(cursor, signatures, undefined, nextToken);
+        //update cursor        
+        cursor = await UpdateCursor(cursor, signatures, maxBlock, nextToken);
 
         //Return Result
         return {

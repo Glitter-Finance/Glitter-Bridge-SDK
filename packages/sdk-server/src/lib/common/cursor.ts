@@ -115,7 +115,7 @@ export async function UpdateCursor(
 
         //No more transactions to fetch
         if (cursor.batch) {
-            cursor = CompleteBatch(cursor);
+            cursor = CompleteBatch(cursor, maxBlock);
         } else {
             //No change to cursor
         }
@@ -125,7 +125,7 @@ export async function UpdateCursor(
         //We have less than the limit
         if (cursor.batch) {
             txnIDs.forEach(txnID => cursor.batch?.txns.add(txnID));
-            cursor = CompleteBatch(cursor);
+            cursor = CompleteBatch(cursor, maxBlock);
         } else {
 
             //Need to update the end position
@@ -136,7 +136,7 @@ export async function UpdateCursor(
             //Reset beginning
             cursor.beginning = undefined;
             cursor.lastBatchTxns = new Set<string>(txnIDs);
-            
+
         }
 
     }
