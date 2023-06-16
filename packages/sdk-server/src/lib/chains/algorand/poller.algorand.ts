@@ -86,7 +86,7 @@ export class GlitterAlgorandPoller implements GlitterPoller {
 
         if (cursor.batch?.nextAPIToken) caller.nextToken(cursor.batch?.nextAPIToken);
         if (cursor.limit) caller.limit(cursor.limit);
-        if (cursor.beginning?.block) caller.minRound(Number(cursor.beginning.block));
+        if (cursor.end?.block) caller.minRound(Number(cursor.end.block));
 
         //Check appid or address
         if (typeof cursor.address === "number") {
