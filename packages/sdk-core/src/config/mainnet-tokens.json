@@ -139,6 +139,83 @@
                     "min_transfer": 5
                 }
             ]
+        },
+        {
+            "asset_id": 6,
+            "asset_name": "Not A Security",
+            "asset_symbol": "NOSEC",
+            "chains": [
+                {
+                    "chain": "Ethereum",
+                    "symbol": "NOSEC",
+                    "name": "Not A Security",
+                    "decimals": 18,
+                    "address": "0x68f0C0003F1826c4E9646Df7E1ecf3707FeE0581",
+                    "min_transfer": 0,
+                    "vault_type": "outgoing",
+                    "vault_address": "0xa234acbd98a917f6dda69298e0e7290380006cf1"
+                },
+                {
+                    "chain": "Arbitrum",
+                    "symbol": "xNOSEC",
+                    "name": "Wrapped Not A Security",
+                    "decimals": 18,
+                    "address": "0x446c264ed8888dad27f5452094d2ceadb1e038ea",
+                    "min_transfer": 0,
+                    "vault_type": "incoming",
+                    "vault_address": "0x446c264ed8888dad27f5452094d2ceadb1e038ea"
+                },
+                {
+                    "chain": "zkEVM",
+                    "symbol": "xNOSEC",
+                    "name": "Wrapped Not A Security",
+                    "decimals": 18,
+                    "address": "0x175355fa6fa82f1bb6868cd885da13069c4e861c",
+                    "min_transfer": 0,
+                    "vault_type": "incoming",
+                    "vault_address": "0x175355fa6fa82f1bb6868cd885da13069c4e861c"
+                },
+                {
+                    "chain": "Polygon",
+                    "symbol": "xNOSEC",
+                    "name": "Wrapped Not A Security",
+                    "decimals": 18,
+                    "address": "0x72decebe0597740551396d3c9e7546cfc97971e9",
+                    "min_transfer": 0,
+                    "vault_type": "incoming",
+                    "vault_address": "0x72decebe0597740551396d3c9e7546cfc97971e9"
+                },
+                {
+                    "chain": "Avalanche",
+                    "symbol": "xNOSEC",
+                    "name": "Wrapped Not A Security",
+                    "decimals": 18,
+                    "address": "0xa234acbd98a917f6dda69298e0e7290380006cf1",
+                    "min_transfer": 0,
+                    "vault_type": "incoming",
+                    "vault_address": "0xa234acbd98a917f6dda69298e0e7290380006cf1"
+                },
+                {
+                    "chain": "Binance",
+                    "symbol": "xNOSEC",
+                    "name": "Wrapped Not A Security",
+                    "decimals": 18,
+                    "address": "0x446c264ed8888dad27f5452094d2ceadb1e038ea",
+                    "min_transfer": 0,
+                    "vault_type": "incoming",
+                    "vault_address": "0x446c264ed8888dad27f5452094d2ceadb1e038ea"
+                },
+                {
+                    "chain": "Optimism",
+                    "symbol": "xNOSEC",
+                    "name": "Wrapped Not A Security",
+                    "decimals": 18,
+                    "address": "0x446c264ed8888dad27f5452094d2ceadb1e038ea",
+                    "min_transfer": 0,
+                    "vault_type": "incoming",
+                    "vault_address": "0x446c264ed8888dad27f5452094d2ceadb1e038ea"
+                }
+            ]
         }
     ]
 }

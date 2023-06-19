@@ -308,7 +308,7 @@
                     "symbol": "xGTT",
                     "name": "Wrapped Glitter Test Token",
                     "decimals": 18,
-                    "address": "0x934431bcf93a48fc608872c00098c6aa5ffbe1ce",
+                    "address": "0x961388fe63d3134a2d83b9dba4b771f738bf8d8d",
                     "min_transfer": 0,
                     "vault_type": "incoming",
                     "vault_address": "0x961388fe63d3134a2d83b9dba4b771f738bf8d8d"
@@ -318,7 +318,7 @@
                     "symbol": "xGTT",
                     "name": "Wrapped Glitter Test Token",
                     "decimals": 18,
-                    "address": "0x9002dee328872d6b8245d0fd4cb8ad7b4d00fe2e",
+                    "address": "0xb36a5accccac48e3ae3207ece4d1cdfd693dd77f",
                     "min_transfer": 0,
                     "vault_type": "incoming",
                     "vault_address": "0xb36a5accccac48e3ae3207ece4d1cdfd693dd77f"
@@ -328,7 +328,7 @@
                     "symbol": "xGTT",
                     "name": "Wrapped Glitter Test Token",
                     "decimals": 18,
-                    "address": "0x934431bcf93a48fc608872c00098c6aa5ffbe1ce",
+                    "address": "0xfb5e89d2d9f33e7e5736a6bd40ffe3ddee3fab5d",
                     "min_transfer": 0,
                     "vault_type": "incoming",
                     "vault_address": "0xfb5e89d2d9f33e7e5736a6bd40ffe3ddee3fab5d"
@@ -338,7 +338,7 @@
                     "symbol": "xGTT",
                     "name": "Wrapped Glitter Test Token",
                     "decimals": 18,
-                    "address": "0x9002dee328872d6b8245d0fd4cb8ad7b4d00fe2e",
+                    "address": "0x1aee85ab59f6f9aa79e9b1cee76926dc81ecf7bb",
                     "min_transfer": 0,
                     "vault_type": "incoming",
                     "vault_address": "0x1aee85ab59f6f9aa79e9b1cee76926dc81ecf7bb"
@@ -348,7 +348,7 @@
                     "symbol": "xGTT",
                     "name": "Wrapped Glitter Test Token",
                     "decimals": 18,
-                    "address": "0xb5480b6d228965455cf2a8aef395dbd7cfa3e7c8",
+                    "address": "0xf83a807849965419c5c9e36b12d5a5da03c34307",
                     "min_transfer": 0,
                     "vault_type": "incoming",
                     "vault_address": "0xf83a807849965419c5c9e36b12d5a5da03c34307"
@@ -358,7 +358,7 @@
                     "symbol": "xGTT",
                     "name": "Wrapped Glitter Test Token",
                     "decimals": 18,
-                    "address": "0x40905d7e5aba26541f29578eee6158bb7d3fd70d",
+                    "address": "0x4c412833bef9c911c57ec0441f7d8a2c482fd81b",
                     "min_transfer": 0,
                     "vault_type": "incoming",
                     "vault_address": "0x4c412833bef9c911c57ec0441f7d8a2c482fd81b"
