@@ -139,6 +139,83 @@
                     "min_transfer": 5
                 }
             ]
+        },
+        {
+            "asset_id": 6,
+            "asset_name": "Not A Security",
+            "asset_symbol": "NOSEC",
+            "chains": [
+                {
+                    "chain": "Ethereum",
+                    "symbol": "NOSEC",
+                    "name": "Not A Security",
+                    "decimals": 18,
+                    "address": "0x68f0C0003F1826c4E9646Df7E1ecf3707FeE0581",
+                    "min_transfer": 0,
+                    "vault_type": "outgoing",
+                    "vault_address": "0xa234acbd98a917f6dda69298e0e7290380006cf1"
+                },
+                {
+                    "chain": "Arbitrum",
+                    "symbol": "xNOSEC",
+                    "name": "Wrapped Not A Security",
+                    "decimals": 18,
+                    "address": "",
+                    "min_transfer": 0,
+                    "vault_type": "incoming",
+                    "vault_address": ""
+                },
+                {
+                    "chain": "zkEVM",
+                    "symbol": "xNOSEC",
+                    "name": "Wrapped Not A Security",
+                    "decimals": 18,
+                    "address": "",
+                    "min_transfer": 0,
+                    "vault_type": "incoming",
+                    "vault_address": ""
+                },
+                {
+                    "chain": "Polygon",
+                    "symbol": "xNOSEC",
+                    "name": "Wrapped Not A Security",
+                    "decimals": 18,
+                    "address": "",
+                    "min_transfer": 0,
+                    "vault_type": "incoming",
+                    "vault_address": ""
+                },
+                {
+                    "chain": "Avalanche",
+                    "symbol": "xNOSEC",
+                    "name": "Wrapped Not A Security",
+                    "decimals": 18,
+                    "address": "",
+                    "min_transfer": 0,
+                    "vault_type": "incoming",
+                    "vault_address": ""
+                },
+                {
+                    "chain": "Binance",
+                    "symbol": "xNOSEC",
+                    "name": "Wrapped Not A Security",
+                    "decimals": 18,
+                    "address": "",
+                    "min_transfer": 0,
+                    "vault_type": "incoming",
+                    "vault_address": ""
+                },
+                {
+                    "chain": "Optimism",
+                    "symbol": "xNOSEC",
+                    "name": "Wrapped Not A Security",
+                    "decimals": 18,
+                    "address": "",
+                    "min_transfer": 0,
+                    "vault_type": "incoming",
+                    "vault_address": ""
+                }
+            ]
         }
     ]
 }
