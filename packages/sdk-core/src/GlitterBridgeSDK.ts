@@ -1,6 +1,6 @@
 import { AlgorandConnect } from "./lib/chains/algorand";
 import { EvmConnect } from "./lib/chains/evm";
-import { SolanaConnect } from "./lib/chains/solana";
+import { LoadSolanaSchema, SolanaConnect } from "./lib/chains/solana";
 import { TronConnect } from "./lib/chains/tron/connect";
 import {
     BridgeEvmNetworks,
@@ -152,6 +152,8 @@ export class GlitterBridgeSDK {
 
     private connectToSolana(): GlitterBridgeSDK {
         this.preInitializeChecks(BridgeNetworks.solana);
+        
+        LoadSolanaSchema();
 
         if (this._rpcOverrides[BridgeNetworks.solana]) {
             this._bridgeConfig!.solana.server = this._rpcOverrides[BridgeNetworks.solana];

@@ -12,6 +12,7 @@ import {
     BridgeReleaseSchema,
     BridgeType,
     ChainStatus,
+    LoadSchema,
     PartialBridgeTxn,
     Routing,
     RoutingHelper,
@@ -23,6 +24,11 @@ import { ServerError } from "../../common/serverErrors";
 import { SolanaPollerCommon } from "./poller.solana.common";
 
 export class SolanaV1Parser {
+//constructor
+    constructor() {
+        LoadSchema();
+    }
+
     //V1 Token Process
     public static async process(
         sdkServer: GlitterSDKServer,
