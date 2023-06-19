@@ -170,10 +170,10 @@
                     "symbol": "xNOSEC",
                     "name": "Wrapped Not A Security",
                     "decimals": 18,
-                    "address": "",
+                    "address": "0x175355fa6fa82f1bb6868cd885da13069c4e861c",
                     "min_transfer": 0,
                     "vault_type": "incoming",
-                    "vault_address": ""
+                    "vault_address": "0x175355fa6fa82f1bb6868cd885da13069c4e861c"
                 },
                 {
                     "chain": "Polygon",
