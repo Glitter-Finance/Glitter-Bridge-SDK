@@ -101,3 +101,7 @@ export class BridgeCancelSchema {
         ],
     ]);
 }
+
+export function LoadSchema(){
+    //here to load schema - so long as this function is called, these static classes are loaded
+}
