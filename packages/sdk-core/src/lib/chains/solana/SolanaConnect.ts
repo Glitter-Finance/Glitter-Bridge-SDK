@@ -18,10 +18,19 @@ export class SolanaConnect {
         this.defaultConnection = config.name === GlitterEnvironment.mainnet ? 
             "mainnet" : "testnet"
 
+        //get urls
+        let mainnetURL = SolanaPublicNetworks.mainnet_beta.toString();
+        const devnetURL = SolanaPublicNetworks.devnet.toString();
+        let testnetURL = SolanaPublicNetworks.testnet.toString();
+
+        if (config.name === GlitterEnvironment.mainnet && config.solana.server) mainnetURL = config.solana.server;
+        if (config.name === GlitterEnvironment.testnet && config.solana.server) testnetURL = config.solana.server;
+        //if (config.name === GlitterEnvironment.mainnet && config.solana.server) mainnetURL = config.solana.server;
+
         this.connections = {
-            devnet : new Connection(SolanaPublicNetworks.devnet.toString()),
-            testnet : new Connection(SolanaPublicNetworks.testnet.toString()),
-            mainnet : new Connection(SolanaPublicNetworks.mainnet_beta.toString())
+            devnet : new Connection(devnetURL),
+            testnet : new Connection(testnetURL),
+            mainnet : new Connection(mainnetURL)
         };
        
         this.accountStore = new SolanaAccountsStore(
