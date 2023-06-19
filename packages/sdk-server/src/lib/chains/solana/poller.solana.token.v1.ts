@@ -12,7 +12,7 @@ import {
     BridgeReleaseSchema,
     BridgeType,
     ChainStatus,
-    LoadSchema,
+    LoadSolanaSchema,
     PartialBridgeTxn,
     Routing,
     RoutingHelper,
@@ -26,7 +26,7 @@ import { SolanaPollerCommon } from "./poller.solana.common";
 export class SolanaV1Parser {
 //constructor
     constructor() {
-        LoadSchema();
+        LoadSolanaSchema();
     }
 
     //V1 Token Process

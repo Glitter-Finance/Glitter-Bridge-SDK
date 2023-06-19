@@ -6,7 +6,7 @@ import { SolanaAccount, SolanaAccountsStore } from "./AccountsStore";
 import { GlitterBridgeConfig, GlitterEnvironment } from "../../../types";
 import { BridgeNetworks, BridgeTokenConfig, BridgeTokens, Routing, Sleep } from "../../../lib/common";
 import BigNumber from "bignumber.js";
-import { LoadSchema, bridgeUSDC, createAssociatedTokenAccountTransaction, getAssociatedTokenAccount, solBridgeTransaction, tokenBridgeTransaction } from "./transactions";
+import { LoadSolanaSchema, bridgeUSDC, createAssociatedTokenAccountTransaction, getAssociatedTokenAccount, solBridgeTransaction, tokenBridgeTransaction } from "./transactions";
 
 export class SolanaConnect {
     readonly defaultConnection: "testnet" | "devnet" | "mainnet";
@@ -41,7 +41,7 @@ export class SolanaConnect {
         BridgeTokens.loadConfig(BridgeNetworks.solana, config.solana.tokens)
 
         //load schema
-        LoadSchema();
+        LoadSolanaSchema();
     }
     /**
      * Provides token configuration by token symbol
