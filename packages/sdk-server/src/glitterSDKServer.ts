@@ -23,8 +23,9 @@ export class GlitterSDKServer {
     private _defaultLimit = 25;
     private _customRPCConfig?: ChainRPCConfigs;
 
-    constructor(environment?: GlitterEnvironment, customRPCConfig?:ChainRPCConfigs) {
+    constructor(environment?: GlitterEnvironment, customRPCConfig?:ChainRPCConfigs, defaultLimit?:number) {
         if (environment) this._sdk = this._sdk.setEnvironment(environment);
+        this._defaultLimit= defaultLimit || this._defaultLimit;
 
         this._customRPCConfig = customRPCConfig;       
     }

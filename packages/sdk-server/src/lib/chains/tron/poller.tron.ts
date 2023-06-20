@@ -83,7 +83,7 @@ export class GlitterTronPoller implements GlitterPoller {
 
         // Get New Txns
         let newLastTimestamp_ms = lastTimestamp_ms;
-        const newTxns = [];
+        const newTxns:string[] = [];
         for (let index = 0; index < results.length; index++) {
             const txn = results[index];
             const txID = txn.transaction_id;
@@ -133,10 +133,13 @@ export class GlitterTronPoller implements GlitterPoller {
                 console.error((error as Error).message)
             }
         }
+
+        //update cursor
+        cursor = await UpdateCursor(cursor, newTxns);
         
         return {
             cursor: cursor,
-            txns: []
+            txns: partialTxns
         };
 
         // //get indexer

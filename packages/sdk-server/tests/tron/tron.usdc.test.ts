@@ -5,10 +5,8 @@ import { GlitterSDKServer } from "../../src/glitterSDKServer";
 import * as assert from "assert";
 import * as util from "util";
 
-//import test1Expected from './results/solana.usdc.Av47VxT8GpGXHYc3aG7fKddgZjCuZEb5yF3BCaXyE7wu.json'
-// import test2Expected from './results/solana.usdc.HrrpuLCq2ewozVZU5sFrWL6oRvFe8KH1VMhVQLCcWpdy.json'
-// import test3Expected from './results/solana.usdc.8Cb6eKCiowqsfYoLeaQf9voTHv1nV6rKjBvMQwLEGoDJ.json'
-// import test4Expected from './results/solana.usdc.CWmY521qXB29Hwp3WBzyX1huApRdQu4kjrcxZpa2St7d.json'
+import test1Expected from './results/tron.circle.TAG83nhpF82P3r9XhFTwNamgv1BsjTcz6v.json'
+import test2Expected from './results/tron.circle.TGUSL4VtESnWQfy2G6RmCNJT6eqqfcR6om.json'
 import { Cursor, CursorToString } from "../../src/lib/common/cursor";
 
 describe("Solana Poller USDC Tests ", () => {
@@ -19,7 +17,7 @@ describe("Solana Poller USDC Tests ", () => {
     //Before All tests -> create new SDK
     beforeAll(async () => {
         //Initialize SDK
-        sdk = new GlitterSDKServer(GlitterEnvironment.mainnet);
+        sdk = new GlitterSDKServer(GlitterEnvironment.mainnet, undefined, 5);
 
         //Create Solana Poller
         sdk.createPollers([BridgeNetworks.TRON]);
@@ -43,22 +41,27 @@ describe("Solana Poller USDC Tests ", () => {
             const result = await poller.poll(sdk, cursorCopy);
             // console.log(util.inspect(result, false, null, true /* enable colors */));
 
-            const stringify = CursorToString(result.cursor) + JSON.stringify(result.txns);
-            const expectedConfig:any = null;
-            // if (cursorCopy.address === "Av47VxT8GpGXHYc3aG7fKddgZjCuZEb5yF3BCaXyE7wu") {
-            //     expectedConfig = test1Expected;
-            // } else if (cursorCopy.address === "HrrpuLCq2ewozVZU5sFrWL6oRvFe8KH1VMhVQLCcWpdy") {
-            //     expectedConfig = test2Expected;
-            // } else if (cursorCopy.address === "8Cb6eKCiowqsfYoLeaQf9voTHv1nV6rKjBvMQwLEGoDJ") {
-            //     expectedConfig = test3Expected;
-            // } else if (cursorCopy.address === "CWmY521qXB29Hwp3WBzyX1huApRdQu4kjrcxZpa2St7d") {
-            //     expectedConfig = test4Expected;
-            // } else {
-            //     console.log(stringify);
-            //     throw Error("Unknown Cursor Address");
-            // }
+            const stringify = `
+            {
+                "Cursor": ${CursorToString(result.cursor)},
+                "Txns": ${JSON.stringify(result.txns)}
+            }`;
+
+            let expectedConfig:any = null;
+            if (cursorCopy.address === "TAG83nhpF82P3r9XhFTwNamgv1BsjTcz6v") {
+                expectedConfig = test1Expected;
+            } else if (cursorCopy.address === "TGUSL4VtESnWQfy2G6RmCNJT6eqqfcR6om") {
+                expectedConfig = test2Expected;
+            } else {
+                console.log(stringify);
+                throw Error("Unknown Cursor Address");
+            }
             
-            const expectedString = JSON.stringify(expectedConfig);
+            const expectedString = `
+            {
+                "Cursor": ${CursorToString(expectedConfig.Cursor)},
+                "Txns": ${JSON.stringify(expectedConfig.Txns)}
+            }`
 
             console.log(stringify);
             console.log("-------------------");
