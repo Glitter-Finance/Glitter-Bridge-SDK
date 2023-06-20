@@ -38,8 +38,8 @@ export class GlitterTronPoller implements GlitterPoller {
 
         //Add USDC Cursors
         const usdcAddresses = [
-            sdkServer.sdk?.tron?.getAddress("depositWallet"),
-            sdkServer.sdk?.tron?.getAddress("releaseWallet"),
+            sdkServer.sdk?.tron?.getTronAddress("depositWallet"),
+            sdkServer.sdk?.tron?.getTronAddress("releaseWallet"),
         ];      
 
         usdcAddresses.forEach((address) => {

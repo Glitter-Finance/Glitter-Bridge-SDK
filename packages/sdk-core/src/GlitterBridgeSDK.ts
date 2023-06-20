@@ -142,7 +142,7 @@ export class GlitterBridgeSDK {
         this._tron = new TronConnect(this._bridgeConfig!.tron);
 
         const APIKey = this._rpcOverridesByChain.get(BridgeNetworks.TRON)?.API_KEY;
-        this._tron.setApiKey(APIKey || "");
+        if (APIKey && APIKey != "") this._tron.setApiKey(APIKey || "");
 
         return this;
     }

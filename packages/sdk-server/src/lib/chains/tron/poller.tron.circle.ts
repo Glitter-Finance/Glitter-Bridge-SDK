@@ -89,10 +89,10 @@ export class TronCircleParser {
             partialTxn.block = txnInfo.blockNumber;
 
             //Check deposit vs release   
-            if (address && address === sdkServer.sdk?.tron?.getAddress("depositWallet")?.toString()) {
+            if (address && address === sdkServer.sdk?.tron?.getTronAddress("depositWallet")?.toString()) {
                 console.info(`${partialTxn.txnID} is a deposit`);
                 partialTxn = await handleDeposit(sdkServer, partialTxn, depositNote, transferDetail, releaseDetail, connect);
-            } else if (address && address === sdkServer.sdk?.tron?.getAddress("releaseWallet")?.toString()) {
+            } else if (address && address === sdkServer.sdk?.tron?.getTronAddress("releaseWallet")?.toString()) {
                 console.info(`${partialTxn.txnID} is a release`);
                 partialTxn = await handleRelease(sdkServer, partialTxn, releaseDetail, transferDetail, connect);
             } else {
@@ -146,13 +146,13 @@ async function handleDeposit(
     let routing: Routing | null = null;
 
     //Check Type
-    if (toAddress.toLocaleLowerCase() == sdkServer.sdk?.tron?.getAddress("depositWallet")?.toString().toLocaleLowerCase()) {
+    if (toAddress.toLocaleLowerCase() == sdkServer.sdk?.tron?.getTronAddress("depositWallet")?.toString().toLocaleLowerCase()) {
 
         //transfer into deposit address
         partialTxn.txnType = TransactionType.Deposit;
         partialTxn.address = fromAddress;
 
-    } else if (fromAddress.toLocaleLowerCase() == sdkServer.sdk?.tron?.getAddress("depositWallet")?.toString().toLocaleLowerCase()) {
+    } else if (fromAddress.toLocaleLowerCase() == sdkServer.sdk?.tron?.getTronAddress("depositWallet")?.toString().toLocaleLowerCase()) {
 
         //Transfer out of deposit address
         if (releaseDetails) {
@@ -236,13 +236,13 @@ async function handleRelease(
     let routing: Routing | null = null;
 
     //Check Type
-    if (toAddress.toLocaleLowerCase() == sdkServer.sdk?.tron?.getAddress("releaseWallet")?.toString().toLocaleLowerCase()) {
+    if (toAddress.toLocaleLowerCase() == sdkServer.sdk?.tron?.getTronAddress("releaseWallet")?.toString().toLocaleLowerCase()) {
 
         //transfer into receiver address
         partialTxn.txnType = TransactionType.Transfer;
         partialTxn.address = fromAddress;
 
-    } else if (fromAddress.toLocaleLowerCase() == sdkServer.sdk?.tron?.getAddress("releaseWallet")?.toString().toLocaleLowerCase()) {
+    } else if (fromAddress.toLocaleLowerCase() == sdkServer.sdk?.tron?.getTronAddress("releaseWallet")?.toString().toLocaleLowerCase()) {
 
         //Transfer out of receiver address
         partialTxn.txnType = TransactionType.Release;
