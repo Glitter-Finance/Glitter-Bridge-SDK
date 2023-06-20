@@ -4,7 +4,7 @@ import { EvmBridgeUSDCEventsParser, USDCBridgeEventGroup } from "./poller.evm.ev
 import { TransactionReceipt } from "@ethersproject/abstract-provider";
 import BigNumber from "bignumber.js";
 
-export class EvmUSDCParser {
+export class EvmCircleParser {
     public static async process(
         sdkServer: GlitterSDKServer,
         connect: EvmConnect | undefined,

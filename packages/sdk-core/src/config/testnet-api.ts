@@ -50,6 +50,12 @@ export const testnetAPI:ChainRPCConfigs = {
             API_KEY:"J52F1UBFRCVCPZG6UJZU4QZ7AR5ZERFBS2",
             API_URL:"https://api-goerli-optimistic.etherscan.io/",
             RPC:"https://proud-quiet-aura.optimism-goerli.quiknode.pro/2be045c8068d8a56f0ab77e72b83bd6acfe07a59/",
+        },
+        {
+            network: BridgeNetworks.TRON,
+            API_KEY:"",
+            API_URL:"",
+            RPC:"https://api.shasta.trongrid.io",
         }
     ]
 }

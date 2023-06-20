@@ -62,6 +62,7 @@ export class TronConnect {
         return TronWeb.address.toHex(address);
     }
     /**
+     * @deprecated Please use getTronAddress or getHexAddress
    * Provide address of bridge
    * component
    * @param {"tokens" | "bridge" | "depositWallet" | "releaseWallet"} entity
@@ -94,6 +95,53 @@ export class TronConnect {
             this.__tronConfig.addresses[entity]
         ).toLowerCase();
     }
+
+    //New Get Addresses
+    /**
+   * Provide address of bridge entity
+   * @param {"tokens" | "bridge" | "depositWallet" | "releaseWallet"} entity the bridge entity to get address of
+   * @param {"USDC"} tokenSymbol only USDC for now
+   * @returns {string} The hex address of the requested address entity
+   */
+    getHexAddress(
+        entity: "tokens" | "bridge" | "depositWallet" | "releaseWallet",
+        tokenSymbol?: string
+    ): string {    
+        return this.fromTronAddress(this.getTronAddress(entity, tokenSymbol)).toLowerCase();
+    }
+
+    /**
+   * Provide address of bridge entity
+   * @param {"tokens" | "bridge" | "depositWallet" | "releaseWallet"} entity the bridge entity to get address of
+   * @param {"USDC"} tokenSymbol only USDC for now
+   * @returns {string} The hex address of the requested address entity
+   */
+    getTronAddress(
+        entity: "tokens" | "bridge" | "depositWallet" | "releaseWallet",
+        tokenSymbol?: string
+    ): string {
+        if (entity === "tokens") {
+            if (!tokenSymbol)
+                throw new Error("[EvmConnect] Please provide token symbol.");
+
+            const token = this.__tronConfig.tokens.find(
+                (local_token) =>
+                    local_token.symbol.toLowerCase() === tokenSymbol.toLowerCase()
+            );
+
+            if (!token) {
+                throw new Error(
+                    "[EvmConnect] Can not provide address of undefined token."
+                );
+            }
+
+            return token.address;
+        }
+
+        return this.__tronConfig.addresses[entity];
+        
+    }
+
     private isValidToken(tokenSymbol: string): boolean {
         return !!this.__tronConfig.tokens.find(
             (x) => x.symbol.toLowerCase() === tokenSymbol.toLowerCase()

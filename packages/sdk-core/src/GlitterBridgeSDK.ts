@@ -7,7 +7,7 @@ import {
     BridgeNetworks,
 } from "./lib/common/networks";
 import { mainnetConfig, testnetConfig, mainnetTokenConfig, testnetTokenConfig } from "./config";
-import { ChainRPCConfigs, GlitterBridgeConfig, GlitterEnvironment } from "./types";
+import { ChainRPCConfig, ChainRPCConfigs, GlitterBridgeConfig, GlitterEnvironment } from "./types";
 import { BridgeV2Tokens } from "./lib/common/tokens/BridgeV2Tokens";
 import { testnetAPI } from "./config/testnet-api";
 
@@ -26,6 +26,7 @@ export class GlitterBridgeSDK {
     /** RPC URL Override */
 
     private _rpcOverrides: { [key: string]: string } = {};
+    private _rpcOverridesByChain = new Map<BridgeNetworks, ChainRPCConfig>();
     private _rpcList: ChainRPCConfigs | undefined;
 
     /** Chain Specific SDKs */
@@ -77,6 +78,11 @@ export class GlitterBridgeSDK {
     public connect(networks: BridgeNetworks[], rpcListOverride?:ChainRPCConfigs): GlitterBridgeSDK {
 
         if (rpcListOverride) this._rpcList = rpcListOverride;
+
+        //set rpc overrides by chain
+        this._rpcList?.chainAPIs.forEach((config) => {
+            this._rpcOverridesByChain.set(config.network, config);
+        });
 
         networks.forEach((network) => {
            
@@ -134,6 +140,9 @@ export class GlitterBridgeSDK {
     private connectToTron(): GlitterBridgeSDK {
         this.preInitializeChecks(BridgeNetworks.TRON);
         this._tron = new TronConnect(this._bridgeConfig!.tron);
+
+        const APIKey = this._rpcOverridesByChain.get(BridgeNetworks.TRON)?.API_KEY;
+        this._tron.setApiKey(APIKey || "");
 
         return this;
     }

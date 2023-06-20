@@ -3,7 +3,7 @@ import { GlitterSDKServer } from "../../../glitterSDKServer";
 import { Cursor, CursorFilter, NewCursor, UpdateCursor } from "../../common/cursor";
 import { GlitterPoller, PollerResult } from "../../common/poller.Interface";
 import { ServerError } from "../../common/serverErrors";
-import { AlgorandUSDCParser } from "./poller.algorand.circle";
+import { AlgorandCircleParser } from "./poller.algorand.circle";
 import { AlgorandTokenV2Parser } from "./poller.algorand.token.v2";
 import { AlgorandTokenV1Parser } from "./poller.algorand.token.v1";
 
@@ -132,7 +132,7 @@ export class GlitterAlgorandPoller implements GlitterPoller {
                         partialTxn = await AlgorandTokenV2Parser.process(sdkServer, txnID, client, indexer, cursor);
                         break;
                     case BridgeType.Circle:
-                        partialTxn = await AlgorandUSDCParser.process(sdkServer, txnID, client, indexer, cursor);
+                        partialTxn = await AlgorandCircleParser.process(sdkServer, txnID, client, indexer, cursor);
                         break;
                     default:
                         throw ServerError.InvalidBridgeType(

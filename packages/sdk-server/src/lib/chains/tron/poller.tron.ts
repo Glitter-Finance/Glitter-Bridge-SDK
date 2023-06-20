@@ -1,8 +1,11 @@
-import { BridgeNetworks, BridgeType, PartialBridgeTxn } from "@glitter-finance/sdk-core";
+import { BridgeNetworks, BridgeType, PartialBridgeTxn, Sleep } from "@glitter-finance/sdk-core";
 import { GlitterSDKServer } from "../../../glitterSDKServer";
 import { Cursor, CursorFilter, NewCursor, UpdateCursor } from "../../common/cursor";
 import { GlitterPoller, PollerResult } from "../../common/poller.Interface";
 import { ServerError } from "../../common/serverErrors";
+import axios, { AxiosResponse } from 'axios';
+import * as util from 'util';
+import { TronCircleParser } from "./poller.tron.circle";
 
 export class GlitterTronPoller implements GlitterPoller {
    
@@ -49,11 +52,93 @@ export class GlitterTronPoller implements GlitterPoller {
 
     //Poll
     async poll(sdkServer: GlitterSDKServer, cursor: Cursor): Promise<PollerResult> {
-       
+
+        const lastTimestamp_ms: number = cursor.batch?.lastTimestamp_ms || cursor.end?.lastTimestamp_ms || 0;
+
+        //Poll for new txns
+        const address = cursor.address;
+        let response: AxiosResponse<any, any> |undefined= undefined;
+        let attempts = 0;
+        do {
+            try {
+                response = await axios.get(`https://api.trongrid.io/v1/accounts/${address}/transactions/trc20`, {
+                    params: {
+                        limit: cursor.limit,
+                        order_by: 'timestamp,asc',
+                        min_timestamp: lastTimestamp_ms,
+                    }
+                });
+                break;
+            } catch (e: any) {
+                attempts++;
+                console.log(`Error getting signatures for address: ${e.message}`);
+                console.log(`Retrying ${attempts} of 5`);
+                await Sleep(250);
+            }
+        } while (attempts < 5);
+        if (attempts >= 5) throw new Error(`Error getting signatures for address: ${address}`);
+        if (!response) throw new Error(`Error getting signatures for address: ${address}`);
+
+        const results = response.data.data;
+
+        // Get New Txns
+        let newLastTimestamp_ms = lastTimestamp_ms;
+        const newTxns = [];
+        for (let index = 0; index < results.length; index++) {
+            const txn = results[index];
+            const txID = txn.transaction_id;
+            const timestamp = txn.block_timestamp;
+
+            //Check if new
+            if (timestamp > newLastTimestamp_ms) newLastTimestamp_ms = timestamp;
+
+            //push to list
+            newTxns.push(txID);
+        }
+
+        console.log(util.inspect(newTxns, false, null, true /* enable colors */));
+
+        //Get partial transactions
+        const partialTxns: PartialBridgeTxn[] = [];
+        for (const txn of newTxns) {
+            try {            
+                //Ensure Transaction Exists
+                if (!txn) continue;
+
+                //Process Transaction
+                let partialTxn: PartialBridgeTxn | undefined;
+                switch (cursor.bridgeType) {
+                    //case BridgeType.TokenV1:
+                    //partialTxn = await SolanaV1Parser.process(sdkServer, txn);
+                    //break;
+                    //case BridgeType.TokenV2:
+                    //partialTxn = await SolanaV2Parser.process(sdkServer, client, txn);
+                    //break;
+                    case BridgeType.Circle:
+                        partialTxn = await TronCircleParser.process(
+                            sdkServer,
+                            txn,
+                            sdkServer.sdk?.tron,
+                            cursor
+                        );
+                        break;
+                    default:
+                        throw ServerError.InvalidBridgeType(
+                            BridgeNetworks.solana,
+                            cursor.bridgeType
+                        );
+                }
+                if (CursorFilter(cursor, partialTxn)) partialTxns.push(partialTxn);
+            } catch (error) {
+                console.error((error as Error).message)
+            }
+        }
+        
         return {
             cursor: cursor,
-            txns: [],
-        }
+            txns: []
+        };
+
         // //get indexer
         // const indexer = sdkServer.sdk?.tron?.clientIndexer;
         // const client = sdkServer.sdk?.algorand?.client;

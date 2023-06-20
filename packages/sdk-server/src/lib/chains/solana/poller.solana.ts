@@ -16,7 +16,7 @@ import { Cursor, NewCursor, CursorFilter, UpdateCursor } from "../../common/curs
 import { GlitterPoller, PollerResult } from "../../common/poller.Interface";
 import { ServerError } from "../../common/serverErrors";
 import { SolanaV1Parser } from "./poller.solana.token.v1";
-import { SolanaUSDCParser } from "./Poller.solana.circle";
+import { SolanaCircleParser } from "./Poller.solana.circle";
 import { SolanaV2Parser } from "./poller.solana.token.v2";
 
 export class GlitterSolanaPoller implements GlitterPoller {
@@ -47,7 +47,8 @@ export class GlitterSolanaPoller implements GlitterPoller {
     
     //Initialize
     public initialize(sdkServer: GlitterSDKServer): void {
-    //Add Token Cursor
+        
+        //Add Token Cursor
         const tokenAddress = sdkServer.sdk?.solana?.getAddress("bridgeProgram");
         if (tokenAddress)
             this.cursors[BridgeType.TokenV1].push(
@@ -105,9 +106,6 @@ export class GlitterSolanaPoller implements GlitterPoller {
             }
         }
         if (!client) throw ServerError.ClientNotSet(BridgeNetworks.solana);
-
-        //Check Cursor
-        if (!cursor) throw ServerError.CursorNotSet(BridgeNetworks.solana);
 
         //Get New Transactions
         const searchFilter = await this.getFilter(cursor);
@@ -171,7 +169,7 @@ export class GlitterSolanaPoller implements GlitterPoller {
                         partialTxn = await SolanaV2Parser.process(sdkServer, client, txn);
                         break;
                     case BridgeType.Circle:
-                        partialTxn = await SolanaUSDCParser.process(
+                        partialTxn = await SolanaCircleParser.process(
                             sdkServer,
                             txn,
                             client,

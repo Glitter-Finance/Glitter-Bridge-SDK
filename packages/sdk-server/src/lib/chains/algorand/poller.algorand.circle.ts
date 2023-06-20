@@ -7,7 +7,7 @@ import IndexerClient from "algosdk/dist/types/client/v2/indexer/indexer";
 import { Cursor } from "../../common/cursor";
 import { GlitterSDKServer } from "../../../glitterSDKServer";
 
-export class AlgorandUSDCParser {
+export class AlgorandCircleParser {
     public static async process(
         sdkServer: GlitterSDKServer,
         txnID: string,

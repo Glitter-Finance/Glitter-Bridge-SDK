@@ -5,7 +5,7 @@ import { GlitterPoller, PollerResult } from "../../common/poller.Interface";
 import { ServerError } from "../../common/serverErrors";
 import axios from "axios";
 import { EvmV2Parser } from "./poller.evm.token.v2";
-import { EvmUSDCParser } from "./poller.evm.circle";
+import { EvmCircleParser } from "./poller.evm.circle";
 
 export class GlitterEVMPoller implements GlitterPoller {
 
@@ -157,7 +157,7 @@ export class GlitterEVMPoller implements GlitterPoller {
                         partialTxn = await EvmV2Parser.process(sdkServer, this.connect, txnID);
                         break;
                     case BridgeType.Circle:
-                        partialTxn = await EvmUSDCParser.process(
+                        partialTxn = await EvmCircleParser.process(
                             sdkServer,  
                             this.connect,                      
                             txnID

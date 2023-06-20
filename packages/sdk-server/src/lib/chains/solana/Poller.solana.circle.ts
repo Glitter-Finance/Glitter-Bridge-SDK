@@ -16,7 +16,7 @@ import { Cursor } from "../../common/cursor";
 import { ServerError } from "../../common/serverErrors";
 import { SolanaPollerCommon } from "./poller.solana.common";
 
-export class SolanaUSDCParser {
+export class SolanaCircleParser {
 
     public static async process(
         sdkServer: GlitterSDKServer,

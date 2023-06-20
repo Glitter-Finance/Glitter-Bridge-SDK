@@ -23,10 +23,12 @@ export type CursorPosition = {
     txn?: string;
     block?: string | number;
     time?: string;
+    lastTimestamp_ms?: number;
 };
 export type CursorBatch = {
     position?: string | number;
     block?: string | number;
+    lastTimestamp_ms?: number;
     txns: Set<string>;
     complete: boolean;    
     nextAPIToken?: string;
@@ -44,18 +46,23 @@ export function NewCursor(network: BridgeNetworks, bridgeType: BridgeType, addre
         beginning: undefined,
         end: undefined,
         limit: limit,
-        batch: undefined,
+        batch: undefined,    
     };
 }
 
-export function CompleteBatch(cursor: Cursor, maxBlock?:number): Cursor {
+export function CompleteBatch(
+    cursor: Cursor, 
+    maxBlock?:number,
+    lastTimestamp_ms?: number): Cursor {
     //Set end transaction
     cursor.end = {
         txn: cursor.beginning?.txn,
         block: cursor.beginning?.block,
         time: cursor.beginning?.time,
+        lastTimestamp_ms: cursor.beginning?.lastTimestamp_ms,
     };
     if (maxBlock && maxBlock > 0) cursor.end.block = maxBlock;
+    if (lastTimestamp_ms && lastTimestamp_ms > 0) cursor.end.lastTimestamp_ms = lastTimestamp_ms;
 
     //Reset beginning
     cursor.beginning = undefined;
@@ -78,7 +85,8 @@ export async function UpdateCursor(
     cursor: Cursor,
     txnIDs: string[],
     maxBlock?: number,
-    nextAPIToken?: string
+    nextAPIToken?: string,
+    lastTimestamp_ms?: number
 ): Promise<Cursor> {
 
     //Check if we have maxxed out the limit
@@ -115,7 +123,7 @@ export async function UpdateCursor(
 
         //No more transactions to fetch
         if (cursor.batch) {
-            cursor = CompleteBatch(cursor, maxBlock);
+            cursor = CompleteBatch(cursor, maxBlock, lastTimestamp_ms);
         } else {
             //No change to cursor
         }
@@ -125,7 +133,7 @@ export async function UpdateCursor(
         //We have less than the limit
         if (cursor.batch) {
             txnIDs.forEach(txnID => cursor.batch?.txns.add(txnID));
-            cursor = CompleteBatch(cursor, maxBlock);
+            cursor = CompleteBatch(cursor, maxBlock, lastTimestamp_ms);
         } else {
 
             //Need to update the end position
@@ -144,5 +152,25 @@ export async function UpdateCursor(
 
     }
 
+    return cursor;
+}
+
+export function CursorToString (cursor: Cursor): string {
+    const jsonString = JSON.stringify(cursor, (key, value) => {
+        if (value instanceof Set) {
+            return Array.from(value);
+        }
+        return value;
+    });
+
+    return jsonString;
+}
+export function CursorFromString(string:string):Cursor{
+    const cursor = JSON.parse(string, (key, value) => {
+        if (value instanceof Array) {
+            return new Set(value);
+        }
+        return value;
+    });
     return cursor;
 }
