@@ -8,11 +8,14 @@ import { EvmV2Parser } from "./poller.evm.token.v2";
 import { EvmUSDCParser } from "./poller.evm.circle";
 
 export class GlitterEVMPoller implements GlitterPoller {
+
+    //Network
+    public network: BridgeNetworks;
+    
     //EVM Connect
     private apiKey: string | undefined;
     private apiURL: string | undefined;
     private connect: EvmConnect | undefined;
-    private network: BridgeNetworks | undefined;
     
     //Cursors
     public cursors: Record<BridgeType, Cursor[]> ;

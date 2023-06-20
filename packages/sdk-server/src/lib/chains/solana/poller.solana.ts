@@ -21,6 +21,9 @@ import { SolanaV2Parser } from "./poller.solana.token.v2";
 
 export class GlitterSolanaPoller implements GlitterPoller {
     
+    //Network
+    public network: BridgeNetworks = BridgeNetworks.solana;
+    
     //Cursors
     public cursors: Record<BridgeType, Cursor[]> ;
     public get tokenV1Cursor(): Cursor | undefined{

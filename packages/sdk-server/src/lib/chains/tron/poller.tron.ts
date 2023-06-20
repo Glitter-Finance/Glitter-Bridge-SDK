@@ -6,6 +6,9 @@ import { ServerError } from "../../common/serverErrors";
 
 export class GlitterTronPoller implements GlitterPoller {
    
+    //Network
+    public network: BridgeNetworks = BridgeNetworks.TRON;
+    
     //Cursors
     public cursors: Record<BridgeType, Cursor[]> ;
     public get tokenV1Cursor(): Cursor | undefined{

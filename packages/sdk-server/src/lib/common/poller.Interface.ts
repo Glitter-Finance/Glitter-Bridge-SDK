@@ -1,8 +1,11 @@
-import { BridgeType, PartialBridgeTxn } from "@glitter-finance/sdk-core";
+import { BridgeNetworks, BridgeType, PartialBridgeTxn } from "@glitter-finance/sdk-core";
 import { GlitterSDKServer } from "../../glitterSDKServer";
 import { Cursor } from "./cursor";
 
 export interface GlitterPoller {
+
+    //Network
+    network: BridgeNetworks;
 
     //Cursors
     cursors: Record<BridgeType, Cursor[]>;

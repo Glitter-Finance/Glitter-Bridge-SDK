@@ -9,6 +9,9 @@ import { AlgorandTokenV1Parser } from "./poller.algorand.token.v1";
 
 export class GlitterAlgorandPoller implements GlitterPoller {
 
+    //Network
+    public network: BridgeNetworks = BridgeNetworks.algorand;
+    
     //Cursors
     public cursors: Record<BridgeType, Cursor[]>;
     public get tokenV1Cursor(): Cursor | undefined{
