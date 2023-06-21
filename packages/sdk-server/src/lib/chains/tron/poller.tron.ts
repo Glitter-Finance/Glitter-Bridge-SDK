@@ -90,8 +90,8 @@ export class GlitterTronPoller implements GlitterPoller {
             const timestamp = txn.block_timestamp;
 
             //Check if transaction was previously processed
-            if (cursor.batch?.txns?.has(txn.signature)) continue;
-            if (cursor.lastBatchTxns?.has(txn.signature)) continue;
+            if (cursor.batch?.txns?.has(txn.transaction_id)) continue;
+            if (cursor.lastBatchTxns?.has(txn.transaction_id)) continue;
      
             //Check if new
             if (timestamp > newLastTimestamp_ms) newLastTimestamp_ms = timestamp;
