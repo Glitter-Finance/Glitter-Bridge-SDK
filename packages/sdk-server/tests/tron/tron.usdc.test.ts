@@ -17,7 +17,7 @@ describe("Solana Poller USDC Tests ", () => {
     //Before All tests -> create new SDK
     beforeAll(async () => {
         //Initialize SDK
-        sdk = new GlitterSDKServer(GlitterEnvironment.mainnet, undefined, 5);
+        sdk = new GlitterSDKServer(GlitterEnvironment.mainnet, undefined, 25);
 
         //Create Solana Poller
         sdk.createPollers([BridgeNetworks.TRON]);

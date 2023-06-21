@@ -101,6 +101,7 @@ export async function UpdateCursor(
                 position: txnIDs[txnIDs.length - 1],
                 complete: false,
                 block: maxBlock,
+                lastTimestamp_ms: lastTimestamp_ms,
                 nextAPIToken: nextAPIToken,
             };
 
@@ -117,6 +118,7 @@ export async function UpdateCursor(
 
             if (maxBlock) cursor.batch.block = maxBlock;
             if (nextAPIToken) cursor.batch.nextAPIToken = nextAPIToken;
+            if (lastTimestamp_ms) cursor.batch.lastTimestamp_ms = lastTimestamp_ms;
 
         }
     } else if (!txnIDs || txnIDs.length == 0) {
@@ -143,6 +145,7 @@ export async function UpdateCursor(
                 time: cursor.beginning?.time,
             };
             if (maxBlock && maxBlock > 0) cursor.end.block = maxBlock;
+            if (lastTimestamp_ms && lastTimestamp_ms > 0) cursor.end.lastTimestamp_ms = lastTimestamp_ms;
 
             //Reset beginning
             cursor.beginning = undefined;

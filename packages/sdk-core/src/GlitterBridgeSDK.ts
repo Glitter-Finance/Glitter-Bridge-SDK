@@ -139,6 +139,12 @@ export class GlitterBridgeSDK {
 
     private connectToTron(): GlitterBridgeSDK {
         this.preInitializeChecks(BridgeNetworks.TRON);
+        
+        if (this._rpcOverrides[BridgeNetworks.TRON]) {  
+            this._bridgeConfig!.tron.fullNode = this._rpcOverrides[BridgeNetworks.TRON];
+            this._bridgeConfig!.tron.solidityNode = this._rpcOverrides[BridgeNetworks.TRON];
+            this._bridgeConfig!.tron.eventServer = this._rpcOverrides[BridgeNetworks.TRON];
+        }
         this._tron = new TronConnect(this._bridgeConfig!.tron);
 
         const APIKey = this._rpcOverridesByChain.get(BridgeNetworks.TRON)?.API_KEY;
