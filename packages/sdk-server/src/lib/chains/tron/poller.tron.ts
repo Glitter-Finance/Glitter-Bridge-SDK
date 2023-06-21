@@ -135,7 +135,7 @@ export class GlitterTronPoller implements GlitterPoller {
         }
 
         //update cursor
-        cursor = await UpdateCursor(cursor, newTxns);
+        cursor = await UpdateCursor(cursor, newTxns, undefined, undefined, newLastTimestamp_ms);
         
         return {
             cursor: cursor,
