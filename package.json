@@ -10,6 +10,7 @@
     "prepare": "husky install",
     "build:core": "yarn workspace @glitter-finance/sdk-core build",
     "release:core": "npm run build-and-release -w ./packages/sdk-core",
+    "types:core": "typechain --target ethers-v5 --out-dir ./packages/sdk-core/src/typechain ./packages/sdk-core/src/**/*.abi.json",
     "build:web": "yarn workspace @glitter-finance/sdk-web build",
     "release:web": "npm run build -w ./packages/sdk-web && npm run release -w ./packages/sdk-web",
     "build:server": "npm run build -w ./packages/sdk-server",
@@ -19,10 +20,12 @@
     "docs": "npx typedoc --entryPointStrategy packages . --out docs"
   },
   "devDependencies": {
+    "@typechain/ethers-v5": "^11.0.0",
     "@types/jest": "^29.4.0",
     "@types/node": "^18.15.3",
     "@typescript-eslint/eslint-plugin": "^5.54.0",
     "@typescript-eslint/parser": "^5.56.0",
+    "assert": "^2.0.0",
     "eslint": "^8.36.0",
     "eslint-config-prettier": "^8.7.0",
     "eslint-plugin-import": "^2.27.5",
@@ -31,8 +34,8 @@
     "prettier": "^2.8.5",
     "ts-jest": "^29.0.5",
     "ts-node": "^10.9.1",
+    "typechain": "^8.2.0",
     "typedoc": "^0.23.28",
-    "typescript": "^5.0.2",
-    "assert": "^2.0.0"
+    "typescript": "^5.0.2"
   }
 }
