@@ -102,6 +102,8 @@ export class EvmV2Parser {
         const baseToken = BridgeV2Tokens.getChainConfigParent(fromToken);
         if (!baseToken) throw new Error("Base token not found")
        
+        partialTxn.tokenSymbol = baseToken.asset_symbol;
+
         //Get transfer amount
         if (events.transfer) {
             fromAddress = events.transfer.from;
@@ -199,11 +201,13 @@ export class EvmV2Parser {
         let fromAddress = txn.from;
 
         //get token name
-        const toToken = BridgeV2Tokens.getChainConfigByVault(connect?.network, events.deposit?.vault || "");
+        const toToken = BridgeV2Tokens.getChainConfigByVault(connect?.network, events.release?.vault || "");
         if (!toToken) throw new Error("From token not found")
         const baseToken = BridgeV2Tokens.getChainConfigParent(toToken);
         if (!baseToken) throw new Error("Base token not found")
       
+        partialTxn.tokenSymbol = baseToken.asset_symbol;
+
         //Get transfer amount
         if (events.transfer) {
             fromAddress = events.transfer.from;
