@@ -428,7 +428,7 @@ export class EvmConnect {
             // Wait for 2 confirmations before proceeding with the deposit
             await approvalTx.wait(2)
             console.log("✅ Deposit done")
-        }
+        } else if(vault_type!=="incoming") throw new Error(`ìnvalid vault type ${vault_type}`)
 
         console.log("💰 Calling deposit function")
         const depositArgs = [
@@ -440,7 +440,7 @@ export class EvmConnect {
         ] as const
         let tx
         if (this.network == BridgeNetworks.Polygon || !maxFeePerGas || !maxPriorityFeePerGas) {
-            tx = await bridgeV2Contract.deposit(...depositArgs, { gasPrice: gasPrice.toString() })
+            tx = await bridgeV2Contract.deposit(...depositArgs, { gasPrice })
         } else {
             tx = await bridgeV2Contract.deposit(...depositArgs, { maxFeePerGas, maxPriorityFeePerGas })
         }
