@@ -22,11 +22,10 @@ import {
     getNumericNetworkId,
 } from "../../common/networks";
 import { ChainStatus } from "../../common/transactions";
-import { walletToAddress } from "../../common/utils/utils";
+import { parseAddress_bridgeV2, walletToAddress } from "../../common/utils/utils";
 import { BridgeTokens, BridgeTokenConfig, Token2ConfigList, BridgeV2Tokens } from "../../../lib/common";
 import bridgeV2Abi from "./abi/bridgeV2.abi.json"
 import erc20Abi from "./abi/erc20.abi.json"
-import lockReleaseVaultAbi from "./abi/lockReleaseVault.abi.json"
 
 type Connection = {
   rpcProvider: providers.BaseProvider;
@@ -302,9 +301,11 @@ export class EvmConnect {
    * Bridge tokens to another supported chain
    * @param {BridgeNetworks} destination
    * @param {"USDC"} tokenSymbol only USDC for now
-   * @param {string | ethers.BigNumber} amount in BigNumber units e.g 1_000_000 for 1USDC
+   * @param {string | ethers.BigNumber} amount in base units e.g 1_000_000 for 1USDC
    * @param {string | PublicKey | algosdk.Account} destinationWallet provide USDC reciever address on destination chain
    * @param {ethers.Wallet} wallet to sign transaction
+   * @param {boolean} [v2] is this a bridge v2 deposit?
+   * @param {boolean} [protocolId] for deposit processed by partners, protocolId allows the process of fee sharing
    * @returns {Promise<ethers.ContractTransaction>}
    */
     async bridge(
@@ -312,8 +313,11 @@ export class EvmConnect {
         destination: BridgeNetworks,
         tokenSymbol: string,
         amount: ethers.BigNumber | string,
-        signer: ethers.Signer
+        signer: ethers.Signer,
+        v2?:boolean,
+        protocolId?:number
     ): Promise<ethers.ContractTransaction> {
+        
         try {
             const signerAddress = await signer.getAddress();
             const isCorrectChain = await this.isCorrectChain(signer);
@@ -321,6 +325,16 @@ export class EvmConnect {
                 throw new Error(
                     `[EvmConnect] Signer should be connected to network ${this.__network}`
                 );
+
+            // parse target wallet address
+            const targetWallet=parseAddress_bridgeV2(destinationWallet)
+
+            // handle deposit on bridge v2
+            if(v2){
+                return this.deposit_bridgeV2({ amount, destination, targetWallet, protocolId, signer, tokenSymbol })
+            }
+
+            // if this is not a v2 bridging deposit
             if (!this.isValidToken(tokenSymbol)) {
                 throw new Error(`[EvmConnect] Unsupported token symbol.`);
             }
@@ -337,7 +351,7 @@ export class EvmConnect {
             const tokenAddress = this.getAddress("tokens", tokenSymbol);
             const depositAddress = this.getAddress("depositWallet");
             const _amount =
-        typeof amount === "string" ? ethers.BigNumber.from(amount) : amount;
+            typeof amount === "string" ? ethers.BigNumber.from(amount) : amount;
 
             const serlized = SerializeEvmBridgeTransfer.serialize(
                 this.__network,
@@ -374,9 +388,7 @@ export class EvmConnect {
         tokenSymbol: string
         protocolId?: number        
         }) {
-        // remove 0x prefix
-        if (targetWallet.startsWith("0x")) targetWallet = targetWallet.slice(2)
-
+        
         // instantiate bridgeV2 contract
         const bridgeV2Contract = new ethers.Contract(this.getAddress("tokenBridge"), bridgeV2Abi, signer)
             
@@ -422,7 +434,7 @@ export class EvmConnect {
             vault_address,
             amount,
             chainId,
-            Buffer.from(targetWallet, "hex"),
+            Buffer.from(targetWallet, "hex"), // TODO figure out the desired encoding
             protocolId,
         ] as const
         let tx
