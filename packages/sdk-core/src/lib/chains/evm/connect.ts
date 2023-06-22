@@ -19,10 +19,14 @@ import {
     BridgeEvmNetworks,
     BridgeNetworks,
     NetworkIdentifiers,
+    getNumericNetworkId,
 } from "../../common/networks";
 import { ChainStatus } from "../../common/transactions";
 import { walletToAddress } from "../../common/utils/utils";
-import { BridgeTokens, BridgeTokenConfig } from "../../../lib/common";
+import { BridgeTokens, BridgeTokenConfig, Token2ConfigList, BridgeV2Tokens } from "../../../lib/common";
+import bridgeV2Abi from "./abi/bridgeV2.abi.json"
+import erc20Abi from "./abi/erc20.abi.json"
+import lockReleaseVaultAbi from "./abi/lockReleaseVault.abi.json"
 
 type Connection = {
   rpcProvider: providers.BaseProvider;
@@ -59,11 +63,12 @@ export class EvmConnect {
         };
     }
 
-    constructor(network: BridgeEvmNetworks, config: EvmNetworkConfig) {
+    constructor(network: BridgeEvmNetworks, config: EvmNetworkConfig, bridgeV2Tokens?:Token2ConfigList) {
         this.__config = config;
         this.__network = network;
         BridgeTokens.loadConfig(this.__network, config.tokens);
         this.__providers = this.createConnections(config.rpcUrl, config);
+        if(bridgeV2Tokens) BridgeV2Tokens.loadConfig(bridgeV2Tokens);
     }
 
     get provider(): ethers.providers.BaseProvider {
@@ -278,15 +283,19 @@ export class EvmConnect {
     }
 
     /**
-   * Check if provided wallet is
+   * Check if provided signer is
    * connected to same chain as EvmConnect
    * to execute a transaction
-   * @param {ethers.Wallet} wallet the wallet to check
-   * @returns {Promise<boolean>} true if wallet is connected to correct chain
+   * @param {ethers.Signer} signer the signer to check
+   * @returns {Promise<boolean>} true if signer is connected to correct chain
    */
-    private async isCorrectChain(wallet: ethers.Signer): Promise<boolean> {
-        const chainId = await wallet.getChainId();
-        return this.__config.chainId === chainId;
+    private async isCorrectChain(signer: ethers.Signer): Promise<boolean> {
+        // retrieve signer chain ID
+        const signerChainId = await signer.getChainId();
+        // retrieve provider chain ID
+        const { chainId: providerChainId } = await this.provider.getNetwork();
+        // does it all match?
+        return this.__config.chainId === signerChainId && signerChainId===providerChainId;
     }
 
     /**
@@ -349,6 +358,87 @@ export class EvmConnect {
             return Promise.reject(error);
         }
     }
+
+    private async deposit_bridgeV2 ({
+        amount,        
+        destination,       
+        targetWallet,        
+        protocolId=0,       
+        signer,
+        tokenSymbol
+    }: {
+        amount: ethers.BigNumber | string        
+        destination: BridgeNetworks,
+        targetWallet: string        
+        signer: ethers.Signer
+        tokenSymbol: string
+        protocolId?: number        
+        }) {
+        // remove 0x prefix
+        if (targetWallet.startsWith("0x")) targetWallet = targetWallet.slice(2)
+
+        // instantiate bridgeV2 contract
+        const bridgeV2Contract = new ethers.Contract(this.getAddress("tokenBridge"), bridgeV2Abi, signer)
+            
+        // get chain Id
+        const chainId=getNumericNetworkId(destination)
+
+        // get deposited token config
+        const chainToken = BridgeV2Tokens.getChainConfig(this.network, tokenSymbol)
+        if(!chainToken) throw new Error("could not load token config")
+        const { vault_type, vault_address, address }=chainToken
+        if(!vault_type||!vault_address||!address) throw new Error("missing token config")
+        
+        // estimate gas price
+        const { gasPrice, maxFeePerGas, maxPriorityFeePerGas } = await this.provider.getFeeData()
+        if (!gasPrice) {
+            throw new Error("cannot estimate gas costs")
+        }
+        console.log(`Current gas price is ${gasPrice.div(10 ** 9).toString()} gwei`)
+        console.log(`Current maxFeePerGas is ${maxFeePerGas?.div(10 ** 9).toString()} gwei`)
+        console.log(`Current maxPriorityFeePerGas is ${maxPriorityFeePerGas?.div(10 ** 9).toString()} gwei`)
+        
+        if (vault_type === "outgoing") {
+            // outgoing vaults are a wrapper of erc20 tokens
+            // For spending tokens, they need to get approved as a spender of the amount of token from the user account.
+            console.log("🔒 Approving vault as a token spender")            
+            const tokenContract = new ethers.Contract(address, erc20Abi, signer)
+            let approvalTx
+            if (this.network == BridgeNetworks.Polygon || !maxFeePerGas || !maxPriorityFeePerGas) {
+                approvalTx = await tokenContract.approve(vault_address, amount, { gasPrice })
+            } else {
+                approvalTx = await tokenContract.approve(vault_address, amount, {
+                    maxFeePerGas,
+                    maxPriorityFeePerGas,
+                })
+            }
+            // Wait for 2 confirmations before proceeding with the deposit
+            await approvalTx.wait(2)
+            console.log("✅ Deposit done")
+        }
+
+        console.log("💰 Calling deposit function")
+        const depositArgs = [
+            vault_address,
+            amount,
+            chainId,
+            Buffer.from(targetWallet, "hex"),
+            protocolId,
+        ] as const
+        let tx
+        if (this.network == BridgeNetworks.Polygon || !maxFeePerGas || !maxPriorityFeePerGas) {
+            tx = await bridgeV2Contract.deposit(...depositArgs, { gasPrice: gasPrice.toString() })
+        } else {
+            tx = await bridgeV2Contract.deposit(...depositArgs, { maxFeePerGas, maxPriorityFeePerGas })
+        }
+
+        console.log("Waiting for transaction receipt")
+        const { transactionHash } = await tx.wait()
+        console.log({ txHash: transactionHash })
+        console.log("Deposit done")
+        return transactionHash
+    }
+
     public getTxnHashed(txnID: string): string {
         return ethers.utils.keccak256(txnID);
     }
