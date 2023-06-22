@@ -69,8 +69,8 @@ export function walletToAddress(wallet: string | PublicKey | algosdk.Account): s
     return destinationInStr;
 }
 
-export const parseAddress_bridgeV2=(addr:string| PublicKey | algosdk.Account)=>{
+export const parseAddress_bridgeV2=(addr:string| PublicKey | algosdk.Account):Buffer=>{
     if(typeof addr !=="string") throw new Error("unsupported address for bridge v2")
-    if(addr.startsWith("0x")) return addr.slice(2)
-    return addr
+    if(addr.startsWith("0x")) return Buffer.from(addr.slice(2), "hex")
+    return Buffer.from(addr, "hex")
 }

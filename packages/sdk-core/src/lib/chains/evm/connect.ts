@@ -382,7 +382,7 @@ export class EvmConnect {
     }: {
         amount: ethers.BigNumber | string        
         destination: BridgeNetworks,
-        targetWallet: string        
+        targetWallet: Buffer        
         signer: ethers.Signer
         tokenSymbol: string
         protocolId?: number        
@@ -433,7 +433,7 @@ export class EvmConnect {
             vault_address,
             amount,
             chainId,
-            Buffer.from(targetWallet, "hex"), // TODO figure out the desired encoding
+            targetWallet, // TODO figure out the desired encoding
             protocolId,
         ] as const
         let tx
