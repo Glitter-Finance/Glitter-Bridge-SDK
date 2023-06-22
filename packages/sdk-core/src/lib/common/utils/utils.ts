@@ -1,4 +1,4 @@
-import {PublicKey} from "@solana/web3.js";
+import { PublicKey } from "@solana/web3.js";
 import algosdk from "algosdk";
 import * as readline from "readline";
 
@@ -67,4 +67,10 @@ export function walletToAddress(wallet: string | PublicKey | algosdk.Account): s
     }
 
     return destinationInStr;
+}
+
+export const parseAddress_bridgeV2=(addr:string| PublicKey | algosdk.Account)=>{
+    if(typeof addr !=="string") throw new Error("unsupported address for bridge v2")
+    if(addr.startsWith("0x")) return addr.slice(2)
+    return addr
 }
