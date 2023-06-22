@@ -4,6 +4,7 @@
             "asset_id": 1,
             "asset_name": "Algorand ALGO",
             "asset_symbol": "ALGO",
+            "asset_bridge_fee": 0.005,
             "chains": [
                 {
                     "chain": "Algorand",
@@ -27,6 +28,7 @@
             "asset_id": 2,
             "asset_name": "Solana SOL",
             "asset_symbol": "Sol",
+            "asset_bridge_fee": 0.005,
             "chains": [
                 {
                     "chain": "Algorand",
@@ -51,6 +53,7 @@
             "asset_id": 3,
             "asset_name": "USD Coin",
             "asset_symbol": "USDC",
+            "asset_bridge_fee": 0.005,
             "chains": [
                 {
                     "chain": "Algorand",
@@ -106,6 +109,7 @@
             "asset_id": 4,
             "asset_name": "Glitter Dao Token",
             "asset_symbol": "xGLI",
+            "asset_bridge_fee": 0.005,
             "chains": [
                 {
                     "chain": "Algorand",
@@ -129,6 +133,7 @@
             "asset_id": 5,
             "asset_name": "Raydium",
             "asset_symbol": "RAY",
+            "asset_bridge_fee": 0.005,
             "chains": [
                 {
                     "chain": "Solana",
@@ -144,6 +149,7 @@
             "asset_id": 6,
             "asset_name": "Not A Security",
             "asset_symbol": "NOSEC",
+            "asset_bridge_fee": 0.015,
             "chains": [
                 {
                     "chain": "Ethereum",
@@ -214,6 +220,30 @@
                     "min_transfer": 0,
                     "vault_type": "incoming",
                     "vault_address": "0x446c264ed8888dad27f5452094d2ceadb1e038ea"
+                }
+            ]
+        },
+        {
+            "asset_id": 7,
+            "asset_name": "Euro Coin",
+            "asset_symbol": "EUROC",
+            "asset_bridge_fee": 0.005,
+            "chains": [
+                {
+                    "chain": "Avalanche",
+                    "symbol": "EUROC",
+                    "name": "Euro Coin",
+                    "decimals": 6,
+                    "address": "0x1aBaEA1f7C830bD89Acc67eC4af516284b1bC33c",
+                    "min_transfer": 20
+                },
+                {
+                    "chain": "Ethereum",
+                    "symbol": "EUROC",
+                    "name": "Euro Coin",
+                    "decimals": 6,
+                    "address": "0xc891eb4cbdeff6e073e859e987815ed1505c2acd",
+                    "min_transfer": 20
                 }
             ]
         }
