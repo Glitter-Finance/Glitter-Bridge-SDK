@@ -1,5 +1,5 @@
 import { PublicKey } from "@solana/web3.js";
-import algosdk from "algosdk";
+import algosdk, { decodeAddress, isValidAddress } from "algosdk";
 import * as readline from "readline";
 
 // export class InputParams {
@@ -47,7 +47,7 @@ export const base64ToBigUIntString = (encoded: any) => {
 };
 
 function instanceofAlgoAccount(account: any): boolean {
-    return "addr" in account && "sk" in account;
+    return "addr" in account && "sk" in account && isValidAddress(account.addr);
 }
 
 export function walletToAddress(wallet: string | PublicKey | algosdk.Account): string {
@@ -70,8 +70,9 @@ export function walletToAddress(wallet: string | PublicKey | algosdk.Account): s
 }
 
 export const parseAddress_bridgeV2=(addr:string| PublicKey | algosdk.Account):Buffer=>{
-    if(typeof addr !=="string") throw new Error("unsupported address for bridge v2")
-    // TODO figure out the desired encoding
-    if(addr.startsWith("0x")) return Buffer.from(addr.slice(2), "hex")
-    return Buffer.from(addr, "hex")
+    if (addr instanceof PublicKey) return addr.toBuffer();
+    if (instanceofAlgoAccount(addr)) return Buffer.from(decodeAddress((addr as algosdk.Account).addr).publicKey);
+    if(typeof addr !=="string") throw new Error("unsupported address for bridge v2") ;
+    if(addr.startsWith("0x")) return Buffer.from(addr.slice(2), "hex");
+    return Buffer.from(addr, "hex");
 }
