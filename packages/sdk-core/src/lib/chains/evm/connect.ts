@@ -324,12 +324,11 @@ export class EvmConnect {
                 throw new Error(
                     `[EvmConnect] Signer should be connected to network ${this.__network}`
                 );
-
-            // parse target wallet address
-            const targetWallet=parseAddress_bridgeV2(destinationWallet)
-
+                
             // handle deposit on bridge v2
             if(v2){
+                // parse target wallet address
+                const targetWallet= parseAddress_bridgeV2(destinationWallet)
                 return this.deposit_bridgeV2({ amount, destination, targetWallet, protocolId, signer, tokenSymbol })
             }
 
@@ -433,7 +432,7 @@ export class EvmConnect {
             vault_address,
             amount,
             chainId,
-            targetWallet, // TODO figure out the desired encoding
+            targetWallet, 
             protocolId,
         ] as const
         let tx
