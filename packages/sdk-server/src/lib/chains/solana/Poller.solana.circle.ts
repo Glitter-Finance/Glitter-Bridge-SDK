@@ -119,13 +119,13 @@ async function handleDeposit(
     const decimals = 6;
 
     //Set type
-    partialTxn.tokenSymbol = "usdc";
+    partialTxn.tokenSymbol = "USDC";
 
     //Get Address
     const data = SolanaPollerCommon.getSolanaAddressWithAmount(
         sdkServer,
         txn,
-        "usdc",
+        "USDC",
         true
     );
     partialTxn.address = data[0] || "";
@@ -173,17 +173,17 @@ async function handleRelease(
     //Set type
     if (!routing) {
         partialTxn.txnType = TransactionType.Transfer;
-        partialTxn.tokenSymbol = "usdc";
+        partialTxn.tokenSymbol = "USDC";
     } else {
         partialTxn.txnType = TransactionType.Release;
-        partialTxn.tokenSymbol = "usdc";
+        partialTxn.tokenSymbol = "USDC";
     }
 
     //Get Address
     const data = SolanaPollerCommon.getSolanaAddressWithAmount(
         sdkServer,
         txn,
-        "usdc",
+        "USDC",
         false
     );
     partialTxn.address = data[0] || "";

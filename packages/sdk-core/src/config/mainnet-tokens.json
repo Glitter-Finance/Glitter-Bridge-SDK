@@ -4,6 +4,8 @@
             "asset_id": 1,
             "asset_name": "Algorand ALGO",
             "asset_symbol": "ALGO",
+            "coingecko_id": "algorand",
+            "cmc_id": "ALGO",
             "asset_bridge_fee": 0.005,
             "chains": [
                 {
@@ -28,6 +30,8 @@
             "asset_id": 2,
             "asset_name": "Solana SOL",
             "asset_symbol": "Sol",
+            "coingecko_id": "solana",
+            "cmc_id": "SOL",
             "asset_bridge_fee": 0.005,
             "chains": [
                 {
@@ -53,6 +57,8 @@
             "asset_id": 3,
             "asset_name": "USD Coin",
             "asset_symbol": "USDC",
+            "coingecko_id": "usd-coin",
+            "cmc_id": "USDC",
             "asset_bridge_fee": 0.005,
             "chains": [
                 {
@@ -109,6 +115,8 @@
             "asset_id": 4,
             "asset_name": "Glitter Dao Token",
             "asset_symbol": "xGLI",
+            "coingecko_id": "glitter-finance",
+            "cmc_id": "XGLI",
             "asset_bridge_fee": 0.005,
             "chains": [
                 {
@@ -133,6 +141,8 @@
             "asset_id": 5,
             "asset_name": "Raydium",
             "asset_symbol": "RAY",
+            "coingecko_id": "",
+            "cmc_id": "",
             "asset_bridge_fee": 0.005,
             "chains": [
                 {
@@ -149,6 +159,8 @@
             "asset_id": 6,
             "asset_name": "Not A Security",
             "asset_symbol": "NOSEC",
+            "coingecko_id": "",
+            "cmc_id": "",
             "asset_bridge_fee": 0.015,
             "chains": [
                 {
@@ -227,6 +239,8 @@
             "asset_id": 7,
             "asset_name": "Euro Coin",
             "asset_symbol": "EUROC",
+            "coingecko_id": "euro-coin",
+            "cmc_id": "EUROC",
             "asset_bridge_fee": 0.005,
             "chains": [
                 {
@@ -244,6 +258,96 @@
                     "decimals": 6,
                     "address": "0xc891eb4cbdeff6e073e859e987815ed1505c2acd",
                     "min_transfer": 20
+                }
+            ]
+        },
+        {
+            "asset_id": 8,
+            "asset_name": "Ethereum",
+            "asset_symbol": "Eth",
+            "coingecko_id": "ethereum",
+            "cmc_id": "ETH",
+            "asset_bridge_fee": 0.005,
+            "chains": [
+                {
+                    "chain": "Ethereum",
+                    "symbol": "Eth",
+                    "name": "Ethereum",
+                    "isNative": true,
+                    "decimals": 18,
+                    "min_transfer": 0.01
+                }
+            ]
+        },
+        {
+            "asset_id": 9,
+            "asset_name": "Avalanche",
+            "asset_symbol": "AVAX",
+            "coingecko_id": "avalanche-2",
+            "cmc_id": "AVAX",
+            "asset_bridge_fee": 0.005,
+            "chains": [
+                {
+                    "chain": "Avalanche",
+                    "symbol": "AVAX",
+                    "name": "Avalanche",
+                    "isNative": true,
+                    "decimals": 18,
+                    "min_transfer": 0.5
+                }
+            ]
+        },
+        {
+            "asset_id": 10,
+            "asset_name": "Polygon",
+            "asset_symbol": "MATIC",
+            "coingecko_id": "matic-network",
+            "cmc_id": "MATIC",
+            "asset_bridge_fee": 0.005,
+            "chains": [
+                {
+                    "chain": "Polygon",
+                    "symbol": "MATIC",
+                    "name": "Polygon",
+                    "isNative": true,
+                    "decimals": 18,
+                    "min_transfer": 10
+                }
+            ]
+        },
+        {
+            "asset_id": 11,
+            "asset_name": "Arbitrum",
+            "asset_symbol": "ARB",
+            "coingecko_id": "arbitrum",
+            "cmc_id": "ARB",
+            "asset_bridge_fee": 0.005,
+            "chains": [
+                {
+                    "chain": "Arbitrum",
+                    "symbol": "ARB",
+                    "name": "Arbitrum",
+                    "isNative": true,
+                    "decimals": 18,
+                    "min_transfer": 5
+                }
+            ]
+        },
+        {
+            "asset_id": 12,
+            "asset_name": "Optimism",
+            "asset_symbol": "OP",
+            "coingecko_id": "optimism",
+            "cmc_id": "OP",
+            "asset_bridge_fee": 0.005,
+            "chains": [
+                {
+                    "chain": "Optimism",
+                    "symbol": "OP",
+                    "name": "Optimism",
+                    "isNative": true,
+                    "decimals": 18,
+                    "min_transfer": 5
                 }
             ]
         }

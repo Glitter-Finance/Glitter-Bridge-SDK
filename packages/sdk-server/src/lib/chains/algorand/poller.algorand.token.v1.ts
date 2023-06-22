@@ -81,7 +81,7 @@ export class AlgorandTokenV1Parser {
 
         //Set type
         partialTxn.txnType = TransactionType.Deposit;
-        partialTxn.tokenSymbol = "xsol";
+        partialTxn.tokenSymbol = "xSOL";
         partialTxn.address = txn.sender;
         partialTxn.units = BigNumber(base64ToBigUIntString(applicationArgs[6]));
         partialTxn.amount = RoutingHelper.ReadableValue_FromBaseUnits(partialTxn.units, decimals);
@@ -91,13 +91,13 @@ export class AlgorandTokenV1Parser {
             from: {
                 network: "algorand",
                 address: partialTxn.address || "",
-                token: "xsol",
+                token: "xSOL",
                 txn_signature: partialTxn.txnID
             },
             to: {
                 network: "solana",
                 address: base64ToString(applicationArgs[0]),
-                token: "sol",
+                token: "SOL",
                 txn_signature: ""
             },
             units: partialTxn.units || BigNumber(0),
@@ -112,7 +112,7 @@ export class AlgorandTokenV1Parser {
 
         //Set type
         partialTxn.txnType = TransactionType.Deposit;
-        partialTxn.tokenSymbol = "algo";
+        partialTxn.tokenSymbol = "ALGO";
         partialTxn.address = txn.sender;
         partialTxn.units = BigNumber(base64ToBigUIntString(applicationArgs[6]));
         partialTxn.amount = RoutingHelper.ReadableValue_FromBaseUnits(partialTxn.units, decimals);
@@ -122,13 +122,13 @@ export class AlgorandTokenV1Parser {
             from: {
                 network: "algorand",
                 address: partialTxn.address || "",
-                token: "algo",
+                token: "ALGO",
                 txn_signature: partialTxn.txnID
             },
             to: {
                 network: "solana",
                 address: base64ToString(applicationArgs[0]),
-                token: "xsol",
+                token: "xSOL",
                 txn_signature: ""
             },
             units: partialTxn.units,
@@ -144,7 +144,7 @@ export class AlgorandTokenV1Parser {
 
         //Set type
         partialTxn.txnType = TransactionType.Release;
-        partialTxn.tokenSymbol = "xsol";
+        partialTxn.tokenSymbol = "xSOL";
         partialTxn.address = txn["application-transaction"].accounts[0];
         partialTxn.units = BigNumber(base64ToBigUIntString(applicationArgs[6]));
         partialTxn.amount = RoutingHelper.ReadableValue_FromBaseUnits(partialTxn.units, decimals);
@@ -154,13 +154,13 @@ export class AlgorandTokenV1Parser {
             from: {
                 network: "solana",
                 address: base64ToString(applicationArgs[0]),
-                token: "sol",
+                token: "SOL",
                 txn_signature: base64ToString(applicationArgs[5])
             },
             to: {
                 network: "algorand",
                 address: partialTxn.address || "",
-                token: "xsol",
+                token: "xSOL",
                 txn_signature: ""
             },
             units: partialTxn.units,
@@ -176,7 +176,7 @@ export class AlgorandTokenV1Parser {
 
         //Set type
         partialTxn.txnType = TransactionType.Release;
-        partialTxn.tokenSymbol = "algo";
+        partialTxn.tokenSymbol = "ALGO";
         partialTxn.address = txn["application-transaction"].accounts[0];
         partialTxn.units = BigNumber(base64ToBigUIntString(applicationArgs[6]));
         partialTxn.amount = RoutingHelper.ReadableValue_FromBaseUnits(partialTxn.units, decimals);
@@ -186,13 +186,13 @@ export class AlgorandTokenV1Parser {
             from: {
                 network: "solana",
                 address: base64ToString(applicationArgs[0]),
-                token: "xalgo",
+                token: "xALGO",
                 txn_signature: base64ToString(applicationArgs[5])
             },
             to: {
                 network: "algorand",
                 address: partialTxn.address || "",
-                token: "algo",
+                token: "ALGO",
                 txn_signature: ""
             },
             units: partialTxn.units,
@@ -208,7 +208,7 @@ export class AlgorandTokenV1Parser {
 
         //Set type
         partialTxn.txnType = TransactionType.Refund;
-        partialTxn.tokenSymbol = "algo";
+        partialTxn.tokenSymbol = "ALGO";
         partialTxn.address = txn["application-transaction"].accounts[0];
         partialTxn.units = BigNumber(base64ToBigUIntString(applicationArgs[6]));
         partialTxn.amount = RoutingHelper.ReadableValue_FromBaseUnits(partialTxn.units, decimals);
@@ -218,13 +218,13 @@ export class AlgorandTokenV1Parser {
             from: {
                 network: "algorand",
                 address: partialTxn.address || "",
-                token: "algo",
+                token: "ALGO",
                 txn_signature: base64ToString(applicationArgs[5])
             },
             to: {
                 network: "algorand",
                 address: partialTxn.address || "",
-                token: "algo",
+                token: "ALGO",
                 txn_signature: ""
             },
             units: partialTxn.units,
@@ -239,7 +239,7 @@ export class AlgorandTokenV1Parser {
 
         //Set type
         partialTxn.txnType = TransactionType.Refund;
-        partialTxn.tokenSymbol = "xsol";
+        partialTxn.tokenSymbol = "xSOL";
         partialTxn.address = txn["application-transaction"].accounts[0];
         partialTxn.units = BigNumber(base64ToBigUIntString(applicationArgs[6]));
         partialTxn.amount = RoutingHelper.ReadableValue_FromBaseUnits(partialTxn.units, decimals);
@@ -249,13 +249,13 @@ export class AlgorandTokenV1Parser {
             from: {
                 network: "algorand",
                 address: partialTxn.address || "",
-                token: "xsol",
+                token: "xSOL",
                 txn_signature: base64ToString(applicationArgs[5])
             },
             to: {
                 network: "algorand",
                 address: partialTxn.address || "",
-                token: "xsol",
+                token: "xSOL",
                 txn_signature: ""
             },
             units: partialTxn.units,
