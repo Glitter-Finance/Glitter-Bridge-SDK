@@ -300,14 +300,14 @@ export class EvmConnect {
 
     /**
    * Bridge tokens to another supported chain
-   * @param {BridgeNetworks} destination
+   * @param {string | PublicKey | algosdk.Account} destinationWallet receiver address on destination chain
+   * @param {BridgeNetworks} destination destination chain
    * @param {"USDC"} tokenSymbol only USDC for now
    * @param {string | ethers.BigNumber} amount in base units e.g 1_000_000 for 1USDC
-   * @param {string | PublicKey | algosdk.Account} destinationWallet provide USDC reciever address on destination chain
-   * @param {ethers.Wallet} wallet to sign transaction
+   * @param {ethers.Signer} signer to sign transaction
    * @param {boolean} [v2] is this a bridge v2 deposit?
    * @param {boolean} [protocolId] for deposit processed by partners, protocolId allows the process of fee sharing
-   * @returns {Promise<ethers.ContractTransaction>}
+   * @returns {Promise<ethers.ContractTransaction>} returns the transaction response
    */
     async bridge(
         destinationWallet: string | PublicKey | algosdk.Account,
