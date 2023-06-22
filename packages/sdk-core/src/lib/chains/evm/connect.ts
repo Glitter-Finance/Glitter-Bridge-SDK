@@ -24,9 +24,7 @@ import {
 import { ChainStatus } from "../../common/transactions";
 import { parseAddress_bridgeV2, walletToAddress } from "../../common/utils/utils";
 import { BridgeTokens, BridgeTokenConfig, Token2ConfigList, BridgeV2Tokens } from "../../../lib/common";
-import bridgeV2Abi from "./abi/bridgeV2.abi.json"
-import erc20Abi from "./abi/erc20.abi.json"
-import { BridgeV2Abi, Erc20Abi } from "src/typechain";
+import { BridgeV2Abi__factory, Erc20Abi__factory } from "src/typechain";
 
 type Connection = {
   rpcProvider: providers.BaseProvider;
@@ -391,7 +389,7 @@ export class EvmConnect {
         }): Promise<ethers.ContractTransaction> {
         
         // instantiate bridgeV2 contract
-        const bridgeV2Contract = new ethers.Contract(this.getAddress("tokenBridge"), bridgeV2Abi, signer) as BridgeV2Abi
+        const bridgeV2Contract = BridgeV2Abi__factory.connect(this.getAddress("tokenBridge"), signer)
             
         // get chain Id
         const chainId=getNumericNetworkId(destination)
@@ -415,12 +413,12 @@ export class EvmConnect {
             // outgoing vaults are a wrapper of erc20 tokens
             // For spending tokens, they need to get approved as a spender of the amount of token from the user account.
             console.log("Approving vault as a token spender")            
-            const tokenContract = new ethers.Contract(address, erc20Abi, signer) as Erc20Abi
+            const erc20Contract = Erc20Abi__factory.connect(address, signer)
             let approvalTx
             if (this.network == BridgeNetworks.Polygon || !maxFeePerGas || !maxPriorityFeePerGas) {
-                approvalTx = await tokenContract.approve(vault_address, amount, { gasPrice })
+                approvalTx = await erc20Contract.approve(vault_address, amount, { gasPrice })
             } else {
-                approvalTx = await tokenContract.approve(vault_address, amount, {
+                approvalTx = await erc20Contract.approve(vault_address, amount, {
                     maxFeePerGas,
                     maxPriorityFeePerGas,
                 })
