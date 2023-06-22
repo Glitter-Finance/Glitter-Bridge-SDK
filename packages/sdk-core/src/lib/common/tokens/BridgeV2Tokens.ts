@@ -123,5 +123,10 @@ export class BridgeV2Tokens {
         //Check if the parents are the same
         return (tokenConfig_A === tokenConfig_B);
     }
+
+    //Return Full Token List
+    public static getTokenList(): Token2Config[] | undefined {
+        return this._tokenConfig?.tokens;
+    }
    
 }
