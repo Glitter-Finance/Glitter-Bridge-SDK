@@ -26,6 +26,7 @@ import { parseAddress_bridgeV2, walletToAddress } from "../../common/utils/utils
 import { BridgeTokens, BridgeTokenConfig, Token2ConfigList, BridgeV2Tokens } from "../../../lib/common";
 import bridgeV2Abi from "./abi/bridgeV2.abi.json"
 import erc20Abi from "./abi/erc20.abi.json"
+import { BridgeV2Abi, Erc20Abi } from "src/typechain";
 
 type Connection = {
   rpcProvider: providers.BaseProvider;
@@ -387,10 +388,10 @@ export class EvmConnect {
         signer: ethers.Signer
         tokenSymbol: string
         protocolId?: number        
-        }) {
+        }): Promise<ethers.ContractTransaction> {
         
         // instantiate bridgeV2 contract
-        const bridgeV2Contract = new ethers.Contract(this.getAddress("tokenBridge"), bridgeV2Abi, signer)
+        const bridgeV2Contract = new ethers.Contract(this.getAddress("tokenBridge"), bridgeV2Abi, signer) as BridgeV2Abi
             
         // get chain Id
         const chainId=getNumericNetworkId(destination)
@@ -414,7 +415,7 @@ export class EvmConnect {
             // outgoing vaults are a wrapper of erc20 tokens
             // For spending tokens, they need to get approved as a spender of the amount of token from the user account.
             console.log("🔒 Approving vault as a token spender")            
-            const tokenContract = new ethers.Contract(address, erc20Abi, signer)
+            const tokenContract = new ethers.Contract(address, erc20Abi, signer) as Erc20Abi
             let approvalTx
             if (this.network == BridgeNetworks.Polygon || !maxFeePerGas || !maxPriorityFeePerGas) {
                 approvalTx = await tokenContract.approve(vault_address, amount, { gasPrice })
@@ -444,11 +445,7 @@ export class EvmConnect {
             tx = await bridgeV2Contract.deposit(...depositArgs, { maxFeePerGas, maxPriorityFeePerGas })
         }
 
-        console.log("Waiting for transaction receipt")
-        const { transactionHash } = await tx.wait()
-        console.log({ txHash: transactionHash })
-        console.log("Deposit done")
-        return transactionHash
+        return tx
     }
 
     public getTxnHashed(txnID: string): string {
