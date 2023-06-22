@@ -414,7 +414,7 @@ export class EvmConnect {
         if (vault_type === "outgoing") {
             // outgoing vaults are a wrapper of erc20 tokens
             // For spending tokens, they need to get approved as a spender of the amount of token from the user account.
-            console.log("🔒 Approving vault as a token spender")            
+            console.log("Approving vault as a token spender")            
             const tokenContract = new ethers.Contract(address, erc20Abi, signer) as Erc20Abi
             let approvalTx
             if (this.network == BridgeNetworks.Polygon || !maxFeePerGas || !maxPriorityFeePerGas) {
@@ -427,10 +427,10 @@ export class EvmConnect {
             }
             // Wait for 2 confirmations before proceeding with the deposit
             await approvalTx.wait(2)
-            console.log("✅ Deposit done")
+            console.log("Approval confirmed")
         } else if(vault_type!=="incoming") throw new Error(`ìnvalid vault type ${vault_type}`)
 
-        console.log("💰 Calling deposit function")
+        console.log("Calling deposit function")
         const depositArgs = [
             vault_address,
             amount,
