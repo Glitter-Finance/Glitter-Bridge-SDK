@@ -105,6 +105,9 @@ export class EvmV2Parser {
        
         partialTxn.tokenSymbol = baseToken.asset_symbol;
 
+        //Get referral ID
+        partialTxn.referral_id =events.deposit?.protocolId || undefined;
+
         //Get transfer amount
         if (events.transfer) {
             fromAddress = events.transfer.from;
