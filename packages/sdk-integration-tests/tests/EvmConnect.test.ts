@@ -1,5 +1,6 @@
-import {BridgeNetworks, EvmConnect, GlitterBridgeSDK, GlitterEnvironment} from "@glitter-finance/sdk-core";
-import {ethers} from "ethers";
+import "dotenv/config"
+import { BridgeNetworks, EvmConnect, GlitterBridgeSDK, GlitterEnvironment } from "@glitter-finance/sdk-core";
+import { ethers } from "ethers";
 
 describe("EvmConnect", () => {
     let glitterSdk: GlitterBridgeSDK;
@@ -81,4 +82,12 @@ describe("EvmConnect", () => {
         expect(release).toBeTruthy()
     });
 
+    it.skip("is able to perform a deposit on the v2 bridge", async function(){        
+        const sk=process.env.TEST_ACCOUNT!
+        const provider = new ethers.providers.JsonRpcProvider(process.env.TEST_RPC);        
+        const signer = new ethers.Wallet(sk).connect(provider);
+        const { wait }=await evmConnect.bridge("0xEC28e6671Bcb93979DFB1734e5240c0cF52bC152", BridgeNetworks.Binance, "xGTT", "10", signer, true)
+        const { transactionHash }=await wait()
+        console.log(`successful deposit: ${transactionHash}`)
+    }, 60000)
 });
