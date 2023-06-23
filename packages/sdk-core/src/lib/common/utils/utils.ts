@@ -47,6 +47,7 @@ export const base64ToBigUIntString = (encoded: any) => {
 };
 
 function instanceofAlgoAccount(account: any): boolean {
+    if(typeof account !=="object" || account == null) return false
     return "addr" in account && "sk" in account && isValidAddress(account.addr);
 }
 
