@@ -21,7 +21,7 @@ export class EvmV2Parser {
         if (!bridgeID || typeof bridgeID !== "string")
             throw Error("Bridge ID is undefined");
             
-        //Get Solana Transaction data
+        //Get EVM Transaction data
         let partialTxn: PartialBridgeTxn = {
             txnID: txnID,
             txnIDHashed: connect?.getTxnHashed(txnID),

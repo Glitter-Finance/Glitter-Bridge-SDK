@@ -103,6 +103,15 @@ export class EvmCircleParser {
             throw new Error("No transfer event found");   
         }
 
+        //get token:
+        let tokenSymbol = "USDC";
+        if (connect.network == BridgeNetworks.Ethereum && events.deposit?.erc20Address?.toString() == "0x1aBaEA1f7C830bD89Acc67eC4af516284b1bC33c") {
+            tokenSymbol = "EUROC";
+        } else if (connect.network == BridgeNetworks.Avalanche && events.deposit?.erc20Address?.toString() == "0xC891EB4cbdEFf6e073e859e987815Ed1505c2ACD") {
+            tokenSymbol = "EUROC";
+        }
+        partialTxn.tokenSymbol = tokenSymbol;
+
         //Check Type
         if (toAddress.toLocaleLowerCase() == connect.getAddress("depositWallet")?.toLocaleLowerCase()) {
 
@@ -131,13 +140,13 @@ export class EvmCircleParser {
                 from: {
                     network: connect.network,
                     address: events.transfer?.from || "",
-                    token: "usdc",
+                    token: tokenSymbol,
                     txn_signature: txnID,
                 },
                 to: {
                     network: toNetwork?.toString() || "",
                     address: toAddress,
-                    token: "usdc"
+                    token: tokenSymbol
                 },
                 amount: partialTxn.amount || BigNumber(0),
                 units: partialTxn.units || BigNumber(0),
@@ -147,13 +156,13 @@ export class EvmCircleParser {
                 from: {
                     network: "",
                     address: "",
-                    token: "usdc",
+                    token: tokenSymbol,
                     txn_signature_hashed: events.release?.depositTransactionHash,
                 },
                 to: {
                     network: connect.network,
                     address: partialTxn.address || "",
-                    token: "usdc",
+                    token: tokenSymbol,
                     txn_signature: txnID,
                 },
                 amount: partialTxn.amount || undefined,
@@ -189,6 +198,15 @@ export class EvmCircleParser {
             throw new Error("No transfer event found");
         }
 
+        //get token:
+        let tokenSymbol = "USDC";
+        if (connect.network == BridgeNetworks.Ethereum && events.release?.erc20Address?.toString() == "0x1aBaEA1f7C830bD89Acc67eC4af516284b1bC33c") {
+            tokenSymbol = "EUROC";
+        } else if (connect.network == BridgeNetworks.Avalanche && events.release?.erc20Address?.toString() == "0xC891EB4cbdEFf6e073e859e987815Ed1505c2ACD") {
+            tokenSymbol = "EUROC";
+        }
+        partialTxn.tokenSymbol = tokenSymbol;
+
         //Get Routing
         let routing: Routing | null = null;
         if (toAddress.toLocaleLowerCase() == connect.getAddress("releaseWallet").toLocaleLowerCase()) {
@@ -208,13 +226,13 @@ export class EvmCircleParser {
                 from: {
                     network: "",
                     address: "",
-                    token: "usdc",
+                    token: tokenSymbol,
                     txn_signature_hashed: events.release?.depositTransactionHash,
                 },
                 to: {
                     network: connect.network,
                     address: partialTxn.address || "",
-                    token: "usdc",
+                    token: tokenSymbol,
                     txn_signature: txnID,
                 },
                 amount: partialTxn.amount || BigNumber(0),

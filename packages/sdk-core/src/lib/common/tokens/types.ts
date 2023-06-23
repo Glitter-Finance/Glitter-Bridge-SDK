@@ -28,6 +28,9 @@ export type Token2Config = {
   asset_id: number;
   asset_name: string;
   asset_symbol: string;
+  cmc_id?: string;
+  coingecko_id?: string;
+  asset_bridge_fee: number;
   chains: Token2ChainConfig[];
 }
 export type Token2ChainConfig = {

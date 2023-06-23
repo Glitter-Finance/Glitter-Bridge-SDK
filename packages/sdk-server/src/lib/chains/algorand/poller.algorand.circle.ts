@@ -73,7 +73,8 @@ export class AlgorandCircleParser {
         const decimals = 6;
 
         //Set type
-        partialTxn.tokenSymbol = "usdc";
+        
+        partialTxn.tokenSymbol = "USDC";
 
         //Check Asset Send
         if (!txn["asset-transfer-transaction"]) {
@@ -119,7 +120,7 @@ export class AlgorandCircleParser {
         const decimals = 6;
 
         //Set type
-        partialTxn.tokenSymbol = "usdc";
+        partialTxn.tokenSymbol = "USDC";
 
         //Get Address
         //Check Asset Send

@@ -143,7 +143,7 @@ export class SolanaV1Parser {
 
         //Set type
         partialTxn.txnType = TransactionType.Deposit;
-        partialTxn.tokenSymbol = "sol";
+        partialTxn.tokenSymbol = "SOL";
 
         //Deserialize Instructions
         const instruction = deserialize(
@@ -165,11 +165,11 @@ export class SolanaV1Parser {
         partialTxn.routing = this.getV1Routing(
             "solana",
             partialTxn.address || "",
-            "sol",
+            "SOL",
             partialTxn.txnID,
             "algorand",
             algosdk.encodeAddress(instruction["algo_address"]).toString(),
-            "xsol",
+            "xSOL",
             "",
             BigNumber(instruction["amount"].toString()),
             decimals
@@ -193,7 +193,7 @@ export class SolanaV1Parser {
 
         //Set type
         partialTxn.txnType = TransactionType.Deposit;
-        partialTxn.tokenSymbol = "xalgo";
+        partialTxn.tokenSymbol = "xALGO";
 
         //Deserialize Instructions
         const instruction = deserialize(
@@ -206,7 +206,7 @@ export class SolanaV1Parser {
         const data = SolanaPollerCommon.getSolanaAddressWithAmount(
             sdkServer,
             txn,
-            "xalgo",
+            "xALGO",
             true
         );
         partialTxn.address = data[0] || "";
@@ -219,7 +219,7 @@ export class SolanaV1Parser {
             partialTxn.txnID,
             "algorand",
             algosdk.encodeAddress(instruction["algo_address"]).toString(),
-            "algo",
+            "Algo",
             "",
             BigNumber(instruction["amount"].toString()),
             decimals
@@ -244,7 +244,7 @@ export class SolanaV1Parser {
 
         //Set type
         partialTxn.txnType = TransactionType.Release;
-        partialTxn.tokenSymbol = "sol";
+        partialTxn.tokenSymbol = "SOL";
 
         //Deserialize Instructions
         const instruction = deserialize(
@@ -266,7 +266,7 @@ export class SolanaV1Parser {
         partialTxn.routing = this.getV1Routing(
             "algorand",
             algosdk.encodeAddress(instruction["algo_address"]).toString(),
-            "xsol",
+            "xSOL",
             new TextDecoder().decode(instruction["algo_txn_id"]),
             "solana",
             partialTxn.address || "",
@@ -295,7 +295,7 @@ export class SolanaV1Parser {
 
         //Set type
         partialTxn.txnType = TransactionType.Release;
-        partialTxn.tokenSymbol = "xalgo";
+        partialTxn.tokenSymbol = "xALGO";
 
         //Deserialize Instructions
         const instruction = deserialize(
@@ -308,7 +308,7 @@ export class SolanaV1Parser {
         const data = SolanaPollerCommon.getSolanaAddressWithAmount(
             sdkServer,
             txn,
-            "xalgo",
+            "xALGO",
             false
         );
         partialTxn.address = data[0] || "";
@@ -317,7 +317,7 @@ export class SolanaV1Parser {
         partialTxn.routing = this.getV1Routing(
             "algorand",
             algosdk.encodeAddress(instruction["algo_address"]).toString(),
-            "algo",
+            "ALGO",
             new TextDecoder().decode(instruction["algo_txn_id"]),
             "solana",
             partialTxn.address || "",
@@ -352,7 +352,7 @@ export class SolanaV1Parser {
             null,
             false
         );
-        partialTxn.tokenSymbol = "sol";
+        partialTxn.tokenSymbol = "SOL";
         partialTxn.address = data[0] || "";
 
         partialTxn.units = BigNumber(data[1]);
@@ -378,10 +378,10 @@ export class SolanaV1Parser {
         const data = SolanaPollerCommon.getSolanaAddressWithAmount(
             sdkServer,
             txn,
-            "xalgo",
+            "xALGO",
             false
         );
-        partialTxn.tokenSymbol = "xalgo";
+        partialTxn.tokenSymbol = "xALGO";
         partialTxn.address = data[0] || "";
 
         partialTxn.amount = BigNumber(data[1]);

@@ -4,6 +4,7 @@
             "asset_id": 1,
             "asset_name": "Algorand ALGO",
             "asset_symbol": "ALGO",
+            "asset_bridge_fee": 0.005,
             "chains": [
                 {
                     "chain": "Algorand",
@@ -27,6 +28,7 @@
             "asset_id": 2,
             "asset_name": "Sol",
             "asset_symbol": "Solana SOL",
+            "asset_bridge_fee": 0.005,
             "chains": [
                 {
                     "chain": "Algorand",
@@ -51,6 +53,7 @@
             "asset_id": 3,
             "asset_name": "USD Coin",
             "asset_symbol": "USDC",
+            "asset_bridge_fee": 0.005,
             "chains": [
                 {
                     "chain": "Algorand",
@@ -106,18 +109,21 @@
             "asset_id": 4,
             "asset_name": "Glitter Dao Token",
             "asset_symbol": "xGLI",
+            "asset_bridge_fee": 0.005,
             "chains": []
         },
         {
             "asset_id": 5,
             "asset_name": "Raydium",
             "asset_symbol": "RAY",
+            "asset_bridge_fee": 0.005,
             "chains": []
         },
         {
             "asset_id": 6,
             "asset_name": "Glitter Test USDT",
             "asset_symbol": "Glitter Test Tether",
+            "asset_bridge_fee": 0.005,
             "chains": [
                 {
                     "chain": "Avalanche",
@@ -205,6 +211,7 @@
             "asset_id": 7,
             "asset_name": "Glitter Test USDC",
             "asset_symbol": "Glitter Test USDC",
+            "asset_bridge_fee": 0.005,
             "chains": [
                 {
                     "chain": "Avalanche",
@@ -292,6 +299,7 @@
             "asset_id": 8,
             "asset_name": "Glitter Test Token",
             "asset_symbol": "GTT",
+            "asset_bridge_fee": 0.005,
             "chains": [
                 {
                     "chain": "Ethereum",
