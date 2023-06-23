@@ -327,6 +327,9 @@ export class EvmConnect {
                 
             // handle deposit on bridge v2
             if(v2){
+                if(destination == BridgeNetworks.algorand|| destination==BridgeNetworks.solana || destination==BridgeNetworks.TRON){
+                    throw new Error(`network ${destination} is not yet supported by the v2 bridge`)
+                }
                 // parse target wallet address
                 const targetWallet= addr_to_pk(destinationWallet)
                 return this.deposit_bridgeV2({ amount, destination, targetWallet, protocolId, signer, tokenSymbol })
@@ -380,7 +383,7 @@ export class EvmConnect {
         tokenSymbol
     }: {
         amount: ethers.BigNumber | string        
-        destination: BridgeNetworks,
+        destination: BridgeEvmNetworks,
         targetWallet: Buffer        
         signer: ethers.Signer
         tokenSymbol: string
