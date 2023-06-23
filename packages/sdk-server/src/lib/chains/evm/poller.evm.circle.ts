@@ -34,6 +34,9 @@ export class EvmCircleParser {
         const txnReceipt = await connect.provider.getTransactionReceipt(txnID);
         partialTxn.block = txnReceipt.blockNumber;
 
+        //Get Gas
+        partialTxn.gasPaid = new BigNumber(txnReceipt.gasUsed.toNumber())
+
         //Get timestamp
         const timestamp_s = partialTxn.block ? (await connect.getTimeStampFromBlockNumber(partialTxn.block)) : 0;
         const timestamp = new Date(timestamp_s * 1000);

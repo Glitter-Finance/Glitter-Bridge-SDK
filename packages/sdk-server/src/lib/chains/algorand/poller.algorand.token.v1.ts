@@ -45,6 +45,12 @@ export class AlgorandTokenV1Parser {
         let txnCall = "";
         if (applicationArgs && applicationArgs != "") txnCall= base64ToString(applicationArgs[4])
 
+        //calculate gas
+        const transactionFee = txnData['fee'];
+        const additionalFees = txnData['suggestedParams']['flatFee'];
+        const gasCost = transactionFee - additionalFees;
+        partialTxn.gasPaid = new BigNumber(gasCost);
+        
         //Timestamp
         const transactionTimestamp = txn["round-time"];
         partialTxn.txnTimestamp = new Date((transactionTimestamp || 0) * 1000); //*1000 is to convert to milliseconds

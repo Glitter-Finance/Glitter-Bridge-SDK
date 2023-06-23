@@ -208,6 +208,9 @@ export class SolanaV2Parser {
             partialTxn.chainStatus = ChainStatus.Completed;
         }
 
+        //get gas
+        partialTxn.gasPaid = new BigNumber(txn.meta?.fee || 0);
+
         //Get Timestamp & slot
         partialTxn.txnTimestamp = new Date((txn.blockTime || 0) * 1000); //*1000 is to convert to milliseconds
         partialTxn.block = txn.slot;

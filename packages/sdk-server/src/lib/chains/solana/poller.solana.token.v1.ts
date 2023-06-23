@@ -68,6 +68,9 @@ export class SolanaV1Parser {
             partialTxn.txnTimestamp = new Date((txn.blockTime || 0) * 1000); //*1000 is to convert to milliseconds
             partialTxn.block = txn.slot;
 
+            //get gas
+            partialTxn.gasPaid = new BigNumber(txn.meta?.fee || 0);
+
             //Get txnData From Solana
             const txnData = (txn.transaction.message.instructions[0] as PartiallyDecodedInstruction).data;
             const data_bytes = bs58.decode(txnData);

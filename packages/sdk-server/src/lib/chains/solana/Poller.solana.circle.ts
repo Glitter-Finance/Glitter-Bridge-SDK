@@ -15,6 +15,7 @@ import { GlitterSDKServer } from "../../../glitterSDKServer";
 import { Cursor } from "../../common/cursor";
 import { ServerError } from "../../common/serverErrors";
 import { SolanaPollerCommon } from "./poller.solana.common";
+import BigNumber from "bignumber.js";
 
 export class SolanaCircleParser {
 
@@ -40,7 +41,7 @@ export class SolanaCircleParser {
             address: address,
             protocol: "Glitter Finance"
         };
-
+       
         //Try to get txn details
         try {
 
@@ -58,6 +59,9 @@ export class SolanaCircleParser {
             //Get Timestamp & slot
             partialTxn.txnTimestamp = new Date((txn.blockTime || 0) * 1000); //*1000 is to convert to milliseconds
             partialTxn.block = txn.slot;
+
+            //get gas
+            partialTxn.gasPaid = new BigNumber(txn.meta?.fee || 0);
 
             //Get deposit note
             let depositNote;

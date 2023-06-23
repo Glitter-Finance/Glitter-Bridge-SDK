@@ -81,6 +81,9 @@ export class TronCircleParser {
                 partialTxn.chainStatus = ChainStatus.Unknown;
             }
 
+            //Get Gas
+            partialTxn.gasPaid = txRec.ret[0].fee;
+
             //Get timestamp   
             const timestamp = new Date(txRec.raw_data.timestamp);
             partialTxn.txnTimestamp = timestamp;
