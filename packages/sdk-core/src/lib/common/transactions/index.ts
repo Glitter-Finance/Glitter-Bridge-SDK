@@ -41,4 +41,6 @@ export type PartialBridgeTxn = {
     units?: BigNumber | null;
     amount?: BigNumber | number | null;
     routing?: Routing | Routing2 | null;
+    protocol?: string | null;
+    protocol_id?: number | null;
 };
