@@ -113,3 +113,6 @@ docs
 packages/server/dev
 
 .idea
+
+# json abi since we're using typechain
+packages/sdk-core/src/lib/chains/evm/abi/

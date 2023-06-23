@@ -1,5 +1,6 @@
-import {BridgeNetworks, EvmConnect, GlitterBridgeSDK, GlitterEnvironment} from "@glitter-finance/sdk-core";
-import {ethers} from "ethers";
+import "dotenv/config"
+import { BridgeNetworks, EvmConnect, GlitterBridgeSDK, GlitterEnvironment } from "@glitter-finance/sdk-core";
+import { ethers } from "ethers";
 
 describe("EvmConnect", () => {
     let glitterSdk: GlitterBridgeSDK;
@@ -81,4 +82,38 @@ describe("EvmConnect", () => {
         expect(release).toBeTruthy()
     });
 
+    it.skip("is able to perform a deposit on the v2 bridge", async function () {
+        const sk = process.env.TEST_ACCOUNT!
+        const networks: { [key in BridgeNetworks]?: string } = {
+            [BridgeNetworks.Arbitrum]: process.env.ARBITRUM_RPC_URL!,
+            [BridgeNetworks.Avalanche]: process.env.AVALANCHE_RPC_URL!,
+            [BridgeNetworks.Binance]: process.env.BSC_RPC_URL!,
+            [BridgeNetworks.Ethereum]: process.env.ETHEREUM_RPC_URL!,
+            [BridgeNetworks.Zkevm]: process.env.ZKEVM_RPC_URL!,
+            [BridgeNetworks.Polygon]: process.env.POLYGON_RPC_URL!,
+            [BridgeNetworks.Optimism]: process.env.OPTIMISM_RPC_URL!,
+        }
+        for (const [network, url] of Object.entries(networks) as [BridgeNetworks, string][]) {
+            let sdk = new GlitterBridgeSDK();
+            sdk.setEnvironment(GlitterEnvironment.testnet)
+            sdk = sdk.connect([network]);
+            evmConnect = sdk[network]
+            const symbol = network == BridgeNetworks.Ethereum ? "GTT" : "xGTT"
+            const provider = new ethers.providers.JsonRpcProvider(url)
+            const signer = new ethers.Wallet(sk).connect(provider)
+            for (const targetNetwork of Object.keys(networks) as BridgeNetworks[]) {
+                if (targetNetwork == network) continue
+                const { wait } = await evmConnect.bridge(
+                    "0x413Ead99932e1fF7fe986234389Cfb2f26CE8acB",
+                    targetNetwork,
+                    symbol,
+                    "99",
+                    signer,
+                    true
+                )
+                const { transactionHash } = await wait()
+                console.log(`successful deposited ${symbol} from ${network} to ${targetNetwork}: ${transactionHash}`)
+            }
+        }
+    }, 1800000) // 30 minutes timeout value, it's a long test
 });
