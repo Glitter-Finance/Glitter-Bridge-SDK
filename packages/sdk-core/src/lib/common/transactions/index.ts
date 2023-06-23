@@ -26,7 +26,11 @@ export enum BridgeType {
     TokenV2 = "TokenV2",
 }
 
-export type PartialBridgeTxn = {
+/**
+ * @deprecated Use PartialTxn instead.
+ */
+export type PartialBridgeTxn = PartialTxn;
+export type PartialTxn = {
     txnID: string;
     txnIDHashed?: string;
     bridgeType?: BridgeType;
@@ -43,4 +47,6 @@ export type PartialBridgeTxn = {
     routing?: Routing | Routing2 | null;
     protocol?: string | null;
     referral_id?: number | null;
+    gasPaid?: BigNumber | null;
+    gasUSD?: number | null;
 };
