@@ -48,5 +48,4 @@ export type PartialTxn = {
     protocol?: string | null;
     referral_id?: number | null;
     gasPaid?: BigNumber | null;
-    gasUSD?: number | null;
 };

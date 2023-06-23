@@ -6,6 +6,7 @@ import AlgodClient from "algosdk/dist/types/client/v2/algod/algod";
 import IndexerClient from "algosdk/dist/types/client/v2/indexer/indexer";
 import { Cursor } from "../../common/cursor";
 import { GlitterSDKServer } from "../../../glitterSDKServer";
+import { BigNumber } from "bignumber.js";
 
 export class AlgorandCircleParser {
     public static async process(
@@ -31,7 +32,7 @@ export class AlgorandCircleParser {
             address: address,
             protocol: "Glitter Finance"
         }
-        
+       
         //Fail Safe
         const BASE_LOG = `NewAlgorandTxn: ${txnID}`;
         if (!client) throw new Error(BASE_LOG + " Algorand client not initialized");  
@@ -41,6 +42,12 @@ export class AlgorandCircleParser {
         
         //Get transaction
         const txn = txnData["transaction"];
+
+        //calculate gas
+        const transactionFee = txnData['fee'];
+        const additionalFees = txnData['suggestedParams']['flatFee'];
+        const gasCost = transactionFee - additionalFees;
+        partialTxn.gasPaid = new BigNumber(gasCost);
 
         //Timestamp
         const transactionTimestamp = txn["round-time"];
