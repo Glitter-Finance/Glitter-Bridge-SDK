@@ -22,7 +22,7 @@ import {
     getNumericNetworkId,
 } from "../../common/networks";
 import { ChainStatus } from "../../common/transactions";
-import { parseAddress_bridgeV2, walletToAddress } from "../../common/utils/utils";
+import { addr_to_pk, walletToAddress } from "../../common/utils/utils";
 import { BridgeTokens, BridgeTokenConfig, Token2ConfigList, BridgeV2Tokens } from "../../../lib/common";
 import { BridgeV2Abi__factory, Erc20Abi__factory } from "src/typechain";
 
@@ -328,7 +328,7 @@ export class EvmConnect {
             // handle deposit on bridge v2
             if(v2){
                 // parse target wallet address
-                const targetWallet= parseAddress_bridgeV2(destinationWallet)
+                const targetWallet= addr_to_pk(destinationWallet)
                 return this.deposit_bridgeV2({ amount, destination, targetWallet, protocolId, signer, tokenSymbol })
             }
 

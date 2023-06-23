@@ -69,7 +69,7 @@ export function walletToAddress(wallet: string | PublicKey | algosdk.Account): s
     return destinationInStr;
 }
 
-export const parseAddress_bridgeV2=(addr:string| PublicKey | algosdk.Account):Buffer=>{
+export const addr_to_pk=(addr:string| PublicKey | algosdk.Account):Buffer=>{
     if (addr instanceof PublicKey) return addr.toBuffer();
     if (instanceofAlgoAccount(addr)) return Buffer.from(decodeAddress((addr as algosdk.Account).addr).publicKey);
     if(typeof addr !=="string") throw new Error("unsupported address for bridge v2") ;
