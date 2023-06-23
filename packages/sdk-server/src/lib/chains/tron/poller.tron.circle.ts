@@ -24,6 +24,7 @@ export class TronCircleParser {
             txnType: TransactionType.Unknown,
             network: BridgeNetworks.TRON,
             address: address,
+            protocol: "Glitter Finance"
         };
 
         //Try to get txn details

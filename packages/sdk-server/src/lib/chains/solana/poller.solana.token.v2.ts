@@ -197,6 +197,7 @@ export class SolanaV2Parser {
             txnType: TransactionType.Unknown,
             network: "solana",
             address: bridgeID || "",
+            protocol: "Glitter Finance"
         };
 
         //Check txn status

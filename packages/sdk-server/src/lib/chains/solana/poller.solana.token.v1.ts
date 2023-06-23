@@ -46,6 +46,7 @@ export class SolanaV1Parser {
             bridgeType: BridgeType.TokenV1,
             txnType: TransactionType.Unknown,
             network: BridgeNetworks.solana,
+            protocol: "Glitter Finance"
         };
 
         //Try to get the txn details

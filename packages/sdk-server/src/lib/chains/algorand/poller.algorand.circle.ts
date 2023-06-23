@@ -29,6 +29,7 @@ export class AlgorandCircleParser {
             network: "algorand",
             chainStatus: ChainStatus.Completed,
             address: address,
+            protocol: "Glitter Finance"
         }
         
         //Fail Safe

@@ -22,7 +22,8 @@ export class AlgorandTokenV1Parser {
             bridgeType: BridgeType.TokenV1,
             txnType: TransactionType.Unknown,
             network: "algorand",
-            chainStatus: ChainStatus.Completed
+            chainStatus: ChainStatus.Completed,
+            protocol: "Glitter Finance"
         }
 
         //Fail Safe

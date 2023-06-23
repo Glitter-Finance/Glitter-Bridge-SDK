@@ -29,6 +29,7 @@ export class EvmV2Parser {
             txnType: TransactionType.Unknown,
             network: connect?.network,
             address: bridgeID || "",
+            protocol: "Glitter Finance"
         };
 
         //Get txn receipt

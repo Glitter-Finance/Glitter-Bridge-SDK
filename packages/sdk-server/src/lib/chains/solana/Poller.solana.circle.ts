@@ -38,6 +38,7 @@ export class SolanaCircleParser {
             txnType: TransactionType.Unknown,
             network: "solana",
             address: address,
+            protocol: "Glitter Finance"
         };
 
         //Try to get txn details
