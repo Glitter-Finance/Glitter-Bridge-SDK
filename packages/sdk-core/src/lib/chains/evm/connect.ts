@@ -24,7 +24,7 @@ import {
 import { ChainStatus } from "../../common/transactions";
 import { addr_to_pk, walletToAddress } from "../../common/utils/utils";
 import { BridgeTokens, BridgeTokenConfig, Token2ConfigList, BridgeV2Tokens } from "../../../lib/common";
-import { BridgeV2Abi__factory, Erc20Abi__factory } from "src/typechain";
+import { BridgeV2Abi__factory, Erc20Abi__factory } from "../../../typechain";
 
 type Connection = {
   rpcProvider: providers.BaseProvider;
