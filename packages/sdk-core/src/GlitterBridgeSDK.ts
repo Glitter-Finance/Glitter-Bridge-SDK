@@ -239,4 +239,21 @@ export class GlitterBridgeSDK {
     get rpcList(): ChainRPCConfigs|undefined {
         return this._rpcList;
     }
+
+    public confirmationsRequired(chainName: string): number 
+    public confirmationsRequired(chain: string): number 
+    public confirmationsRequired(chainOrName: BridgeNetworks): number {
+
+        if (typeof chainOrName === "string") {
+            //iterate chain enums and match chain name against case insensitive
+            for (const chain in BridgeNetworks) {
+                if (chain.toLowerCase() === chainOrName.toLowerCase()) {
+                    chainOrName = chain as BridgeNetworks;
+                    break;
+                }
+            }
+        }
+
+        return this._bridgeConfig?.confirmations[chainOrName] || 0;
+    }
 }

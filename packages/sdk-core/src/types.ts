@@ -10,6 +10,7 @@ export type GlitterBridgeConfig = {
   solana: SolanaConfig;
   evm: EvmConfig;
   tron: TronConfig;
+  confirmations: { [key in BridgeNetworks]: number }
 };
 
 export enum GlitterEnvironment {

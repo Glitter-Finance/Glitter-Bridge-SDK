@@ -203,4 +203,16 @@ export const config: GlitterBridgeConfig = {
             releaseWallet: "TEWifyy5yrm7zWbWBs5RVbLyZm4JPiawpf",
         },
     },
+    confirmations: {
+        [BridgeNetworks.algorand]: 1,
+        [BridgeNetworks.solana]: 1,
+        [BridgeNetworks.Arbitrum]: 300,
+        [BridgeNetworks.Avalanche]: 1,
+        [BridgeNetworks.Ethereum]: 12,
+        [BridgeNetworks.Polygon]: 372,
+        [BridgeNetworks.Binance]: 15,
+        [BridgeNetworks.Zkevm]: 80,
+        [BridgeNetworks.Optimism]: 80,
+        [BridgeNetworks.TRON]: 19,
+    },
 };
