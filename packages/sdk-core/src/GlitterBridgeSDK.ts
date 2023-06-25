@@ -10,6 +10,7 @@ import { mainnetConfig, testnetConfig, mainnetTokenConfig, testnetTokenConfig } 
 import { ChainRPCConfig, ChainRPCConfigs, GlitterBridgeConfig, GlitterEnvironment } from "./types";
 import { BridgeV2Tokens } from "./lib/common/tokens/BridgeV2Tokens";
 import { testnetAPI } from "./config/testnet-api";
+import { BridgeTokenConfig, Token2Config } from "./lib";
 
 /**
  * GlitterBridgeSDK
@@ -244,16 +245,23 @@ export class GlitterBridgeSDK {
     public confirmationsRequired(chain: string): number 
     public confirmationsRequired(chainOrName: BridgeNetworks): number {
 
-        if (typeof chainOrName === "string") {
-            //iterate chain enums and match chain name against case insensitive
-            for (const chain in BridgeNetworks) {
-                if (chain.toLowerCase() === chainOrName.toLowerCase()) {
-                    chainOrName = chain as BridgeNetworks;
-                    break;
-                }
+        const confirmations = this._bridgeConfig?.confirmations[chainOrName] || 0;
+        if (confirmations > 0) return confirmations;
+        
+        //parse through confirmation pairs
+        for (const [chain, confirmations] of Object.entries(this._bridgeConfig?.confirmations || {})) {
+            if (chain.toLowerCase() === chainOrName.toLowerCase()) {
+                return confirmations;
             }
-        }
+        }       
 
-        return this._bridgeConfig?.confirmations[chainOrName] || 0;
+        return 0;
     }
+
+    public gasToken(chainName: string): Token2Config 
+    public gasToken(chain: string): Token2Config 
+    public gasToken(chainOrName: BridgeNetworks): Token2Config|undefined {
+        return BridgeV2Tokens.getTokenConfig(chainOrName);       
+    }
+
 }
