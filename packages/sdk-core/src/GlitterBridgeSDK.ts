@@ -261,7 +261,19 @@ export class GlitterBridgeSDK {
     public gasToken(chainName: string): Token2Config 
     public gasToken(chain: string): Token2Config 
     public gasToken(chainOrName: BridgeNetworks): Token2Config|undefined {
-        return BridgeV2Tokens.getTokenConfig(chainOrName);       
+
+        //get gas token from config
+        let gasToken = this._bridgeConfig?.gasTokens[chainOrName];
+        if (!gasToken) {
+            //parse through gas token pairs
+            for (const [chain, localgasToken] of Object.entries(this._bridgeConfig?.gasTokens || {})) {
+                if (chain.toLowerCase() === chainOrName.toLowerCase()) {
+                    gasToken= localgasToken;
+                }
+            }
+        }
+
+        return BridgeV2Tokens.getTokenConfig(gasToken || "");       
     }
 
 }
