@@ -4,6 +4,7 @@ import { EvmBridgeV2EventsParser, TokenBridgeV2EventGroup } from "./poller.evm.e
 import { TransactionReceipt } from "@ethersproject/abstract-provider";
 import BigNumber from "bignumber.js";
 import { Routing2 } from "@glitter-finance/sdk-core/dist/lib/common/routing/routing.v2";
+import { ethers } from "ethers";
 
 export class EvmV2Parser {
 
@@ -37,9 +38,20 @@ export class EvmV2Parser {
         if (!txnReceipt) return partialTxn;
         partialTxn.block = txnReceipt.blockNumber;
         partialTxn.confirmations = txnReceipt.confirmations;
+
+        //Check if effective gas price is set
+        let gasPrice = new BigNumber(txnReceipt.effectiveGasPrice?.toString() || 0);
+        if (!txnReceipt.effectiveGasPrice || txnReceipt.effectiveGasPrice.isZero()) {
+            //ZKEvm does not have effective gas price
+            const transaction = await connect.provider.getTransaction(txnID);
+            if (transaction) {
+                gasPrice = new BigNumber(transaction.gasPrice?.toString() || 0);
+            }
+
+        }
         
         //Get Gas
-        const gasPaid = txnReceipt.gasUsed.mul(txnReceipt.effectiveGasPrice);
+        const gasPaid = txnReceipt.gasUsed.mul(ethers.BigNumber.from(gasPrice.toString));
         partialTxn.gasPaid = new BigNumber(gasPaid.toString());
 
         //Get timestamp
