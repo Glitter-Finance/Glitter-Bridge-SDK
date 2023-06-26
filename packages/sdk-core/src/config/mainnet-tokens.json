@@ -264,7 +264,7 @@
         {
             "asset_id": 8,
             "asset_name": "Ethereum",
-            "asset_symbol": "Eth",
+            "asset_symbol": "ETH",
             "coingecko_id": "ethereum",
             "cmc_id": "ETH",
             "asset_bridge_fee": 0.005,
@@ -348,6 +348,24 @@
                     "isNative": true,
                     "decimals": 18,
                     "min_transfer": 5
+                }
+            ]
+        },
+        {
+            "asset_id": 14,
+            "asset_name": "Binance",
+            "asset_symbol": "BNB",
+            "coingecko_id": "binancecoin",
+            "cmc_id": "BNB",
+            "asset_bridge_fee": 0.005,
+            "chains": [
+                {
+                    "chain": "Binance",
+                    "symbol": "BNB",
+                    "name": "Binance",
+                    "isNative": true,
+                    "decimals": 18,
+                    "min_transfer": 0.025
                 }
             ]
         }
