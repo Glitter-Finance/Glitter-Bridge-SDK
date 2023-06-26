@@ -36,7 +36,7 @@
     "dist/**/*"
   ],
   "dependencies": {
-    "@glitter-finance/sdk-core": "1.2.0-68",
+    "@glitter-finance/sdk-core": "1.2.0-69",
     "@project-serum/anchor": "^0.26.0",
     "@solana/web3.js": "^1.65.0",
     "algosdk": "^2.1.0",
