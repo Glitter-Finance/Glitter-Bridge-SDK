@@ -51,7 +51,7 @@ export class EvmV2Parser {
         }
         
         //Get Gas
-        const gasPaid = txnReceipt.gasUsed.mul(ethers.BigNumber.from(gasPrice.toString));
+        const gasPaid = txnReceipt.gasUsed.mul(ethers.BigNumber.from(gasPrice.toString()));
         partialTxn.gasPaid = new BigNumber(gasPaid.toString());
 
         //Get timestamp
