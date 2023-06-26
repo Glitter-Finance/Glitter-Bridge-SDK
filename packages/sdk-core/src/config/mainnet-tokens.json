@@ -271,9 +271,33 @@
             "chains": [
                 {
                     "chain": "Ethereum",
-                    "symbol": "Eth",
+                    "symbol": "ETH",
                     "name": "Ethereum",
                     "isNative": true,
+                    "decimals": 18,
+                    "min_transfer": 0.01
+                },
+                {
+                    "chain": "Arbitrum",
+                    "symbol": "WETH",
+                    "name": "Wrapped Ethereum",
+                    "decimals": 18,
+                    "address": "0x82aF49447D8a07e3bd95BD0d56f35241523fBab1",
+                    "min_transfer": 0.01
+                },
+                {
+                    "chain": "Zkevm",
+                    "symbol": "WETH",
+                    "name": "Wrapped Ethereum",
+                    "address": "0x4F9A0e7FD2Bf6067db6994CF12E4495Df938E6e9",
+                    "decimals": 18,
+                    "min_transfer": 0.01
+                },
+                {
+                    "chain": "Optimism",
+                    "symbol": "WETH",
+                    "name": "Wrapped Ethereum",
+                    "address": "0x4200000000000000000000000000000000000006",
                     "decimals": 18,
                     "min_transfer": 0.01
                 }
