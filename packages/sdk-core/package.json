@@ -1,6 +1,6 @@
 {
   "name": "@glitter-finance/sdk-core",
-  "version": "1.2.0-66",
+  "version": "1.2.0-67",
   "description": "Glitter Finance SDK: Core Functions",
   "main": "dist/index.js",
   "module": "dist/index.js",
