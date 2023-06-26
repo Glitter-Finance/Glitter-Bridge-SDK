@@ -40,7 +40,7 @@ export class EvmV2Parser {
         
         //Get Gas
         const gasPaid = txnReceipt.gasUsed.mul(txnReceipt.effectiveGasPrice);
-        partialTxn.gasPaid = new BigNumber(gasPaid.toNumber());
+        partialTxn.gasPaid = new BigNumber(gasPaid.toString());
 
         //Get timestamp
         const timestamp_s = partialTxn.block ? (await connect.getTimeStampFromBlockNumber(partialTxn.block)) : 0;
