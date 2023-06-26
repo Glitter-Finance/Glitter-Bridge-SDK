@@ -47,6 +47,21 @@ export class BridgeV2Tokens {
         const chainToken = tokenConfig.chains?.find((x) => x.chain.toLowerCase() === network.toLowerCase());
         return chainToken;
     }
+    public static getTokenConfigFromChildSymbol(localSymbol: string): Token2Config | undefined {
+
+        //Fail safe
+        if (!this._tokenConfig || !this._tokenConfig.tokens) return undefined;
+
+        for (const token of this._tokenConfig?.tokens ?? []) {
+            for (const chain of token.chains ?? []) {
+                if (chain.symbol?.toLowerCase() == localSymbol.toLowerCase()) {
+                    return token;
+                }
+            }
+        }
+
+        return undefined;
+    }
  
     //Get Chain Configs
     public static getChainConfig(network: BridgeNetworks, localSymbol: string): Token2ChainConfig | undefined {
