@@ -19,8 +19,8 @@ export class BridgeV2Tokens {
         if (!this._tokenConfig || !this._tokenConfig.tokens) return undefined;
 
         //Get Token Config
-        if (Object.values(BridgeNetworks).includes(nativeSymbolOrNetwork as BridgeNetworks) && localSymbolOrUndefined !== undefined) {
-           
+        if (localSymbolOrUndefined !== undefined) {
+            
             //Passed in network:
             for (const token of this._tokenConfig?.tokens ?? []) {
                 for (const chain of token.chains ?? []) {
@@ -30,13 +30,12 @@ export class BridgeV2Tokens {
                 }
             }         
 
-        } else {
+        } 
 
-            //Passed in native symbol:
-            const token = this._tokenConfig.tokens?.find((x) => x.asset_symbol.toLowerCase() === nativeSymbolOrNetwork.toLowerCase());
-            return token;        
-                   
-        }
+        //Check if Passed in native symbol:
+        const token = this._tokenConfig.tokens?.find((x) => x.asset_symbol.toLowerCase() === nativeSymbolOrNetwork.toLowerCase());
+        return token;        
+    
     }    
     public static getTokenConfigChild(tokenConfig: Token2Config, network: BridgeNetworks): Token2ChainConfig | undefined {
             

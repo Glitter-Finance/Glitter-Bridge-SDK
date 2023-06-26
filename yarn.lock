@@ -1482,7 +1482,7 @@
     "@solana/wallet-adapter-base" "^0.9.17"
     "bs58" "^5.0.0"
 
-"@glitter-finance/sdk-core@*", "@glitter-finance/sdk-core@file:C:\\Users\\Andrew\\Documents\\Github\\Glitter Finance\\Bridge\\Glitter\\SDK\\packages\\sdk-core":
+"@glitter-finance/sdk-core@*", "@glitter-finance/sdk-core@1.2.0-68", "@glitter-finance/sdk-core@file:C:\\Users\\Andrew\\Documents\\Github\\Glitter Finance\\Bridge\\Glitter\\SDK\\packages\\sdk-core":
   "resolved" "file:packages/sdk-core"
   "version" "1.2.0-68"
   dependencies:
@@ -1535,24 +1535,6 @@
     "tronweb" "^5.1.0"
     "tweetnacl" "^1.0.3"
 
-"@glitter-finance/sdk-core@1.2.0-67":
-  "integrity" "sha512-kDHaFd1cl92Mco7tCJn/HBDXjixmQiNR6MHk4jbM6oMrwQ8lov5BacofyZL4irEVn4m94k3NCCKmPqQ1Gh+MzQ=="
-  "resolved" "https://registry.npmjs.org/@glitter-finance/sdk-core/-/sdk-core-1.2.0-67.tgz"
-  "version" "1.2.0-67"
-  dependencies:
-    "@circle-fin/circle-sdk" "^1.3.0"
-    "@solana/spl-token" "^0.3.6"
-    "@solana/web3.js" "^1.65.0"
-    "algosdk" "^2.1.0"
-    "bignumber.js" "^9.1.1"
-    "bip39" "^3.0.4"
-    "bs58" "^5.0.0"
-    "ed25519-hd-key" "^1.3.0"
-    "ethers" "^5.7.2"
-    "glitter-evm-contracts" "^1.0.32"
-    "tronweb" "^5.1.0"
-    "tweetnacl" "^1.0.3"
-
 "@glitter-finance/sdk-integration-tests@file:C:\\Users\\Andrew\\Documents\\Github\\Glitter Finance\\Bridge\\Glitter\\SDK\\packages\\sdk-integration-tests":
   "resolved" "file:packages/sdk-integration-tests"
   "version" "1.0.0"
@@ -1577,7 +1559,7 @@
 
 "@glitter-finance/sdk-server@file:C:\\Users\\Andrew\\Documents\\Github\\Glitter Finance\\Bridge\\Glitter\\SDK\\packages\\sdk-server":
   "resolved" "file:packages/sdk-server"
-  "version" "1.0.1-57"
+  "version" "1.0.1-58"
   dependencies:
     "@glitter-finance/sdk-core" "1.2.0-67"
     "@project-serum/anchor" "^0.26.0"
