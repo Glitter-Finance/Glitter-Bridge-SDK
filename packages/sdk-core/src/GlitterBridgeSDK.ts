@@ -11,6 +11,7 @@ import { ChainRPCConfig, ChainRPCConfigs, GlitterBridgeConfig, GlitterEnvironmen
 import { BridgeV2Tokens } from "./lib/common/tokens/BridgeV2Tokens";
 import { testnetAPI } from "./config/testnet-api";
 import { BridgeTokenConfig, Token2Config } from "./lib";
+import { TokenPricing } from "./lib/common/pricing/tokenPricing";
 
 /**
  * GlitterBridgeSDK
@@ -35,6 +36,7 @@ export class GlitterBridgeSDK {
     private _algorand: AlgorandConnect | undefined;
     private _solana: SolanaConnect | undefined;
     private _tron: TronConnect | undefined;
+    private _pricing: TokenPricing | undefined;
     
     /**
      * Set environment of the SDK
@@ -79,6 +81,7 @@ export class GlitterBridgeSDK {
     public connect(networks: BridgeNetworks[], rpcListOverride?:ChainRPCConfigs): GlitterBridgeSDK {
 
         if (rpcListOverride) this._rpcList = rpcListOverride;
+        TokenPricing.loadConfig(this._rpcList?.CMC_API || "");
 
         //set rpc overrides by chain
         this._rpcList?.chainAPIs.forEach((config) => {
@@ -200,7 +203,19 @@ export class GlitterBridgeSDK {
      * @returns {EvmConnect | undefined}
      */
     public getEvmNetwork(evmNetwork: BridgeEvmNetworks): EvmConnect | undefined {
-        return this._evm.get(evmNetwork);
+        let connect = this._evm.get(evmNetwork);
+        if (!connect) {
+            //loop through all evm networks enum values
+            
+            Object.values(BridgeNetworks).forEach((network) => {
+                if (network.toLocaleLowerCase() === evmNetwork.toLocaleLowerCase()) {
+                    connect = this._evm.get(network as BridgeEvmNetworks);
+                    return;
+                }
+            });
+        }
+
+        return connect;
     }
 
     get environment(): GlitterEnvironment | undefined {
@@ -249,9 +264,9 @@ export class GlitterBridgeSDK {
         if (confirmations > 0) return confirmations;
         
         //parse through confirmation pairs
-        for (const [chain, confirmations] of Object.entries(this._bridgeConfig?.confirmations || {})) {
+        for (const [chain, localconfirmations] of Object.entries(this._bridgeConfig?.confirmations || {})) {
             if (chain.toLowerCase() === chainOrName.toLowerCase()) {
-                return confirmations;
+                return localconfirmations;
             }
         }       
 
@@ -273,7 +288,12 @@ export class GlitterBridgeSDK {
             }
         }
 
-        return BridgeV2Tokens.getTokenConfig(gasToken || "");       
+        let gasTokenConfig = BridgeV2Tokens.getTokenConfig(gasToken || "");
+        if (!gasTokenConfig) {
+            gasTokenConfig = BridgeV2Tokens.getTokenConfigFromChildSymbol(gasToken || "");
+        }
+
+        return gasTokenConfig;       
     }
 
 }

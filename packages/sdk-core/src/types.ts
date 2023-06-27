@@ -21,6 +21,7 @@ export enum GlitterEnvironment {
 
 export type ChainRPCConfigs = {
     chainAPIs: ChainRPCConfig[];
+    CMC_API: string;
 }
 export type ChainRPCConfig = {
     network: BridgeNetworks;
