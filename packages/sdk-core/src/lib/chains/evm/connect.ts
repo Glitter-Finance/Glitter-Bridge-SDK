@@ -293,7 +293,7 @@ export class EvmConnect {
         // retrieve provider chain ID
         const { chainId: providerChainId } = await this.provider.getNetwork();
         // does it all match?
-        return this.__config.chainId === signerChainId && signerChainId===providerChainId;
+        return this.__config.chainId === signerChainId && signerChainId === providerChainId;
     }
 
     /**
@@ -327,11 +327,11 @@ export class EvmConnect {
                 
             // handle deposit on bridge v2
             if(v2){
-                if(destination == BridgeNetworks.algorand|| destination==BridgeNetworks.solana || destination==BridgeNetworks.TRON){
+                if(destination == BridgeNetworks.algorand || destination == BridgeNetworks.solana || destination == BridgeNetworks.TRON){
                     throw new Error(`network ${destination} is not yet supported by the v2 bridge`)
                 }
                 // parse target wallet address
-                const targetWallet= addr_to_pk(destinationWallet)
+                const targetWallet = addr_to_pk(destinationWallet)
                 return this.deposit_bridgeV2({ amount, destination, targetWallet, protocolId, signer, tokenSymbol })
             }
 
@@ -378,7 +378,7 @@ export class EvmConnect {
         amount,        
         destination,       
         targetWallet,        
-        protocolId=0,       
+        protocolId = 0,       
         signer,
         tokenSymbol
     }: {
@@ -394,13 +394,13 @@ export class EvmConnect {
         const bridgeV2Contract = BridgeV2Abi__factory.connect(this.getAddress("tokenBridge"), signer)
             
         // get chain Id
-        const chainId=getNumericNetworkId(destination)
+        const chainId = getNumericNetworkId(destination)
 
         // get deposited token config
         const chainToken = BridgeV2Tokens.getChainConfig(this.network, tokenSymbol)
         if(!chainToken) throw new Error("could not load token config")
-        const { vault_type, vault_address, address }=chainToken
-        if(!vault_type||!vault_address||!address) throw new Error("missing token config")
+        const { vault_type, vault_address, address } = chainToken
+        if(!vault_type || !vault_address || !address) throw new Error("missing token config")
         
         // estimate gas price
         const { gasPrice, maxFeePerGas, maxPriorityFeePerGas } = await this.provider.getFeeData()
@@ -428,7 +428,7 @@ export class EvmConnect {
             // Wait for 2 confirmations before proceeding with the deposit
             await approvalTx.wait(2)
             console.log("Approval confirmed")
-        } else if(vault_type!=="incoming") throw new Error(`ìnvalid vault type ${vault_type}`)
+        } else if(vault_type !== "incoming") throw new Error(`ìnvalid vault type ${vault_type}`)
 
         console.log("Calling deposit function")
         const depositArgs = [
