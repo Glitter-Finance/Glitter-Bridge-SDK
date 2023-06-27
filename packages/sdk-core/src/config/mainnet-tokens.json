@@ -392,6 +392,24 @@
                     "min_transfer": 0.025
                 }
             ]
+        },
+        {
+            "asset_id": 14,
+            "asset_name": "Tron",
+            "asset_symbol": "TRX",
+            "coingecko_id": "tron",
+            "cmc_id": "TRX",
+            "asset_bridge_fee": 0.005,
+            "chains": [
+                {
+                    "chain": "Tron",
+                    "symbol": "TRX",
+                    "name": "Tron",
+                    "isNative": true,
+                    "decimals": 6,
+                    "min_transfer": 100
+                }
+            ]
         }
     ]
 }
