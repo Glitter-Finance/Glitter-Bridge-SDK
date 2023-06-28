@@ -83,6 +83,7 @@ export class AlgorandCircleParser {
         //Set type
         
         partialTxn.tokenSymbol = "USDC";
+        partialTxn.baseSymbol = "USDC";
 
         //Check Asset Send
         if (!txn["asset-transfer-transaction"]) {
@@ -129,6 +130,7 @@ export class AlgorandCircleParser {
 
         //Set type
         partialTxn.tokenSymbol = "USDC";
+        partialTxn.baseSymbol = "USDC";
 
         //Get Address
         //Check Asset Send

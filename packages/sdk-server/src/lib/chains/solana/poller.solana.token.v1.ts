@@ -148,6 +148,7 @@ export class SolanaV1Parser {
         //Set type
         partialTxn.txnType = TransactionType.Deposit;
         partialTxn.tokenSymbol = "SOL";
+        partialTxn.baseSymbol = "SOL";
 
         //Deserialize Instructions
         const instruction = deserialize(
@@ -198,6 +199,7 @@ export class SolanaV1Parser {
         //Set type
         partialTxn.txnType = TransactionType.Deposit;
         partialTxn.tokenSymbol = "xALGO";
+        partialTxn.baseSymbol = "ALGO";
 
         //Deserialize Instructions
         const instruction = deserialize(
@@ -249,6 +251,7 @@ export class SolanaV1Parser {
         //Set type
         partialTxn.txnType = TransactionType.Release;
         partialTxn.tokenSymbol = "SOL";
+        partialTxn.baseSymbol = "SOL";
 
         //Deserialize Instructions
         const instruction = deserialize(
@@ -300,6 +303,7 @@ export class SolanaV1Parser {
         //Set type
         partialTxn.txnType = TransactionType.Release;
         partialTxn.tokenSymbol = "xALGO";
+        partialTxn.baseSymbol = "ALGO";
 
         //Deserialize Instructions
         const instruction = deserialize(
@@ -357,6 +361,7 @@ export class SolanaV1Parser {
             false
         );
         partialTxn.tokenSymbol = "SOL";
+        partialTxn.baseSymbol = "SOL";
         partialTxn.address = data[0] || "";
 
         partialTxn.units = BigNumber(data[1]);
@@ -386,6 +391,7 @@ export class SolanaV1Parser {
             false
         );
         partialTxn.tokenSymbol = "xALGO";
+        partialTxn.baseSymbol = "ALGO";
         partialTxn.address = data[0] || "";
 
         partialTxn.amount = BigNumber(data[1]);

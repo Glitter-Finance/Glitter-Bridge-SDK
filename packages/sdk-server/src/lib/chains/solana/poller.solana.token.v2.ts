@@ -6,6 +6,7 @@ import {
 import {
     BridgeNetworks,
     BridgeType,
+    BridgeV2Tokens,
     ChainStatus,
     PartialBridgeTxn,
     Routing,
@@ -295,9 +296,15 @@ export class SolanaV2Parser {
 
         //Get token Information
         const tokenAddress = depositEvent.data.mint.toBase58();
-        const token = BridgeTokens.getFromAddress(BridgeNetworks.solana, tokenAddress);
-        if (!token) throw Error("Token not found");
-        partialTxn.tokenSymbol = token?.symbol || "";
+
+        //get token info
+        const fromToken = BridgeV2Tokens.getChainConfigByVault(BridgeNetworks.solana, tokenAddress || "");
+        if (!fromToken) throw new Error("From token not found")
+        const baseToken = BridgeV2Tokens.getChainConfigParent(fromToken);
+        if (!baseToken) throw new Error("Base token not found")
+                
+        partialTxn.tokenSymbol = fromToken?.symbol || "";
+        partialTxn.baseSymbol = baseToken?.asset_symbol || "";
 
         //Get Address
         const data = SolanaPollerCommon.
@@ -307,7 +314,7 @@ export class SolanaV2Parser {
         //Get amount;
         const amountTransferred = BigNumber(-data[1]) || BigNumber(0)
         const amountEvent = RoutingHelper.BaseUnits_FromReadableValue(
-            BigNumber(depositEvent.data.amount), token.decimals);
+            BigNumber(depositEvent.data.amount), fromToken.decimals);
         if (!amountEvent.minus(amountTransferred).eq(0)) {
             throw Error("Amount transferred does not match amount in event");
         }
@@ -328,7 +335,7 @@ export class SolanaV2Parser {
             partialTxn.tokenSymbol,
             "",
             amountTransferred,
-            token.decimals
+            fromToken.decimals
         );
         
         return partialTxn;

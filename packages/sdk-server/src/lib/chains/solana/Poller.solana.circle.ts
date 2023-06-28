@@ -125,6 +125,7 @@ async function handleDeposit(
 
     //Set type
     partialTxn.tokenSymbol = "USDC";
+    partialTxn.baseSymbol = "USDC";
 
     //Get Address
     const data = SolanaPollerCommon.getSolanaAddressWithAmount(
@@ -179,9 +180,11 @@ async function handleRelease(
     if (!routing) {
         partialTxn.txnType = TransactionType.Transfer;
         partialTxn.tokenSymbol = "USDC";
+        partialTxn.baseSymbol = "USDC";
     } else {
         partialTxn.txnType = TransactionType.Release;
         partialTxn.tokenSymbol = "USDC";
+        partialTxn.baseSymbol = "USDC";
     }
 
     //Get Address

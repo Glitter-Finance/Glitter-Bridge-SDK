@@ -176,6 +176,7 @@ async function handleDeposit(
     //     tokenSymbol = "EUROC";
     // }
     partialTxn.tokenSymbol = tokenSymbol;
+    partialTxn.baseSymbol = tokenSymbol;
 
     //Get Routing
     if (partialTxn.txnType == TransactionType.Deposit) {
@@ -256,6 +257,7 @@ async function handleRelease(
     //     tokenSymbol = "EUROC";
     // }
     partialTxn.tokenSymbol = tokenSymbol;
+    partialTxn.baseSymbol = tokenSymbol;
 
     //Check Type
     if (toAddress.toLocaleLowerCase() == sdkServer.sdk?.tron?.getTronAddress("releaseWallet")?.toString().toLocaleLowerCase()) {
