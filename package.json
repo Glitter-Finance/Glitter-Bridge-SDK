@@ -37,6 +37,7 @@
     "ts-node": "^10.9.1",
     "typechain": "^8.2.0",
     "typedoc": "^0.23.28",
-    "typescript": "^5.0.2"
+    "typescript": "^5.0.2",
+    "lerna": "^7.1.1"
   }
 }
