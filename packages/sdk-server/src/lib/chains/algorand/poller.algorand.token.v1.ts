@@ -46,9 +46,7 @@ export class AlgorandTokenV1Parser {
         if (applicationArgs && applicationArgs != "") txnCall= base64ToString(applicationArgs[4])
 
         //calculate gas
-        const transactionFee = txnData['fee'];
-        const additionalFees = txnData['suggestedParams']['flatFee'];
-        const gasCost = transactionFee - additionalFees;
+        const gasCost = txn.fee;
         partialTxn.gasPaid = new BigNumber(gasCost);
         
         //Timestamp

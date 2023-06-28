@@ -44,9 +44,7 @@ export class AlgorandCircleParser {
         const txn = txnData["transaction"];
 
         //calculate gas
-        const transactionFee = txnData['fee'];
-        const additionalFees = txnData['suggestedParams']['flatFee'];
-        const gasCost = transactionFee - additionalFees;
+        const gasCost = txn.fee;
         partialTxn.gasPaid = new BigNumber(gasCost);
 
         //Timestamp
