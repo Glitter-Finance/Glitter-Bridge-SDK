@@ -1,6 +1,6 @@
 import { BridgeDepositEvent, BridgeNetworks, BridgeReleaseEvent, BridgeType, ChainStatus, PartialBridgeTxn, Routing, RoutingHelper, Sleep, TransactionType, TransferEvent, TronConnect, getHashedTransactionId } from "@glitter-finance/sdk-core/dist";
 import { GlitterSDKServer } from "../../../glitterSDKServer";
-import { Cursor, ServerError } from "../../../lib/common";
+import { ServerError } from "../../../lib/common";
 import BigNumber from "bignumber.js";
 
 export class TronCircleParser {
@@ -8,13 +8,9 @@ export class TronCircleParser {
     public static async process(
         sdkServer: GlitterSDKServer,
         txnID: string,
-        connect: TronConnect | undefined,
-        cursor: Cursor
+        connect: TronConnect | undefined
     ): Promise<PartialBridgeTxn> {
         
-        //Destructure Local Vars
-        const address = cursor.address.toString();
-
         //Get Solana Transaction data
         const txnHashed = getHashedTransactionId(BridgeNetworks.TRON, txnID);
         let partialTxn: PartialBridgeTxn = {
@@ -23,7 +19,6 @@ export class TronCircleParser {
             bridgeType: BridgeType.Circle,
             txnType: TransactionType.Unknown,
             network: BridgeNetworks.TRON,
-            address: address,
             protocol: "Glitter Finance"
         };
 
@@ -35,7 +30,6 @@ export class TronCircleParser {
 
             //Get Status
             const provider = connect.tronWeb;
-            const { TRONGRID_API } = process.env;
 
             //Get Bridge Logs
             let details: (TransferEvent | BridgeDepositEvent | BridgeReleaseEvent)[] = [];
@@ -92,19 +86,33 @@ export class TronCircleParser {
             const txnInfo = await provider.trx.getTransactionInfo(txnID);
             partialTxn.block = txnInfo.blockNumber;
 
-            //Check deposit vs release   
-            if (address && address === sdkServer.sdk?.tron?.getTronAddress("depositWallet")?.toString()) {
+            //Check Deposit vs Release
+            const depositAddress = sdkServer.sdk?.tron?.getTronAddress("depositWallet")?.toString();
+            const releaseAddress = sdkServer.sdk?.tron?.getTronAddress("releaseWallet")?.toString();
+
+            const to = transferDetail != null ? connect.tronWeb.address.fromHex((transferDetail as TransferEvent).to) : "";
+            const from = transferDetail != null ? connect.tronWeb.address.fromHex((transferDetail as TransferEvent).from) : "";
+
+            if (to.toLocaleLowerCase() === depositAddress?.toLocaleLowerCase() || 
+                from.toLocaleLowerCase() === depositAddress?.toLocaleLowerCase()) {
+
+                //Deposit
                 console.info(`${partialTxn.txnID} is a deposit`);
+                partialTxn.address = depositAddress;
                 partialTxn = await handleDeposit(sdkServer, partialTxn, depositNote, transferDetail, releaseDetail, connect);
-            } else if (address && address === sdkServer.sdk?.tron?.getTronAddress("releaseWallet")?.toString()) {
+            } else if (to.toLocaleLowerCase() === releaseAddress?.toLocaleLowerCase() ||
+                from.toLocaleLowerCase() === releaseAddress?.toLocaleLowerCase()) {
+                
+                //Release
                 console.info(`${partialTxn.txnID} is a release`);
+                partialTxn.address = releaseAddress;
                 partialTxn = await handleRelease(sdkServer, partialTxn, releaseDetail, transferDetail, connect);
             } else {
                 partialTxn.txnType = TransactionType.Error;
                 console.info(`${partialTxn.txnID} is unknown`);
                 return Promise.resolve(partialTxn);
             }
-        
+
         } catch (e) {
             partialTxn.txnType = TransactionType.Error;
             console.error(`Transaction ${txnID} failed to parse`);

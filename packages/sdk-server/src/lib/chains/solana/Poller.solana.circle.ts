@@ -22,13 +22,12 @@ export class SolanaCircleParser {
     public static async process(
         sdkServer: GlitterSDKServer,
         txn: ParsedTransactionWithMeta,
-        client: Connection | undefined,
-        cursor: Cursor
+        client: Connection | undefined
     ): Promise<PartialBridgeTxn> {
         
         //Destructure Local Vars
         const txnID = txn.transaction.signatures[0];
-        const address = cursor.address.toString();
+        //const address = cursor.address.toString();
 
         //Get Solana Transaction data
         const txnHashed = getHashedTransactionId(BridgeNetworks.solana, txnID);
@@ -38,9 +37,27 @@ export class SolanaCircleParser {
             bridgeType: BridgeType.Circle,
             txnType: TransactionType.Unknown,
             network: "solana",
-            address: address,
             protocol: "Glitter Finance"
         };
+
+        const depositAddress= sdkServer.sdk?.solana?.getAddress("usdcDeposit");
+        const depositTokenAddress = sdkServer.sdk?.solana?.getAddress("usdcDepositTokenAccount");
+        const receiverAddress = sdkServer.sdk?.solana?.getAddress("usdcReceiver");
+        const receiverTokenAddress = sdkServer.sdk?.solana?.getAddress("usdcReceiverTokenAccount");
+
+        //Check if txn is a deposit
+        let isDeposit = false;
+        let isRelease = false;
+        for (let i = 0; i < txn.transaction.message.accountKeys.length; i++) {
+            if (txn.transaction.message.accountKeys[i].pubkey.toBase58() === depositAddress ||
+                txn.transaction.message.accountKeys[i].pubkey.toBase58() === depositTokenAddress) {
+                isDeposit = true;
+            }
+            if (txn.transaction.message.accountKeys[i].pubkey.toBase58() === receiverAddress ||
+                txn.transaction.message.accountKeys[i].pubkey.toBase58() === receiverTokenAddress) {
+                isRelease = true;
+            }
+        }
        
         //Try to get txn details
         try {
@@ -89,17 +106,13 @@ export class SolanaCircleParser {
                 : null;
 
             //Check deposit vs release
-            if (
-                (address && address === sdkServer.sdk?.solana?.getAddress("usdcDeposit")) ||
-                (address && address === sdkServer.sdk?.solana?.getAddress("usdcDepositTokenAccount"))
-            ) {
+            if (isDeposit) {
                 //console.info(`Transaction ${txnID} is a deposit`);
+                partialTxn.address = depositAddress;
                 partialTxn = await handleDeposit(sdkServer, txn, routing, partialTxn);
-            } else if (
-                (address && address === sdkServer.sdk?.solana?.getAddress("usdcReceiver")) ||
-                (address && address === sdkServer.sdk?.solana?.getAddress("usdcReceiverTokenAccount"))
-            ) {
+            } else if (isRelease) {
                 //console.info(`Transaction ${txnID} is a release`);
+                partialTxn.address = receiverAddress;
                 partialTxn = await handleRelease(sdkServer, txn, routing, partialTxn);
             } else {
                 //console.error(`Transaction ${txnID} is not a deposit or release`);

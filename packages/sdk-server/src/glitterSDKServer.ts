@@ -1,9 +1,13 @@
 import {
     BridgeNetworks,
+    BridgeType,
     ChainRPCConfig,
     ChainRPCConfigs,
     GlitterBridgeSDK,
     GlitterEnvironment,
+    PartialBridgeTxn,
+    PartialBridgeTxnEquals,
+    PartialTxn,
 } from "@glitter-finance/sdk-core";
 import { GlitterPoller } from "./lib/common/poller.Interface";
 import { GlitterAlgorandPoller } from "./lib/chains/algorand/poller.algorand";
@@ -86,5 +90,28 @@ export class GlitterSDKServer {
         const apiConfig = rpcList.chainAPIs.find((api) => api.network.toLocaleLowerCase() === network.toLocaleLowerCase());
 
         return apiConfig;
+    }
+
+    public async parseTxnID(network: BridgeNetworks, txnID: string, type:BridgeType): Promise<PartialBridgeTxn | undefined> {
+        const poller = this.poller(network);
+        if (!poller) throw new Error("Poller not found");
+        return await poller.parseTxnID(this, txnID, type);
+    }
+
+    public async verifyTransaction(txn:PartialBridgeTxn): Promise<boolean> {
+
+        //Fail safe
+        if (!txn.network) throw new Error("Network not found");
+        if (!txn.bridgeType) throw new Error("Type not found");
+        if (!txn.txnID) throw new Error("TxnID not found");
+
+        const poller = this.poller(txn.network as BridgeNetworks);
+        if (!poller) throw new Error("Poller not found");
+        const checkedTxn =await poller.parseTxnID(this, txn.txnID, txn.bridgeType);
+        if (!checkedTxn) throw new Error("Txn not found");
+
+        //Check if the values of the txn match
+        return PartialBridgeTxnEquals(txn, checkedTxn);
+
     }
 }

@@ -13,13 +13,9 @@ export class AlgorandCircleParser {
         sdkServer: GlitterSDKServer,
         txnID: string,
         client: AlgodClient | undefined,
-        indexer: IndexerClient | undefined,
-        cursor: Cursor
+        indexer: IndexerClient | undefined
     ): Promise<PartialBridgeTxn> {
      
-        //Destructure Local Vars        
-        const address = cursor.address.toString();
-
         //Get Algorand Transaction data
         const txnHashed = getHashedTransactionId(BridgeNetworks.algorand, txnID);
         let partialTxn: PartialBridgeTxn = {
@@ -29,7 +25,6 @@ export class AlgorandCircleParser {
             txnType: TransactionType.Unknown,
             network: "algorand",
             chainStatus: ChainStatus.Completed,
-            address: address,
             protocol: "Glitter Finance"
         }
        
@@ -43,6 +38,10 @@ export class AlgorandCircleParser {
         //Get transaction
         const txn = txnData["transaction"];
 
+        //Get Sender/Reveiver
+        const sender = txn.sender;
+        const receiver = txn["payment-transaction"]? txn["payment-transaction"].receiver : txn["asset-transfer-transaction"].receiver;
+      
         //calculate gas
         const gasCost = txn.fee;
         partialTxn.gasPaid = new BigNumber(gasCost);
@@ -52,23 +51,30 @@ export class AlgorandCircleParser {
         partialTxn.txnTimestamp = new Date((transactionTimestamp || 0) * 1000); //*1000 is to convert to milliseconds
         partialTxn.block = txn["confirmed-round"];
 
-        // const noteObj = txn.note ? algosdk.decodeObj(Buffer.from(txn.note, "base64")) as DepositNote : null;
-        // const note = noteObj ? noteObj["system"] : null;
-        // const routing: Routing | null = note ? JSON.parse(note) : null;
-
         //Get Routing
         let routing: Routing | null = null;
         if (txn.note) routing= this.parseDepositNote(txn.note);
 
         //Check deposit vs release
-        
-        if (address && address === sdkServer.sdk?.algorand?.getAddress("usdcDeposit")) {
+        const depositAddress = sdkServer.sdk?.algorand?.getAddress("usdcDeposit");
+        const releaseAddress = sdkServer.sdk?.algorand?.getAddress("usdcReceiver");        
+        if (sender && sender === depositAddress || receiver && receiver === depositAddress) {
+            partialTxn.address = depositAddress;
             partialTxn = await this.handleDeposit(sdkServer, txnID, txn, routing, partialTxn);
-        } else if (address && address === sdkServer.sdk?.algorand?.getAddress("usdcReceiver")) {
+        }else if (sender && sender === releaseAddress || receiver && receiver === releaseAddress) {
+            partialTxn.address = releaseAddress;
             partialTxn = await this.handleRelease(sdkServer, txnID, txn, routing, partialTxn);
         } else {
             throw new Error(BASE_LOG + " Address not found");
         }
+
+        // if (address && address === sdkServer.sdk?.algorand?.getAddress("usdcDeposit")) {
+        //     partialTxn = await this.handleDeposit(sdkServer, txnID, txn, routing, partialTxn);
+        // } else if (address && address === sdkServer.sdk?.algorand?.getAddress("usdcReceiver")) {
+        //     partialTxn = await this.handleRelease(sdkServer, txnID, txn, routing, partialTxn);
+        // } else {
+        //     throw new Error(BASE_LOG + " Address not found");
+        // }
 
         return partialTxn;
 
