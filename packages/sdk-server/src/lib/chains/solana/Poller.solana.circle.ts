@@ -93,16 +93,16 @@ export class SolanaCircleParser {
                 (address && address === sdkServer.sdk?.solana?.getAddress("usdcDeposit")) ||
                 (address && address === sdkServer.sdk?.solana?.getAddress("usdcDepositTokenAccount"))
             ) {
-                console.info(`Transaction ${txnID} is a deposit`);
+                //console.info(`Transaction ${txnID} is a deposit`);
                 partialTxn = await handleDeposit(sdkServer, txn, routing, partialTxn);
             } else if (
                 (address && address === sdkServer.sdk?.solana?.getAddress("usdcReceiver")) ||
                 (address && address === sdkServer.sdk?.solana?.getAddress("usdcReceiverTokenAccount"))
             ) {
-                console.info(`Transaction ${txnID} is a release`);
+                //console.info(`Transaction ${txnID} is a release`);
                 partialTxn = await handleRelease(sdkServer, txn, routing, partialTxn);
             } else {
-                console.error(`Transaction ${txnID} is not a deposit or release`);
+                //console.error(`Transaction ${txnID} is not a deposit or release`);
                 partialTxn.txnType = TransactionType.Error;
             }
         } catch (e) {

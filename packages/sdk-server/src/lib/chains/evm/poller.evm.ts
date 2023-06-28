@@ -124,7 +124,7 @@ export class GlitterEVMPoller implements GlitterPoller {
             `&fromBlock=${startBlock}&offset=${cursor.limit}` +
             `&page=1&sort=asc&apikey=` +
             this.apiKey;
-        console.log(url);
+        //console.log(url);
 
         //Request Data
         const response = await axios.get(url);

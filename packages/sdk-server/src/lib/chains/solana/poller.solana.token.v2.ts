@@ -251,7 +251,7 @@ export class SolanaV2Parser {
 
             //Handle Events
             if (depositEvent) {
-                console.info(`Transaction ${txnID} is a deposit`);
+                //console.info(`Transaction ${txnID} is a deposit`);
                 partialTxn = await this.handleDeposit(
                     sdkServer,
                     txn,
@@ -259,7 +259,7 @@ export class SolanaV2Parser {
                     depositEvent
                 );
             } else if (releaseEvent) {
-                console.info(`Transaction ${txnID} is a release`);
+                //console.info(`Transaction ${txnID} is a release`);
                 partialTxn = await this.handleRelease(
                     sdkServer,
                     txn,
@@ -267,7 +267,7 @@ export class SolanaV2Parser {
                     releaseEvent
                 );
             } else if (refundEvent) {
-                console.info(`Transaction ${txnID} is a refund`);
+                //console.info(`Transaction ${txnID} is a refund`);
                 partialTxn = await this.handleRefund(
                     sdkServer,
                     txn,
