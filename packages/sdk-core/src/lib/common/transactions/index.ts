@@ -8,6 +8,7 @@ export enum TransactionType {
     Release = "Release",
     Refund = "Refund",
     Transfer = "Transfer",
+    GasDeposit = "GasDeposit",
     Finalize = "Finalize",
     FeeTransfer = "FeeTransfer",
     Error = "Error",
