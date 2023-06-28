@@ -85,7 +85,17 @@ export class AlgorandCircleParser {
 
         //Check Asset Send
         if (!txn["asset-transfer-transaction"]) {
-            throw new Error(`Transaction ${txnID} is not an asset transaction`);
+            //Check if this is the circle account
+            if (partialTxn.address == "ZG54ZBZ5LVWV3MTGOPDSKCBL5LEQTAPUTN5OQQZUMTAYV3JIICA7G3RJZE") {
+                partialTxn.txnType = TransactionType.GasDeposit;
+                partialTxn.units = new BigNumber(txn["payment-transaction"].amount);
+                partialTxn.address = txn.sender;
+            } else {
+                partialTxn.txnType = TransactionType.Transfer;
+                partialTxn.units = new BigNumber(txn["payment-transaction"].amount);
+                partialTxn.address = txn.sender;
+            }
+            return partialTxn;
         }
         const units = txn["asset-transfer-transaction"].amount;
         const assetID = txn["asset-transfer-transaction"]["asset-id"];
@@ -133,7 +143,18 @@ export class AlgorandCircleParser {
         //Get Address
         //Check Asset Send
         if (!txn["asset-transfer-transaction"]) {
-            throw new Error(`Transaction ${txnID} is not an asset transaction`);
+
+            //Check if this is the circle account
+            if (partialTxn.address == "ZG54ZBZ5LVWV3MTGOPDSKCBL5LEQTAPUTN5OQQZUMTAYV3JIICA7G3RJZE") {
+                partialTxn.txnType = TransactionType.GasDeposit;
+                partialTxn.units = new BigNumber(txn["payment-transaction"].amount);
+                partialTxn.address = txn.sender;
+            } else {
+                partialTxn.txnType = TransactionType.Transfer;
+                partialTxn.units = new BigNumber(txn["payment-transaction"].amount);
+                partialTxn.address = txn.sender;
+            }
+            return partialTxn;
         }
         const units = txn["asset-transfer-transaction"].amount;
         const assetID = txn["asset-transfer-transaction"]["asset-id"];
