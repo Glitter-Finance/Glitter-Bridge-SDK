@@ -1,12 +1,12 @@
 import MetamaskOnboarding from "@metamask/onboarding";
-import {CodeStatus} from "./CodeStatusEnum";
-import {utils} from "ethers";
-import {ChainNativeCurrency, Chains} from "../Chains";
-import {EVMRPCUrls} from "../utils/EVM";
+import { CodeStatus } from "./CodeStatusEnum";
+import { utils } from "ethers";
+import { ChainNativeCurrency, Chains } from "../Chains";
+import { EVMRPCUrls } from "../utils/EVM";
 declare global {
-  interface Window {
-    ethereum?: any;
-  }
+    interface Window {
+        ethereum?: any;
+    }
 }
 export class Metamask {
     async connect(origin?: string): Promise<{ code: CodeStatus, data: string | string[] }> {
@@ -15,12 +15,12 @@ export class Metamask {
             // If Metamask is not installed
             if (!MetamaskOnboarding.isMetaMaskInstalled()) {
                 onBoarding.startOnboarding();
-                return {code: CodeStatus.WAIT, data: "Metamask onboarding Started, Reload the page once account is created."};
+                return { code: CodeStatus.WAIT, data: "Metamask onboarding Started, Reload the page once account is created." };
             } else {
                 const accounts = await window.ethereum.request({
                     method: "eth_requestAccounts",
                 });
-                return {code: CodeStatus.SUCCESS, data: accounts};
+                return { code: CodeStatus.SUCCESS, data: accounts };
             }
         } else {
             return this.connectToPhoneMetaMask(origin);
@@ -29,9 +29,9 @@ export class Metamask {
     connectToPhoneMetaMask(origin?: string) {
         if (origin) {
             const metamaskAppDeepLink = "https://metamask.app.link/dapp/" + origin;
-            return {code: CodeStatus.REDIRECT, data: metamaskAppDeepLink}
+            return { code: CodeStatus.REDIRECT, data: metamaskAppDeepLink }
         } else {
-            return {code: CodeStatus.FAILURE, data: "Origin URI Not Provided for Phone Metamask"}
+            return { code: CodeStatus.FAILURE, data: "Origin URI Not Provided for Phone Metamask" }
         }
     }
     isMobileDevice() {
@@ -44,9 +44,10 @@ export class Metamask {
         const hexChain = utils.hexValue(chainId);
         await window.ethereum.request({
             method: 'wallet_addEthereumChain',
-            params: [{ 
-                chainId: hexChain, 
-                rpcUrls, chainName, 
+            params: [{
+                chainId: hexChain,
+                rpcUrls,
+                chainName,
                 nativeCurrency
             }],
         });
@@ -56,7 +57,7 @@ export class Metamask {
         const hexChain = utils.hexValue(chainId);
         await window.ethereum.request({
             method: 'wallet_switchEthereumChain',
-            params: [{chainId: hexChain}],
+            params: [{ chainId: hexChain }],
         });
     }
 

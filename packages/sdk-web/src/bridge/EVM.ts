@@ -1,7 +1,7 @@
-import {BridgeEvmNetworks, BridgeNetworks, BridgeTokens, GlitterBridgeSDK, GlitterEnvironment} from "@glitter-finance/sdk-core";
-import {Signer} from "ethers";
-import {PublicKey} from "@solana/web3.js";
-import {BigNumber as BigNumberJS} from "bignumber.js";
+import { BridgeEvmNetworks, BridgeNetworks, BridgeTokens, GlitterBridgeSDK, GlitterEnvironment } from "@glitter-finance/sdk-core";
+import { Signer } from "ethers";
+import { PublicKey } from "@solana/web3.js";
+import { BigNumber as BigNumberJS } from "bignumber.js";
 
 export class EVMBridge {
     private sdk: GlitterBridgeSDK;
@@ -57,7 +57,7 @@ export class EVMBridge {
 
     /**
      * Bridging a token from supported EVM network to other supported network
-     * @param toNetwork
+     * @param {BridgeNetworks} toNetwork
      * @param tokenSymbol
      * @param amount
      * @param toWalletAddress
@@ -65,11 +65,10 @@ export class EVMBridge {
      */
     public async bridge(toNetwork: BridgeNetworks, tokenSymbol: string, amount: number, toWalletAddress: string | PublicKey, signer: Signer) {
         const token = this.sdk[this.network]?.config.tokens.find(x => x.symbol.toLowerCase() === tokenSymbol.toLowerCase());
-        let bigNumber = new BigNumberJS(0);
-        if (token) {
-            bigNumber = await this.toTokenUnits(amount, token.decimals);
-        }
+        const bigNumber = token ? await this.toTokenUnits(amount, token.decimals) : new BigNumberJS(0);
+
         console.log("Token", token, amount, bigNumber.toString())
+
         return this.sdk[this.network]?.bridge(
             toWalletAddress,
             toNetwork,

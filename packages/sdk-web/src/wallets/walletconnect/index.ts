@@ -16,6 +16,9 @@ export class WConnect {
                 43114: "https://avalanche.public-rpc.com",
                 137: "https://rpc.ankr.com/polygon",
                 80001: "https://rpc.ankr.com/polygon_mumbai",
+                42161: "https://rpc.ankr.com/arbitrum",
+                10: "https://rpc.ankr.com/optimism",
+                1101: "https://rpc.ankr.com/zkevm",
             },
             qrcode: true,
         });
