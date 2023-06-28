@@ -41,6 +41,7 @@ export type PartialTxn = {
     chainStatus?: ChainStatus | null;
     network?: string | null;
     tokenSymbol?: string | null;
+    baseSymbol?: string | null;
     address?: string | null;
     units?: BigNumber | null;
     amount?: BigNumber | number | null;
