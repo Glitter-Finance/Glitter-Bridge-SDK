@@ -15,7 +15,7 @@ const gas_cache: {
     };
 } = {};
 
-const cache_duration = 1000 * 60 * 0.5; // 5 mins
+const cache_duration = 1000 * 60 * 5; // 5 mins
 
 export async function EVMGasPrice(sdk: GlitterBridgeSDK, network: BridgeNetworks): Promise<{
     nativePrice: BigNumber;
