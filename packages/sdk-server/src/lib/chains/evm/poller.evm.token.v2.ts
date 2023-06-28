@@ -119,6 +119,7 @@ export class EvmV2Parser {
         const baseToken = BridgeV2Tokens.getChainConfigParent(fromToken);
         if (!baseToken) throw new Error("Base token not found")
        
+        //Get symbol
         partialTxn.tokenSymbol = fromToken.symbol;
         partialTxn.baseSymbol = baseToken.asset_symbol;
 
