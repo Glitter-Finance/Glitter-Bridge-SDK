@@ -87,5 +87,6 @@
     "readmeFile": "./README.md",
     "displayName": "@glitter-finance/sdk-web",
     "tsconfig": "./tsconfig.json"
-  }
+  },
+  "gitHead": "a0cc731b809f262290f9c4ad9c02338401082c9e"
 }
