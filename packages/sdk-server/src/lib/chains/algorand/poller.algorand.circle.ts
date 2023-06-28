@@ -52,9 +52,13 @@ export class AlgorandCircleParser {
         partialTxn.txnTimestamp = new Date((transactionTimestamp || 0) * 1000); //*1000 is to convert to milliseconds
         partialTxn.block = txn["confirmed-round"];
 
-        const noteObj = txn.note ? algosdk.decodeObj(Buffer.from(txn.note, "base64")) as DepositNote : null;
-        const note = noteObj ? noteObj["system"] : null;
-        const routing: Routing | null = note ? JSON.parse(note) : null;
+        // const noteObj = txn.note ? algosdk.decodeObj(Buffer.from(txn.note, "base64")) as DepositNote : null;
+        // const note = noteObj ? noteObj["system"] : null;
+        // const routing: Routing | null = note ? JSON.parse(note) : null;
+
+        //Get Routing
+        let routing: Routing | null = null;
+        if (txn.note) routing= this.parseDepositNote(txn.note);
 
         //Check deposit vs release
         
@@ -185,5 +189,38 @@ export class AlgorandCircleParser {
 
         partialTxn.routing = routing;
         return Promise.resolve(partialTxn);
+    }
+
+    static parseDepositNote(note: any): Routing {
+        let depositNote: DepositNote | undefined = undefined;
+
+        try {
+            depositNote = JSON.parse(decodeURIComponent(atob(note)));
+
+            if (depositNote && !depositNote.system) {
+                depositNote = undefined
+            }
+        } catch (error) {
+            //console.error(JSON.stringify(error, Object.getOwnPropertyNames(error)))
+        }
+
+        try {
+            if (!depositNote) {
+                depositNote = (algosdk.decodeObj(Buffer.from(note, "base64")) as any)
+            }
+        } catch (error) {
+            //console.error(JSON.stringify(error, Object.getOwnPropertyNames(error)))
+        }
+
+        if (!depositNote) throw new Error("[AlgorandDepositHandler] Unable to parse transaction: ")
+        if (!depositNote.system){
+            throw new Error(
+                "[AlgorandDepositHandler] Unable to parse transaction: ");
+        } else if (typeof depositNote.system == 'string'){
+            depositNote.system = JSON.parse(depositNote.system);
+        }
+
+        const routingData: Routing = depositNote.system as any;
+        return routingData;
     }
 }
