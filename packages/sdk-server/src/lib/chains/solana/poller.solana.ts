@@ -211,6 +211,7 @@ export class GlitterSolanaPoller implements GlitterPoller {
     }
     async parseTxnID(sdkServer: GlitterSDKServer, txnID:string, type:BridgeType):Promise<PartialBridgeTxn | undefined>{
         try {
+            
             //Ensure Transaction Exists
             if (!txnID) return undefined;
 
