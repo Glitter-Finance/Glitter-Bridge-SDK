@@ -84,19 +84,30 @@ export class SolanaCircleParser {
             let depositNote;
             for (let i = 0; i < txn.transaction.message.instructions.length; i++) {
                 try {
-                    const data_bytes = bs58.decode((txn.transaction.message.instructions[ i ] as PartiallyDecodedInstruction).data) || "{}";
-                    const object = JSON.parse(Buffer.from(data_bytes).toString("utf8"));
+                    const data_bytes = (bs58.decode((txn.transaction.message.instructions[i] as PartiallyDecodedInstruction).data) || "{}");
+                    const object = JSON.parse(Buffer.from(data_bytes).toString('utf8'))
                     if (object.system && object.date) {
                         depositNote = object;
                     }
                 } catch {
                     try {
                         const parsed_data = (txn.transaction.message.instructions[i] as ParsedInstruction).parsed;
-                        const object = JSON.parse(parsed_data);
+                        const object = JSON.parse(parsed_data)
                         if (object.system && object.date) {
                             depositNote = object;
                         }
-                    } catch {}
+                    } catch { 
+                        try {
+                            const parsed_data = (txn.transaction.message.instructions[i] as ParsedInstruction).parsed;
+                            const object = JSON.parse(JSON.parse(parsed_data))
+                            if (object.system && object.date) {
+                                depositNote = object;
+                            }
+                        } catch (noteError) { 
+                            console.error(`Transaction ${txnID} failed to parse`);
+                            console.error(noteError);  
+                        }
+                    }
                 }
             }
 
