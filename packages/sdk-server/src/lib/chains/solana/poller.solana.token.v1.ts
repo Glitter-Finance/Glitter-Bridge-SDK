@@ -166,6 +166,9 @@ export class SolanaV1Parser {
         );
         partialTxn.address = data[0] || "";
 
+        const amount = instruction["amount"];
+        const roundedAmount = Number(amount.toFixed(decimals));
+
         //Set Routing
         partialTxn.routing = this.getV1Routing(
             "solana",
@@ -176,7 +179,7 @@ export class SolanaV1Parser {
             algosdk.encodeAddress(instruction["algo_address"]).toString(),
             "xSOL",
             "",
-            BigNumber(instruction["amount"].toString()),
+            BigNumber(roundedAmount),
             decimals
         );
 
@@ -217,6 +220,9 @@ export class SolanaV1Parser {
         );
         partialTxn.address = data[0] || "";
 
+        const amount = instruction["amount"];
+        const roundedAmount = Number(amount.toFixed(decimals));
+
         //Set Routing
         partialTxn.routing = this.getV1Routing(
             "solana",
@@ -227,7 +233,7 @@ export class SolanaV1Parser {
             algosdk.encodeAddress(instruction["algo_address"]).toString(),
             "Algo",
             "",
-            BigNumber(instruction["amount"].toString()),
+            BigNumber(roundedAmount),
             decimals
         );
 
@@ -269,6 +275,9 @@ export class SolanaV1Parser {
         );
         partialTxn.address = data[0] || "";
 
+        const amount = instruction["amount"];
+        const roundedAmount = Number(amount.toFixed(decimals));
+
         //Set Routing
         partialTxn.routing = this.getV1Routing(
             "algorand",
@@ -279,7 +288,7 @@ export class SolanaV1Parser {
             partialTxn.address || "",
             partialTxn.tokenSymbol,
             partialTxn.txnID,
-            BigNumber(instruction["amount"].toString()),
+            BigNumber(roundedAmount),
             decimals
         );
 
@@ -321,6 +330,9 @@ export class SolanaV1Parser {
         );
         partialTxn.address = data[0] || "";
 
+        const amount = instruction["amount"];
+        const roundedAmount = Number(amount.toFixed(decimals));
+
         //Set Routing
         partialTxn.routing = this.getV1Routing(
             "algorand",
@@ -331,7 +343,7 @@ export class SolanaV1Parser {
             partialTxn.address || "",
             partialTxn.tokenSymbol,
             partialTxn.txnID,
-            BigNumber(instruction["amount"].toString()),
+            BigNumber(roundedAmount),
             decimals
         );
 

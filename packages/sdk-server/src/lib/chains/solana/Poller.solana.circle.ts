@@ -177,9 +177,11 @@ async function handleDeposit(
         }
 
         const value = -data[1] || 0;
-        partialTxn.amount = value;
+        const roundedValue = Number(value.toFixed(decimals));
+
+        partialTxn.amount = roundedValue;
         partialTxn.units = RoutingHelper.BaseUnits_FromReadableValue(
-            value,
+            roundedValue,
             decimals
         );
 
@@ -187,9 +189,11 @@ async function handleDeposit(
 
         partialTxn.txnType = TransactionType.Refund; //positive delta is a refund to the user
         const value = data[1] || 0;
-        partialTxn.amount = value;
+        const roundedValue = Number(value.toFixed(decimals));
+
+        partialTxn.amount = roundedValue;
         partialTxn.units = RoutingHelper.BaseUnits_FromReadableValue(
-            value,
+            roundedValue,
             decimals
         );
 
@@ -227,8 +231,10 @@ async function handleRelease(
     );
     partialTxn.address = data[0] || "";
     const value = data[1] || 0;
-    partialTxn.amount = value;
-    partialTxn.units = RoutingHelper.BaseUnits_FromReadableValue(value, decimals);
+    const roundedValue = Number(value.toFixed(decimals));
+      
+    partialTxn.amount = roundedValue;
+    partialTxn.units = RoutingHelper.BaseUnits_FromReadableValue(roundedValue, decimals);
 
     partialTxn.routing = routing;
     return Promise.resolve(partialTxn);

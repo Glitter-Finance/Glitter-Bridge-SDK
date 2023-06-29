@@ -25,7 +25,7 @@ describe("Parsing Test", () => {
 
     //Default Cursor Test
     it("Parse Solana Txn", async () => {
-        const result = await sdk.parseTxnID(BridgeNetworks.solana, "2Uhub9Wn3K9fmKU5hUpiLAMWWsJ9LE1hvheXJJM5P8vNuBcw4EyKLSfR3JtsMYfEH114B2MocM89DP35C8A91KU7", BridgeType.Circle);
+        const result = await sdk.parseTxnID(BridgeNetworks.solana, "4ALzVrPLQn4zQLteV6KmZRDBMrzJ3gr8GNWzguFccgQWam26ZtKNMzo5C9FD3LTceAff4yABAPJXWSBJjewYJBY1", BridgeType.Circle);
         Promise.resolve();
     }, 120_000);
 

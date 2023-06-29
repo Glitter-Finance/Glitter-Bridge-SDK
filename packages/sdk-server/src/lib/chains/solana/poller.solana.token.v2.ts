@@ -313,9 +313,10 @@ export class SolanaV2Parser {
         
         //Get amount;
         const amountTransferred = BigNumber(-data[1]) || BigNumber(0)
+        const amountTransferredRounded = BigNumber(amountTransferred.toFixed(fromToken.decimals));
         const amountEvent = RoutingHelper.BaseUnits_FromReadableValue(
             BigNumber(depositEvent.data.amount), fromToken.decimals);
-        if (!amountEvent.minus(amountTransferred).eq(0)) {
+        if (!amountEvent.minus(amountTransferredRounded).eq(0)) {
             throw Error("Amount transferred does not match amount in event");
         }
 
@@ -334,7 +335,7 @@ export class SolanaV2Parser {
             toAddress,
             partialTxn.tokenSymbol,
             "",
-            amountTransferred,
+            amountTransferredRounded,
             fromToken.decimals
         );
         
