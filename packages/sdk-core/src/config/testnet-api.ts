@@ -57,5 +57,6 @@ export const testnetAPI:ChainRPCConfigs = {
             API_URL:"",
             RPC:"https://api.shasta.trongrid.io",
         }
-    ]
+    ],
+    CMC_API:""
 }

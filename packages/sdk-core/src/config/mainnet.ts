@@ -239,13 +239,13 @@ export const config: GlitterBridgeConfig = {
     gasTokens: {
         [BridgeNetworks.algorand]: "ALGO",
         [BridgeNetworks.solana]: "SOL",
-        [BridgeNetworks.Arbitrum]: "ETH",
+        [BridgeNetworks.Arbitrum]: "WETH",
         [BridgeNetworks.Avalanche]: "AVAX",
         [BridgeNetworks.Ethereum]: "ETH",
         [BridgeNetworks.Polygon]: "MATIC",
         [BridgeNetworks.Binance]: "BNB",
-        [BridgeNetworks.Zkevm]: "ETH",
-        [BridgeNetworks.Optimism]: "ETH",
+        [BridgeNetworks.Zkevm]: "WETH",
+        [BridgeNetworks.Optimism]: "WETH",
         [BridgeNetworks.TRON]: "TRX",
     }
 };

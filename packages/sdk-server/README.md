@@ -34,3 +34,4 @@ yarn jest packages/sdk-server/tests/evm/evm.gtt.test --testNamePattern 'Ethereum
 yarn jest packages/sdk-server/tests/tron/tron.usdc.test --testNamePattern 'Default Cursor Test'
 
 yarn jest packages/sdk-server/tests/evm/evm.nosec.test --testNamePattern 'AVAX NOSEC Test'
+

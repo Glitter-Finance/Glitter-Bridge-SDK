@@ -168,6 +168,15 @@ async function handleDeposit(
         }
     }
 
+    //get token:
+    const tokenSymbol = "USDC";
+    // if (connect.network == BridgeNetworks.Ethereum && events.deposit?.erc20Address?.toString() == "0x1aBaEA1f7C830bD89Acc67eC4af516284b1bC33c") {
+    //     tokenSymbol = "EUROC";
+    // } else if (connect.network == BridgeNetworks.Avalanche && events.deposit?.erc20Address?.toString() == "0xC891EB4cbdEFf6e073e859e987815Ed1505c2ACD") {
+    //     tokenSymbol = "EUROC";
+    // }
+    partialTxn.tokenSymbol = tokenSymbol;
+
     //Get Routing
     if (partialTxn.txnType == TransactionType.Deposit) {
         const toNetwork = depositNote?.destination?.chain || "";
@@ -176,13 +185,13 @@ async function handleDeposit(
             from: {
                 network: BridgeNetworks.TRON,
                 address: fromAddress || "",
-                token: "usdc",
+                token: tokenSymbol,
                 txn_signature: partialTxn.txnID,
             },
             to: {
                 network: toNetwork,
                 address: toAddress,
-                token: "usdc"
+                token: tokenSymbol
             },
             amount: partialTxn.amount || undefined,
             units: partialTxn.units || undefined,
@@ -192,13 +201,13 @@ async function handleDeposit(
             from: {
                 network: "",
                 address: "",
-                token: "usdc",
+                token: tokenSymbol,
                 txn_signature_hashed: releaseDetails?.depositTransactionHash,
             },
             to: {
                 network: BridgeNetworks.TRON,
                 address: partialTxn.address || "",
-                token: "usdc",
+                token: tokenSymbol,
                 txn_signature: partialTxn.txnID,
             },
             amount: partialTxn.amount || undefined,
@@ -239,6 +248,15 @@ async function handleRelease(
     //Get Routing
     let routing: Routing | null = null;
 
+    //get token:
+    const tokenSymbol = "USDC";
+    // if (connect.network == BridgeNetworks.Ethereum && events.deposit?.erc20Address?.toString() == "0x1aBaEA1f7C830bD89Acc67eC4af516284b1bC33c") {
+    //     tokenSymbol = "EUROC";
+    // } else if (connect.network == BridgeNetworks.Avalanche && events.deposit?.erc20Address?.toString() == "0xC891EB4cbdEFf6e073e859e987815Ed1505c2ACD") {
+    //     tokenSymbol = "EUROC";
+    // }
+    partialTxn.tokenSymbol = tokenSymbol;
+
     //Check Type
     if (toAddress.toLocaleLowerCase() == sdkServer.sdk?.tron?.getTronAddress("releaseWallet")?.toString().toLocaleLowerCase()) {
 
@@ -257,13 +275,13 @@ async function handleRelease(
             from: {
                 network: "",
                 address: "",
-                token: "usdc",
+                token: tokenSymbol,
                 txn_signature_hashed: releaseDetails?.depositTransactionHash,
             },
             to: {
                 network: BridgeNetworks.TRON,
                 address: partialTxn.address || "",
-                token: "usdc",
+                token: tokenSymbol,
                 txn_signature: partialTxn.txnID,
             },
             amount: partialTxn.amount || undefined,

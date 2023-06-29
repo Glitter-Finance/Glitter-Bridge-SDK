@@ -1,4 +1,4 @@
-import { BridgeEvmNetworks, BridgeNetworks, BridgeTokens, GlitterBridgeSDK, GlitterEnvironment } from "@glitter-finance/sdk-core";
+import { BridgeEvmNetworks, BridgeV2Tokens, BridgeNetworks, GlitterBridgeSDK, GlitterEnvironment } from "@glitter-finance/sdk-core";
 import { Signer } from "ethers";
 import { PublicKey } from "@solana/web3.js";
 import { BigNumber as BigNumberJS } from "bignumber.js";
@@ -14,13 +14,13 @@ export class EVMBridge {
         this.sdk.connect([BridgeNetworks.Avalanche, BridgeNetworks.Ethereum, BridgeNetworks.Polygon]);
     }
 
-    private async fromTokenUnits(
-        amount: number,
-        decimals: number
-    ): Promise<number> {
-        const bigNumberDecimals = new BigNumberJS(10).pow(decimals);
-        return new BigNumberJS(amount).div(bigNumberDecimals).toNumber();
-    }
+    // private async _fromTokenUnits(
+    //     amount: number,
+    //     decimals: number
+    // ): Promise<number> {
+    //     const bigNumberDecimals = new BigNumberJS(10).pow(decimals);
+    //     return new BigNumberJS(amount).div(bigNumberDecimals).toNumber();
+    // }
 
     private async toTokenUnits(
         amount: number,
@@ -83,18 +83,19 @@ export class EVMBridge {
      * @param signerAddress
      */
     public async getBalances(signerAddress: string) {
-        const result = [];
-        const tokens = this.sdk[this.network]?.config.tokens;
-        if (tokens) {
-            for (let index = 0; index < tokens?.length; index++) {
-                const bigNumber = (await this.sdk[this.network]?.getTokenBalanceOnNetwork(tokens[index].symbol, signerAddress))?.toNumber()
-                result.push({
-                    token: tokens[index].symbol,
-                    balance: bigNumber ? await this.fromTokenUnits(bigNumber, tokens[index].decimals) : 0
-                })
-            }
-        }
-        return result;
+        const tokens = await this.getTokens()
+        if (!tokens) return Promise.resolve([]);
+
+        const result = tokens
+            .filter(parentToken => parentToken.chains.filter(availableChain => availableChain.chain.toLowerCase() === this.network.toLowerCase()))
+            .map(parentToken => BridgeV2Tokens.getTokenConfigChild(parentToken, this.network))
+            .map(async evmTokenConfig => evmTokenConfig ? ({
+                token: evmTokenConfig.symbol,
+                balance: await this.sdk[this.network]?.getTokenBalanceOnNetwork(evmTokenConfig.symbol, signerAddress)
+            }) : (null));
+        Promise.all(result).then(t => console.log({ t }))
+
+        return Promise.all(result);
     }
 
     public async getToken(tokenSymbol: string) {
@@ -102,6 +103,6 @@ export class EVMBridge {
     }
 
     public async getTokens() {
-        return BridgeTokens.getTokens(this.network);
+        return BridgeV2Tokens.getTokenList();
     }
 }

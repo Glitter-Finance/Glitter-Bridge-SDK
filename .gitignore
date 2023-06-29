@@ -116,3 +116,5 @@ packages/server/dev
 
 # json abi since we're using typechain
 packages/sdk-core/src/lib/chains/evm/abi/
+
+packages/sdk-core/tests/config
