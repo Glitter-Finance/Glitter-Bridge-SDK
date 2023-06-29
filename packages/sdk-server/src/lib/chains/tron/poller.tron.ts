@@ -135,10 +135,9 @@ export class GlitterTronPoller implements GlitterPoller {
             if (!txnID) return undefined;
 
             //Process Transaction
-            let partialTxn: PartialBridgeTxn | undefined;
             switch (type) {                   
                 case BridgeType.Circle:
-                    partialTxn = await TronCircleParser.process(
+                    return await TronCircleParser.process(
                         sdkServer,
                         txnID,
                         sdkServer.sdk?.tron
