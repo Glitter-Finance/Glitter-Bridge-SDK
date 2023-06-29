@@ -46,9 +46,7 @@ export class AlgorandTokenV1Parser {
         if (applicationArgs && applicationArgs != "") txnCall= base64ToString(applicationArgs[4])
 
         //calculate gas
-        const transactionFee = txnData['fee'];
-        const additionalFees = txnData['suggestedParams']['flatFee'];
-        const gasCost = transactionFee - additionalFees;
+        const gasCost = txn.fee;
         partialTxn.gasPaid = new BigNumber(gasCost);
         
         //Timestamp
@@ -89,6 +87,7 @@ export class AlgorandTokenV1Parser {
         //Set type
         partialTxn.txnType = TransactionType.Deposit;
         partialTxn.tokenSymbol = "xSOL";
+        partialTxn.baseSymbol = "SOL";
         partialTxn.address = txn.sender;
         partialTxn.units = BigNumber(base64ToBigUIntString(applicationArgs[6]));
         partialTxn.amount = RoutingHelper.ReadableValue_FromBaseUnits(partialTxn.units, decimals);
@@ -120,6 +119,7 @@ export class AlgorandTokenV1Parser {
         //Set type
         partialTxn.txnType = TransactionType.Deposit;
         partialTxn.tokenSymbol = "ALGO";
+        partialTxn.baseSymbol = "ALGO";
         partialTxn.address = txn.sender;
         partialTxn.units = BigNumber(base64ToBigUIntString(applicationArgs[6]));
         partialTxn.amount = RoutingHelper.ReadableValue_FromBaseUnits(partialTxn.units, decimals);
@@ -152,6 +152,7 @@ export class AlgorandTokenV1Parser {
         //Set type
         partialTxn.txnType = TransactionType.Release;
         partialTxn.tokenSymbol = "xSOL";
+        partialTxn.baseSymbol = "SOL";
         partialTxn.address = txn["application-transaction"].accounts[0];
         partialTxn.units = BigNumber(base64ToBigUIntString(applicationArgs[6]));
         partialTxn.amount = RoutingHelper.ReadableValue_FromBaseUnits(partialTxn.units, decimals);
@@ -184,6 +185,7 @@ export class AlgorandTokenV1Parser {
         //Set type
         partialTxn.txnType = TransactionType.Release;
         partialTxn.tokenSymbol = "ALGO";
+        partialTxn.baseSymbol = "ALGO";
         partialTxn.address = txn["application-transaction"].accounts[0];
         partialTxn.units = BigNumber(base64ToBigUIntString(applicationArgs[6]));
         partialTxn.amount = RoutingHelper.ReadableValue_FromBaseUnits(partialTxn.units, decimals);
@@ -216,6 +218,7 @@ export class AlgorandTokenV1Parser {
         //Set type
         partialTxn.txnType = TransactionType.Refund;
         partialTxn.tokenSymbol = "ALGO";
+        partialTxn.baseSymbol = "ALGO";
         partialTxn.address = txn["application-transaction"].accounts[0];
         partialTxn.units = BigNumber(base64ToBigUIntString(applicationArgs[6]));
         partialTxn.amount = RoutingHelper.ReadableValue_FromBaseUnits(partialTxn.units, decimals);
@@ -247,6 +250,7 @@ export class AlgorandTokenV1Parser {
         //Set type
         partialTxn.txnType = TransactionType.Refund;
         partialTxn.tokenSymbol = "xSOL";
+        partialTxn.baseSymbol = "SOL";
         partialTxn.address = txn["application-transaction"].accounts[0];
         partialTxn.units = BigNumber(base64ToBigUIntString(applicationArgs[6]));
         partialTxn.amount = RoutingHelper.ReadableValue_FromBaseUnits(partialTxn.units, decimals);

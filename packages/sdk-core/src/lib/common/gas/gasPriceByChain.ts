@@ -15,7 +15,7 @@ const gas_cache: {
     };
 } = {};
 
-const cache_duration = 1000 * 60 * 0.5; // 5 mins
+const cache_duration = 1000 * 60 * 5; // 5 mins
 
 export async function EVMGasPrice(sdk: GlitterBridgeSDK, network: BridgeNetworks): Promise<{
     nativePrice: BigNumber;
@@ -154,7 +154,7 @@ export async function TronGasPrice(sdk: GlitterBridgeSDK):Promise<{
     }
 
     //Get available energy
-    const availableEnergy = resources.EnergyLimit - resources.EnergyUsed
+    const availableEnergy = resources.EnergyLimit - (resources.EnergyUsed || 0)
     const triggerConstantContractResult = await tronEstimateReleaseTxEnergy(
         tronWeb,
         tronConnect.getAddress("bridge"),
@@ -166,13 +166,13 @@ export async function TronGasPrice(sdk: GlitterBridgeSDK):Promise<{
     )
 
     //Get available bandwidth
-    const availableBandwidth = (resources.NetLimit - resources.NetUsed) + (resources.freeNetLimit - resources.freeNetUsed)
+    const availableBandwidth = (resources.NetLimit - (resources.NetUsed|| 0)) + (resources.freeNetLimit - (resources.freeNetUsed || 0))
     if (triggerConstantContractResult === null || !triggerConstantContractResult.result.result) {
         throw new Error('[TronReleaseHandler] TronEnergyEstimation Error triggerConstantContractResult unavailable')
     }
 
     //Check if we need to burn TRX for energy or bandwidth
-    const trxShouldbeBurnedForEnergy = triggerConstantContractResult.energy_used > availableEnergy
+    const trxShouldbeBurnedForEnergy = (triggerConstantContractResult.energy_used ||0)> availableEnergy
     const trxShouldbeBurnedForBandwidth = 411 > availableBandwidth
 
     let neededEnergy = new BigNumber(0)
@@ -180,7 +180,7 @@ export async function TronGasPrice(sdk: GlitterBridgeSDK):Promise<{
     let trxToBeBurned: BigNumber = new BigNumber(0)
 
     if (trxShouldbeBurnedForEnergy) {
-        neededEnergy = new BigNumber(Math.abs(triggerConstantContractResult.energy_used - availableEnergy))
+        neededEnergy = new BigNumber(Math.abs((triggerConstantContractResult.energy_used||0) - availableEnergy))
         trxToBeBurned = await getTRXBurnByEnergy(chainParams, neededEnergy)
     }
 

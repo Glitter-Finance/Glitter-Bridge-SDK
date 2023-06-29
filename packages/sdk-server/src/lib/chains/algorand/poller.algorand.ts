@@ -114,39 +114,21 @@ export class GlitterAlgorandPoller implements GlitterPoller {
         const partialTxns: PartialBridgeTxn[] = [];
         let maxBlock = cursor.end?.block as number || 0;
         for (const txnID of signatures) {
-            try {
-                //Ensure Transaction Exists
-                if (!txnID) continue;
 
-                //Check if transaction was previously processed
-                if (cursor.batch?.txns?.has(txnID)) continue;
-                if (cursor.lastBatchTxns?.has(txnID)) continue;
-    
-                //Process Transaction
-                let partialTxn: PartialBridgeTxn | undefined;
-                switch (cursor.bridgeType) {
-                    case BridgeType.TokenV1:
-                        partialTxn = await AlgorandTokenV1Parser.process(sdkServer, txnID, client, indexer);
-                        break;
-                    case BridgeType.TokenV2:
-                        partialTxn = await AlgorandTokenV2Parser.process(sdkServer, txnID, client, indexer, cursor);
-                        break;
-                    case BridgeType.Circle:
-                        partialTxn = await AlgorandCircleParser.process(sdkServer, txnID, client, indexer, cursor);
-                        break;
-                    default:
-                        throw ServerError.InvalidBridgeType(
-                            BridgeNetworks.algorand,
-                            cursor.bridgeType
-                        );
-                }
-                if (CursorFilter(cursor, partialTxn)) partialTxns.push(partialTxn);    
+            //Check if transaction was previously processed
+            if (cursor.batch?.txns?.has(txnID)) continue;
+            if (cursor.lastBatchTxns?.has(txnID)) continue;
+
+            //Process Transaction
+            const partialTxn = await this.parseTxnID(sdkServer, txnID, cursor.bridgeType);
+            if (!partialTxn) continue;
+
+            //Run Through Filter
+            if (CursorFilter(cursor, partialTxn)) partialTxns.push(partialTxn);    
                 
-                //Update max block
-                if (partialTxn?.block) maxBlock = Math.max(maxBlock, partialTxn.block);
-            } catch (error) {
-                console.error((error as Error).message)
-            }
+            //Update max block
+            if (partialTxn?.block) maxBlock = Math.max(maxBlock, partialTxn.block);
+
         }
 
         //Ensure that max block is really max in the case of backward counting batches
@@ -161,4 +143,38 @@ export class GlitterAlgorandPoller implements GlitterPoller {
             txns: partialTxns,
         };
     }
+
+    //Parse Txn
+    async parseTxnID(sdkServer: GlitterSDKServer, txnID:string, type:BridgeType):Promise<PartialBridgeTxn | undefined>{
+        try {
+            //Ensure Transaction Exists
+            if (!txnID) return;
+
+            //get indexer
+            const indexer = sdkServer.sdk?.algorand?.clientIndexer;
+            const client = sdkServer.sdk?.algorand?.client;
+    
+            //Process Transaction
+            switch (type) {
+                case BridgeType.TokenV1:
+                    return await AlgorandTokenV1Parser.process(sdkServer, txnID, client, indexer);
+                case BridgeType.TokenV2:
+                    return await AlgorandTokenV2Parser.process(sdkServer, txnID, client, indexer);
+                case BridgeType.Circle:
+                    return await AlgorandCircleParser.process(sdkServer, txnID, client, indexer);
+                default:
+                    throw ServerError.InvalidBridgeType(
+                        BridgeNetworks.algorand,
+                        type
+                    );
+            }
+           
+        } catch (error) {
+            console.error((error as Error).message)
+        }
+
+        return undefined;
+
+    }
+
 }

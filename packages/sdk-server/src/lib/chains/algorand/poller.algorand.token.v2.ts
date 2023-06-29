@@ -9,8 +9,7 @@ export class AlgorandTokenV2Parser {
         sdkServer: GlitterSDKServer,
         txnID: string,
         client: AlgodClient | undefined,
-        indexer: IndexerClient | undefined,
-        cursor: Cursor
+        indexer: IndexerClient | undefined
     ): Promise<PartialBridgeTxn> {
         throw new Error("Not Implemented");
     }

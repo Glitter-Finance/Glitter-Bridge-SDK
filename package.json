@@ -14,7 +14,7 @@
     "build:web": "yarn workspace @glitter-finance/sdk-web build",
     "release:web": "npm run build -w ./packages/sdk-web && npm run release -w ./packages/sdk-web",
     "build:server": "npm run build -w ./packages/sdk-server",
-    "release:server": "npm run build-and-release -w ./packages/sdk-server",
+    "release:server": "yarn workspace @glitter-finance/sdk-core build && yarn workspace @glitter-finance/sdk-server build && npx lerna publish",
     "test:core": "yarn workspace @glitter-finance/sdk-core build && yarn workspace @glitter-finance/sdk-integration-tests test",
     "example:server-solana": "npm run example:solana -w ./packages/examples",
     "docs": "npx typedoc --entryPointStrategy packages . --out docs"
@@ -37,6 +37,7 @@
     "ts-node": "^10.9.1",
     "typechain": "^8.2.0",
     "typedoc": "^0.23.28",
-    "typescript": "^5.0.2"
+    "typescript": "^5.0.2",
+    "lerna": "^7.1.1"
   }
 }

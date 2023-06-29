@@ -3,6 +3,7 @@ import {
     ParsedTransactionWithMeta,
     PublicKey,
     SignaturesForAddressOptions,
+    Connection
 } from "@solana/web3.js";
 
 import {
@@ -99,12 +100,7 @@ export class GlitterSolanaPoller implements GlitterPoller {
     ): Promise<PollerResult> {
 
         //Check Client
-        let client = sdkServer.sdk?.solana?.connections[sdkServer.sdk?.solana?.defaultConnection];
-        if (sdkServer.sdk.environment === GlitterEnvironment.testnet) {
-            if (cursor.bridgeType === BridgeType.Circle || cursor.bridgeType === BridgeType.TokenV2) {
-                client = sdkServer.sdk?.solana?.connections["devnet"];
-            }
-        }
+        const client = this.getClient(sdkServer, cursor.bridgeType);
         if (!client) throw ServerError.ClientNotSet(BridgeNetworks.solana);
 
         //Get New Transactions
@@ -154,38 +150,16 @@ export class GlitterSolanaPoller implements GlitterPoller {
 
         //Get partial transactions
         const partialTxns: PartialBridgeTxn[] = [];
-        for (const txn of txnData) {
-            try {            
-                //Ensure Transaction Exists
-                if (!txn) continue;
+        for (const txn of txnData) {         
 
-                //Process Transaction
-                let partialTxn: PartialBridgeTxn | undefined;
-                switch (cursor.bridgeType) {
-                    case BridgeType.TokenV1:
-                        partialTxn = await SolanaV1Parser.process(sdkServer, txn);
-                        break;
-                    case BridgeType.TokenV2:
-                        partialTxn = await SolanaV2Parser.process(sdkServer, client, txn);
-                        break;
-                    case BridgeType.Circle:
-                        partialTxn = await SolanaCircleParser.process(
-                            sdkServer,
-                            txn,
-                            client,
-                            cursor
-                        );
-                        break;
-                    default:
-                        throw ServerError.InvalidBridgeType(
-                            BridgeNetworks.solana,
-                            cursor.bridgeType
-                        );
-                }
-                if (CursorFilter(cursor, partialTxn)) partialTxns.push(partialTxn);
-            } catch (error) {
-                console.error((error as Error).message)
-            }
+            if (!txn) continue;
+
+            //Process Transaction
+            const partialTxn = await this.parseTxnData(sdkServer, txn, cursor.bridgeType);
+            if (!partialTxn) continue;
+
+            //Run Through Filter
+            if (CursorFilter(cursor, partialTxn)) partialTxns.push(partialTxn);    
         }
 
         //update cursor
@@ -196,6 +170,81 @@ export class GlitterSolanaPoller implements GlitterPoller {
             cursor: cursor,
             txns: partialTxns,
         };
+    }
+
+    //Parse Txn
+    async parseTxnData(sdkServer: GlitterSDKServer, txnData:ParsedTransactionWithMeta, type:BridgeType):Promise<PartialBridgeTxn | undefined>{
+        
+        //Check Client
+        const client = this.getClient(sdkServer, type);
+        if (!client) throw ServerError.ClientNotSet(BridgeNetworks.solana);
+
+        try {
+            //Ensure Transaction Exists
+            if (!txnData) return undefined;
+
+            //Process Transaction
+            switch (type) {
+                case BridgeType.TokenV1:
+                    return await SolanaV1Parser.process(sdkServer, txnData);
+                case BridgeType.TokenV2:
+                    return await SolanaV2Parser.process(sdkServer, client, txnData);
+                case BridgeType.Circle:
+                    return await SolanaCircleParser.process(
+                        sdkServer,
+                        txnData,
+                        client
+                    );
+                default:
+                    throw ServerError.InvalidBridgeType(
+                        BridgeNetworks.solana,
+                        type
+                    );
+            }
+                      
+        } catch (error) {
+            console.error((error as Error).message)
+        }
+
+        return undefined;
+
+    }
+    async parseTxnID(sdkServer: GlitterSDKServer, txnID:string, type:BridgeType):Promise<PartialBridgeTxn | undefined>{
+        try {
+            //Ensure Transaction Exists
+            if (!txnID) return undefined;
+
+            //Check Client
+            const client = this.getClient(sdkServer, type);
+            if (!client) throw ServerError.ClientNotSet(BridgeNetworks.solana);
+
+            //Get ParsedTransactionWithMeta
+            const txn = await client.getParsedTransaction(txnID, {
+                maxSupportedTransactionVersion: 0,
+            });
+            if (!txn) return undefined;
+
+            //Process Transaction
+            switch (type) {
+                case BridgeType.TokenV1:
+                    return await SolanaV1Parser.process(sdkServer, txn);
+                case BridgeType.TokenV2:
+                    return await SolanaV2Parser.process(sdkServer, client, txn);                
+                case BridgeType.Circle:
+                    return await SolanaCircleParser.process(sdkServer, txn, client);
+                default:
+                    throw ServerError.InvalidBridgeType(
+                        BridgeNetworks.solana,
+                        type
+                    );
+            }
+                      
+        } catch (error) {
+            console.error((error as Error).message)
+        }
+
+        return undefined;
+
     }
 
     //Get Transactions
@@ -213,6 +262,20 @@ export class GlitterSolanaPoller implements GlitterPoller {
         }
 
         return searchFilter;
+    }
+
+    getClient(sdkServer: GlitterSDKServer, type:BridgeType): Connection | undefined{
+        //Check Client
+        let client = sdkServer.sdk?.solana?.connections[sdkServer.sdk?.solana?.defaultConnection];
+        if (sdkServer.sdk.environment === GlitterEnvironment.testnet) {
+            if (type === BridgeType.Circle || type === BridgeType.TokenV2) {
+                client = sdkServer.sdk?.solana?.connections["devnet"];
+            }
+        }
+        if (!client) throw ServerError.ClientNotSet(BridgeNetworks.solana);
+
+        return client;
+
     }
    
 }

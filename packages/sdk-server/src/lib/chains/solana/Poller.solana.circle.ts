@@ -22,13 +22,12 @@ export class SolanaCircleParser {
     public static async process(
         sdkServer: GlitterSDKServer,
         txn: ParsedTransactionWithMeta,
-        client: Connection | undefined,
-        cursor: Cursor
+        client: Connection | undefined
     ): Promise<PartialBridgeTxn> {
         
         //Destructure Local Vars
         const txnID = txn.transaction.signatures[0];
-        const address = cursor.address.toString();
+        //const address = cursor.address.toString();
 
         //Get Solana Transaction data
         const txnHashed = getHashedTransactionId(BridgeNetworks.solana, txnID);
@@ -38,9 +37,27 @@ export class SolanaCircleParser {
             bridgeType: BridgeType.Circle,
             txnType: TransactionType.Unknown,
             network: "solana",
-            address: address,
             protocol: "Glitter Finance"
         };
+
+        const depositAddress= sdkServer.sdk?.solana?.getAddress("usdcDeposit");
+        const depositTokenAddress = sdkServer.sdk?.solana?.getAddress("usdcDepositTokenAccount");
+        const receiverAddress = sdkServer.sdk?.solana?.getAddress("usdcReceiver");
+        const receiverTokenAddress = sdkServer.sdk?.solana?.getAddress("usdcReceiverTokenAccount");
+
+        //Check if txn is a deposit
+        let isDeposit = false;
+        let isRelease = false;
+        for (let i = 0; i < txn.transaction.message.accountKeys.length; i++) {
+            if (txn.transaction.message.accountKeys[i].pubkey.toBase58() === depositAddress ||
+                txn.transaction.message.accountKeys[i].pubkey.toBase58() === depositTokenAddress) {
+                isDeposit = true;
+            }
+            if (txn.transaction.message.accountKeys[i].pubkey.toBase58() === receiverAddress ||
+                txn.transaction.message.accountKeys[i].pubkey.toBase58() === receiverTokenAddress) {
+                isRelease = true;
+            }
+        }
        
         //Try to get txn details
         try {
@@ -67,42 +84,56 @@ export class SolanaCircleParser {
             let depositNote;
             for (let i = 0; i < txn.transaction.message.instructions.length; i++) {
                 try {
-                    const data_bytes = bs58.decode((txn.transaction.message.instructions[ i ] as PartiallyDecodedInstruction).data) || "{}";
-                    const object = JSON.parse(Buffer.from(data_bytes).toString("utf8"));
+                    const data_bytes = (bs58.decode((txn.transaction.message.instructions[i] as PartiallyDecodedInstruction).data) || "{}");
+                    const object = JSON.parse(Buffer.from(data_bytes).toString('utf8'))
                     if (object.system && object.date) {
                         depositNote = object;
                     }
                 } catch {
                     try {
                         const parsed_data = (txn.transaction.message.instructions[i] as ParsedInstruction).parsed;
-                        const object = JSON.parse(parsed_data);
+                        const object = JSON.parse(parsed_data)
                         if (object.system && object.date) {
                             depositNote = object;
                         }
-                    } catch {}
+                    } catch { 
+                        try {
+                            const parsed_data = (txn.transaction.message.instructions[i] as ParsedInstruction).parsed;
+                            const object = JSON.parse(JSON.parse(parsed_data))
+                            if (object.system && object.date) {
+                                depositNote = object;
+                            }
+                        } catch (noteError) { 
+                            // console.error(`Transaction ${txnID} failed to parse`);
+                            // console.error(noteError);  
+                        }
+                    }
                 }
             }
 
+            if (!depositNote) {
+                console.error(`Transaction ${txnID} failed to parse`);
+                partialTxn.txnType = TransactionType.Unknown;//TransactionType.BadRouting;           
+                return partialTxn;
+            }
+            if (typeof depositNote.system == "string"){
+                depositNote.system = JSON.parse(depositNote.system);
+            }
+
             //Get Routing Data
-            const routing: Routing | null = depositNote
-                ? JSON.parse(depositNote.system)
-                : null;
+            const routing: Routing | null = depositNote ? depositNote.system : null;
 
             //Check deposit vs release
-            if (
-                (address && address === sdkServer.sdk?.solana?.getAddress("usdcDeposit")) ||
-                (address && address === sdkServer.sdk?.solana?.getAddress("usdcDepositTokenAccount"))
-            ) {
-                console.info(`Transaction ${txnID} is a deposit`);
+            if (isDeposit) {
+                //console.info(`Transaction ${txnID} is a deposit`);
+                partialTxn.address = depositAddress;
                 partialTxn = await handleDeposit(sdkServer, txn, routing, partialTxn);
-            } else if (
-                (address && address === sdkServer.sdk?.solana?.getAddress("usdcReceiver")) ||
-                (address && address === sdkServer.sdk?.solana?.getAddress("usdcReceiverTokenAccount"))
-            ) {
-                console.info(`Transaction ${txnID} is a release`);
+            } else if (isRelease) {
+                //console.info(`Transaction ${txnID} is a release`);
+                partialTxn.address = receiverAddress;
                 partialTxn = await handleRelease(sdkServer, txn, routing, partialTxn);
             } else {
-                console.error(`Transaction ${txnID} is not a deposit or release`);
+                //console.error(`Transaction ${txnID} is not a deposit or release`);
                 partialTxn.txnType = TransactionType.Error;
             }
         } catch (e) {
@@ -125,6 +156,7 @@ async function handleDeposit(
 
     //Set type
     partialTxn.tokenSymbol = "USDC";
+    partialTxn.baseSymbol = "USDC";
 
     //Get Address
     const data = SolanaPollerCommon.getSolanaAddressWithAmount(
@@ -179,9 +211,11 @@ async function handleRelease(
     if (!routing) {
         partialTxn.txnType = TransactionType.Transfer;
         partialTxn.tokenSymbol = "USDC";
+        partialTxn.baseSymbol = "USDC";
     } else {
         partialTxn.txnType = TransactionType.Release;
         partialTxn.tokenSymbol = "USDC";
+        partialTxn.baseSymbol = "USDC";
     }
 
     //Get Address

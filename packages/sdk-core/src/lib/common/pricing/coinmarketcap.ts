@@ -7,7 +7,7 @@ const cmc_cache: {
     };
 } = {};
 
-const cache_duration = 1000 * 60 * 0.5; // 5 mins
+const cache_duration = 1000 * 60 *5; // 5 mins
 
 export type CoinMarketCapQuoteResponse = {
     "status": {

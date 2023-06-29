@@ -1,6 +1,6 @@
 {
   "name": "@glitter-finance/sdk-core",
-  "version": "1.2.0-70",
+  "version": "2.0.0-alpha.8",
   "description": "Glitter Finance SDK: Core Functions",
   "main": "dist/index.js",
   "module": "dist/index.js",
@@ -42,11 +42,11 @@
     }
   },
   "devDependencies": {
-    "@types/node": "^18.15.3",
     "@types/jest": "^29.4.0",
+    "@types/node": "^18.15.3",
     "jest": "^29.4.3",
-    "ts-jest": "^29.0.5",
     "release-it": "^15.5.0",
+    "ts-jest": "^29.0.5",
     "ts-node": "^10.9.1",
     "tslint": "latest",
     "typescript": "^4.9.4"
@@ -62,5 +62,6 @@
     "readmeFile": "./redme.md",
     "displayName": "@glitter-finance/sdk-core",
     "tsconfig": "./tsconfig.json"
-  }
+  },
+  "gitHead": "a0cc731b809f262290f9c4ad9c02338401082c9e"
 }

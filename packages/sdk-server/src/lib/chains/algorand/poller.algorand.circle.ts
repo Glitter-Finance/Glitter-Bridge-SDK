@@ -13,13 +13,9 @@ export class AlgorandCircleParser {
         sdkServer: GlitterSDKServer,
         txnID: string,
         client: AlgodClient | undefined,
-        indexer: IndexerClient | undefined,
-        cursor: Cursor
+        indexer: IndexerClient | undefined
     ): Promise<PartialBridgeTxn> {
      
-        //Destructure Local Vars        
-        const address = cursor.address.toString();
-
         //Get Algorand Transaction data
         const txnHashed = getHashedTransactionId(BridgeNetworks.algorand, txnID);
         let partialTxn: PartialBridgeTxn = {
@@ -29,7 +25,6 @@ export class AlgorandCircleParser {
             txnType: TransactionType.Unknown,
             network: "algorand",
             chainStatus: ChainStatus.Completed,
-            address: address,
             protocol: "Glitter Finance"
         }
        
@@ -43,10 +38,12 @@ export class AlgorandCircleParser {
         //Get transaction
         const txn = txnData["transaction"];
 
+        //Get Sender/Reveiver
+        const sender = txn.sender;
+        const receiver = txn["payment-transaction"]? txn["payment-transaction"].receiver : txn["asset-transfer-transaction"].receiver;
+      
         //calculate gas
-        const transactionFee = txnData['fee'];
-        const additionalFees = txnData['suggestedParams']['flatFee'];
-        const gasCost = transactionFee - additionalFees;
+        const gasCost = txn.fee;
         partialTxn.gasPaid = new BigNumber(gasCost);
 
         //Timestamp
@@ -54,19 +51,30 @@ export class AlgorandCircleParser {
         partialTxn.txnTimestamp = new Date((transactionTimestamp || 0) * 1000); //*1000 is to convert to milliseconds
         partialTxn.block = txn["confirmed-round"];
 
-        const noteObj = txn.note ? algosdk.decodeObj(Buffer.from(txn.note, "base64")) as DepositNote : null;
-        const note = noteObj ? noteObj["system"] : null;
-        const routing: Routing | null = note ? JSON.parse(note) : null;
+        //Get Routing
+        let routing: Routing | null = null;
+        if (txn.note) routing= this.parseDepositNote(txn.note);
 
         //Check deposit vs release
-        
-        if (address && address === sdkServer.sdk?.algorand?.getAddress("usdcDeposit")) {
+        const depositAddress = sdkServer.sdk?.algorand?.getAddress("usdcDeposit");
+        const releaseAddress = sdkServer.sdk?.algorand?.getAddress("usdcReceiver");        
+        if (sender && sender === depositAddress || receiver && receiver === depositAddress) {
+            partialTxn.address = depositAddress;
             partialTxn = await this.handleDeposit(sdkServer, txnID, txn, routing, partialTxn);
-        } else if (address && address === sdkServer.sdk?.algorand?.getAddress("usdcReceiver")) {
+        }else if (sender && sender === releaseAddress || receiver && receiver === releaseAddress) {
+            partialTxn.address = releaseAddress;
             partialTxn = await this.handleRelease(sdkServer, txnID, txn, routing, partialTxn);
         } else {
             throw new Error(BASE_LOG + " Address not found");
         }
+
+        // if (address && address === sdkServer.sdk?.algorand?.getAddress("usdcDeposit")) {
+        //     partialTxn = await this.handleDeposit(sdkServer, txnID, txn, routing, partialTxn);
+        // } else if (address && address === sdkServer.sdk?.algorand?.getAddress("usdcReceiver")) {
+        //     partialTxn = await this.handleRelease(sdkServer, txnID, txn, routing, partialTxn);
+        // } else {
+        //     throw new Error(BASE_LOG + " Address not found");
+        // }
 
         return partialTxn;
 
@@ -83,10 +91,21 @@ export class AlgorandCircleParser {
         //Set type
         
         partialTxn.tokenSymbol = "USDC";
+        partialTxn.baseSymbol = "USDC";
 
         //Check Asset Send
         if (!txn["asset-transfer-transaction"]) {
-            throw new Error(`Transaction ${txnID} is not an asset transaction`);
+            //Check if this is the circle account
+            if (partialTxn.address == "ZG54ZBZ5LVWV3MTGOPDSKCBL5LEQTAPUTN5OQQZUMTAYV3JIICA7G3RJZE") {
+                partialTxn.txnType = TransactionType.GasDeposit;
+                partialTxn.units = new BigNumber(txn["payment-transaction"].amount);
+                partialTxn.address = txn.sender;
+            } else {
+                partialTxn.txnType = TransactionType.Transfer;
+                partialTxn.units = new BigNumber(txn["payment-transaction"].amount);
+                partialTxn.address = txn.sender;
+            }
+            return partialTxn;
         }
         const units = txn["asset-transfer-transaction"].amount;
         const assetID = txn["asset-transfer-transaction"]["asset-id"];
@@ -129,11 +148,23 @@ export class AlgorandCircleParser {
 
         //Set type
         partialTxn.tokenSymbol = "USDC";
+        partialTxn.baseSymbol = "USDC";
 
         //Get Address
         //Check Asset Send
         if (!txn["asset-transfer-transaction"]) {
-            throw new Error(`Transaction ${txnID} is not an asset transaction`);
+
+            //Check if this is the circle account
+            if (partialTxn.address == "ZG54ZBZ5LVWV3MTGOPDSKCBL5LEQTAPUTN5OQQZUMTAYV3JIICA7G3RJZE") {
+                partialTxn.txnType = TransactionType.GasDeposit;
+                partialTxn.units = new BigNumber(txn["payment-transaction"].amount);
+                partialTxn.address = txn.sender;
+            } else {
+                partialTxn.txnType = TransactionType.Transfer;
+                partialTxn.units = new BigNumber(txn["payment-transaction"].amount);
+                partialTxn.address = txn.sender;
+            }
+            return partialTxn;
         }
         const units = txn["asset-transfer-transaction"].amount;
         const assetID = txn["asset-transfer-transaction"]["asset-id"];
@@ -164,5 +195,38 @@ export class AlgorandCircleParser {
 
         partialTxn.routing = routing;
         return Promise.resolve(partialTxn);
+    }
+
+    static parseDepositNote(note: any): Routing {
+        let depositNote: DepositNote | undefined = undefined;
+
+        try {
+            depositNote = JSON.parse(decodeURIComponent(atob(note)));
+
+            if (depositNote && !depositNote.system) {
+                depositNote = undefined
+            }
+        } catch (error) {
+            //console.error(JSON.stringify(error, Object.getOwnPropertyNames(error)))
+        }
+
+        try {
+            if (!depositNote) {
+                depositNote = (algosdk.decodeObj(Buffer.from(note, "base64")) as any)
+            }
+        } catch (error) {
+            //console.error(JSON.stringify(error, Object.getOwnPropertyNames(error)))
+        }
+
+        if (!depositNote) throw new Error("[AlgorandDepositHandler] Unable to parse transaction: ")
+        if (!depositNote.system){
+            throw new Error(
+                "[AlgorandDepositHandler] Unable to parse transaction: ");
+        } else if (typeof depositNote.system == 'string'){
+            depositNote.system = JSON.parse(depositNote.system);
+        }
+
+        const routingData: Routing = depositNote.system as any;
+        return routingData;
     }
 }

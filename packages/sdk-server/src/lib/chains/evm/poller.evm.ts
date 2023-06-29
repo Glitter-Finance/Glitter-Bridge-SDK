@@ -124,7 +124,7 @@ export class GlitterEVMPoller implements GlitterPoller {
             `&fromBlock=${startBlock}&offset=${cursor.limit}` +
             `&page=1&sort=asc&apikey=` +
             this.apiKey;
-        console.log(url);
+        //console.log(url);
 
         //Request Data
         const response = await axios.get(url);
@@ -139,41 +139,18 @@ export class GlitterEVMPoller implements GlitterPoller {
         //Parse Txns
         const partialTxns: PartialBridgeTxn[] = [];
         for (const txnID of signatures) {
-            try { // ensure failing to parse a single tx does not fail the entire batch           
-                //Ensure Transaction Exists
-                if (!txnID) continue;
 
-                //Check if transaction was previously processed
-                if (cursor.batch?.txns?.has(txnID)) continue;
-                if (cursor.lastBatchTxns?.has(txnID)) continue;
-    
-                //Process Transaction
-                let partialTxn: PartialBridgeTxn | undefined;
-                switch (cursor.bridgeType) {
-                    case BridgeType.TokenV1:
-                        throw new Error("Token V1 Not Supported for EVM");
-                        break;
-                    case BridgeType.TokenV2:
-                        partialTxn = await EvmV2Parser.process(sdkServer, this.connect, txnID);
-                        break;
-                    case BridgeType.Circle:
-                        partialTxn = await EvmCircleParser.process(
-                            sdkServer,  
-                            this.connect,                      
-                            txnID
-                        );
-                        break;
-                    default:
-                        throw ServerError.InvalidBridgeType(
-                            BridgeNetworks.solana,
-                            cursor.bridgeType
-                        );
-                }
-                if (CursorFilter(cursor, partialTxn)) partialTxns.push(partialTxn);
+            //Check if transaction was previously processed
+            if (cursor.batch?.txns?.has(txnID)) continue;
+            if (cursor.lastBatchTxns?.has(txnID)) continue;
+
+            //Process Transaction
+            const partialTxn = await this.parseTxnID(sdkServer, txnID, cursor.bridgeType);
+            if (!partialTxn) continue;
+
+            //Run Through Filter
+            if (CursorFilter(cursor, partialTxn)) partialTxns.push(partialTxn);    
                 
-            } catch (error) {
-                console.error((error as Error).message)
-            }
         }
 
         //update cursor
@@ -183,5 +160,38 @@ export class GlitterEVMPoller implements GlitterPoller {
             cursor: cursor,
             txns: partialTxns,
         };
+    }
+
+    //Parse Txn
+    async parseTxnID(sdkServer: GlitterSDKServer, txnID:string, type:BridgeType):Promise<PartialBridgeTxn | undefined>{
+        try {
+            //Ensure Transaction Exists
+            if (!txnID) return undefined;
+           
+            //Process Transaction
+            switch (type) {
+                case BridgeType.TokenV1:
+                    throw new Error("Token V1 Not Supported for EVM");
+                case BridgeType.TokenV2:
+                    return await EvmV2Parser.process(sdkServer, this.connect, txnID);
+                case BridgeType.Circle:
+                    return await EvmCircleParser.process(
+                        sdkServer,  
+                        this.connect,                      
+                        txnID
+                    );
+                default:
+                    throw ServerError.InvalidBridgeType(
+                        BridgeNetworks.solana,
+                        type
+                    );
+            }
+                      
+        } catch (error) {
+            console.error((error as Error).message)
+        }
+
+        return undefined;
+
     }
 }

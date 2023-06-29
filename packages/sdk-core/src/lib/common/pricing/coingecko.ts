@@ -7,7 +7,7 @@ const cg_cache: {
   };
 } = {};
 
-const cache_duration = 1000 * 60 * 0.5; // 5 mins
+const cache_duration = 1000 * 60 *5; // 5 mins
 
 export async function getPriceFromCoingecko (coingeckoId: string): Promise<{ usdPrice: number; isFresh: boolean;}> {
 

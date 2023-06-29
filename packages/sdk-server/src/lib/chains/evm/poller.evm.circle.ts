@@ -116,6 +116,7 @@ export class EvmCircleParser {
             tokenSymbol = "EUROC";
         }
         partialTxn.tokenSymbol = tokenSymbol;
+        partialTxn.baseSymbol = tokenSymbol;
 
         //Check Type
         if (toAddress.toLocaleLowerCase() == connect.getAddress("depositWallet")?.toLocaleLowerCase()) {
@@ -211,6 +212,7 @@ export class EvmCircleParser {
             tokenSymbol = "EUROC";
         }
         partialTxn.tokenSymbol = tokenSymbol;
+        partialTxn.baseSymbol = tokenSymbol;
 
         //Get Routing
         let routing: Routing | null = null;

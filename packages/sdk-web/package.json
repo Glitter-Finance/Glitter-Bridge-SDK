@@ -1,6 +1,6 @@
 {
   "name": "@glitter-finance/sdk-web",
-  "version": "1.0.3",
+  "version": "2.0.0-alpha.1",
   "description": "Glitter Finance Bridge: React Support Library (Dev Version)",
   "license": "MIT",
   "main": "dist/index.js",
@@ -87,5 +87,6 @@
     "readmeFile": "./README.md",
     "displayName": "@glitter-finance/sdk-web",
     "tsconfig": "./tsconfig.json"
-  }
+  },
+  "gitHead": "a0cc731b809f262290f9c4ad9c02338401082c9e"
 }

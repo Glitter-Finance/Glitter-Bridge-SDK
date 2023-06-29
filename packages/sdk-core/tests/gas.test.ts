@@ -30,23 +30,23 @@ describe("Gas Tests", () => {
     it("Main Gas Test", async () => {
 
         //Iterate through bridge network enums
-        // for (const from_network of Object.values(BridgeNetworks)) {
-        //     for (const to_network of Object.values(BridgeNetworks)) {
+        for (const from_network of Object.values(BridgeNetworks)) {
+            for (const to_network of Object.values(BridgeNetworks)) {
              
-        //         //Estimate Gas
-        //         const gas = await GasEstimator.estimateGasPrice(sdk, from_network, to_network, BridgeType.Circle);
-        //         const gasStr = util.inspect(gas);
-        //         console.log(`From: ${from_network} - To: ${to_network} - Gas: ${gasStr}`);
+                //Estimate Gas
+                const gas = await GasEstimator.estimateGasPrice(sdk, from_network, to_network, BridgeType.TokenV1);
+                const gasStr = util.inspect(gas);
+                console.log(`From: ${from_network} - To: ${to_network} - Gas: ${gasStr}`);
 
-        //         await Sleep(1000);
-        //     }
-        // }
+                await Sleep(1000);
+            }
+        }
 
-        const from_network = BridgeNetworks.algorand;
-        const to_network = BridgeNetworks.Arbitrum;
-        const gas = await GasEstimator.estimateGasPrice(sdk, from_network, to_network, BridgeType.Circle);
-        const gasStr = util.inspect(gas);
-        console.log(`From: ${from_network} - To: ${to_network} - Gas: ${gasStr}`);
+        // const from_network = BridgeNetworks.solana;
+        // const to_network = BridgeNetworks.TRON;
+        // const gas = await GasEstimator.estimateGasPrice(sdk, from_network, to_network, BridgeType.Circle);
+        // const gasStr = util.inspect(gas);
+        // console.log(`From: ${from_network} - To: ${to_network} - Gas: ${gasStr}`);
 
         // //DO inner loop 5 times
         // for (let i = 0; i < 5; i++) {
@@ -74,7 +74,7 @@ describe("Gas Tests", () => {
         // }        
             
         Promise.resolve();
-    }, 120_000);
+    }, 1200_000);
 
     afterAll(async () => {
         console.log("Closing SDK");
