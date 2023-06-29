@@ -104,17 +104,24 @@ export class SolanaCircleParser {
                                 depositNote = object;
                             }
                         } catch (noteError) { 
-                            console.error(`Transaction ${txnID} failed to parse`);
-                            console.error(noteError);  
+                            // console.error(`Transaction ${txnID} failed to parse`);
+                            // console.error(noteError);  
                         }
                     }
                 }
             }
 
+            if (!depositNote) {
+                console.error(`Transaction ${txnID} failed to parse`);
+                partialTxn.txnType = TransactionType.Unknown;//TransactionType.BadRouting;           
+                return partialTxn;
+            }
+            if (typeof depositNote.system == "string"){
+                depositNote.system = JSON.parse(depositNote.system);
+            }
+
             //Get Routing Data
-            const routing: Routing | null = depositNote
-                ? JSON.parse(depositNote.system)
-                : null;
+            const routing: Routing | null = depositNote ? depositNote.system : null;
 
             //Check deposit vs release
             if (isDeposit) {
