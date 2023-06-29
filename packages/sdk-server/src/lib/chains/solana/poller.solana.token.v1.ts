@@ -167,7 +167,7 @@ export class SolanaV1Parser {
         partialTxn.address = data[0] || "";
 
         const amount = instruction["amount"];
-        const roundedAmount = Number(amount.toFixed(decimals));
+        const roundedAmount = amount;//Number(amount.toFixed(0));
 
         //Set Routing
         partialTxn.routing = this.getV1Routing(
@@ -221,7 +221,7 @@ export class SolanaV1Parser {
         partialTxn.address = data[0] || "";
 
         const amount = instruction["amount"];
-        const roundedAmount = Number(amount.toFixed(decimals));
+        const roundedAmount = amount;//Number(amount.toFixed(0));
 
         //Set Routing
         partialTxn.routing = this.getV1Routing(
@@ -276,7 +276,7 @@ export class SolanaV1Parser {
         partialTxn.address = data[0] || "";
 
         const amount = instruction["amount"];
-        const roundedAmount = Number(amount.toFixed(decimals));
+        const roundedAmount = amount;//Number(amount.toFixed(0));
 
         //Set Routing
         partialTxn.routing = this.getV1Routing(
@@ -331,7 +331,7 @@ export class SolanaV1Parser {
         partialTxn.address = data[0] || "";
 
         const amount = instruction["amount"];
-        const roundedAmount = Number(amount.toFixed(decimals));
+        const roundedAmount = amount;//Number(amount.toFixed(0));
 
         //Set Routing
         partialTxn.routing = this.getV1Routing(
