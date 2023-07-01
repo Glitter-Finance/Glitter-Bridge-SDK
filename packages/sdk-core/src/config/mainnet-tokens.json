@@ -29,7 +29,7 @@
         {
             "asset_id": 2,
             "asset_name": "Solana SOL",
-            "asset_symbol": "Sol",
+            "asset_symbol": "SOL",
             "coingecko_id": "solana",
             "cmc_id": "SOL",
             "asset_bridge_fee": 0.005,
