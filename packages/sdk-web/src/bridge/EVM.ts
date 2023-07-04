@@ -86,16 +86,14 @@ export class EVMBridge {
         const tokens = await this.getTokens()
         if (!tokens) return Promise.resolve([]);
 
-        const result = tokens
-            .filter(parentToken => parentToken.chains.filter(availableChain => availableChain.chain.toLowerCase() === this.network.toLowerCase()))
-            .map(parentToken => BridgeV2Tokens.getTokenConfigChild(parentToken, this.network))
-            .map(async evmTokenConfig => evmTokenConfig ? ({
-                token: evmTokenConfig.symbol,
-                balance: await this.sdk[this.network]?.getTokenBalanceOnNetwork(evmTokenConfig.symbol, signerAddress)
-            }) : (null));
-        Promise.all(result).then(t => console.log({ t }))
+        const result = tokens.map(async token => ({
+            token: token.symbol,
+            balance: await this.sdk[this.network]?.getTokenBalanceOnNetwork(token.symbol, signerAddress),
+            decimals: token.decimals
+        }))
 
-        return Promise.all(result);
+        return await Promise.all(result);
+
     }
 
     public async getToken(tokenSymbol: string) {
@@ -103,6 +101,11 @@ export class EVMBridge {
     }
 
     public async getTokens() {
-        return BridgeV2Tokens.getTokenList();
+        const v2Tokens = BridgeV2Tokens.getTokenList()?.flatMap((token) => {
+            return token.chains?.filter(chain => {
+                return chain.chain.toLowerCase() === this.network.toLowerCase() && chain.address
+            })
+        });
+        return v2Tokens;
     }
 }

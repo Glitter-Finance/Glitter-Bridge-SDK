@@ -23,13 +23,14 @@ import {
 } from "../../common/networks";
 import { ChainStatus } from "../../common/transactions";
 import { addr_to_pk, walletToAddress } from "../../common/utils/utils";
-import { BridgeTokens, BridgeTokenConfig, Token2ConfigList, BridgeV2Tokens } from "../../../lib/common";
+import { BridgeTokens, BridgeTokenConfig, Token2ConfigList, BridgeV2Tokens, Token2Config, Token2ChainConfig } from "../../../lib/common";
 import { BridgeV2Abi__factory, Erc20Abi__factory } from "../../../typechain";
 
 type Connection = {
     rpcProvider: providers.BaseProvider;
     bridge: TokenBridge;
     tokens: Map<string, ERC20>;
+    v2Tokens: Map<string, ERC20>;
 };
 
 export class EvmConnect {
@@ -54,10 +55,25 @@ export class EvmConnect {
             );
         }, {} as Record<string, ERC20>);
 
+        const v2Tokens = BridgeV2Tokens.getTokenList()?.flatMap((token) => {
+            return token.chains?.filter(chain => {
+                return chain.chain.toLowerCase() === this.network.toLowerCase() && chain.address
+            })
+        }).reduce((acc, cur) => {
+            if (!cur.address) return acc;
+
+            acc.set(
+                cur.symbol.toLowerCase(),
+                ERC20__factory.connect(cur.address, rpcProvider)
+            )
+            return acc
+        }, new Map<string, ERC20>()) ?? new Map();
+
         return {
             rpcProvider,
             bridge,
             tokens,
+            v2Tokens,
         };
     }
 
@@ -66,7 +82,6 @@ export class EvmConnect {
         this.__network = network;
         BridgeTokens.loadConfig(this.__network, config.tokens);
         this.__providers = this.createConnections(config.rpcUrl, config);
-        // if (bridgeV2Tokens) BridgeV2Tokens.loadConfig(bridgeV2Tokens);
     }
 
     get provider(): ethers.providers.BaseProvider {
@@ -114,10 +129,10 @@ export class EvmConnect {
     }
 
     private isValidToken(tokenSymbol: string): boolean {
-        const v1Token = !!this.__providers.tokens.get(tokenSymbol.toLowerCase());
-        return v1Token ||
-            !!BridgeV2Tokens.getTokenConfig(tokenSymbol) ||
-            !!BridgeV2Tokens.getTokenConfigFromChildSymbol(tokenSymbol);
+        const v1Token = this.__providers.tokens.has(tokenSymbol.toLowerCase());
+        const v2Token = this.__providers.v2Tokens.has(tokenSymbol.toLowerCase());
+
+        return v1Token || v2Token;
     }
 
     /**
@@ -130,15 +145,16 @@ export class EvmConnect {
     async getTokenBalanceOnNetwork(
         tokenSymbol: string,
         address: string
-    ): Promise<ethers.BigNumber> {
+    ): Promise<ethers.BigNumber | undefined> {
         if (!this.isValidToken(tokenSymbol))
             return Promise.reject(`[EvmConnect] Unsupported token symbol, ${tokenSymbol}`);
 
         const symbol = tokenSymbol.toLowerCase();
-        const erc20 = this.__providers.tokens.get(symbol);
+        const erc20 = this.__providers.tokens.get(symbol) || this.__providers.v2Tokens.get(symbol);
         if (erc20) {
             return await erc20!.balanceOf(address);
         }
+        return
     }
     /**
    * Before bridging tokens we need to check
@@ -156,7 +172,7 @@ export class EvmConnect {
         signer: ethers.Signer
     ): Promise<ethers.ContractTransaction> {
         if (!this.isValidToken(tokenSymbol))
-            return Promise.reject("[EvmConnect] Unsupported token symbol.");
+            return Promise.reject(`[EvmConnect] Unsupported token symbol. ${tokenSymbol}`);
 
         const bridgeAddress = this.getAddress("bridge");
         const tokenAddress = this.getAddress("tokens", tokenSymbol);
@@ -176,7 +192,7 @@ export class EvmConnect {
         signer: ethers.Signer
     ): Promise<ethers.BigNumber> {
         if (!this.isValidToken(tokenSymbol))
-            return Promise.reject("Unsupported token symbol.");
+            return Promise.reject(`Unsupported token symbol. ${tokenSymbol}`);
 
         const tokenAddress = this.getAddress("tokens", tokenSymbol);
         const usdc = ERC20__factory.connect(tokenAddress, signer);
@@ -341,11 +357,11 @@ export class EvmConnect {
 
             // if this is not a v2 bridging deposit
             if (!this.isValidToken(tokenSymbol)) {
-                throw new Error(`[EvmConnect] Unsupported token symbol.`);
+                throw new Error(`[EvmConnect] Unsupported token symbol: ${tokenSymbol}`);
             }
 
             if (destination === this.__network) {
-                throw new Error("[EvmConnect] Cannot transfer tokens to same chain.");
+                throw new Error(`[EvmConnect] Cannot transfer tokens to same chain: ${this.__network}.`);
             }
 
             const bridge = TokenBridge__factory.connect(

@@ -13,6 +13,7 @@ enum EVMChains {
   ARBITRUM = 42161,
   ZKEVM = 1101,
   OPTIMISM = 10,
+  OPTIMISM_GOERLI = 420
 }
 
 enum NonEVMChains {
@@ -36,16 +37,16 @@ export enum ChainNames {
 }
 
 export const ChainNativeCurrency = {
-    [EVMChains.AVALANCHE.toString()]: {
-        name: "AVAX",
-        symbol: "AVAX",
-        decimals: 18,
-    },
-    [EVMChains.POLYGON.toString()]: {
-        name: "MATIC",
-        symbol: "MATIC",
-        decimals: 18,
-    }
+  [EVMChains.AVALANCHE.toString()]: {
+    name: "AVAX",
+    symbol: "AVAX",
+    decimals: 18,
+  },
+  [EVMChains.POLYGON.toString()]: {
+    name: "MATIC",
+    symbol: "MATIC",
+    decimals: 18,
+  }
 }
 
 export const Chains = { ...NonEVMChains, ...EVMChains };

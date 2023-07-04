@@ -12,6 +12,7 @@ export class Wallets {
     public static networks = {
         [Chains.ETHEREUM]: { metamask: Metamask, walletConnect: WConnect, coin98: Coin98, phantom: Phantom },
         [Chains.ETHEREUM_GOERLI]: { metamask: Metamask, walletConnect: WConnect, coin98: Coin98, phantom: Phantom },
+        [Chains.OPTIMISM_GOERLI]: { metamask: Metamask, walletConnect: WConnect, coin98: Coin98, phantom: Phantom },
         [Chains.BSC]: { metamask: Metamask, walletConnect: WConnect },
         [Chains.SOLANA]: { solflare: Solflare, phantom: Phantom },
         [Chains.ALGO]: { pera: Pera, defly: Defly, walletConnect: WConnect },
