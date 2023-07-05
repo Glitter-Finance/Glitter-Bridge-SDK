@@ -20,19 +20,47 @@ import { SolanaV1Parser } from "./poller.solana.token.v1";
 import { SolanaCircleParser } from "./Poller.solana.circle";
 import { SolanaV2Parser } from "./poller.solana.token.v2";
 
+/**
+ * Glitter Solana Poller class.
+ * Implements the GlitterPoller interface.
+ */
 export class GlitterSolanaPoller implements GlitterPoller {
     
     //Network
     public network: BridgeNetworks = BridgeNetworks.solana;
     
     //Cursors
+    /**
+     * Cursors object for tracking transaction cursors.
+     * The keys represent BridgeTypes and the values are arrays of Cursor objects.
+     *
+     * @type {Record<BridgeType, Cursor[]>}
+     */
     public cursors: Record<BridgeType, Cursor[]> ;
+    /**
+     * Get the tokenV1Cursor.
+     *
+     * @type {Cursor | undefined}
+     * @readonly
+     */
     public get tokenV1Cursor(): Cursor | undefined{
         return this.cursors?.[BridgeType.TokenV1]?.[0];
     }
+    /**
+     * Get the tokenV2Cursor.
+     *
+     * @type {Cursor | undefined}
+     * @readonly
+     */
     public get tokenV2Cursor(): Cursor | undefined{
         return this.cursors?.[BridgeType.TokenV2]?.[0];
     }
+    /**
+     * Get the usdcCursors.
+     *
+     * @type {Cursor | undefined}
+     * @readonly
+     */
     public get usdcCursors(): Cursor[] | undefined{
         return this.cursors?.[BridgeType.Circle];
     }
@@ -47,6 +75,13 @@ export class GlitterSolanaPoller implements GlitterPoller {
     }
     
     //Initialize
+    /**
+     * Initializes the solana poller.
+     *
+     * @public
+     * @param {GlitterSDKServer} sdkServer - The Glitter SDK server object.
+     * @returns {void}
+     */
     public initialize(sdkServer: GlitterSDKServer): void {
         
         //Add Token Cursor
@@ -94,6 +129,14 @@ export class GlitterSolanaPoller implements GlitterPoller {
     }
 
     //Poll   
+    /**
+     * Polls for updates using the provided cursor.
+     *
+     * @public
+     * @param {GlitterSDKServer} sdkServer - The Glitter SDK server object.
+     * @param {Cursor} cursor - The cursor for polling updates.
+     * @returns {Promise<PollerResult>} A promise that resolves to the poller result.
+     */
     public async poll(
         sdkServer: GlitterSDKServer,
         cursor: Cursor
@@ -173,6 +216,15 @@ export class GlitterSolanaPoller implements GlitterPoller {
     }
 
     //Parse Txn
+    /**
+     * Parses the transaction data and returns a partial bridge transaction based on the provided bridge type.
+     *
+     * @public
+     * @param {GlitterSDKServer} sdkServer - The Glitter SDK server object.
+     * @param {ParsedTransactionWithMeta} txnData - The parsed transaction data.
+     * @param {BridgeType} type - The bridge type.
+     * @returns {Promise<PartialBridgeTxn | undefined>} A promise that resolves to the partial bridge transaction, or undefined if parsing fails.
+     */
     async parseTxnData(sdkServer: GlitterSDKServer, txnData:ParsedTransactionWithMeta, type:BridgeType):Promise<PartialBridgeTxn | undefined>{
         
         //Check Client
@@ -209,6 +261,15 @@ export class GlitterSolanaPoller implements GlitterPoller {
         return undefined;
 
     }
+    /**
+     * Parses the transaction ID and returns a partial bridge transaction based on the provided bridge type.
+     *
+     * @public
+     * @param {GlitterSDKServer} sdkServer - The Glitter SDK server object.
+     * @param {string} txnID - The transaction ID.
+     * @param {BridgeType} type - The bridge type.
+     * @returns {Promise<PartialBridgeTxn | undefined>} A promise that resolves to the partial bridge transaction, or undefined if parsing fails.
+     */
     async parseTxnID(sdkServer: GlitterSDKServer, txnID:string, type:BridgeType):Promise<PartialBridgeTxn | undefined>{
         try {
             
@@ -249,6 +310,13 @@ export class GlitterSolanaPoller implements GlitterPoller {
     }
 
     //Get Transactions
+    /**
+     * Retrieves the filter options for obtaining signatures for a specific address.
+     *
+     * @public
+     * @param {Cursor} cursor - The cursor for retrieving signatures.
+     * @returns {Promise<SignaturesForAddressOptions>} A promise that resolves to the filter options for obtaining signatures.
+     */
     public async getFilter(cursor: Cursor): Promise<SignaturesForAddressOptions> {
     //Set Search Filter
         const searchFilter = {
@@ -265,6 +333,14 @@ export class GlitterSolanaPoller implements GlitterPoller {
         return searchFilter;
     }
 
+    /**
+     * Retrieves the connection client based on the provided bridge type.
+     *
+     * @public
+     * @param {GlitterSDKServer} sdkServer - The Glitter SDK server object.
+     * @param {BridgeType} type - The bridge type.
+     * @returns {Connection | undefined} The connection client for the specified bridge type, or undefined if not found.
+     */
     getClient(sdkServer: GlitterSDKServer, type:BridgeType): Connection | undefined{
         //Check Client
         let client = sdkServer.sdk?.solana?.connections[sdkServer.sdk?.solana?.defaultConnection];

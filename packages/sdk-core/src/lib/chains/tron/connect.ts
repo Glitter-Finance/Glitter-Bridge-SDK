@@ -13,12 +13,23 @@ import { BridgeTokenConfig, BridgeTokens } from "../../";
 // eslint-disable-next-line @typescript-eslint/no-var-requires
 const TronWeb = require("tronweb");
 
+/**
+ * Represents a connection to the Tron network.
+ *
+ * @class TronConnect
+ */
 export class TronConnect {
     protected __tronConfig: TronConfig;
     protected __tronWeb: any;
     protected __usdc: any;
     protected __bridge: any;
 
+    /**
+     * Creates an instance of the TronConnect class.
+     *
+     * @constructor
+     * @param {TronConfig} tronconfig - The configuration for the Tron connection.
+     */
     constructor(tronconfig: TronConfig) {
         this.__tronConfig = tronconfig;
         this.__tronWeb = new TronWeb(
@@ -32,6 +43,13 @@ export class TronConnect {
         this.initContracts();
     }
 
+    /**
+     * Sets the API key to be used for the Tron connection.
+     *
+     * @method setApiKey
+     * @param {string} apiKey - The API key to be set.
+     * @returns {void}
+     */
     public setApiKey(apiKey: string) {
         this.__tronWeb.setHeader({ "TRON-PRO-API-KEY": apiKey });
     }
@@ -61,14 +79,15 @@ export class TronConnect {
     private fromTronAddress(address: string): string {
         return TronWeb.address.toHex(address);
     }
+
     /**
-     * @deprecated Please use getTronAddress or getHexAddress
-   * Provide address of bridge
-   * component
-   * @param {"tokens" | "bridge" | "depositWallet" | "releaseWallet"} entity
-   * @param {"USDC"} tokenSymbol only USDC for now
-   * @returns {string}
-   */
+     * Retrieves the address associated with a specific entity.
+     *
+     * @method getAddress
+     * @param {"tokens" | "bridge" | "depositWallet" | "releaseWallet"} entity - The entity for which to retrieve the address.
+     * @param {string} [tokenSymbol] - The symbol of the token associated with the address (optional).
+     * @returns {string} - The address associated with the specified entity.
+     */
     getAddress(
         entity: "tokens" | "bridge" | "depositWallet" | "releaseWallet",
         tokenSymbol?: string
@@ -98,11 +117,11 @@ export class TronConnect {
 
     //New Get Addresses
     /**
-   * Provide address of bridge entity
-   * @param {"tokens" | "bridge" | "depositWallet" | "releaseWallet"} entity the bridge entity to get address of
-   * @param {"USDC"} tokenSymbol only USDC for now
-   * @returns {string} The hex address of the requested address entity
-   */
+     * Provide address of bridge entity
+     * @param {"tokens" | "bridge" | "depositWallet" | "releaseWallet"} entity the bridge entity to get address of
+     * @param {"USDC"} tokenSymbol only USDC for now
+     * @returns {string} The hex address of the requested address entity
+     */
     getHexAddress(
         entity: "tokens" | "bridge" | "depositWallet" | "releaseWallet",
         tokenSymbol?: string
@@ -111,11 +130,11 @@ export class TronConnect {
     }
 
     /**
-   * Provide address of bridge entity
-   * @param {"tokens" | "bridge" | "depositWallet" | "releaseWallet"} entity the bridge entity to get address of
-   * @param {"USDC"} tokenSymbol only USDC for now
-   * @returns {string} The hex address of the requested address entity
-   */
+     * Provide address of bridge entity
+     * @param {"tokens" | "bridge" | "depositWallet" | "releaseWallet"} entity the bridge entity to get address of
+     * @param {"USDC"} tokenSymbol only USDC for now
+     * @returns {string} The hex address of the requested address entity
+     */
     getTronAddress(
         entity: "tokens" | "bridge" | "depositWallet" | "releaseWallet",
         tokenSymbol?: string
@@ -142,18 +161,28 @@ export class TronConnect {
         
     }
 
+    /**
+     * Checks if a token symbol is valid.
+     *
+     * @method isValidToken
+     * @param {string} tokenSymbol - The token symbol to check.
+     * @returns {boolean} - A boolean indicating whether the token symbol is valid.
+     */
     private isValidToken(tokenSymbol: string): boolean {
         return !!this.__tronConfig.tokens.find(
             (x) => x.symbol.toLowerCase() === tokenSymbol.toLowerCase()
         );
     }
+
     /**
-   * Provide token balance of an address
-   * on the connected evm network
-   * @param {"USDC"} tokenSymbol only USDC for now
-   * @param {string} address
-   * @returns {ethers.BigNumber}
-   */
+     * Retrieves the token balance of a specific address on the network.
+     *
+     * @method getTokenBalanceOnNetwork
+     * @async
+     * @param {string} tokenSymbol - The symbol of the token for which to retrieve the balance.
+     * @param {string} address - The address for which to retrieve the token balance.
+     * @returns {Promise<BigNumber>} - A Promise that resolves to the token balance as a BigNumber.
+     */
     async getTokenBalanceOnNetwork(
         tokenSymbol: string,
         address: string
@@ -168,16 +197,20 @@ export class TronConnect {
         const balance = await token.balanceOf(this.fromTronAddress(address)).call();
         return ethers.BigNumber.from(balance.toString());
     }
+
     /**
-   * Bridge tokens to another supported chain
-   * @param {BridgeNetworks} destination
-   * @param {"USDC"} tokenSymbol only USDC for now
-   * @param {string | ethers.BigNumber} amount in BigNumber units e.g 1_000_000 for 1USDC
-   * @param {string | PublicKey | algosdk.Account} destinationWallet provide USDC reciever address on destination chain
-   * @param {string} string source wallet
-   * @param {privateKey} string to sign transaction
-   * @returns {Promise<ethers.ContractTransaction>}
-   */
+     * Bridges a specific token from the source wallet to the destination wallet on the specified network.
+     *
+     * @method bridge
+     * @async
+     * @param {string} sourceWallet - The source wallet from which to bridge the token.
+     * @param {string | PublicKey | algosdk.Account} destinationWallet - The destination wallet or account to receive the bridged token.
+     * @param {BridgeNetworks} destination - The destination network for the bridged token.
+     * @param {string} tokenSymbol - The symbol of the token to bridge.
+     * @param {ethers.BigNumber | string} amount - The amount of the token to bridge.
+     * @param {string} privateKey - The private key of the source wallet.
+     * @returns {Promise<string>} - A Promise that resolves to the transaction hash or identifier for the bridge transaction.
+     */
     async bridge(
         sourceWallet: string,
         destinationWallet: string | PublicKey | algosdk.Account,
@@ -243,15 +276,20 @@ export class TronConnect {
             return Promise.reject(error);
         }
     }
+
     /**
-   * Bridge tokens to another supported chain
-   * @param {BridgeNetworks} destination
-   * @param {"USDC"} tokenSymbol only USDC for now
-   * @param {string | ethers.BigNumber} amount in BigNumber units e.g 1_000_000 for 1USDC
-   * @param {string | PublicKey | algosdk.Account} destinationWallet provide USDC reciever address on destination chain
-   * @param {ethers.Wallet} wallet to sign transaction
-   * @returns {Promise<ethers.ContractTransaction>}
-   */
+     * Bridges a specific token from the source wallet to the destination wallet on the specified network using a web interface.
+     *
+     * @method bridgeWeb
+     * @async
+     * @param {BridgeNetworks} destination - The destination network for the bridged token.
+     * @param {string} tokenSymbol - The symbol of the token to bridge.
+     * @param {ethers.BigNumber | string} amount - The amount of the token to bridge.
+     * @param {string | PublicKey | algosdk.Account} destinationWallet - The destination wallet or account to receive the bridged token.
+     * @param {string} sourceWallet - The source wallet from which to bridge the token.
+     * @param {any} trWeb - The web interface for interacting with the bridge.
+     * @returns {Promise<string>} - A Promise that resolves to the transaction hash or identifier for the bridge transaction.
+     */
     async bridgeWeb(
         destination: BridgeNetworks,
         tokenSymbol: string,
@@ -310,6 +348,15 @@ export class TronConnect {
             return Promise.reject(error);
         }
     }
+
+    /**
+     * Deserializes the deposit event data based on the deposit transaction hash.
+     *
+     * @method deSerializeDepositEvent
+     * @async
+     * @param {string} depositTxHash - The deposit transaction hash.
+     * @returns {Promise<Object>} - A Promise that resolves to an object containing the deserialized deposit event data.
+     */
     async deSerializeDepositEvent(depositTxHash: string): Promise<{
     destination: {
       chain: BridgeNetworks;
@@ -329,6 +376,14 @@ export class TronConnect {
         return decoded;
     }
 
+    /**
+     * Retrieves the bridge logs associated with a specific deposit or release transaction ID.
+     *
+     * @method getBridgeLogs
+     * @async
+     * @param {string} depositOrReleaseTxId - The transaction ID of the deposit or release.
+     * @returns {Promise<Array<TransferEvent | BridgeDepositEvent | BridgeReleaseEvent>>} - A Promise that resolves to an array of bridge logs, which can be TransferEvent, BridgeDepositEvent, or BridgeReleaseEvent objects.
+     */
     async getBridgeLogs(
         depositOrReleaseTxId: string
     ): Promise<Array<TransferEvent | BridgeDepositEvent | BridgeReleaseEvent>> {
@@ -381,18 +436,44 @@ export class TronConnect {
         return events;
     }
 
+    /**
+     * Retrieves the TronWeb instance.
+     *
+     * @method tronWeb
+     * @returns {TronWeb} - The TronWeb instance.
+     */
     get tronWeb() {
         return this.__tronWeb;
     }
 
+    /**
+     * Retrieves the Tron configuration.
+     *
+     * @method tronConfig
+     * @returns {TronConfig} - The Tron configuration.
+     */
     get tronConfig() {
         return this.__tronConfig;
     }
 
+    /**
+     * Retrieves the hashed transaction ID.
+     *
+     * @method getTxnHashed
+     * @param {string} txnID - The transaction ID.
+     * @returns {string} - The hashed transaction ID.
+     */
     public getTxnHashed(txnID: string): string {
         return ethers.utils.keccak256(`0x${txnID}`);
     }
 
+    /**
+     * Retrieves the configuration for a specific token based on its symbol.
+     *
+     * @method getToken
+     * @param {string} tokenSymbol - The symbol of the token.
+     * @returns {BridgeTokenConfig | undefined} - The configuration for the token, or undefined if the token is not found.
+     */
     public getToken(tokenSymbol: string): BridgeTokenConfig | undefined {
         return this.__tronConfig.tokens.find(x => x.symbol.toLowerCase() === tokenSymbol.toLowerCase())
     }

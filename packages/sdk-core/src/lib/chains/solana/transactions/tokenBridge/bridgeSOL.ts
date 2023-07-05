@@ -1,11 +1,21 @@
-import {Connection, PublicKey, SystemProgram, Transaction, TransactionInstruction} from "@solana/web3.js";
-import {BridgeTokenConfig, Routing, RoutingHelper} from "../../../../common";
-import {SolanaAccountsConfig} from "../../types";
-import {getSolEscrowAccount} from "./utils";
+import { Connection, PublicKey, SystemProgram, Transaction, TransactionInstruction } from "@solana/web3.js";
+import { BridgeTokenConfig, Routing, RoutingHelper } from "../../../../common";
+import { SolanaAccountsConfig } from "../../types";
+import { getSolEscrowAccount } from "./utils";
 import algosdk from "algosdk";
-import {serialize} from "borsh"
-import {BridgeInitSchema} from "./schemas";
+import { serialize } from "borsh"
+import { BridgeInitSchema } from "./schemas";
 
+/**
+ * Builds a Solana bridge transaction.
+ *
+ * @param {Connection} connection - The connection object.
+ * @param {PublicKey} account - The account public key.
+ * @param {Routing} routing - The routing information.
+ * @param {BridgeTokenConfig} token - The token configuration.
+ * @param {SolanaAccountsConfig} solanaAccountsConfig - The Solana accounts configuration.
+ * @returns {Promise<Transaction>} - A promise that resolves with the built Solana bridge transaction.
+ */
 export async function solBridgeTransaction(
     connection: Connection,
     account: PublicKey,
@@ -38,14 +48,14 @@ export async function solBridgeTransaction(
     const instructions = new TransactionInstruction({
         programId: new PublicKey(solanaAccountsConfig.bridgeProgram),
         keys: [
-            {pubkey: account, isSigner: true, isWritable: true},
-            {pubkey: solanaEscrowAccount, isSigner: false, isWritable: true},
+            { pubkey: account, isSigner: true, isWritable: true },
+            { pubkey: solanaEscrowAccount, isSigner: false, isWritable: true },
             {
                 pubkey: new PublicKey("GdMte7MdNc3n6zFKZAmKa3TCBhPooPNJ3cBGnJc3uHnG"),
                 isSigner: false,
                 isWritable: false,
             },
-            {pubkey: SystemProgram.programId, isSigner: false, isWritable: false},
+            { pubkey: SystemProgram.programId, isSigner: false, isWritable: false },
         ],
         data: Buffer.from(data),
     });

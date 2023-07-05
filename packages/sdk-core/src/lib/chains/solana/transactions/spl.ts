@@ -1,7 +1,16 @@
-import {ASSOCIATED_TOKEN_PROGRAM_ID, TOKEN_PROGRAM_ID, createAssociatedTokenAccountInstruction, createCloseAccountInstruction, createTransferCheckedInstruction, getAccount, getAssociatedTokenAddress, getMint} from "@solana/spl-token";
-import {Account, Connection, PublicKey, Transaction, sendAndConfirmTransaction} from "@solana/web3.js";
-import {BridgeTokenConfig, Routing, RoutingHelper} from "../../../common";
+import { ASSOCIATED_TOKEN_PROGRAM_ID, TOKEN_PROGRAM_ID, createAssociatedTokenAccountInstruction, createCloseAccountInstruction, createTransferCheckedInstruction, getAccount, getAssociatedTokenAddress, getMint } from "@solana/spl-token";
+import { Connection, PublicKey, Transaction } from "@solana/web3.js";
+import { BridgeTokenConfig, Routing, RoutingHelper } from "../../../common";
 
+/**
+ * Sends a token transaction using the provided routing information.
+ *
+ * @param {Routing} routing - The routing information for the transaction.
+ * @param {PublicKey} senderTokenAccount - The sender's token account public key.
+ * @param {PublicKey} recipientTokenAccount - The recipient's token account public key.
+ * @param {BridgeTokenConfig} token - The configuration for the token.
+ * @returns {Promise<Transaction>} - A Promise that resolves to the sent token transaction.
+ */
 export async function sendTokenTransaction(
     routing: Routing,
     senderTokenAccount: PublicKey,
@@ -25,6 +34,13 @@ export async function sendTokenTransaction(
     return txn;
 }
 
+/**
+ * Creates a transaction to close a token account.
+ *
+ * @param {PublicKey} senderAccount - The public key of the sender's account.
+ * @param {PublicKey} senderTokenAccount - The public key of the sender's token account to be closed.
+ * @returns {Promise<Transaction>} - A Promise that resolves to the transaction to close the token account.
+ */
 export async function closeTokenAccountTransaction(senderAccount: PublicKey, senderTokenAccount: PublicKey): Promise<Transaction> {
     const tx = new Transaction();
     tx.add(
@@ -39,12 +55,14 @@ export async function closeTokenAccountTransaction(senderAccount: PublicKey, sen
 
     return tx
 }
+
 /**
- * 
- * @param owner 
- * @param solanaTokenConfig 
- * @param connection 
- * @returns 
+ * Generates the associated token account address for a given owner.
+ *
+ * @param {string} owner - The owner's address for which to generate the associated token account address.
+ * @param {BridgeTokenConfig} solanaTokenConfig - The configuration for the Solana token.
+ * @param {Connection} connection - The Solana connection object.
+ * @returns {Promise<PublicKey>} - A Promise that resolves to the generated associated token account address.
  */
 export async function generateAssociatedTokenAccountAddress(
     owner: string,
@@ -55,11 +73,14 @@ export async function generateAssociatedTokenAccountAddress(
     const tokenAccountAddress = await getAssociatedTokenAddress(new PublicKey(mintAddress.address), new PublicKey(owner))
     return tokenAccountAddress
 }
+
 /**
- * 
- * @param owner 
- * @param solanaTokenConfig 
- * @returns 
+ * Retrieves the associated token account for a given owner.
+ *
+ * @param {string} owner - The owner's address for which to retrieve the associated token account.
+ * @param {BridgeTokenConfig} solanaTokenConfig - The configuration for the Solana token.
+ * @param {Connection} connection - The Solana connection object.
+ * @returns {Promise<PublicKey>} - A Promise that resolves to the associated token account's PublicKey.
  */
 export async function getAssociatedTokenAccount(
     owner: string,
@@ -81,12 +102,14 @@ export async function getAssociatedTokenAccount(
 
     return tokenAccount
 }
+
 /**
- * 
- * @param signer 
- * @param owner 
- * @param tokenConfig 
- * @returns 
+ * Creates a transaction to create an associated token account for a given owner.
+ *
+ * @param {string} owner - The owner's address for which to create the associated token account.
+ * @param {BridgeTokenConfig} tokenConfig - The configuration for the token.
+ * @param {Connection} connection - The Solana connection object.
+ * @returns {Promise<Transaction>} - A Promise that resolves to the transaction to create the associated token account.
  */
 export async function createAssociatedTokenAccountTransaction(owner: string, tokenConfig: BridgeTokenConfig, connection: Connection): Promise<Transaction> {
     const ownerPk = new PublicKey(owner)

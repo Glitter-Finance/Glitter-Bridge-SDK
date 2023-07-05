@@ -8,6 +8,12 @@ import { getHashedTransactionId } from "../utils";
 import { RoutingHelper } from "../routing";
 import { TronResources, getTRXBurnByEnergy, tronEstimateReleaseTxEnergy } from "./gasPrice_Tron";
 
+/**
+ * Cache object for storing gas prices for different networks.
+ *
+ * @type {Object.<string, { nativePrice: BigNumber, updatedAt: number }>}
+ * @constant
+ */
 const gas_cache: {
     [network: string]: {
         nativePrice: BigNumber;
@@ -17,6 +23,15 @@ const gas_cache: {
 
 const cache_duration = 1000 * 60 * 5; // 5 mins
 
+/**
+ * Retrieves the EVM gas price for the specified network.
+ *
+ * @async
+ * @function EVMGasPrice
+ * @param {GlitterBridgeSDK} sdk - The GlitterBridgeSDK instance.
+ * @param {BridgeNetworks} network - The network for which to retrieve the EVM gas price.
+ * @returns {Promise<{ nativePrice: BigNumber, isFresh: boolean }>} - A Promise that resolves to an object containing the native gas price as a BigNumber and a boolean indicating if the gas price is fresh.
+ */
 export async function EVMGasPrice(sdk: GlitterBridgeSDK, network: BridgeNetworks): Promise<{
     nativePrice: BigNumber;
     isFresh: boolean;
@@ -51,7 +66,16 @@ export async function EVMGasPrice(sdk: GlitterBridgeSDK, network: BridgeNetworks
         isFresh: true
     };
 }
-export async function AlgoGasPrice(sdk: GlitterBridgeSDK): Promise<{
+
+/**
+ * Retrieves the Algo gas price.
+ *
+ * @async
+ * @function AlgoGasPrice
+ * @param {GlitterBridgeSDK} sdk - The GlitterBridgeSDK instance.
+ * @returns {Promise<{ nativePrice: BigNumber, isFresh: boolean }>} - A Promise that resolves to an object containing the native gas price as a BigNumber and a boolean indicating if the gas price is fresh.
+ */
+export async function AlgoGasPrice(): Promise<{
     nativePrice: BigNumber;
     isFresh: boolean;
 }> {      
@@ -60,6 +84,15 @@ export async function AlgoGasPrice(sdk: GlitterBridgeSDK): Promise<{
         isFresh: true
     };        
 }
+
+/**
+ * Retrieves the Solana gas price.
+ *
+ * @async
+ * @function SolanaGasPrice
+ * @param {GlitterBridgeSDK} sdk - The GlitterBridgeSDK instance.
+ * @returns {Promise<{ nativePrice: BigNumber, isFresh: boolean }>} - A Promise that resolves to an object containing the native gas price as a BigNumber and a boolean indicating if the gas price is fresh.
+ */
 export async function SolanaGasPrice(sdk: GlitterBridgeSDK):Promise<{
     nativePrice: BigNumber;
     isFresh: boolean;
@@ -114,6 +147,14 @@ export async function SolanaGasPrice(sdk: GlitterBridgeSDK):Promise<{
         
 }
 
+/**
+ * Retrieves the Tron gas price.
+ *
+ * @async
+ * @function TronGasPrice
+ * @param {GlitterBridgeSDK} sdk - The GlitterBridgeSDK instance.
+ * @returns {Promise<{ nativePrice: BigNumber, isFresh: boolean }>} - A Promise that resolves to an object containing the native gas price as a BigNumber and a boolean indicating if the gas price is fresh.
+ */
 export async function TronGasPrice(sdk: GlitterBridgeSDK):Promise<{
     nativePrice: BigNumber;
     isFresh: boolean;

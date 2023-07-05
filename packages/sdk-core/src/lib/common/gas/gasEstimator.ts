@@ -1,24 +1,55 @@
 import BigNumber from "bignumber.js";
 import { BridgeType } from "../transactions";
-import { BridgeEvmNetworks, BridgeNetworks } from "../networks";
+import { BridgeNetworks } from "../networks";
 import { GlitterBridgeSDK } from "../../../GlitterBridgeSDK";
 import { BridgeV2Tokens } from "../tokens";
 import { TokenPricing } from "../pricing";
 import { AlgoGasPrice, EVMGasPrice, SolanaGasPrice, TronGasPrice } from "./gasPriceByChain";
 
+/**
+ * Represents gas estimate values.
+ *
+ * @typedef {Object} GasEstimate
+ * @property {number} usd - The estimated gas cost in USD.
+ * @property {number | undefined} deposit - The estimated gas cost for deposit (optional).
+ * @property {number | undefined} release - The estimated gas cost for release (optional).
+ */
 export type GasEstimate = {
     usd: number;
     deposit?: number;
     release?: number;
 }
 
+/**
+ * Represents gas used estimate values.
+ *
+ * @typedef {Object} GasUsedEstimate
+ * @property {BigNumber} source - The estimated gas used for the source.
+ * @property {BigNumber} destination - The estimated gas used for the destination.
+ */
 export type GasUsedEstimate = {
     source: BigNumber;
     destination: BigNumber;
 }
 
+/**
+ * GasEstimator is a class that provides gas estimation functionality.
+ *
+ * @class GasEstimator
+ */
 export class GasEstimator {
 
+    /**
+     * Estimates the gas price for a bridge transaction.
+     *
+     * @static
+     * @method estimateGasPrice
+     * @param {GlitterBridgeSDK} sdk - The GlitterBridgeSDK instance.
+     * @param {string} from - The source address for the bridge transaction.
+     * @param {string} to - The destination address for the bridge transaction.
+     * @param {BridgeType} type - The type of bridge transaction.
+     * @returns {Promise<GasEstimate | undefined>} - A Promise that resolves to the estimated gas price as a GasEstimate object, or undefined if estimation fails.
+     */
     public static async estimateGasPrice(
         sdk: GlitterBridgeSDK,
         from: string,
@@ -93,6 +124,16 @@ export class GasEstimator {
 
     }
 
+    /**
+     * Estimates the gas price for a Circle bridge transaction.
+     *
+     * @static
+     * @method estimateCircleGasPrice
+     * @param {GlitterBridgeSDK} sdk - The GlitterBridgeSDK instance.
+     * @param {BridgeNetworks} fromNetwork - The source network for the bridge transaction.
+     * @param {BridgeNetworks} toNetwork - The destination network for the bridge transaction.
+     * @returns {Promise<GasEstimate | undefined>} - A Promise that resolves to the estimated gas price as a GasEstimate object, or undefined if estimation fails.
+     */
     private static async estimateCircleGasPrice(
         sdk: GlitterBridgeSDK,
         fromNetwork: BridgeNetworks,
@@ -115,6 +156,17 @@ export class GasEstimator {
             return undefined;
         }
     }
+
+    /**
+     * Estimates the gas price for a TokenV2 bridge transaction.
+     *
+     * @static
+     * @method estimateTokenV2GasPrice
+     * @param {GlitterBridgeSDK} sdk - The GlitterBridgeSDK instance.
+     * @param {BridgeNetworks} fromNetwork - The source network for the bridge transaction.
+     * @param {BridgeNetworks} toNetwork - The destination network for the bridge transaction.
+     * @returns {Promise<GasEstimate | undefined>} - A Promise that resolves to the estimated gas price as a GasEstimate object, or undefined if estimation fails.
+     */
     private static async estimateTokenV2GasPrice(
         sdk: GlitterBridgeSDK,
         fromNetwork: BridgeNetworks,
@@ -138,6 +190,15 @@ export class GasEstimator {
         }
     }
        
+    /**
+     * Retrieves the Circle token amount for a given network estimate.
+     *
+     * @static
+     * @method getCircleFromEstimate
+     * @param {GlitterBridgeSDK} sdk - The GlitterBridgeSDK instance.
+     * @param {BridgeNetworks} network - The network for which to retrieve the Circle token amount.
+     * @returns {Promise<BigNumber | undefined>} - A Promise that resolves to the Circle token amount as a BigNumber, or undefined if retrieval fails.
+     */
     private static async getCircleFromEstimate(sdk: GlitterBridgeSDK,
         network: BridgeNetworks): Promise<BigNumber|undefined>{
         
@@ -175,7 +236,7 @@ export class GasEstimator {
                 return gasPrice.nativePrice.times(circleDepositGasEstimate).times(gasTokenPrice.average_price).dividedBy(10 ** (gasTokenChain?.decimals || 0));
 
             case BridgeNetworks.algorand.toLocaleLowerCase():
-                gasPrice = await AlgoGasPrice(sdk);
+                gasPrice = await AlgoGasPrice();
                 return gasPrice.nativePrice.times(gasTokenPrice.average_price);
             case BridgeNetworks.solana.toLocaleLowerCase():
                 gasPrice = await SolanaGasPrice(sdk);
@@ -188,6 +249,16 @@ export class GasEstimator {
         }
 
     }
+
+    /**
+     * Retrieves the Circle token amount for a given destination network estimate.
+     *
+     * @static
+     * @method getCircleToEstimate
+     * @param {GlitterBridgeSDK} sdk - The GlitterBridgeSDK instance.
+     * @param {BridgeNetworks} network - The destination network for which to retrieve the Circle token amount.
+     * @returns {Promise<BigNumber | undefined>} - A Promise that resolves to the Circle token amount as a BigNumber, or undefined if retrieval fails.
+     */
     private static async getCircleToEstimate(sdk: GlitterBridgeSDK,
         network: BridgeNetworks): Promise<BigNumber|undefined>{
         
@@ -221,7 +292,7 @@ export class GasEstimator {
                 return gasPrice.nativePrice.times(circleReleaseGasEstimate).times(gasTokenPrice.average_price).dividedBy(10 ** (gasTokenChain?.decimals || 0));
 
             case BridgeNetworks.algorand.toLocaleLowerCase():
-                gasPrice = await AlgoGasPrice(sdk);
+                gasPrice = await AlgoGasPrice();
                 return gasPrice.nativePrice.times(gasTokenPrice.average_price);
             case BridgeNetworks.solana.toLocaleLowerCase():
                 gasPrice = await SolanaGasPrice(sdk);
@@ -235,6 +306,15 @@ export class GasEstimator {
 
     }
 
+    /**
+     * Retrieves the TokenV2 token amount for a given network estimate.
+     *
+     * @static
+     * @method getTokenV2FromEstimate
+     * @param {GlitterBridgeSDK} sdk - The GlitterBridgeSDK instance.
+     * @param {BridgeNetworks} network - The network for which to retrieve the TokenV2 token amount.
+     * @returns {Promise<BigNumber | undefined>} - A Promise that resolves to the TokenV2 token amount as a BigNumber, or undefined if retrieval fails.
+     */
     private static async getTokenV2FromEstimate(sdk: GlitterBridgeSDK,
         network: BridgeNetworks): Promise<BigNumber|undefined>{
 
@@ -251,6 +331,16 @@ export class GasEstimator {
                 return undefined;
         }
     }
+
+    /**
+     * Retrieves the TokenV2 token amount for a given network estimate.
+     *
+     * @static
+     * @method getTokenV2FromEstimate
+     * @param {GlitterBridgeSDK} sdk - The GlitterBridgeSDK instance.
+     * @param {BridgeNetworks} network - The network for which to retrieve the TokenV2 token amount.
+     * @returns {Promise<BigNumber | undefined>} - A Promise that resolves to the TokenV2 token amount as a BigNumber, or undefined if retrieval fails.
+     */
     private static async getTokenV2ToEstimate(sdk: GlitterBridgeSDK,
         network: BridgeNetworks): Promise<BigNumber|undefined>{
         
@@ -282,16 +372,7 @@ export class GasEstimator {
 
                 // eslint-disable-next-line no-case-declarations              
                 return gasPrice.nativePrice.times(circleReleaseGasEstimate).times(gasTokenPrice.average_price).dividedBy(10 ** (gasTokenChain?.decimals || 0));
-
-            // case BridgeNetworks.algorand.toLocaleLowerCase():
-            //     gasPrice = await AlgoGasPrice(sdk);
-            //     return gasPrice.nativePrice.times(gasTokenPrice.average_price);
-            // case BridgeNetworks.solana.toLocaleLowerCase():
-            //     gasPrice = await SolanaGasPrice(sdk);
-            //     return gasPrice.nativePrice.times(gasTokenPrice.average_price);
-            // case BridgeNetworks.TRON.toLocaleLowerCase():
-            //     gasPrice = await TronGasPrice(sdk);
-            //     return gasPrice.nativePrice.times(gasTokenPrice.average_price);
+           
             default:
                 return undefined;
         }

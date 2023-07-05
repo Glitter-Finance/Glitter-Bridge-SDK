@@ -1,4 +1,4 @@
-import algosdk, {Transaction} from "algosdk";
+import algosdk, { Transaction } from "algosdk";
 import BigNumber from "bignumber.js";
 import {
     AlgorandStandardAssetConfig,
@@ -6,12 +6,12 @@ import {
     Routing,
     RoutingDefault,
 } from "../../../../common";
-import {BridgeNetworks} from "../../../../common";
+import { BridgeNetworks } from "../../../../common";
 import {
     algoTransferTxnWithRoutingNote,
     assetTransferTxnWithRoutingNote,
 } from "../assets";
-import {getAlgorandDefaultTransactionParams} from "../utils";
+import { getAlgorandDefaultTransactionParams } from "../utils";
 import {
     AlgorandTokenBridgeDepositTransactions,
     AlgorandTokenBridgeRefundTransactions,
@@ -23,7 +23,7 @@ function validateTokenBridgeTransaction(params: {
   routing: Routing;
   tokenConfig: AlgorandNativeTokenConfig | AlgorandStandardAssetConfig;
 }): boolean {
-    const {routing, tokenConfig} = params;
+    const { routing, tokenConfig } = params;
     const toNetwork = routing.to.network.toLowerCase();
     const fromNetwork = routing.from.network.toLowerCase();
     const toTokenSymbol = routing.to.token.toLowerCase();
@@ -52,11 +52,12 @@ function validateTokenBridgeTransaction(params: {
 }
 
 /**
+ * Retrieves a transfer transaction based on the asset symbol.
  *
- * @param client
- * @param routing
- * @param tokenConfig
- * @returns
+ * @param {algosdk.Algodv2} client - The Algorand client instance.
+ * @param {Routing} routing - The routing object.
+ * @param {AlgorandNativeTokenConfig|AlgorandStandardAssetConfig} [tokenConfig] - Optional token configuration object.
+ * @returns {Promise<algosdk.Transaction>} - A promise that resolves with the transfer transaction.
  */
 const getTransferTxByAssetSymbol = async (
     client: algosdk.Algodv2,
@@ -80,12 +81,13 @@ const getTransferTxByAssetSymbol = async (
 };
 
 /**
+ * Generates a fee transaction for a specified fee collector and token configuration.
  *
- * @param client
- * @param routing
- * @param feeCollector
- * @param tokenConfig
- * @returns
+ * @param {algosdk.Algodv2} client - The Algorand client instance.
+ * @param {Routing} routing - The routing object.
+ * @param {string} feeCollector - The address of the fee collector.
+ * @param {AlgorandNativeTokenConfig|AlgorandStandardAssetConfig} tokenConfig - The token configuration object.
+ * @returns {Promise<Transaction>} - A promise that resolves with the fee transaction.
  */
 export const feeTransaction = async (
     client: algosdk.Algodv2,
@@ -94,11 +96,11 @@ export const feeTransaction = async (
     tokenConfig: AlgorandNativeTokenConfig | AlgorandStandardAssetConfig
 ): Promise<Transaction> => {
     /**
-   * FeeRouting seems to be copy
-   * of actual routing but with address
-   * and network updated to network algorand
-   * and address of feeCollector
-   */
+     * FeeRouting seems to be copy
+     * of actual routing but with address
+     * and network updated to network algorand
+     * and address of feeCollector
+     */
     const feeRouting = RoutingDefault(routing);
     feeRouting.to.network = "algorand";
     feeRouting.to.token = feeRouting.from.token;
@@ -114,15 +116,16 @@ export const feeTransaction = async (
 };
 
 /**
+ * Generates an approval transaction for a specified method and token configuration.
  *
- * @param client
- * @param method
- * @param sourceNetwork
- * @param destiantionNetwork
- * @param routing
- * @param bridgeAppIndex
- * @param token
- * @returns
+ * @param {algosdk.Algodv2} client - The Algorand client instance.
+ * @param {AlgorandTokenBridgeDepositTransactions|AlgorandTokenBridgeRefundTransactions|AlgorandTokenBridgeReleaseTransactions} method - The method type for the approval (either "AlgorandTokenBridgeDepositTransactions", "AlgorandTokenBridgeRefundTransactions", or "AlgorandTokenBridgeReleaseTransactions").
+ * @param {Routing} routing - The routing object.
+ * @param {string} destinationOnChainAddress - The destination on-chain address.
+ * @param {number} bridgeAppIndex - The index of the bridge app.
+ * @param {string} vault - The vault address.
+ * @param {AlgorandStandardAssetConfig|AlgorandNativeTokenConfig} token - The token configuration object.
+ * @returns {Promise<Transaction>} - A promise that resolves with the approval transaction.
  */
 export const approvalTransaction = async (
     client: algosdk.Algodv2,
@@ -159,15 +162,18 @@ export const approvalTransaction = async (
 };
 
 /**
+ * Initiates a bridge deposit transaction from the source network to the destination network.
  *
- * @param client
- * @param sourceAddress
- * @param destinationAddress
- * @param destinationNetwork
- * @param amount
- * @param vaultConfig
- * @param tokenConfig
- * @returns
+ * @param {algosdk.Algodv2} client - The Algorand client instance.
+ * @param {number} bridgeAppIndex - The index of the bridge app.
+ * @param {string} sourceAddress - The source address on the source network.
+ * @param {string} destinationAddress - The destination address on the destination network.
+ * @param {BridgeNetworks} destinationNetwork - The destination network type.
+ * @param {bigint} amount - The amount to be deposited (as a BigInt).
+ * @param {{ algoVault: string, asaVault: string }} vaultConfig - The configuration for the vaults.
+ * @param {string} feeCollectorAddress - The address of the fee collector.
+ * @param {AlgorandStandardAssetConfig|AlgorandNativeTokenConfig} tokenConfig - The token configuration object.
+ * @returns {Promise<Transaction[]>} - A promise that resolves with an array of deposit transactions.
  */
 export const bridgeDeposit = async (
     client: algosdk.Algodv2,

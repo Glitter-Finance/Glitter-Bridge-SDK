@@ -1,12 +1,22 @@
-import {Connection, PublicKey, SystemProgram, Transaction, TransactionInstruction} from "@solana/web3.js";
-import {SolanaAccountsConfig} from "../../types";
-import {BridgeTokenConfig, Routing, RoutingHelper} from "../../../../common";
-import {getSolEscrowAccount, getTokenAccount, getTokenEscrowAccount} from "./utils";
+import { Connection, PublicKey, SystemProgram, Transaction, TransactionInstruction } from "@solana/web3.js";
+import { SolanaAccountsConfig } from "../../types";
+import { BridgeTokenConfig, Routing, RoutingHelper } from "../../../../common";
+import { getSolEscrowAccount, getTokenAccount, getTokenEscrowAccount } from "./utils";
 import algosdk from "algosdk";
-import {serialize} from "borsh";
-import {BridgeInitSchema} from "./schemas";
-import {TOKEN_PROGRAM_ID} from "@solana/spl-token";
+import { serialize } from "borsh";
+import { BridgeInitSchema } from "./schemas";
+import { TOKEN_PROGRAM_ID } from "@solana/spl-token";
 
+/**
+ * Builds a token bridge transaction.
+ *
+ * @param {Connection} connection - The connection object.
+ * @param {PublicKey} account - The account public key.
+ * @param {Routing} routing - The routing information.
+ * @param {BridgeTokenConfig} token - The token configuration.
+ * @param {SolanaAccountsConfig} solanaAccountsConfig - The Solana accounts configuration.
+ * @returns {Promise<Transaction>} - A promise that resolves with the built token bridge transaction.
+ */
 export async function tokenBridgeTransaction(
     connection: Connection,
     account: PublicKey,
@@ -51,19 +61,19 @@ export async function tokenBridgeTransaction(
     const instructions = new TransactionInstruction({
         programId: bridgeProgram,
         keys: [
-            {pubkey: account, isSigner: true, isWritable: false},
-            {pubkey: userTokenAccount, isSigner: false, isWritable: true},
-            {pubkey: solEscrowAccount, isSigner: false, isWritable: true},
-            {pubkey: tokenEscrowAccount, isSigner: false, isWritable: true},
+            { pubkey: account, isSigner: true, isWritable: false },
+            { pubkey: userTokenAccount, isSigner: false, isWritable: true },
+            { pubkey: solEscrowAccount, isSigner: false, isWritable: true },
+            { pubkey: tokenEscrowAccount, isSigner: false, isWritable: true },
             {
                 // WHY IS THIS ADDRESS HARDCODED?
                 pubkey: new PublicKey("2g1SsjER76eKTLsSCdpDyB726ba8SwvN23YMoknTHvmX"),
                 isSigner: false,
                 isWritable: false,
             },
-            {pubkey: mintToken, isSigner: false, isWritable: false},
-            {pubkey: TOKEN_PROGRAM_ID, isSigner: false, isWritable: false},
-            {pubkey: SystemProgram.programId, isSigner: false, isWritable: false},
+            { pubkey: mintToken, isSigner: false, isWritable: false },
+            { pubkey: TOKEN_PROGRAM_ID, isSigner: false, isWritable: false },
+            { pubkey: SystemProgram.programId, isSigner: false, isWritable: false },
         ],
         data: Buffer.from(data),
     });

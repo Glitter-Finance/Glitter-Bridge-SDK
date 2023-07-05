@@ -1,25 +1,26 @@
-import {Connection, PublicKey, Transaction, TransactionInstruction} from "@solana/web3.js";
-import {BridgeNetworks, BridgeTokenConfig, Routing} from "../../../../common";
-import {SolanaAccountsConfig} from "../../types";
-import {TOKEN_PROGRAM_ID, createTransferInstruction, getAssociatedTokenAddress, getMint} from "@solana/spl-token";
+import { Connection, PublicKey, Transaction, TransactionInstruction } from "@solana/web3.js";
+import { BridgeNetworks, BridgeTokenConfig, Routing } from "../../../../common";
+import { SolanaAccountsConfig } from "../../types";
+import { TOKEN_PROGRAM_ID, createTransferInstruction, getAssociatedTokenAddress, getMint } from "@solana/spl-token";
 import BigNumber from "bignumber.js";
 
 /**
- * 
- * @param connection 
- * @param sourceAddress 
- * @param destinationAddress 
- * @param destiantionNetwork 
- * @param amount 
- * @param solanaAccountsConfig 
- * @param usdcConfig 
- * @returns 
+ * Bridges USDC tokens from the source network to the destination network.
+ *
+ * @param {Connection} connection - The Solana connection object.
+ * @param {string} sourceAddress - The source address from which to bridge the tokens.
+ * @param {string} destinationAddress - The destination address to receive the bridged tokens.
+ * @param {BridgeNetworks} destinationNetwork - The destination network to bridge the tokens to.
+ * @param {BigNumber} amount - The amount of USDC tokens to bridge.
+ * @param {SolanaAccountsConfig} solanaAccountsConfig - The Solana accounts configuration.
+ * @param {BridgeTokenConfig} usdcConfig - The configuration for the USDC token.
+ * @returns {Promise<Transaction>} - A Promise that resolves when the bridging operation is completed.
  */
 export async function bridgeUSDC (
     connection: Connection,
     sourceAddress: string,
     destinationAddress: string,
-    destiantionNetwork: BridgeNetworks,
+    destinationNetwork: BridgeNetworks,
     amount: BigNumber,
     solanaAccountsConfig: SolanaAccountsConfig,
     usdcConfig: BridgeTokenConfig
@@ -37,7 +38,7 @@ export async function bridgeUSDC (
         },
         to: {
             token: usdcConfig.symbol,
-            network: destiantionNetwork.toString().toLowerCase(),
+            network: destinationNetwork.toString().toLowerCase(),
             address: destinationAddress,
             txn_signature: "",
         },
@@ -77,7 +78,7 @@ export async function bridgeUSDC (
     );
     tx.add(
         new TransactionInstruction({
-            keys: [{pubkey: sourcePublicKey, isSigner: true, isWritable: true}],
+            keys: [{ pubkey: sourcePublicKey, isSigner: true, isWritable: true }],
             data: Buffer.from(JSON.stringify(bridgeNodeInstructionData), "utf-8"),
             programId: new PublicKey(solanaAccountsConfig.memoProgram),
         })

@@ -2,6 +2,16 @@ import { BridgeV2Tokens, Token2Config } from "../tokens";
 import { getPriceFromCoingecko } from "./coingecko";
 import { fromCoinMarketCap } from "./coinmarketcap";
 
+/**
+ * Represents the price data for a token.
+ *
+ * @typedef {Object} TokenPriceData
+ * @property {number} average_price - The average price.
+ * @property {number} cmc_price - The price from CoinMarketCap.
+ * @property {number} cg_price - The price from Coingecko.
+ * @property {number} timestamp - The timestamp of the price data.
+ * @property {PriceDataStatus} status - The status of the price data.
+ */
 export type TokenPriceData = {
     average_price: number;
     cmc_price: number;
@@ -9,6 +19,13 @@ export type TokenPriceData = {
     timestamp: number;
     status: PriceDataStatus;
 }
+
+/**
+ * Enum representing the status of price data.
+ *
+ * @enum {string}
+ * @readonly
+ */
 export enum PriceDataStatus {
     Fresh = "Fresh",
     Updated = "Updated",
@@ -16,17 +33,39 @@ export enum PriceDataStatus {
     NotFound = "NotFound"
 }
 
+/**
+ * Represents a class for token pricing.
+ *
+ * @class TokenPricing
+ */
 export class TokenPricing {
 
     //Local Vars
     private static _cmc_api_key: string | undefined = undefined;
     public static isLoaded = false;
 
+    /**
+     * Loads the configuration for token pricing.
+     *
+     * @static
+     * @function loadConfig
+     * @param {string} apiKey - The API key for token pricing.
+     * @returns {void}
+     */
     public static loadConfig(apiKey: string) {
         this._cmc_api_key = apiKey;
         this.isLoaded = true;
     }  
 
+    /**
+     * Updates the price for the specified token.
+     *
+     * @static
+     * @async
+     * @function updatePrice
+     * @param {Token2Config} token - The token configuration.
+     * @returns {Promise<TokenPriceData>} - A Promise that resolves to the updated token price data.
+     */
     public static async updatePrice(token: Token2Config): Promise<TokenPriceData> {
 
         let cg_return;
@@ -84,6 +123,15 @@ export class TokenPricing {
         return returnValue;
     }
     
+    /**
+     * Retrieves the price for the specified token.
+     *
+     * @static
+     * @async
+     * @function getPrice
+     * @param {string | Token2Config} [symbolorToken] - The symbol of the token or the token configuration.
+     * @returns {Promise<TokenPriceData>} - A Promise that resolves to the token price data.
+     */
     public static async getPrice(symbol: string): Promise<TokenPriceData>
     public static async getPrice(token: Token2Config): Promise<TokenPriceData>
     public static async getPrice(symbolorToken?: string | Token2Config): Promise<TokenPriceData> {

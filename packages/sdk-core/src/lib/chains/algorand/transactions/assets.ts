@@ -1,14 +1,15 @@
-import algosdk, {Transaction} from "algosdk";
-import {Routing} from "../../../";
-import {AlgorandStandardAssetConfig} from "../../../../lib/common";
-import {getAlgorandDefaultTransactionParams} from "./utils";
+import algosdk, { Transaction } from "algosdk";
+import { Routing } from "../../../";
+import { AlgorandStandardAssetConfig } from "../../../../lib/common";
+import { getAlgorandDefaultTransactionParams } from "./utils";
 
 /**
+ * Initiates an asset opt-in transaction for a specified token.
  *
- * @param client
- * @param address
- * @param tokenConfig
- * @returns
+ * @param {algosdk.Algodv2} client - The Algorand client instance.
+ * @param {string} address - The address to opt-in for the asset.
+ * @param {AlgorandStandardAssetConfig} tokenConfig - The token configuration object.
+ * @returns {Promise<Transaction>} - A promise that resolves with the opt-in transaction.
  */
 export const assetOptin = async (
     client: algosdk.Algodv2,
@@ -34,11 +35,12 @@ export const assetOptin = async (
 };
 
 /**
+ * Initiates a close-out transaction for an account, transferring its funds to another address.
  *
- * @param client
- * @param addressClosing
- * @param addressReceiving
- * @returns
+ * @param {algosdk.Algodv2} client - The Algorand client instance.
+ * @param {string} addressClosing - The address of the account being closed.
+ * @param {string} addressReceiving - The address to which the funds will be transferred.
+ * @returns {Promise<Transaction>} - A promise that resolves with the close-out transaction.
  */
 export const closeOutAccount = async (
     client: algosdk.Algodv2,
@@ -62,12 +64,13 @@ export const closeOutAccount = async (
 };
 
 /**
+ * Initiates a close-out transaction for a specific token, transferring the token's balance from the closing address to the receiving address.
  *
- * @param client
- * @param addressClosing
- * @param addressReceiving
- * @param token_asset_id
- * @returns
+ * @param {algosdk.Algodv2} client - The Algorand client instance.
+ * @param {string} addressClosing - The address from which the token balance will be closed out.
+ * @param {string} addressReceiving - The address that will receive the token balance.
+ * @param {number} token_asset_id - The ID of the token being closed out.
+ * @returns {Promise<Transaction>} - A promise that resolves with the close-out transaction.
  */
 export const closeOutToken = async (
     client: algosdk.Algodv2,
@@ -94,11 +97,12 @@ export const closeOutToken = async (
 };
 
 /**
+ * Creates an asset transfer transaction with routing and note options.
  *
- * @param client
- * @param routing
- * @param tokenConfig
- * @returns
+ * @param {algosdk.Algodv2} client - The Algorand client instance.
+ * @param {Routing} routing - The routing object.
+ * @param {AlgorandStandardAssetConfig} tokenConfig - The token configuration object.
+ * @returns {Promise<algosdk.Transaction>} - A promise that resolves with the asset transfer transaction.
  */
 export const assetTransferTxnWithRoutingNote = async (
     client: algosdk.Algodv2,
@@ -125,10 +129,11 @@ export const assetTransferTxnWithRoutingNote = async (
 };
 
 /**
+ * Creates an Algo transfer transaction with routing and note options.
  *
- * @param client
- * @param routing
- * @returns
+ * @param {algosdk.Algodv2} client - The Algorand client instance.
+ * @param {Routing} routing - The routing object.
+ * @returns {Promise<algosdk.Transaction>} - A promise that resolves with the Algo transfer transaction.
  */
 export const algoTransferTxnWithRoutingNote = async (
     client: algosdk.Algodv2,

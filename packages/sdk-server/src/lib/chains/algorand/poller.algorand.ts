@@ -4,22 +4,51 @@ import { Cursor, CursorFilter, NewCursor, UpdateCursor } from "../../common/curs
 import { GlitterPoller, PollerResult } from "../../common/poller.Interface";
 import { ServerError } from "../../common/serverErrors";
 import { AlgorandCircleParser } from "./poller.algorand.circle";
-import { AlgorandTokenV2Parser } from "./poller.algorand.token.v2";
+//import { AlgorandTokenV2Parser } from "./poller.algorand.token.v2";
 import { AlgorandTokenV1Parser } from "./poller.algorand.token.v1";
 
+/**
+ * Glitter Algorand Poller class.
+ * Implements the GlitterPoller interface.
+ */
 export class GlitterAlgorandPoller implements GlitterPoller {
 
     //Network
     public network: BridgeNetworks = BridgeNetworks.algorand;
     
     //Cursors
+    /**
+     * Cursors object for tracking transaction cursors.
+     * The keys represent BridgeTypes and the values are arrays of Cursor objects.
+     *
+     * @type {Record<BridgeType, Cursor[]>}
+     */
     public cursors: Record<BridgeType, Cursor[]>;
+
+    /**
+     * Get the tokenV1Cursor.
+     *
+     * @type {Cursor | undefined}
+     * @readonly
+     */
     public get tokenV1Cursor(): Cursor | undefined{
         return this.cursors?.[BridgeType.TokenV1]?.[0];
     }
+    /**
+     * Get the tokenV2Cursor.
+     *
+     * @type {Cursor | undefined}
+     * @readonly
+     */
     public get tokenV2Cursor(): Cursor | undefined{
         return this.cursors?.[BridgeType.TokenV2]?.[0];
     }
+    /**
+     * Get the usdcCursors.
+     *
+     * @type {Cursor | undefined}
+     * @readonly
+     */
     public get usdcCursors(): Cursor[] | undefined{
         return this.cursors?.[BridgeType.Circle];
     }
@@ -33,7 +62,12 @@ export class GlitterAlgorandPoller implements GlitterPoller {
         };
     }
 
-    //Initialize
+    /**
+     * Initializes the GlitterAlgorandPoller.
+     *
+     * @param {GlitterSDKServer} sdkServer - The Glitter SDK server instance.
+     * @returns {void}
+     */
     initialize(sdkServer: GlitterSDKServer): void {
       
         //Add Token Cursor
@@ -73,7 +107,13 @@ export class GlitterAlgorandPoller implements GlitterPoller {
         });
     }
 
-    //Poll
+    /**
+     * Polls for new transactions.
+     *
+     * @param {GlitterSDKServer} sdkServer - The Glitter SDK server instance.
+     * @param {Cursor} cursor - The cursor object indicating the starting point for polling.
+     * @returns {Promise<PollerResult>} A promise that resolves to a PollerResult object.
+     */
     async poll(sdkServer: GlitterSDKServer, cursor: Cursor): Promise<PollerResult> {
        
         //get indexer
@@ -144,7 +184,14 @@ export class GlitterAlgorandPoller implements GlitterPoller {
         };
     }
 
-    //Parse Txn
+    /**
+     * Parses a transaction ID.
+     *
+     * @param {GlitterSDKServer} sdkServer - The Glitter SDK server instance.
+     * @param {string} txnID - The transaction ID to parse.
+     * @param {BridgeType} type - The bridge type associated with the transaction.
+     * @returns {Promise<PartialBridgeTxn | undefined>} A promise that resolves to a PartialBridgeTxn object or undefined.
+     */
     async parseTxnID(sdkServer: GlitterSDKServer, txnID:string, type:BridgeType):Promise<PartialBridgeTxn | undefined>{
         try {
             //Ensure Transaction Exists
@@ -159,7 +206,7 @@ export class GlitterAlgorandPoller implements GlitterPoller {
                 case BridgeType.TokenV1:
                     return await AlgorandTokenV1Parser.process(sdkServer, txnID, client, indexer);
                 case BridgeType.TokenV2:
-                    return await AlgorandTokenV2Parser.process(sdkServer, txnID, client, indexer);
+                    return undefined; //await AlgorandTokenV2Parser.process(sdkServer, txnID, client, indexer);
                 case BridgeType.Circle:
                     return await AlgorandCircleParser.process(sdkServer, txnID, client, indexer);
                 default:

@@ -1,7 +1,10 @@
-import {Algodv2} from "algosdk";
-import {AlgorandNativeTokenConfig, AlgorandStandardAssetConfig} from "../../common";
-import {AlgorandAssetMetadata} from "./types";
+import { Algodv2 } from "algosdk";
+import { AlgorandNativeTokenConfig, AlgorandStandardAssetConfig } from "../../common";
+import { AlgorandAssetMetadata } from "./types";
 
+/**
+ * Class representing an assets repository.
+ */
 export class AssetsRepository {
     protected __metadata: Map<
     string,
@@ -9,11 +12,22 @@ export class AssetsRepository {
   >;
     protected __algoClient: Algodv2;
 
+    /**
+     * Create an instance of AssetsRepository.
+     *
+     * @param {Algodv2} client - The Algodv2 client instance.
+     */
     constructor(client: Algodv2) {
         this.__algoClient = client;
         this.__metadata = new Map();
     }
 
+    /**
+     * Adds a standard asset to the repository.
+     *
+     * @param {AlgorandStandardAssetConfig | AlgorandNativeTokenConfig} tokenConfig - The configuration object for the standard asset.
+     * @returns {void}
+     */
     async addStandardAsset(
         tokenConfig: AlgorandStandardAssetConfig | AlgorandNativeTokenConfig
     ) {
@@ -38,6 +52,12 @@ export class AssetsRepository {
         })
     }
 
+    /**
+     * Updates a standard asset in the repository.
+     *
+     * @param {AlgorandStandardAssetConfig} tokenConfig - The updated configuration object for the standard asset.
+     * @returns {void}
+     */
     public async updateStandardAsset(tokenConfig: AlgorandStandardAssetConfig) {
         const assetInfo = (await this.__algoClient
             .getAssetByID(tokenConfig.assetId)

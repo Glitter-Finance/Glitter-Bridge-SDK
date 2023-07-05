@@ -1,17 +1,41 @@
 import { BridgeNetworks } from "../networks";
 import { Token2Config, Token2ConfigList, Token2ChainConfig, } from "./types";
 
+/**
+ * Class representing the BridgeV2 tokens.
+ */
 export class BridgeV2Tokens {
 
     private static _tokenConfig : Token2ConfigList|undefined = undefined;
     public static isLoaded = false;
 
+    /**
+     * Loads the token configuration for BridgeV2.
+     *
+     * @static
+     * @function loadConfig
+     * @param {Token2ConfigList} config - The token configuration for BridgeV2.
+     * @returns {void}
+     */
     public static loadConfig(config: Token2ConfigList) {
         this._tokenConfig = config;
         this.isLoaded = true;
     }  
 
-    //Get Token Configs
+    /**
+     * Retrieves the token configuration for the specified native symbol or network and local symbol.
+     *
+     * @static
+     * @function getTokenConfig
+     * @param {string} nativeSymbol - The native symbol of the token.
+     * @returns {Token2Config | undefined} - The token configuration for the specified native symbol, or undefined if not found.
+     * @param {BridgeNetworks} network - The network of the token.
+     * @param {string} localSymbol - The local symbol of the token.
+     * @returns {Token2Config | undefined} - The token configuration for the specified network and local symbol, or undefined if not found.
+     * @param {string | BridgeNetworks} nativeSymbolOrNetwork - The native symbol or network of the token.
+     * @param {string} localSymbolOrUndefined - The local symbol of the token, or undefined if not applicable.
+     * @returns {Token2Config | undefined} - The token configuration for the specified native symbol or network and local symbol, or undefined if not found.
+     */ 
     public static getTokenConfig(nativeSymbol: string): Token2Config | undefined;
     public static getTokenConfig(network: BridgeNetworks, localSymbol: string): Token2Config | undefined;
     public static getTokenConfig(nativeSymbolOrNetwork: string | BridgeNetworks, localSymbolOrUndefined?: string): Token2Config | undefined {
@@ -37,6 +61,16 @@ export class BridgeV2Tokens {
         return token;        
     
     }    
+
+    /**
+     * Retrieves the child chain token configuration for the specified token and network.
+     *
+     * @static
+     * @function getTokenConfigChild
+     * @param {Token2Config} tokenConfig - The token configuration.
+     * @param {BridgeNetworks} network - The network for which to retrieve the child chain token configuration.
+     * @returns {Token2ChainConfig | undefined} - The child chain token configuration for the specified token and network, or undefined if not found.
+     */
     public static getTokenConfigChild(tokenConfig: Token2Config, network: BridgeNetworks): Token2ChainConfig | undefined {
             
         //Fail safe
@@ -46,6 +80,15 @@ export class BridgeV2Tokens {
         const chainToken = tokenConfig.chains?.find((x) => x.chain.toLowerCase() === network.toLowerCase());
         return chainToken;
     }
+
+    /**
+     * Retrieves the token configuration for the specified local symbol of a child chain token.
+     *
+     * @static
+     * @function getTokenConfigFromChildSymbol
+     * @param {string} localSymbol - The local symbol of the child chain token.
+     * @returns {Token2Config | undefined} - The token configuration for the specified local symbol, or undefined if not found.
+     */
     public static getTokenConfigFromChildSymbol(localSymbol: string): Token2Config | undefined {
 
         //Fail safe

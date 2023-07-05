@@ -2,6 +2,10 @@ import BigNumber from "bignumber.js";
 import { Routing } from "../routing";
 import { Routing2 } from "../routing/routing.v2";
 
+/**
+ * Enum representing transaction types.
+ * @enum {string}
+ */
 export enum TransactionType {
     Unknown = "Unknown",
     Deposit = "Deposit",
@@ -13,6 +17,10 @@ export enum TransactionType {
     FeeTransfer = "FeeTransfer",
     Error = "Error",
 }
+/**
+ * Enum representing chain status.
+ * @enum {string}
+ */
 export enum ChainStatus {
     Unknown = "Unknown",
     Pending = "Pending",
@@ -20,6 +28,11 @@ export enum ChainStatus {
     Failed = "Failed",
     Cancelled = "Cancelled",
 }
+
+/**
+ * Enum representing bridge type.
+ * @enum {string}
+ */
 export enum BridgeType {
     Unknown = "Unknown",
     Circle = "Circle",
@@ -31,6 +44,29 @@ export enum BridgeType {
  * @deprecated Use PartialTxn instead.
  */
 export type PartialBridgeTxn = PartialTxn;
+
+/**
+ * Type representing a partial transaction.
+ * @typedef {object} PartialTxn
+ * @property {string} txnID - The transaction ID.
+ * @property {string} [txnIDHashed] - The hashed transaction ID.
+ * @property {BridgeType} [bridgeType] - The bridge type.
+ * @property {Date} [txnTimestamp] - The transaction timestamp.
+ * @property {number} [block] - The block number.
+ * @property {number} [confirmations] - The number of confirmations.
+ * @property {TransactionType} txnType - The transaction type.
+ * @property {ChainStatus | null} [chainStatus] - The chain status.
+ * @property {string | null} [network] - The network.
+ * @property {string | null} [tokenSymbol] - The token symbol.
+ * @property {string | null} [baseSymbol] - The base symbol.
+ * @property {string | null} [address] - The address.
+ * @property {BigNumber | null} [units] - The units.
+ * @property {BigNumber | number | null} [amount] - The amount.
+ * @property {Routing | Routing2 | null} [routing] - The routing information.
+ * @property {string | null} [protocol] - The protocol.
+ * @property {number | null} [referral_id] - The referral ID.
+ * @property {BigNumber | null} [gasPaid] - The gas paid.
+ */
 export type PartialTxn = {
     txnID: string;
     txnIDHashed?: string;

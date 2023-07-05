@@ -5,22 +5,35 @@ import algosdk, {
     Account,
 } from "algosdk";
 import SendRawTransaction from "algosdk/dist/types/client/v2/algod/sendRawTransaction";
-import {AlgorandStandardAssetConfig} from "../../common";
-import {AlgorandAccount, AlgorandAccountInformation, AlgorandMultiSigAccount} from "./types";
+import { AlgorandStandardAssetConfig } from "../../common";
+import { AlgorandAccount, AlgorandAccountInformation, AlgorandMultiSigAccount } from "./types";
 import BigNumber from "bignumber.js";
 
+/**
+ * Class representing an Algorand accounts store.
+ */
 export class AlgorandAccountsStore {
     private ALGO_DECIMALS = 6;
     private __accounts: Map<string, AlgorandAccount>;
     private __multisigs: Map<string, AlgorandMultiSigAccount>;
     private __client: Algodv2;
 
+    /**
+     * Create an instance of AlgorandAccountsStore.
+     * @param {Algodv2} algoClient - The Algorand client instance.
+     */
     public constructor(algoClient: Algodv2) {
         this.__client = algoClient;
         this.__accounts = new Map();
         this.__multisigs = new Map();
     }
 
+    /**
+     * Adds a new Algorand account to the store.
+     *
+     * @param {Uint8Array|string} args - Either the secret key (as a Uint8Array) or the mnemonic (as a string) for the account.
+     * @returns {Promise<AlgorandAccount>} - A promise that resolves with the added Algorand account.
+     */
     public async add(
         ...args: [sk: Uint8Array | undefined] | [mnemonic: string | undefined]
     ): Promise<AlgorandAccount> {
@@ -58,21 +71,29 @@ export class AlgorandAccountsStore {
         return accountMetdata;
     }
 
+    /**
+     * Adds a new multi-signature Algorand account to the store.
+     *
+     * @param {string[]} addresses - The addresses of the participants in the multi-signature account.
+     * @param {number} threshold - The minimum number of signatures required to authorize a transaction.
+     * @param {number} [version=1] - The version of the multi-signature account.
+     * @returns {Promise<AlgorandMultiSigAccount>} - A promise that resolves with the added multi-signature account.
+     */
     public async addMultiSignatureAccount(
-        addreses: string[],
+        addresses: string[],
         threshold: number,
         version = 1,
     ): Promise<AlgorandMultiSigAccount> {
         const params = {
             version: version,
             threshold: threshold,
-            addrs: addreses,
+            addrs: addresses,
         } as MultisigMetadata;
 
         // https://github.com/Glitter-Finance/SDK/pull/33
         // TODO: aurel suggested to add another value
         // to make it unique
-        const mSigIdentifier = addreses.join("");
+        const mSigIdentifier = addresses.join("");
         const exists = this.__multisigs.get(mSigIdentifier);
 
         if (exists) {
@@ -84,7 +105,7 @@ export class AlgorandAccountsStore {
 
         const msig: AlgorandMultiSigAccount = {
             addr: addr,
-            addresses: addreses,
+            addresses: addresses,
             params: params,
             information: accountInfo,
             pk: algosdk.decodeAddress(addr).publicKey,
@@ -94,6 +115,12 @@ export class AlgorandAccountsStore {
         return msig;
     }
 
+    /**
+     * Retrieves the account information for a specified account.
+     *
+     * @param {string|AlgorandAccount} params - Either the account address (as a string) or the AlgorandAccount object.
+     * @returns {Promise<AlgorandAccountInformation>} - A promise that resolves with the account information.
+     */
     public async getAccountInfo(
         params: string | AlgorandAccount
     ): Promise<AlgorandAccountInformation> {
@@ -108,6 +135,12 @@ export class AlgorandAccountsStore {
         return accountInfo as AlgorandAccountInformation;
     }
 
+    /**
+     * Updates the account details for a specified Algorand account.
+     *
+     * @param {AlgorandAccount} account - The Algorand account to update.
+     * @returns {Promise<AlgorandAccount>} - A promise that resolves with the updated Algorand account.
+     */
     public async updateAccountDetails(
         account: AlgorandAccount
     ): Promise<AlgorandAccount> {
@@ -117,6 +150,11 @@ export class AlgorandAccountsStore {
         return account;
     }
 
+    /**
+     * Creates a new Algorand account.
+     *
+     * @returns {Promise<AlgorandAccount>} - A promise that resolves with the newly created Algorand account.
+     */
     public async createNew(): Promise<AlgorandAccount> {
         const account = algosdk.generateAccount();
         const algorandAcocunt: AlgorandAccount = {
@@ -128,6 +166,13 @@ export class AlgorandAccountsStore {
         return algorandAcocunt;
     }
 
+    /**
+     * Creates a new Algorand account with a specified prefix for the address.
+     *
+     * @param {string} prefix - The prefix for the address.
+     * @param {number} [tries=10000] - The maximum number of attempts to find an available address.
+     * @returns {Promise<AlgorandAccount>} - A promise that resolves with the newly created Algorand account.
+     */
     public async createNewWithPrefix(
         prefix: string,
         tries = 10000
@@ -148,6 +193,12 @@ export class AlgorandAccountsStore {
         return Promise.reject("Account generation with retries exhausted");
     }
 
+    /**
+     * Retrieves the Algo balance of a specified address.
+     *
+     * @param {string} address - The address for which to retrieve the Algo balance.
+     * @returns {Promise<{ balanceHuman: BigNumber, balanceBn: BigNumber }>} - A promise that resolves with the Algo balance in both human-readable and BigNumber format.
+     */
     public async getAlgoBalance(address: string): Promise<{
         balanceHuman: BigNumber;
         balanceBn: BigNumber;
@@ -160,6 +211,13 @@ export class AlgorandAccountsStore {
         }
     }
 
+    /**
+     * Retrieves the balance of a specific standard asset for a specified address.
+     *
+     * @param {string} address - The address for which to retrieve the asset balance.
+     * @param {AlgorandStandardAssetConfig} token - The token configuration object for the standard asset.
+     * @returns {Promise<{ balanceHuman: BigNumber, balanceBn: BigNumber }>} - A promise that resolves with the asset balance in both human-readable and BigNumber format.
+     */
     public async getStandardAssetBalance(
         address: string,
         token: AlgorandStandardAssetConfig
@@ -187,12 +245,14 @@ export class AlgorandAccountsStore {
             balanceHuman: new BigNumber(0),
         }
     }
+
     /**
-   *
-   * @param transactions
-   * @param signer
-   * @returns
-   */
+     * Signs and sends an array of transactions using the specified signer address.
+     *
+     * @param {Transaction[]} transactions - The transactions to sign and send.
+     * @param {string} signerAddress - The address of the signer.
+     * @returns {Promise<string[]>} - A promise that resolves with an array of transaction IDs.
+     */
     async signAndSendTransactions(
         transactions: Transaction[],
         signerAddress: string
@@ -225,14 +285,15 @@ export class AlgorandAccountsStore {
 
         return transactions.map(x => x.txID());
     }
+
     /**
-   *
-   * Signs and send multi sig
-   * @param groupedTxns
-   * @param signers
-   * @param mParams
-   * @returns
-   */
+     * Signs and sends an array of multisig transactions using the specified signers and multisig metadata.
+     *
+     * @param {Transaction[]} groupedTxns - The grouped transactions to sign and send.
+     * @param {algosdk.MultisigMetadata} mParams - The multisig metadata object.
+     * @param {Account[]} signers - The signers for the multisig account.
+     * @returns {Promise<SendRawTransaction>} - A promise that resolves with the result of sending the multisig transactions.
+     */
     async signAndSendMultisigTransactions(
         groupedTxns: Transaction[],
         mParams: algosdk.MultisigMetadata,

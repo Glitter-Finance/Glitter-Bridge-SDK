@@ -1,3 +1,6 @@
+/**
+ * Class representing the initialization schema for the Solana token v1 bridge.
+ */
 export class BridgeInitSchema {
     readonly algo_address: Uint8Array;
     readonly amount: number;
@@ -19,6 +22,9 @@ export class BridgeInitSchema {
         ],
     ]);
 }
+/**
+ * Class representing the set schema for the Solana token v1 bridge.
+ */
 export class BridgeSetSchema {
     readonly validator_address: Uint8Array;
 
@@ -37,6 +43,9 @@ export class BridgeSetSchema {
     ]);
 }
 
+/**
+ * Class representing the release schema for the Solana token v1 bridge.
+ */
 export class BridgeReleaseSchema {
     readonly algo_address: Uint8Array;
     readonly algo_txn_id: Uint8Array;
@@ -62,6 +71,10 @@ export class BridgeReleaseSchema {
         ],
     ]);
 }
+
+/**
+ * Class representing the approve schema for the Solana token v1 bridge.
+ */
 export class BridgeApproveSchema {
     readonly algo_address: Uint8Array;
     readonly algo_txn_id: Uint8Array;
@@ -84,6 +97,9 @@ export class BridgeApproveSchema {
         ],
     ]);
 }
+/**
+ * Class representing the cancel schema for the Solana token v1 bridge.
+ */
 export class BridgeCancelSchema {
     readonly algo_address: Uint8Array;
 
@@ -102,6 +118,12 @@ export class BridgeCancelSchema {
     ]);
 }
 
+/**
+ * Loads the Solana schema. so long as this function is called, these static classes are loaded
+ *
+ * @function LoadSolanaSchema
+ * @returns {void}
+ */
 export function LoadSolanaSchema(){
     //here to load schema - so long as this function is called, these static classes are loaded
 }

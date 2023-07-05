@@ -1,4 +1,4 @@
-import {PreciseDecimals} from "./utils";
+import { PreciseDecimals } from "./utils";
 
 /**
  * @deprecated The method should not be used. Please use RoutingHelper instead
@@ -33,21 +33,3 @@ export class ValueUnits {
         }
     }
 }
-
-// using BigNumber.js
-// e.g 1 => 1000000 USDC
-// export function toTokenUnits(
-//   amount: string | number | BigNumber,
-//   decimals: number
-// ): BigNumber {
-//   const decimals = new BigNumber(10).pow(decimals);
-//   return new BigNumber(amount).times(decimals);
-// }
-// e.g 1000000 => 1 USDC
-// export function fromTokenUnits(
-//   amount: string | number | BigNumber,
-//   decimals: number
-// ): BigNumber {
-//   const decimals = new BigNumber(10).pow(decimals);
-//   return new BigNumber(amount).div(decimals);
-// }

@@ -23,13 +23,24 @@ import { GlitterSDKServer } from "../../../glitterSDKServer";
 import { ServerError } from "../../common/serverErrors";
 import { SolanaPollerCommon } from "./poller.solana.common";
 
+/**
+ * Glitter Solana V1 Parser class.
+ */
 export class SolanaV1Parser {
-//constructor
+
+    //constructor
     constructor() {
         LoadSolanaSchema();
     }
 
     //V1 Token Process
+    /**
+     * Processes a transaction using the SolanaV1Parser.
+     *
+     * @param {GlitterSDKServer} sdkServer - The Glitter SDK server instance.
+     * @param {ParsedTransactionWithMeta} txn - The parsed transaction with metadata.
+     * @returns {Promise<PartialBridgeTxn>} A promise that resolves to the partial bridge transaction.
+     */
     public static async process(
         sdkServer: GlitterSDKServer,
         txn: ParsedTransactionWithMeta,
@@ -137,6 +148,17 @@ export class SolanaV1Parser {
     }
 
     //V1 Paths
+    /**
+     * Retrieves a partial bridge transaction for V1 SOL deposit.
+     *
+     * @private
+     * @static
+     * @param {GlitterSDKServer} sdkServer - The Glitter SDK server object.
+     * @param {ParsedTransactionWithMeta} txn - The parsed transaction with metadata.
+     * @param {Uint8Array} data_bytes - The data bytes for the transaction.
+     * @param {PartialBridgeTxn} partialTxn - The partial bridge transaction object.
+     * @returns {PartialBridgeTxn} The partial bridge transaction for V1 SOL deposit.
+     */
     private static getV1SolDeposit(
         sdkServer: GlitterSDKServer,
         txn: ParsedTransactionWithMeta,
@@ -191,6 +213,17 @@ export class SolanaV1Parser {
         return partialTxn;
     }
 
+    /**
+     * Retrieves a partial bridge transaction for V1 xALGO deposit.
+     *
+     * @private
+     * @static
+     * @param {GlitterSDKServer} sdkServer - The Glitter SDK server object.
+     * @param {ParsedTransactionWithMeta} txn - The parsed transaction with metadata.
+     * @param {Uint8Array} data_bytes - The data bytes for the transaction.
+     * @param {PartialBridgeTxn} partialTxn - The partial bridge transaction object.
+     * @returns {PartialBridgeTxn} The partial bridge transaction for V1 xALGO deposit.
+     */
     private static getV1xALGODeposit(
         sdkServer: GlitterSDKServer,
         txn: ParsedTransactionWithMeta,
@@ -245,6 +278,17 @@ export class SolanaV1Parser {
         return partialTxn;
     }
 
+    /**
+     * Retrieves a partial bridge transaction for V1 SOL release.
+     *
+     * @private
+     * @static
+     * @param {GlitterSDKServer} sdkServer - The Glitter SDK server object.
+     * @param {ParsedTransactionWithMeta} txn - The parsed transaction with metadata.
+     * @param {Uint8Array} data_bytes - The data bytes for the transaction.
+     * @param {PartialBridgeTxn} partialTxn - The partial bridge transaction object.
+     * @returns {PartialBridgeTxn} The partial bridge transaction for V1 SOL release.
+     */
     private static getV1SOLRelease(
         sdkServer: GlitterSDKServer,
         txn: ParsedTransactionWithMeta,
@@ -300,6 +344,17 @@ export class SolanaV1Parser {
         return partialTxn;
     }
 
+    /**
+     * Retrieves a partial bridge transaction for V1 xALGO release.
+     *
+     * @private
+     * @static
+     * @param {GlitterSDKServer} sdkServer - The Glitter SDK server object.
+     * @param {ParsedTransactionWithMeta} txn - The parsed transaction with metadata.
+     * @param {Uint8Array} data_bytes - The data bytes for the transaction.
+     * @param {PartialBridgeTxn} partialTxn - The partial bridge transaction object.
+     * @returns {PartialBridgeTxn} The partial bridge transaction for V1 xALGO release.
+     */
     private static getV1xALGORelease(
         sdkServer: GlitterSDKServer,
         txn: ParsedTransactionWithMeta,
@@ -354,6 +409,18 @@ export class SolanaV1Parser {
         //return
         return partialTxn;
     }
+
+    /**
+     * Retrieves a partial bridge transaction for V1 SOL finalize.
+     *
+     * @private
+     * @static
+     * @param {GlitterSDKServer} sdkServer - The Glitter SDK server object.
+     * @param {ParsedTransactionWithMeta} txn - The parsed transaction with metadata.
+     * @param {Uint8Array} data_bytes - The data bytes for the transaction.
+     * @param {PartialBridgeTxn} partialTxn - The partial bridge transaction object.
+     * @returns {PartialBridgeTxn} The partial bridge transaction for V1 SOL finalize.
+     */
     private static getV1solFinalize(
         sdkServer: GlitterSDKServer,
         txn: ParsedTransactionWithMeta,
@@ -384,6 +451,18 @@ export class SolanaV1Parser {
 
         return partialTxn;
     }
+
+    /**
+     * Retrieves a partial bridge transaction for V1 xALGO finalize.
+     *
+     * @private
+     * @static
+     * @param {GlitterSDKServer} sdkServer - The Glitter SDK server object.
+     * @param {ParsedTransactionWithMeta} txn - The parsed transaction with metadata.
+     * @param {Uint8Array} data_bytes - The data bytes for the transaction.
+     * @param {PartialBridgeTxn} partialTxn - The partial bridge transaction object.
+     * @returns {PartialBridgeTxn} The partial bridge transaction for V1 xALGO finalize.
+     */
     private static getV1xALGOFinalize(
         sdkServer: GlitterSDKServer,
         txn: ParsedTransactionWithMeta,
@@ -414,6 +493,24 @@ export class SolanaV1Parser {
 
         return partialTxn;
     }
+
+    /**
+     * Retrieves the routing information for a V1 bridge transaction.
+     *
+     * @private
+     * @static
+     * @param {string} fromNetwork - The network of the source token.
+     * @param {string} fromAddress - The address of the source token.
+     * @param {string} fromToken - The symbol or identifier of the source token.
+     * @param {string} fromTxnID - The transaction ID on the source network.
+     * @param {string} toNetwork - The network of the destination token.
+     * @param {string} toAddress - The address of the destination token.
+     * @param {string} toToken - The symbol or identifier of the destination token.
+     * @param {string} toTxnID - The transaction ID on the destination network.
+     * @param {BigNumber} units - The number of units being transferred.
+     * @param {number} decimals - The decimal places of the tokens.
+     * @returns {Routing} The routing information for the V1 bridge transaction.
+     */
     private static getV1Routing(
         fromNetwork: string,
         fromAddress: string,

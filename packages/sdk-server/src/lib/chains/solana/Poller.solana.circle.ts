@@ -12,13 +12,24 @@ import {
     getHashedTransactionId,
 } from "@glitter-finance/sdk-core";
 import { GlitterSDKServer } from "../../../glitterSDKServer";
-import { Cursor } from "../../common/cursor";
 import { ServerError } from "../../common/serverErrors";
 import { SolanaPollerCommon } from "./poller.solana.common";
 import BigNumber from "bignumber.js";
 
+/**
+ * Glitter Solana Poller class.
+ * Implements the GlitterPoller interface.
+ */
 export class SolanaCircleParser {
 
+    /**
+     * Processes a transaction using the SolanaCircleParser.
+     *
+     * @param {GlitterSDKServer} sdkServer - The Glitter SDK server instance.
+     * @param {ParsedTransactionWithMeta} txn - The parsed transaction with metadata.
+     * @param {Connection | undefined} client - The connection object or undefined if not available.
+     * @returns {Promise<PartialBridgeTxn>} A promise that resolves to the partial bridge transaction.
+     */
     public static async process(
         sdkServer: GlitterSDKServer,
         txn: ParsedTransactionWithMeta,
@@ -145,6 +156,16 @@ export class SolanaCircleParser {
         return partialTxn;
     }
 }
+
+/**
+ * Handles the deposit transaction.
+ *
+ * @param {GlitterSDKServer} sdkServer - The Glitter SDK server instance.
+ * @param {ParsedTransactionWithMeta} txn - The parsed transaction with metadata.
+ * @param {Routing | null} routing - The routing information or null if not available.
+ * @param {PartialBridgeTxn} partialTxn - The partial bridge transaction.
+ * @returns {Promise<PartialBridgeTxn>} A promise that resolves to the updated partial bridge transaction.
+ */
 async function handleDeposit(
     sdkServer: GlitterSDKServer,
     txn: ParsedTransactionWithMeta,
@@ -202,6 +223,16 @@ async function handleDeposit(
     partialTxn.routing = routing;
     return Promise.resolve(partialTxn);
 }
+
+/**
+ * Handles the release transaction.
+ *
+ * @param {GlitterSDKServer} sdkServer - The Glitter SDK server instance.
+ * @param {ParsedTransactionWithMeta} txn - The parsed transaction with metadata.
+ * @param {Routing | null} routing - The routing information or null if not available.
+ * @param {PartialBridgeTxn} partialTxn - The partial bridge transaction.
+ * @returns {Promise<PartialBridgeTxn>} A promise that resolves to the updated partial bridge transaction.
+ */
 async function handleRelease(
     sdkServer: GlitterSDKServer,
     txn: ParsedTransactionWithMeta,

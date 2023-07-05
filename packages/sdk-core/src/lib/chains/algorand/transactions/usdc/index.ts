@@ -1,8 +1,8 @@
 import algosdk from "algosdk";
 import BigNumber from "bignumber.js";
-import {BridgeNetworks} from "../../../../../lib/common/networks";
-import {AlgorandStandardAssetConfig, Routing} from "../../../../../lib/common";
-import {getAlgorandDefaultTransactionParams} from "../utils";
+import { BridgeNetworks } from "../../../../../lib/common/networks";
+import { AlgorandStandardAssetConfig, Routing } from "../../../../../lib/common";
+import { getAlgorandDefaultTransactionParams } from "../utils";
 
 async function validParams(params: {
   sourceAddress: string;
@@ -32,6 +32,18 @@ async function validParams(params: {
     return true;
 }
 
+/**
+ * Initiates a bridge transaction for USDC from the source network to the destination network.
+ *
+ * @param {algosdk.Algodv2} client - The Algorand client instance.
+ * @param {string} sourceAddress - The source address on the source network.
+ * @param {string} destinationAddress - The destination address on the destination network.
+ * @param {BridgeNetworks} destinationNetwork - The destination network type.
+ * @param {BigNumber} amount - The amount of USDC to be bridged.
+ * @param {string} bridgeDepositAddress - The address to deposit USDC for bridging.
+ * @param {AlgorandStandardAssetConfig} usdcConfig - The USDC token configuration object.
+ * @returns {Promise<algosdk.Transaction[]>} - A promise that resolves with an array of bridge transactions.
+ */
 export const bridgeUSDC = async (
     client: algosdk.Algodv2,
     sourceAddress: string,

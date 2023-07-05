@@ -12,12 +12,18 @@ import {
 // eslint-disable-next-line @typescript-eslint/no-var-requires
 const TronWeb = require("tronweb");
 
+/**
+ * Class for serializing EVM bridge transfers.
+ */
 export class SerializeEvmBridgeTransfer {
+    
     /**
-     * Convert encoded addresses to bytes
-     * @param {Network} sourceChain
-     * @param {string | algoSdk.Account | PublicKey} address
-     * @returns hex string
+     * Serializes an address based on the source chain and address value.
+     *
+     * @static
+     * @param {BridgeNetworks | BridgeEvmNetworks} sourceChain - The source chain for the address serialization.
+     * @param {string} address - The address value to serialize.
+     * @returns {string} - The serialized address.
      */
     static serializeAddress(sourceChain: BridgeNetworks | BridgeEvmNetworks, address: string): string {
         switch (sourceChain) {
@@ -38,14 +44,17 @@ export class SerializeEvmBridgeTransfer {
                 return ethers.utils.hexZeroPad(algoSdk.decodeAddress(address).publicKey, 32).toString();
         }
     }
+
     /**
-     * Serialize bridge transfer parameters
-     * @param {BridgeEvmNetworks} sourceChain
-     * @param {BridgeEvmNetworks | BridgeNetworks} destinationChain
-     * @param {string} sourceWallet
-     * @param {PublicKey | algoSdk.Account | string} destinationWallet
-     * @param {ethers.BigNumber} amount
-     * @returns Serialized transfer
+     * Serializes the EVM bridge transfer information.
+     *
+     * @static
+     * @param {BridgeEvmNetworks} sourceChain - The source EVM network.
+     * @param {BridgeNetworks} destinationChain - The destination bridge network.
+     * @param {string} sourceWallet - The source wallet address.
+     * @param {string} destinationWallet - The destination wallet address.
+     * @param {ethers.BigNumber} amount - The amount of the transfer.
+     * @returns {{ sourceChain: number, destinationChain: number, sourceWallet: string, destinationWallet: string, amount: string }} - The serialized EVM bridge transfer information.
      */
     static serialize(
         sourceChain: BridgeEvmNetworks,
@@ -76,12 +85,18 @@ export class SerializeEvmBridgeTransfer {
     }
 }
 
+/**
+ * Class for deserializing EVM bridge transfers.
+ */
 export class DeserializeEvmBridgeTransfer {
+    
     /**
-     * Deserialize address from bytes
-     * @param {Network} sourceChain
-     * @param {string} address
-     * @returns {string} formatted address
+     * Deserializes an address based on the chain and data value.
+     *
+     * @static
+     * @param {BridgeNetworks} chain - The chain for the address deserialization.
+     * @param {string} data - The serialized address data.
+     * @returns {string} - The deserialized address.
      */
     static deserializeAddress(chain: BridgeNetworks, data: string): string {
         switch (chain) {
@@ -102,6 +117,17 @@ export class DeserializeEvmBridgeTransfer {
         }
     }
 
+    /**
+     * Deserializes the EVM bridge transfer information.
+     *
+     * @static
+     * @param {number} sourceChainId - The source chain ID.
+     * @param {number} destinationChainId - The destination chain ID.
+     * @param {string} sourceWallet - The source wallet address.
+     * @param {string} destinationIdBytes - The serialized destination wallet address.
+     * @param {ethers.BigNumber} amount - The amount of the transfer.
+     * @returns {{ sourceNetwork: BridgeEvmNetworks, destinationNetwork: BridgeNetworks, sourceWallet: string, destinationWallet: string, amount: ethers.BigNumber, }} - The deserialized EVM bridge transfer information.
+     */
     static deserialize(
         sourceChainId: number,
         destinationChainId: number,

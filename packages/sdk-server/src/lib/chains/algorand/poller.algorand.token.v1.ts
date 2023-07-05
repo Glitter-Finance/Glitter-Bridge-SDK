@@ -6,7 +6,20 @@ import IndexerClient from "algosdk/dist/types/client/v2/indexer/indexer";
 import BigNumber from "bignumber.js";
 import { GlitterSDKServer } from "../../../glitterSDKServer";
 
+/**
+ * Algorand Token V1 Parser class.
+ */
 export class AlgorandTokenV1Parser {
+
+    /**
+     * Processes a transaction.
+     *
+     * @param {GlitterSDKServer} sdkServer - The Glitter SDK server instance.
+     * @param {string} txnID - The ID of the transaction.
+     * @param {AlgodClient | undefined} client - The AlgodClient instance, if available.
+     * @param {IndexerClient | undefined} indexer - The IndexerClient instance, if available.
+     * @returns {Promise<PartialBridgeTxn>} A Promise that resolves to the updated partial transaction object.
+     */
     public static async process(
         sdkServer: GlitterSDKServer,
         txnID: string,
@@ -80,6 +93,15 @@ export class AlgorandTokenV1Parser {
         return partialTxn;
 
     }
+
+    /**
+     * Handles a deposit of xSol tokens.
+     *
+     * @param {Record<string, any>} txn - The transaction object.
+     * @param {any} applicationArgs - The application arguments.
+     * @param {PartialBridgeTxn} partialTxn - The partial transaction object.
+     * @returns {PartialBridgeTxn} The updated partial transaction object.
+     */
     static xSolDeposit(txn: Record<string, any>, applicationArgs: any, partialTxn: PartialBridgeTxn): PartialBridgeTxn {
 
         const decimals = 9;
@@ -113,6 +135,15 @@ export class AlgorandTokenV1Parser {
         //return
         return partialTxn;
     }
+
+    /**
+     * Handles a deposit of Algo tokens.
+     *
+     * @param {Record<string, any>} txn - The transaction object.
+     * @param {any} applicationArgs - The application arguments.
+     * @param {PartialBridgeTxn} partialTxn - The partial transaction object.
+     * @returns {PartialBridgeTxn} The updated partial transaction object.
+     */
     static algoDeposit(txn: Record<string, any>, applicationArgs: any, partialTxn: PartialBridgeTxn): PartialBridgeTxn {
         const decimals = 6;
 
@@ -145,6 +176,15 @@ export class AlgorandTokenV1Parser {
         //return
         return partialTxn;
     }
+
+    /**
+     * Handles a release of xSol tokens.
+     *
+     * @param {Record<string, any>} txn - The transaction object.
+     * @param {any} applicationArgs - The application arguments.
+     * @param {PartialBridgeTxn} partialTxn - The partial transaction object.
+     * @returns {PartialBridgeTxn} The updated partial transaction object.
+     */
     static xSolRelease(txn: Record<string, any>, applicationArgs: any, partialTxn: PartialBridgeTxn): PartialBridgeTxn {
 
         const decimals = 9;
@@ -179,6 +219,15 @@ export class AlgorandTokenV1Parser {
         return partialTxn;
 
     }
+
+    /**
+     * Handles a release of Algo tokens.
+     *
+     * @param {Record<string, any>} txn - The transaction object.
+     * @param {any} applicationArgs - The application arguments.
+     * @param {PartialBridgeTxn} partialTxn - The partial transaction object.
+     * @returns {PartialBridgeTxn} The updated partial transaction object.
+     */
     static algoRelease(txn: Record<string, any>, applicationArgs: any, partialTxn: PartialBridgeTxn): PartialBridgeTxn {
         const decimals = 6;
 
@@ -211,6 +260,15 @@ export class AlgorandTokenV1Parser {
         //return
         return partialTxn;
     }
+
+    /**
+     * Handles a refund of Algo tokens.
+     *
+     * @param {Record<string, any>} txn - The transaction object.
+     * @param {any} applicationArgs - The application arguments.
+     * @param {PartialBridgeTxn} partialTxn - The partial transaction object.
+     * @returns {PartialBridgeTxn} The updated partial transaction object.
+     */
     static algoRefund(txn: Record<string, any>, applicationArgs: any, partialTxn: PartialBridgeTxn): PartialBridgeTxn {
 
         const decimals = 6;
@@ -244,6 +302,15 @@ export class AlgorandTokenV1Parser {
         //return
         return partialTxn;
     }
+
+    /**
+     * Handles a refund of xSol tokens.
+     *
+     * @param {Record<string, any>} txn - The transaction object.
+     * @param {any} applicationArgs - The application arguments.
+     * @param {PartialBridgeTxn} partialTxn - The partial transaction object.
+     * @returns {PartialBridgeTxn} The updated partial transaction object.
+     */
     static xSolRefund(txn: Record<string, any>, applicationArgs: any, partialTxn: PartialBridgeTxn): PartialBridgeTxn {
         const decimals = 9;
 

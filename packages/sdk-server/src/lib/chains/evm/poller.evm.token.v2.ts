@@ -1,4 +1,4 @@
-import { BridgeType, BridgeV2Tokens, ChainStatus, DeserializeEvmBridgeTransfer, EvmConnect, PartialBridgeTxn, Routing, RoutingHelper, TransactionType, TransferEvent } from "@glitter-finance/sdk-core/dist";
+import { BridgeType, BridgeV2Tokens, ChainStatus, DeserializeEvmBridgeTransfer, EvmConnect, PartialBridgeTxn, Routing, RoutingHelper, TransactionType } from "@glitter-finance/sdk-core/dist";
 import { GlitterSDKServer } from "../../../glitterSDKServer";
 import { EvmBridgeV2EventsParser, TokenBridgeV2EventGroup } from "./poller.evm.eventparser.v2";
 import { TransactionReceipt } from "@ethersproject/abstract-provider";
@@ -6,8 +6,19 @@ import BigNumber from "bignumber.js";
 import { Routing2 } from "@glitter-finance/sdk-core/dist/lib/common/routing/routing.v2";
 import { ethers } from "ethers";
 
+/**
+ * EVM V2 Parser class.
+ */
 export class EvmV2Parser {
 
+    /**
+     * Processes a transaction using the EvmV2Parser.
+     *
+     * @param {GlitterSDKServer} sdkServer - The Glitter SDK server instance.
+     * @param {EvmConnect | undefined} connect - The EvmConnect instance or undefined if not available.
+     * @param {string} txnID - The ID of the transaction to process.
+     * @returns {Promise<PartialBridgeTxn>} A promise that resolves to the partial bridge transaction.
+     */
     public static async process(
         sdkServer: GlitterSDKServer,
         connect: EvmConnect | undefined,
@@ -83,6 +94,12 @@ export class EvmV2Parser {
         return partialTxn;
     }
     
+    /**
+     * Parses logs from a transaction receipt using the EvmV2Parser.
+     *
+     * @param {TransactionReceipt} receipt - The transaction receipt containing logs to parse.
+     * @returns {Promise<TokenBridgeV2EventGroup | null>} A promise that resolves to the parsed TokenBridgeV2EventGroup or null if not found.
+     */
     public static async parseLogs(receipt: TransactionReceipt): Promise<TokenBridgeV2EventGroup | null> {
       
         const parsedLogs = EvmBridgeV2EventsParser.parseLogs(receipt.logs);
@@ -101,6 +118,17 @@ export class EvmV2Parser {
         return returnValue;
        
     }
+
+    /**
+     * Handles the deposit transaction.
+     *
+     * @param {string} txnID - The ID of the transaction.
+     * @param {EvmConnect} connect - The EvmConnect instance.
+     * @param {TransactionReceipt} txn - The transaction receipt.
+     * @param {PartialBridgeTxn} partialTxn - The partial bridge transaction.
+     * @param {TokenBridgeV2EventGroup} events - The TokenBridgeV2EventGroup containing parsed events.
+     * @returns {Promise<PartialBridgeTxn>} A promise that resolves to the updated partial bridge transaction.
+     */
     static async handleDeposit(
         txnID: string,
         connect: EvmConnect,
@@ -210,6 +238,17 @@ export class EvmV2Parser {
 
         return Promise.resolve(partialTxn);
     }
+
+    /**
+     * Handles the release transaction.
+     *
+     * @param {string} txnID - The ID of the transaction.
+     * @param {EvmConnect} connect - The EvmConnect instance.
+     * @param {TransactionReceipt} txn - The transaction receipt.
+     * @param {PartialBridgeTxn} partialTxn - The partial bridge transaction.
+     * @param {TokenBridgeV2EventGroup} events - The TokenBridgeV2EventGroup containing parsed events.
+     * @returns {Promise<PartialBridgeTxn>} A promise that resolves to the updated partial bridge transaction.
+     */
     static async handleRelease(
         txnID: string,
         connect: EvmConnect,
@@ -291,6 +330,17 @@ export class EvmV2Parser {
 
         return Promise.resolve(partialTxn);
     }
+
+    /**
+     * Handles the refund transaction.
+     *
+     * @param {string} txnID - The ID of the transaction.
+     * @param {EvmConnect} connect - The EvmConnect instance.
+     * @param {TransactionReceipt} txn - The transaction receipt.
+     * @param {PartialBridgeTxn} partialTxn - The partial bridge transaction.
+     * @param {TokenBridgeV2EventGroup} events - The TokenBridgeV2EventGroup containing parsed events.
+     * @returns {Promise<PartialBridgeTxn>} A promise that resolves to the updated partial bridge transaction.
+     */
     static async handleRefund(
         txnID: string,
         connect: EvmConnect,

@@ -4,11 +4,23 @@ import { AlgorandStandardAssetConfig } from "@glitter-finance/sdk-core/dist/lib/
 import algosdk from "algosdk";
 import AlgodClient from "algosdk/dist/types/client/v2/algod/algod";
 import IndexerClient from "algosdk/dist/types/client/v2/indexer/indexer";
-import { Cursor } from "../../common/cursor";
 import { GlitterSDKServer } from "../../../glitterSDKServer";
 import { BigNumber } from "bignumber.js";
 
+/**
+ * AlgorandCircleParser is a utility class for parsing data related to Algorand Circle.
+ */
 export class AlgorandCircleParser {
+
+    /**
+     * Processes a transaction using the Algorand Circle parser.
+     * 
+     * @param {GlitterSDKServer} sdkServer - The Glitter SDK server instance.
+     * @param {string} txnID - The transaction ID to be processed.
+     * @param {AlgodClient | undefined} client - The AlgodClient for making Algorand API requests (optional).
+     * @param {IndexerClient | undefined} indexer - The IndexerClient for making Algorand Indexer API requests (optional).
+     * @returns {Promise<PartialBridgeTxn>} A Promise that resolves to the processed partial bridge transaction.
+     */
     public static async process(
         sdkServer: GlitterSDKServer,
         txnID: string,
@@ -68,18 +80,20 @@ export class AlgorandCircleParser {
             throw new Error(BASE_LOG + " Address not found");
         }
 
-        // if (address && address === sdkServer.sdk?.algorand?.getAddress("usdcDeposit")) {
-        //     partialTxn = await this.handleDeposit(sdkServer, txnID, txn, routing, partialTxn);
-        // } else if (address && address === sdkServer.sdk?.algorand?.getAddress("usdcReceiver")) {
-        //     partialTxn = await this.handleRelease(sdkServer, txnID, txn, routing, partialTxn);
-        // } else {
-        //     throw new Error(BASE_LOG + " Address not found");
-        // }
-
         return partialTxn;
 
     }
 
+    /**
+     * Handles a deposit transaction.
+     *
+     * @param {GlitterSDKServer} sdkServer - The Glitter SDK server instance.
+     * @param {string} txnID - The ID of the transaction.
+     * @param {any} txn - The transaction object.
+     * @param {Routing | null} routing - The routing information.
+     * @param {PartialBridgeTxn} partialTxn - The partial transaction object.
+     * @returns {Promise<PartialBridgeTxn>} A Promise that resolves to the updated partial transaction object.
+     */
     static async handleDeposit(
         sdkServer: GlitterSDKServer,
         txnID: string,
@@ -138,6 +152,17 @@ export class AlgorandCircleParser {
         partialTxn.routing = routing;
         return Promise.resolve(partialTxn);
     }
+
+    /**
+     * Handles a release transaction.
+     *
+     * @param {GlitterSDKServer} sdkServer - The Glitter SDK server instance.
+     * @param {string} txnID - The ID of the transaction.
+     * @param {any} txn - The transaction object.
+     * @param {Routing | null} routing - The routing information.
+     * @param {PartialBridgeTxn} partialTxn - The partial transaction object.
+     * @returns {Promise<PartialBridgeTxn>} A Promise that resolves to the updated partial transaction object.
+     */
     static async handleRelease(
         sdkServer: GlitterSDKServer,
         txnID: string,
@@ -197,6 +222,12 @@ export class AlgorandCircleParser {
         return Promise.resolve(partialTxn);
     }
 
+    /**
+     * Parses a deposit note and returns the routing information.
+     *
+     * @param {any} note - The deposit note to parse.
+     * @returns {Routing} The routing information extracted from the deposit note.
+     */
     static parseDepositNote(note: any): Routing {
         let depositNote: DepositNote | undefined = undefined;
 

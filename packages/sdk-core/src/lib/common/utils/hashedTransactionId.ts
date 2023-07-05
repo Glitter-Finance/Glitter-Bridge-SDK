@@ -1,13 +1,18 @@
 import base58 from "bs58";
 import { ethers } from "ethers";
 import { BridgeNetworks } from "../networks";
-import { base64ToString } from "./utils";
 
+/**
+ * Generates a hashed transaction ID based on the source network and hash.
+ * @param {BridgeNetworks} sourceNetwork - The source network of the transaction.
+ * @param {string} hash - The transaction hash.
+ * @returns {string} The hashed transaction ID.
+ */
 export function getHashedTransactionId(
     sourceNetwork: BridgeNetworks,
     hash: string
 ): string {
-    const base64String = base64ToString(hash);
+    // const base64String = base64ToString(hash);
     switch (sourceNetwork) {
         case BridgeNetworks.solana:
             return ethers.utils.keccak256(base58.decode(hash));

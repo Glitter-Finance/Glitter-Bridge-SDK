@@ -1,5 +1,5 @@
 import algosdk from "algosdk";
-import {AlgorandTokenBridgeRefundTransactions} from "./tokenRefund";
+import { AlgorandTokenBridgeRefundTransactions } from "./tokenRefund";
 
 export enum AlgorandTokenBridgeReleaseTransactions {
   xsol_release = "xSOL-release",
@@ -7,14 +7,15 @@ export enum AlgorandTokenBridgeReleaseTransactions {
 }
 
 /**
+ * Builds release parameters for the Algorand Token Bridge V1 transactions.
  *
- * @param method
- * @param sourceAddress
- * @param destinationAddress
- * @param amount
- * @param tokenSymbol
- * @param txnSignature
- * @returns {Uint8Array[]}
+ * @param {AlgorandTokenBridgeReleaseTransactions | AlgorandTokenBridgeRefundTransactions} method: the method call (deposit_xsol) or (deposit_algo)
+ * @param {string} sourceAddress: the address on foreign chain making the deposit
+ * @param {string} destinationAddress: the address on algorand to receive the funds
+ * @param {bigint} amount: The amount in microAlgo.
+ * @param {"xSOL" | "algo"} tokenSymbol: The token symbol (xSOL or algo).
+ * @param {string} txnSignature: Transaction signature of the foreign chain deposit
+ * @returns {Uint8Array[]}: Builds the release params for Glitter Bridge v1 deposits
  */
 export const buildReleaseParams = (
     method:

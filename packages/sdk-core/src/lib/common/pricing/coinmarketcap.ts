@@ -61,10 +61,14 @@ export type CoinMarketCapQuoteResponse = {
 }
 
 /**
-     * Get price from CMC
-     * @param {string[]} cryptoSymbols works with uppercase symbols
-     * @returns {Promise<CoinMarketCapQuoteResponse>}
-     */
+ * Retrieves the USD price for the specified cryptocurrency symbol from CoinMarketCap.
+ *
+ * @async
+ * @function fromCoinMarketCap
+ * @param {string} cryptoSymbol - The cryptocurrency symbol.
+ * @param {string} api_key - The API key for CoinMarketCap.
+ * @returns {Promise<{ usdPrice: number, isFresh: boolean }>} - A Promise that resolves to an object containing the USD price and a boolean indicating if the price is fresh.
+ */
 export async function fromCoinMarketCap(cryptoSymbol: string, api_key:string):Promise<{ usdPrice: number; isFresh: boolean;}> {
    
     //Check Cache

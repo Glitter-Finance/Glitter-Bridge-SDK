@@ -7,7 +7,7 @@ import {
     AlgorandTokenBridgeDepositTransactions,
     buildDepositParams,
 } from "./tokenDeposit";
-import {AlgorandTokenBridgeRefundTransactions} from "./tokenRefund";
+import { AlgorandTokenBridgeRefundTransactions } from "./tokenRefund";
 import {
     AlgorandTokenBridgeReleaseTransactions,
     buildReleaseParams,
@@ -22,6 +22,7 @@ export const buildTokenBridgeTxParams = (
     destinationOnChainAddress: string,
     tokenConfig: AlgorandStandardAssetConfig | AlgorandNativeTokenConfig
 ): Uint8Array[] => {
+    
     if (!routing.amount) throw new Error("Amount is required");
     const bigAmount = BigInt(routing.units.toString());
 

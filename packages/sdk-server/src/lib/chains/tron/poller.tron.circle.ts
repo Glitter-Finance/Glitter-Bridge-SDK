@@ -3,8 +3,19 @@ import { GlitterSDKServer } from "../../../glitterSDKServer";
 import { ServerError } from "../../../lib/common";
 import BigNumber from "bignumber.js";
 
+/**
+ * Tron Circle Parser class.
+ */
 export class TronCircleParser {
 
+    /**
+     * Processes the transaction using the TronCircleParser.
+     *
+     * @param {GlitterSDKServer} sdkServer - The Glitter SDK server instance.
+     * @param {string} txnID - The transaction ID.
+     * @param {TronConnect|undefined} connect - The TronConnect instance or undefined.
+     * @returns {Promise<PartialBridgeTxn>} A promise that resolves to the partial bridge transaction.
+     */
     public static async process(
         sdkServer: GlitterSDKServer,
         txnID: string,
@@ -124,6 +135,18 @@ export class TronCircleParser {
 }
 
 //Deposit
+/**
+ * Handles the deposit by processing the partial transaction.
+ *
+ * @async
+ * @param {GlitterSDKServer} sdkServer - The Glitter SDK server instance.
+ * @param {PartialBridgeTxn} partialTxn - The partial bridge transaction.
+ * @param {{ destination: { chain: BridgeNetworks, address: string }, amount: string } | null} depositNote - The deposit note object or null.
+ * @param {TransferEvent | null} transferDetail - The transfer detail object or null.
+ * @param {BridgeReleaseEvent | null} releaseDetails - The release details object or null.
+ * @param {TronConnect} connect - The TronConnect instance.
+ * @returns {Promise<PartialBridgeTxn>} A promise that resolves to the processed partial bridge transaction.
+ */
 async function handleDeposit(
     sdkServer: GlitterSDKServer,
     partialTxn: PartialBridgeTxn,
@@ -231,6 +254,17 @@ async function handleDeposit(
 }
 
 //Release
+/**
+ * Handles the release event by processing the partial transaction.
+ *
+ * @async
+ * @param {GlitterSDKServer} sdkServer - The Glitter SDK server instance.
+ * @param {PartialBridgeTxn} partialTxn - The partial bridge transaction.
+ * @param {BridgeReleaseEvent | null} releaseDetails - The release details object or null.
+ * @param {TransferEvent | null} transferDetail - The transfer detail object or null.
+ * @param {TronConnect} connect - The TronConnect instance.
+ * @returns {Promise<PartialBridgeTxn>} A promise that resolves to the processed partial bridge transaction.
+ */
 async function handleRelease(
     sdkServer: GlitterSDKServer,
     partialTxn: PartialBridgeTxn,

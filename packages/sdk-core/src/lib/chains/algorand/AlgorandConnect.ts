@@ -1,9 +1,9 @@
 import * as algosdk from "algosdk";
-import {AlgorandConfig} from "./types";
-import {AssetsRepository} from "./AssetsRepository";
-import {BridgeNetworks} from "../../../lib/common/networks";
+import { AlgorandConfig } from "./types";
+import { AssetsRepository } from "./AssetsRepository";
+import { BridgeNetworks } from "../../../lib/common/networks";
 import BigNumber from "bignumber.js";
-import {assetOptin, bridgeDeposit, bridgeUSDC} from "./transactions";
+import { assetOptin, bridgeDeposit, bridgeUSDC } from "./transactions";
 import {
     AlgorandNativeTokenConfig,
     AlgorandStandardAssetConfig,
@@ -11,17 +11,45 @@ import {
     RoutingDefault,
     Sleep,
 } from "../../../lib/common";
-import {AlgorandAccountsStore} from "./AccountsStore";
+import { AlgorandAccountsStore } from "./AccountsStore";
 
+/**
+ * Class representing the Algorand connection.
+ */
 export class AlgorandConnect {
-    public readonly clientIndexer: algosdk.Indexer;
-    public readonly assetsRepo: AssetsRepository;
-    public readonly config: AlgorandConfig;
-    public readonly client: algosdk.Algodv2;
-    public readonly accountsStore: AlgorandAccountsStore;
     /**
-     * 
-     * @param config 
+     * The Algorand Indexer client.
+     * @type {algosdk.Indexer}
+     */
+    public readonly clientIndexer: algosdk.Indexer;
+  
+    /**
+     * The Assets repository.
+     * @type {AssetsRepository}
+     */
+    public readonly assetsRepo: AssetsRepository;
+  
+    /**
+     * The Algorand configuration object.
+     * @type {AlgorandConfig}
+     */
+    public readonly config: AlgorandConfig;
+  
+    /**
+     * The Algorand client instance.
+     * @type {algosdk.Algodv2}
+     */
+    public readonly client: algosdk.Algodv2;
+  
+    /**
+     * The Algorand accounts store.
+     * @type {AlgorandAccountsStore}
+     */
+    public readonly accountsStore: AlgorandAccountsStore;
+
+    /**
+     * Create an instance of AlgorandConnect.
+     * @param {AlgorandConfig} config - The Algorand configuration object.
      */
     constructor(config: AlgorandConfig) {
         this.config = config;
@@ -39,18 +67,20 @@ export class AlgorandConnect {
             }
         );
     }
+
     /**
-     * 
-     * @param sourceAddress 
-     * @param destinationNetwork 
-     * @param destinationAdress 
-     * @param tokenSymbol 
-     * @param amount 
-     * @returns 
+     * Initiates bridge transactions to transfer tokens from the source network to the destination network.
+     *
+     * @param {string} sourceAddress - The source address on the source network.
+     * @param {string} destinationAddress - The destination address on the destination network.
+     * @param {BridgeNetworks} destinationNetwork - The destination network type.
+     * @param {string} tokenSymbol - The symbol of the token being transferred.
+     * @param {bigint} amount - The amount of tokens to be transferred (as a BigInt).
+     * @returns {Promise<algosdk.Transaction[]>} - A promise that resolves with an array of bridge transactions.
      */
     public async bridgeTransactions(
         sourceAddress: string,
-        destinationAdress: string,
+        destinationAddress: string,
         destinationNetwork: BridgeNetworks,
         tokenSymbol: string,
         amount: bigint
@@ -63,7 +93,7 @@ export class AlgorandConnect {
         routing.from.address = sourceAddress;
         routing.from.token = tokenSymbol;
         routing.from.network = BridgeNetworks.algorand.toString().toLowerCase();
-        routing.to.address = destinationAdress;
+        routing.to.address = destinationAddress;
         routing.to.token = token.wrappedSymbol ?? token.symbol;
         routing.to.network = destinationNetwork.toString().toLowerCase();
         routing.amount = new BigNumber(amount.toString()).div(
@@ -76,7 +106,7 @@ export class AlgorandConnect {
             return await bridgeUSDC(
                 this.client,
                 sourceAddress,
-                destinationAdress,
+                destinationAddress,
                 destinationNetwork,
                 new BigNumber(amount.toString()),
                 depositAddress,
@@ -88,7 +118,7 @@ export class AlgorandConnect {
             this.client,
             this.config.bridgeProgramId,
             sourceAddress,
-            destinationAdress,
+            destinationAddress,
             destinationNetwork,
             amount,
             {
@@ -100,9 +130,11 @@ export class AlgorandConnect {
         )
         
     }
+
     /**
-     * 
-     * @returns 
+     * Retrieves the Algod Indexer instance.
+     *
+     * @returns {algosdk.Indexer} - The Algod Indexer instance.
      */
     getAlgodIndexer(): algosdk.Indexer {
         const indexer = new algosdk.Indexer(
@@ -113,9 +145,11 @@ export class AlgorandConnect {
         indexer.setIntEncoding(algosdk.IntDecoding.MIXED);
         return indexer;
     }
+    
     /**
-     * 
-     * @returns 
+     * Retrieves the Algod client instance.
+     *
+     * @returns {algosdk.Algodv2} - The Algod client instance.
      */
     getAlgodClient(): algosdk.Algodv2 {
         const client = new algosdk.Algodv2(
@@ -126,27 +160,33 @@ export class AlgorandConnect {
         client.setIntEncoding(algosdk.IntDecoding.MIXED);
         return client;
     }
+
     /**
-     * 
-     * @param key 
-     * @returns 
+     * Retrieves the address corresponding to a specified key from the bridge accounts configuration.
+     *
+     * @param {string} key - The key for the bridge account address.
+     * @returns {string} - The address corresponding to the specified key.
      */
     getAddress(key: keyof AlgorandConfig["bridgeAccounts"]): string {
         return this.config.bridgeAccounts[key];
     }
+
     /**
-     * 
-     * @param tokenSymbol 
-     * @returns 
+     * Retrieves the asset configuration for a specified token symbol.
+     *
+     * @param {string} tokenSymbol - The symbol of the token.
+     * @returns {AlgorandStandardAssetConfig|AlgorandNativeTokenConfig|undefined} - The asset configuration for the specified token symbol, or undefined if not found.
      */
     public getAsset(tokenSymbol: string): AlgorandStandardAssetConfig | AlgorandNativeTokenConfig | undefined {
         return this.assetsRepo.getAsset(tokenSymbol)
     }
+
     /**
-     * 
-     * @param address 
-     * @param tokenSymbol 
-     * @returns 
+     * Retrieves the balance of a specified token for a given address.
+     *
+     * @param {string} address - The address for which to retrieve the token balance.
+     * @param {string} tokenSymbol - The symbol of the token.
+     * @returns {Promise<{ balanceHuman: BigNumber, balanceBn: BigNumber }>} - A promise that resolves with the token balance in both human-readable and BigNumber format.
      */
     public async getBalance(address: string, tokenSymbol: string): Promise<{
         balanceBn: BigNumber;
@@ -166,13 +206,15 @@ export class AlgorandConnect {
             token as AlgorandStandardAssetConfig
         )
     }
+    
     /**
-     * 
-     * @param address 
-     * @param tokenSymbol 
-     * @param startingAmount 
-     * @param timeoutSeconds 
-     * @returns 
+     * Waits for the balance of a specified token for a given address to change from the starting amount.
+     *
+     * @param {string} address - The address for which to wait for the balance change.
+     * @param {string} tokenSymbol - The symbol of the token.
+     * @param {number} startingAmount - The starting balance amount to compare against.
+     * @param {number} [timeoutSeconds=60] - The timeout duration in seconds.
+     * @returns {Promise<number>} - A promise that resolves with the updated balance amount after the change.
      */
     public async waitForBalanceChange(address: string, tokenSymbol: string, startingAmount: number, timeoutSeconds = 60): Promise<number> {
         const start = Date.now();
@@ -193,13 +235,15 @@ export class AlgorandConnect {
 
         return balance.balanceHuman.toNumber();
     }
+
     /**
-     * 
-     * @param address 
-     * @param minAmount 
-     * @param tokenSymbol 
-     * @param timeoutSeconds 
-     * @returns 
+     * Waits for the balance of a specified token for a given address to reach or exceed the minimum amount.
+     *
+     * @param {string} address - The address for which to wait for the minimum balance.
+     * @param {number} minAmount - The minimum balance amount to wait for.
+     * @param {string} tokenSymbol - The symbol of the token.
+     * @param {number} [timeoutSeconds=60] - The timeout duration in seconds.
+     * @returns {Promise<number>} - A promise that resolves with the updated balance amount after reaching or exceeding the minimum.
      */
     public async waitForMinBalance(address: string, minAmount: number, tokenSymbol: string, timeoutSeconds = 60): Promise<number> {
         const start = Date.now();
@@ -220,16 +264,18 @@ export class AlgorandConnect {
 
         return balance.balanceHuman.toNumber();
     }
+
     /**
-     * 
-     * @param address 
-     * @param expectedAmount 
-     * @param tokenSymbol 
-     * @param timeoutSeconds 
-     * @param threshold 
-     * @param anybalance 
-     * @param noBalance 
-     * @returns 
+     * Waits for the balance of a specified token for a given address to match the expected amount within a timeout period.
+     *
+     * @param {string} address - The address for which to wait for the balance.
+     * @param {number} expectedAmount - The expected balance amount to wait for.
+     * @param {string} tokenSymbol - The symbol of the token.
+     * @param {number} [timeoutSeconds=60] - The timeout duration in seconds.
+     * @param {number} [threshold=0.001] - The threshold to consider the balance amount as a match.
+     * @param {boolean} [anybalance=false] - If true, waits for any balance change (greater or smaller) to match the expected amount.
+     * @param {boolean} [noBalance=false] - If true, waits for no balance (zero) to match the expected amount.
+     * @returns {Promise<number>} - A promise that resolves with the updated balance amount that matches the expected amount.
      */
     public async waitForBalance(
         address: string,
@@ -263,10 +309,11 @@ export class AlgorandConnect {
     }
 
     /**
-     * 
-     * @param signer 
-     * @param tokenSymbol 
-     * @returns 
+     * Generates an opt-in transaction for a specified token symbol.
+     *
+     * @param {string} signerAddress - The address of the account performing the opt-in.
+     * @param {string} tokenSymbol - The symbol of the token to opt-in.
+     * @returns {Promise<algosdk.Transaction>} - A promise that resolves with the opt-in transaction.
      */
     async optinTransaction(signerAddress: string, tokenSymbol: string): Promise<algosdk.Transaction> {
         const token = this.getAsset(tokenSymbol);
@@ -281,6 +328,13 @@ export class AlgorandConnect {
         return txn
     }
 
+    /**
+     * Performs an opt-in operation for a specified token symbol.
+     *
+     * @param {string} signerAddress - The address of the account performing the opt-in.
+     * @param {string} tokenSymbol - The symbol of the token to opt-in.
+     * @returns {Promise<string>} - A promise that resolves with the result of the opt-in operation.
+     */
     async optin(signerAddress: string, tokenSymbol: string): Promise<string> {
         const txn = await this.optinTransaction(
             signerAddress,
@@ -295,6 +349,13 @@ export class AlgorandConnect {
         return txID
     }
 
+    /**
+     * Checks if a specified address is opted-in to a given asset.
+     *
+     * @param {number} assetId - The ID of the asset.
+     * @param {string} address - The address to check.
+     * @returns {Promise<boolean>} - A promise that resolves with a boolean indicating if the address is opted-in to the asset.
+     */
     async isOptedIn(assetId: number, address: string): Promise<boolean> {
         const accountInfo = await this.accountsStore.getAccountInfo(address)
         return !!accountInfo.assets.find(x => x["asset-id"] === assetId)

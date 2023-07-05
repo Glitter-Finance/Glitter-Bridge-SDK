@@ -2,8 +2,21 @@ import { ParsedTransactionWithMeta, TokenBalance } from "@solana/web3.js";
 import { GlitterSDKServer } from "../../../glitterSDKServer";
 import { BridgeNetworks, BridgeTokens } from "@glitter-finance/sdk-core/dist";
 
+/**
+ * Solana Poller Common class.
+ */
 export class SolanaPollerCommon {
+
     //Get solana address with amount
+    /**
+     * Gets the Solana address with the corresponding amount from the transaction.
+     *
+     * @param {GlitterSDKServer} sdkServer - The Glitter SDK server instance.
+     * @param {ParsedTransactionWithMeta} txn - The parsed transaction with metadata.
+     * @param {string | null} token - The token address or null if not available.
+     * @param {boolean} isDeposit - Indicates whether the transaction is a deposit or not.
+     * @returns {[string, number]} An array containing the Solana address and the corresponding amount.
+     */
     public static getSolanaAddressWithAmount(
         sdkServer: GlitterSDKServer,
         txn: ParsedTransactionWithMeta,
@@ -86,6 +99,13 @@ export class SolanaPollerCommon {
     }
 
     //Match a prebalance to a post balance object
+    /**
+     * Gets the pre-balance from the transaction and post-balance.
+     *
+     * @param {ParsedTransactionWithMeta} txn - The parsed transaction with metadata.
+     * @param {TokenBalance | undefined} postBalance - The post-balance information or undefined if not available.
+     * @returns {any} The pre-balance information.
+     */
     public static getPreBalance(txn: ParsedTransactionWithMeta, postBalance: TokenBalance | undefined) {
         if (!postBalance) {
             return 0;

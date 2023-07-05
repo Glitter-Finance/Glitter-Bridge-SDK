@@ -1,13 +1,22 @@
-import {ethers} from "ethers";
-import {AbiCoder} from "ethers/lib/utils";
-import {isArray} from "util";
-import {BridgeDepositEvent, BridgeReleaseEvent, TransferEvent} from "../evm";
-import {EventTopics} from "./types";
+import { ethers } from "ethers";
+import { AbiCoder } from "ethers/lib/utils";
+import { isArray } from "util";
+import { BridgeDepositEvent, BridgeReleaseEvent, TransferEvent } from "../evm";
+import { EventTopics } from "./types";
 
 const BRIDGE_RELEASE_EVENT_SIGNATURE = (trWeb: any): string =>
     trWeb.sha3("BridgeRelease(uint256,address,address,bytes32)");
 const TRC20_TRANSFER_EVENT_SIGNATURE = (trWeb: any): string => trWeb.sha3("Transfer(address,address,uint256)");
 
+/**
+ * Retrieves a log from an array of logs based on the event signature.
+ *
+ * @function getLogByEventSignature
+ * @param {any} trWeb - The TronWeb instance.
+ * @param {Array<{ data: string, topics: string[] }>} logs - The array of logs to search.
+ * @param {EventTopics} topic - The event signature to match.
+ * @returns {{ data: string, topics: string[] } | null} - The matched log object, or null if no match is found.
+ */
 export function getLogByEventSignature(
     trWeb: any,
     logs: Array<{
@@ -34,6 +43,14 @@ export function getLogByEventSignature(
     return matchingLog;
 }
 
+/**
+ * Decodes event data based on the event log and event topic.
+ *
+ * @function decodeEventData
+ * @param {{ data: string, topics: string[] }} log - The event log containing data to decode.
+ * @param {EventTopics} topic - The event topic to determine the type of event.
+ * @returns {BridgeDepositEvent | BridgeReleaseEvent | TransferEvent | null} - The decoded event object, or null if decoding fails.
+ */
 export function decodeEventData(
     log: { data: string; topics: string[] },
     topic: EventTopics
@@ -78,6 +95,13 @@ export function decodeEventData(
     return null;
 }
 
+/**
+ * Converts a hexadecimal string to an array of bytes.
+ *
+ * @function hexToBytes
+ * @param {string} hex - The hexadecimal string to convert.
+ * @returns {number[]} - An array of bytes representing the converted hexadecimal string.
+ */
 export function hexToBytes(hex: string): number[] {
     const bytes: number[] = [];
     for (let c = 0; c < hex.length; c += 2) bytes.push(parseInt(hex.substr(c, 2), 16));

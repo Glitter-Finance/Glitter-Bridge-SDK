@@ -7,19 +7,48 @@ import axios, { AxiosResponse } from 'axios';
 import * as util from 'util';
 import { TronCircleParser } from "./poller.tron.circle";
 
+/**
+ * Glitter Tron Poller class.
+ * Implements the GlitterPoller interface.
+ */
 export class GlitterTronPoller implements GlitterPoller {
    
     //Network
     public network: BridgeNetworks = BridgeNetworks.TRON;
     
     //Cursors
+    /**
+     * Cursors object for tracking transaction cursors.
+     * The keys represent BridgeTypes and the values are arrays of Cursor objects.
+     *
+     * @type {Record<BridgeType, Cursor[]>}
+     */
     public cursors: Record<BridgeType, Cursor[]> ;
+
+    /**
+     * Get the tokenV1Cursor.
+     *
+     * @type {Cursor | undefined}
+     * @readonly
+     */
     public get tokenV1Cursor(): Cursor | undefined{
         return this.cursors?.[BridgeType.TokenV1]?.[0];
     }
+    /**
+     * Get the tokenV2Cursor.
+     *
+     * @type {Cursor | undefined}
+     * @readonly
+     */
     public get tokenV2Cursor(): Cursor | undefined{
         return this.cursors?.[BridgeType.TokenV2]?.[0];
     }
+    /**
+     * Get the usdcCursors.
+     *
+     * @type {Cursor | undefined}
+     * @readonly
+     */
     public get usdcCursors(): Cursor[] | undefined{
         return this.cursors?.[BridgeType.Circle];
     }
@@ -33,7 +62,12 @@ export class GlitterTronPoller implements GlitterPoller {
         };
     }
     
-    //Initialize
+    /**
+     * Initializes the GlitterTronPoller.
+     *
+     * @param {GlitterSDKServer} sdkServer - The Glitter SDK server instance.
+     * @returns {void}
+     */
     initialize(sdkServer: GlitterSDKServer): void {
 
         //Add USDC Cursors
@@ -50,7 +84,13 @@ export class GlitterTronPoller implements GlitterPoller {
         });
     }
 
-    //Poll
+    /**
+     * Polls for new transactions.
+     *
+     * @param {GlitterSDKServer} sdkServer - The Glitter SDK server instance.
+     * @param {Cursor} cursor - The cursor object indicating the starting point for polling.
+     * @returns {Promise<PollerResult>} A promise that resolves to a PollerResult object.
+     */
     async poll(sdkServer: GlitterSDKServer, cursor: Cursor): Promise<PollerResult> {
 
         const lastTimestamp_ms: number = cursor.batch?.lastTimestamp_ms || cursor.end?.lastTimestamp_ms || 0;
@@ -128,7 +168,16 @@ export class GlitterTronPoller implements GlitterPoller {
         };
        
     }
-
+    
+    /**
+     * Parses the transaction ID and returns the partial bridge transaction.
+     *
+     * @async
+     * @param {GlitterSDKServer} sdkServer - The Glitter SDK server instance.
+     * @param {string} txnID - The transaction ID.
+     * @param {BridgeType} type - The bridge type.
+     * @returns {Promise<PartialBridgeTxn | undefined>} A promise that resolves to the parsed partial bridge transaction or undefined.
+     */
     async parseTxnID(sdkServer: GlitterSDKServer, txnID:string, type:BridgeType):Promise<PartialBridgeTxn | undefined>{
         try {
             //Ensure Transaction Exists

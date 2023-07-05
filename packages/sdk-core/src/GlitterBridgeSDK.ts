@@ -10,13 +10,12 @@ import { mainnetConfig, testnetConfig, mainnetTokenConfig, testnetTokenConfig } 
 import { ChainRPCConfig, ChainRPCConfigs, GlitterBridgeConfig, GlitterEnvironment } from "./types";
 import { BridgeV2Tokens } from "./lib/common/tokens/BridgeV2Tokens";
 import { testnetAPI } from "./config/testnet-api";
-import { BridgeTokenConfig, Token2Config } from "./lib";
+import { Token2Config } from "./lib";
 import { TokenPricing } from "./lib/common/pricing/tokenPricing";
 
 /**
  * GlitterBridgeSDK
- * Provides access to bridging
- * on all supported chains
+ * Provides access to bridging on all supported chains
  */
 export class GlitterBridgeSDK {
 
@@ -39,9 +38,10 @@ export class GlitterBridgeSDK {
     private _pricing: TokenPricing | undefined;
     
     /**
-     * Set environment of the SDK
-     * @param {GlitterEnvironment} environment 
-     * @returns {GlitterBridgeSDK}
+     * Sets the environment for the Glitter Bridge SDK.
+     *
+     * @param {GlitterEnvironment} environment - The environment to set for the SDK.
+     * @returns {GlitterBridgeSDK} The updated GlitterBridgeSDK instance.
      */
     public setEnvironment(environment: GlitterEnvironment): GlitterBridgeSDK {
         this._environment = environment;
@@ -62,22 +62,26 @@ export class GlitterBridgeSDK {
 
         return this;
     }
+
     /**
-     * Set RPC Override for the network
-     * @param {BridgeNetworks} network 
-     * @param {string} rpcUrl
-     * @returns {GlitterBridgeSDK}
+     * Sets the RPC URL for a specific network in the Glitter Bridge SDK.
+     *
+     * @param {BridgeNetworks} network - The network for which to set the RPC URL.
+     * @param {string} rpcUrl - The RPC URL to set for the specified network.
+     * @returns {GlitterBridgeSDK} The updated GlitterBridgeSDK instance.
      */
     public setRPC(network: BridgeNetworks, rpcUrl: string): GlitterBridgeSDK {
         this._rpcOverrides[network] = rpcUrl;
         return this;
     }
+
     /**
-     * Initialize connections and SDK
-     * @param {BridgeNetworks[]} networks list of
-     * networks to connect to
-     * @returns {GlitterBridgeSDK}
-    */
+     * Connects the Glitter Bridge SDK to the specified networks using their default RPC configurations or custom RPC configurations if provided.
+     *
+     * @param {BridgeNetworks[]} networks - An array of networks to connect to.
+     * @param {ChainRPCConfigs} [rpcListOverride] - Optional custom RPC configurations to override the default RPC configurations for the networks.
+     * @returns {GlitterBridgeSDK} The connected GlitterBridgeSDK instance.
+     */
     public connect(networks: BridgeNetworks[], rpcListOverride?:ChainRPCConfigs): GlitterBridgeSDK {
 
         if (rpcListOverride) this._rpcList = rpcListOverride;
@@ -97,7 +101,7 @@ export class GlitterBridgeSDK {
              * TODO: Have a single method
              * for each chain e.g
              * interface ChainConnect { connect(network: BridgeNetworks): void; }
-            */
+             */
             switch (network) {
                 case BridgeNetworks.algorand:
                     this.connectToAlgorand();
@@ -122,6 +126,13 @@ export class GlitterBridgeSDK {
         return this;
     }
 
+    /**
+     * Performs pre-initialization checks for the specified network.
+     *
+     * @private
+     * @param {BridgeNetworks} network - The network to perform pre-initialization checks for.
+     * @returns {void}
+     */
     private preInitializeChecks(network: BridgeNetworks) {
         if (!this._bridgeConfig) throw new Error("Glitter environment not set");
         /**
@@ -141,6 +152,12 @@ export class GlitterBridgeSDK {
         }
     }
 
+    /**
+     * Connects to the Tron network.
+     *
+     * @private
+     * @returns {GlitterBridgeSDK} - The GlitterBridgeSDK instance.
+     */
     private connectToTron(): GlitterBridgeSDK {
         this.preInitializeChecks(BridgeNetworks.TRON);
         
@@ -157,6 +174,12 @@ export class GlitterBridgeSDK {
         return this;
     }
 
+    /**
+     * Connects to the Algorand network.
+     *
+     * @private
+     * @returns {GlitterBridgeSDK} - The GlitterBridgeSDK instance.
+     */
     private connectToAlgorand(): GlitterBridgeSDK {
         this.preInitializeChecks(BridgeNetworks.algorand)
 
@@ -169,6 +192,12 @@ export class GlitterBridgeSDK {
         return this;
     }
 
+    /**
+     * Connects to the Solana network.
+     *
+     * @private
+     * @returns {GlitterBridgeSDK} - The GlitterBridgeSDK instance.
+     */
     private connectToSolana(): GlitterBridgeSDK {
         this.preInitializeChecks(BridgeNetworks.solana);
         
@@ -182,6 +211,13 @@ export class GlitterBridgeSDK {
         return this;
     }
 
+    /**
+     * Connects to the specified EVM network.
+     *
+     * @private
+     * @param {BridgeEvmNetworks} network - The EVM network to connect to.
+     * @returns {GlitterBridgeSDK} - The GlitterBridgeSDK instance.
+     */
     private connectToEvmNetwork(network: BridgeEvmNetworks): GlitterBridgeSDK {
         this.preInitializeChecks(network);
 
@@ -197,10 +233,10 @@ export class GlitterBridgeSDK {
     }
 
     /**
-     * Returns EVMConnect for
-     * a specific evm network
-     * @param {BridgeEvmNetworks} network
-     * @returns {EvmConnect | undefined}
+     * Retrieves the EVM network configuration for the specified EVM network.
+     *
+     * @param {BridgeEvmNetworks} evmNetwork - The EVM network.
+     * @returns {EvmConnect | undefined} - The EVM network configuration, or undefined if not found.
      */
     public getEvmNetwork(evmNetwork: BridgeEvmNetworks): EvmConnect | undefined {
         let connect = this._evm.get(evmNetwork);
@@ -218,44 +254,120 @@ export class GlitterBridgeSDK {
         return connect;
     }
 
+    /**
+     * Retrieves the current Glitter environment.
+     *
+     * @returns {GlitterEnvironment | undefined} - The current Glitter environment, or undefined if not set.
+     */
     get environment(): GlitterEnvironment | undefined {
         return this._environment;
     }
+
+    /**
+     * Retrieves the Algorand connection.
+     *
+     * @returns {AlgorandConnect | undefined} - The Algorand connection or undefined if not available.
+     */
     get algorand(): AlgorandConnect | undefined {
         return this._algorand;
     }
+
+    /**
+     * Retrieves the Solana connection.
+     *
+     * @returns {SolanaConnect | undefined} - The Solana connection or undefined if not available.
+     */
     get solana(): SolanaConnect | undefined {
         return this._solana;
     }
+
+    /**
+     * Retrieves the Ethereum connection.
+     *
+     * @returns {EvmConnect | undefined} - The Ethereum connection or undefined if not available.
+     */
     get ethereum(): EvmConnect | undefined {
         return this._evm.get(BridgeNetworks.Ethereum);
     }
+
+    /**
+     * Retrieves the Polygon connection.
+     *
+     * @returns {EvmConnect | undefined} - The Polygon connection or undefined if not available.
+     */
     get polygon(): EvmConnect | undefined {
         return this._evm.get(BridgeNetworks.Polygon);
     }
+
+    /**
+     * Retrieves the Avalanche connection.
+     *
+     * @returns {EvmConnect | undefined} - The Avalanche connection or undefined if not available.
+     */
     get avalanche(): EvmConnect | undefined {
         return this._evm.get(BridgeNetworks.Avalanche);
     }
+
+    /**
+     * Retrieves the Arbitrum connection.
+     *
+     * @returns {EvmConnect | undefined} - The Arbitrum connection or undefined if not available.
+     */
     get arbitrum(): EvmConnect | undefined {
         return this._evm.get(BridgeNetworks.Arbitrum);
     }
+
+    /**
+     * Retrieves the Binance connection.
+     *
+     * @returns {EvmConnect | undefined} - The Binance connection or undefined if not available.
+     */
     get binance(): EvmConnect | undefined {
         return this._evm.get(BridgeNetworks.Binance);
     }
+
+    /**
+     * Retrieves the Zkevm connection.
+     *
+     * @returns {EvmConnect | undefined} - The Zkevm connection or undefined if not available.
+     */
     get zkevm(): EvmConnect | undefined {
         return this._evm.get(BridgeNetworks.Zkevm);
     }
+
+    /**
+     * Retrieves the Optimism connection.
+     *
+     * @returns {EvmConnect | undefined} - The Optimism connection or undefined if not available.
+     */
     get optimism(): EvmConnect | undefined {
         return this._evm.get(BridgeNetworks.Optimism);
     }
+
+    /**
+     * Retrieves the Tron connection.
+     *
+     * @returns {TronConnect | undefined} - The Tron connection or undefined if not available.
+     */
     get tron(): TronConnect | undefined {
         return this._tron;
     }
 
+    /**
+     * Retrieves the RPC list configuration.
+     *
+     * @returns {ChainRPCConfigs | undefined} - The RPC list configuration or undefined if not available.
+     */
     get rpcList(): ChainRPCConfigs|undefined {
         return this._rpcList;
     }
 
+    /**
+     * Retrieves the number of confirmations required for the specified chain or network.
+     *
+     * @param {string | BridgeNetworks} chainOrName - The chain name or BridgeNetworks value.
+     * @returns {number} - The number of confirmations required.
+     */
     public confirmationsRequired(chainName: string): number 
     public confirmationsRequired(chain: string): number 
     public confirmationsRequired(chainOrName: BridgeNetworks): number {
@@ -273,6 +385,12 @@ export class GlitterBridgeSDK {
         return 0;
     }
 
+    /**
+     * Retrieves the gas token configuration for the specified chain or network.
+     *
+     * @param {string | BridgeNetworks} chainOrName - The chain name or BridgeNetworks value.
+     * @returns {Token2Config | undefined} - The gas token configuration, or undefined if not found.
+     */
     public gasToken(chainName: string): Token2Config 
     public gasToken(chain: string): Token2Config 
     public gasToken(chainOrName: BridgeNetworks): Token2Config|undefined {

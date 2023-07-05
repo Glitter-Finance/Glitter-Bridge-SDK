@@ -26,17 +26,35 @@ import { addr_to_pk, walletToAddress } from "../../common/utils/utils";
 import { BridgeTokens, BridgeTokenConfig, Token2ConfigList, BridgeV2Tokens } from "../../../lib/common";
 import { BridgeV2Abi__factory, Erc20Abi__factory } from "../../../typechain";
 
+/**
+ * Represents a connection object.
+ * @typedef {Object} Connection
+ * @property {providers.BaseProvider} rpcProvider - The RPC provider for the connection.
+ * @property {TokenBridge} bridge - The bridge object for the connection.
+ * @property {Map<string, ERC20>} tokens - A map of token symbols to ERC20 token objects.
+ */
 type Connection = {
   rpcProvider: providers.BaseProvider;
   bridge: TokenBridge;
   tokens: Map<string, ERC20>;
 };
 
+/**
+ * Class representing the Evm connection.
+ */
 export class EvmConnect {
     protected readonly __network: BridgeEvmNetworks;
     protected readonly __providers: Connection;
     protected readonly __config: EvmNetworkConfig;
 
+    /**
+     * Creates connection objects based on the provided RPC URL and configuration.
+     *
+     * @private
+     * @param {string} rpcUrl - The RPC URL for the connection.
+     * @param {EvmNetworkConfig} config - The configuration object for the EVM network.
+     * @returns {Connection} - The created connection object.
+     */
     private createConnections(
         rpcUrl: string,
         config: EvmNetworkConfig
@@ -61,6 +79,13 @@ export class EvmConnect {
         };
     }
 
+    /**
+     * Create an instance of the class.
+     *
+     * @param {BridgeEvmNetworks} network - The network for the instance.
+     * @param {EvmNetworkConfig} config - The configuration object for the EVM network.
+     * @param {Token2ConfigList} [bridgeV2Tokens] - The list of bridge V2 tokens (optional).
+     */
     constructor(network: BridgeEvmNetworks, config: EvmNetworkConfig, bridgeV2Tokens?:Token2ConfigList) {
         this.__config = config;
         this.__network = network;
@@ -69,25 +94,40 @@ export class EvmConnect {
         if(bridgeV2Tokens) BridgeV2Tokens.loadConfig(bridgeV2Tokens);
     }
 
+    /**
+     * Retrieves the base provider for the instance.
+     *
+     * @returns {ethers.providers.BaseProvider} - The base provider for the instance.
+     */
     get provider(): ethers.providers.BaseProvider {
         return this.__providers.rpcProvider;
     }
 
+    /**
+     * Retrieves the EVM network configuration for the instance.
+     *
+     * @returns {EvmNetworkConfig} - The EVM network configuration for the instance.
+     */
     get config(): EvmNetworkConfig {
         return this.__config;
     }
 
+    /**
+     * Retrieves the EVM network for the instance.
+     *
+     * @returns {BridgeEvmNetworks} - The EVM network for the instance.
+     */
     get network(): BridgeEvmNetworks {
         return this.__network;
     }
 
     /**
-   * Provide address of bridge
-   * component
-   * @param {"tokens" | "bridge" | "depositWallet" | "releaseWallet"| "tokenBridge"} entity The type of address to provide
-   * @param {"USDC"} tokenSymbol only USDC for now
-   * @returns {string} returns the address for the given entity
-   */
+     * Provide address of bridge component
+     * 
+     * @param {"tokens" | "bridge" | "depositWallet" | "releaseWallet"| "tokenBridge"} entity The type of address to provide
+     * @param {"USDC"} tokenSymbol only USDC for now
+     * @returns {string} returns the address for the given entity
+     */
     getAddress(
         entity: "tokens" | "bridge" | "depositWallet" | "releaseWallet"| "tokenBridge",
         tokenSymbol?: string
@@ -113,17 +153,24 @@ export class EvmConnect {
         return this.__config[entity].toLowerCase();
     }
 
+    /**
+     * Checks if a token symbol is valid.
+     *
+     * @private
+     * @param {string} tokenSymbol - The symbol of the token.
+     * @returns {boolean} - Returns true if the token symbol is valid, otherwise false.
+     */
     private isValidToken(tokenSymbol: string): boolean {
         return !!this.__providers.tokens.get(tokenSymbol.toLowerCase());
     }
     
     /**
-   * Provide token balance of an address
-   * on the connected evm network
-   * @param {"USDC"} tokenSymbol only USDC for now
-   * @param {string} address
-   * @returns {ethers.BigNumber}
-   */
+     * Retrieves the token balance of a specified token symbol for a given address on the network.
+     *
+     * @param {string} tokenSymbol - The symbol of the token.
+     * @param {string} address - The address for which to retrieve the token balance.
+     * @returns {Promise<ethers.BigNumber>} - A promise that resolves with the token balance as an ethers.BigNumber.
+     */
     async getTokenBalanceOnNetwork(
         tokenSymbol: string,
         address: string
@@ -136,16 +183,15 @@ export class EvmConnect {
         const balance = await erc20!.balanceOf(address);
         return balance;
     }
+
     /**
-   * Before bridging tokens we need to check
-   * if tokens are approved for bridge to use
-   * if not, we can use this method to sign
-   * and approve transaction
-   * @param {"USDC"} tokenSymbol only USDC for now
-   * @param {ethers.BigNumber | string} amount in BigNumber units e.g 1_000_000 for 1USDC
-   * @param {ethers.Signer} signer to sign the transaction
-   * @returns {ethers.ContractTransaction}
-   */
+     * Approves tokens to be used by the bridge.
+     *
+     * @param {string} tokenSymbol - The symbol of the token to approve.
+     * @param {ethers.BigNumber | string} amount - The amount of tokens to approve.
+     * @param {ethers.Signer} signer - The signer to use for the approval transaction.
+     * @returns {Promise<ethers.ContractTransaction>} - A promise that resolves with the approval transaction.
+     */
     async approveTokensForBridge(
         tokenSymbol: string,
         amount: ethers.BigNumber | string,
@@ -160,13 +206,14 @@ export class EvmConnect {
         const token = ERC20__factory.connect(tokenAddress, signer);
         return await token.increaseAllowance(bridgeAddress, amount);
     }
+
     /**
-   * Get the amount of tokens approved
-   * to be used by the bridge
-   * @param {"USDC"} tokenSymbol only USDC for now
-   * @param {ethers.Signer} signer to sign the transaction
-   * @returns {ethers.BigNumber}
-   */
+     * Retrieves the current allowance of tokens for the bridge.
+     *
+     * @param {string} tokenSymbol - The symbol of the token.
+     * @param {ethers.Signer} signer - The signer to use for the operation.
+     * @returns {Promise<ethers.BigNumber>} - A promise that resolves with the current token allowance for the bridge.
+     */
     async bridgeAllowance(
         tokenSymbol: string,
         signer: ethers.Signer
@@ -184,12 +231,13 @@ export class EvmConnect {
 
         return allowance;
     }
+
     /**
-   * Parse transaction receipts to retrieve
-   * bridge transfer data
-   * @param {string} txHash transaction hash of deposit or release event on evm chain
-   * @returns {Array<TransferEvent | BridgeDepositEvent | BridgeReleaseEvent>}
-   */
+     * Parses logs from a transaction and returns an array of events.
+     *
+     * @param {string} txHash - The transaction hash.
+     * @returns {Promise<Array<TransferEvent | BridgeDepositEvent | BridgeReleaseEvent>>} - A promise that resolves with an array of parsed events.
+     */
     async parseLogs(
         txHash: string
     ): Promise<Array<TransferEvent | BridgeDepositEvent | BridgeReleaseEvent>> {
@@ -220,6 +268,13 @@ export class EvmConnect {
             return Promise.reject(error.message);
         }
     }
+
+    /**
+     * Retrieves the block number of a transaction.
+     *
+     * @param {string} txHash - The transaction hash.
+     * @returns {Promise<number>} - A promise that resolves with the block number of the transaction.
+     */
     async getBlockNumber(txHash: string): Promise<number> {
         try {
             const transactionReceipt =
@@ -230,6 +285,13 @@ export class EvmConnect {
             return Promise.reject(error.message);
         }
     }
+
+    /**
+     * Retrieves the timestamp from a block number.
+     *
+     * @param {number} blockNumber - The block number.
+     * @returns {Promise<number>} - A promise that resolves with the timestamp of the block.
+     */
     async getTimeStampFromBlockNumber(blockNumber: number): Promise<number> {
         try {
             const block = await this.__providers.rpcProvider.getBlock(blockNumber);
@@ -239,6 +301,13 @@ export class EvmConnect {
             return Promise.reject(error.message);
         }
     }
+
+    /**
+     * Retrieves the timestamp of a transaction.
+     *
+     * @param {string} txHash - The transaction hash.
+     * @returns {Promise<number>} - A promise that resolves with the timestamp of the transaction.
+     */
     async getTimeStamp(txHash: string): Promise<number> {
         try {
             const transactionReceipt =
@@ -251,6 +320,13 @@ export class EvmConnect {
             return Promise.reject(error.message);
         }
     }
+
+    /**
+     * Retrieves the status of a transaction.
+     *
+     * @param {string} txHash - The transaction hash.
+     * @returns {Promise<ChainStatus>} - A promise that resolves with the status of the transaction.
+     */  
     async getTxnStatus(txHash: string): Promise<ChainStatus> {
         try {
             const txnReceipt =
@@ -269,6 +345,12 @@ export class EvmConnect {
         }
     }
 
+    /**
+     * Retrieves the chain network from a chain ID.
+     *
+     * @param {number} chainId - The chain ID.
+     * @returns {BridgeNetworks | undefined} - The bridge network corresponding to the chain ID, or undefined if not found.
+     */
     getChainFromID(chainId: number): BridgeNetworks | undefined {
         try {
             const returnValue = Object.entries(NetworkIdentifiers).find(([_id]) => {
@@ -281,12 +363,12 @@ export class EvmConnect {
     }
 
     /**
-   * Check if provided signer is
-   * connected to same chain as EvmConnect
-   * to execute a transaction
-   * @param {ethers.Signer} signer the signer to check
-   * @returns {Promise<boolean>} true if signer is connected to correct chain
-   */
+     * Checks if the signer is connected to the correct chain.
+     *
+     * @private
+     * @param {ethers.Signer} signer - The signer to check.
+     * @returns {Promise<boolean>} - A promise that resolves with a boolean indicating if the signer is connected to the correct chain.
+     */
     private async isCorrectChain(signer: ethers.Signer): Promise<boolean> {
         // retrieve signer chain ID
         const signerChainId = await signer.getChainId();
@@ -297,16 +379,17 @@ export class EvmConnect {
     }
 
     /**
-   * Bridge tokens to another supported chain
-   * @param {string | PublicKey | algosdk.Account} destinationWallet receiver address on destination chain
-   * @param {BridgeNetworks} destination destination chain
-   * @param {"USDC"} tokenSymbol only USDC for now
-   * @param {string | ethers.BigNumber} amount in base units e.g 1_000_000 for 1USDC
-   * @param {ethers.Signer} signer to sign transaction
-   * @param {boolean} [v2] is this a bridge v2 deposit?
-   * @param {boolean} [protocolId] for deposit processed by partners, protocolId allows the process of fee sharing
-   * @returns {Promise<ethers.ContractTransaction>} returns the transaction response
-   */
+     * Bridge tokens to another supported chain
+     * 
+     * @param {string | PublicKey | algosdk.Account} destinationWallet receiver address on destination chain
+     * @param {BridgeNetworks} destination destination chain
+     * @param {"USDC"} tokenSymbol only USDC for now
+     * @param {string | ethers.BigNumber} amount in base units e.g 1_000_000 for 1USDC
+     * @param {ethers.Signer} signer to sign transaction
+     * @param {boolean} [v2] is this a bridge v2 deposit?
+     * @param {boolean} [protocolId] for deposit processed by partners, protocolId allows the process of fee sharing
+     * @returns {Promise<ethers.ContractTransaction>} returns the transaction response
+     */
     async bridge(
         destinationWallet: string | PublicKey | algosdk.Account,
         destination: BridgeNetworks,
@@ -374,6 +457,19 @@ export class EvmConnect {
         }
     }
 
+    /**
+     * Deposits tokens using the bridge V2.
+     *
+     * @private
+     * @param {Object} options - The options for the deposit.
+     * @param {ethers.BigNumber | string} options.amount - The amount of tokens to deposit.
+     * @param {BridgeEvmNetworks} options.destination - The destination EVM network.
+     * @param {Buffer} options.targetWallet - The target wallet address.
+     * @param {ethers.Signer} options.signer - The signer to use for the deposit transaction.
+     * @param {string} options.tokenSymbol - The symbol of the token to deposit.
+     * @param {number} [options.protocolId=0] - The protocol ID for the deposit (optional).
+     * @returns {Promise<ethers.ContractTransaction>} - A promise that resolves with the deposit transaction.
+     */
     private async deposit_bridgeV2 ({
         amount,        
         destination,       
@@ -448,117 +544,31 @@ export class EvmConnect {
         return tx
     }
 
+    /**
+     * Retrieves the hashed transaction ID.
+     *
+     * @param {string} txnID - The transaction ID.
+     * @returns {string} - The hashed transaction ID.
+     */
     public getTxnHashed(txnID: string): string {
         return ethers.utils.keccak256(txnID);
     }
-
-    // public async getUSDCPartialTxn(txnID: string): Promise<PartialBridgeTxn> {
-
-    //   //USDC decimals
-    //   let decimals = 6;
-
-    //   //Get logs
-    //   const logs = await this.parseLogs(txnID);
-
-    //   //Get Timestamp
-    //   const blockNumber = await this.getBlockNumber(txnID);
-    //   const timestamp_s = await this.getTimeStampFromBlockNumber(blockNumber);
-    //   const timestamp = new Date(timestamp_s * 1000);
-
-    //   //Check deposit/transfer/release
-    //   const releaseEvent = logs?.find(
-    //     (log) => log.__type === "BridgeRelease"
-    //   ) as BridgeReleaseEvent;
-
-    //   const depositEvent = logs?.find(
-    //     (log) => log.__type === "BridgeDeposit"
-    //   ) as BridgeDepositEvent;
-
-    //   const transferEvent = logs?.find(
-    //     (log) => log.__type === "Transfer"
-    //   ) as TransferEvent;
-
-    //   //Get transaction type
-    //   let type: TransactionType;
-    //   if (releaseEvent) {
-    //     type = TransactionType.Release;
-    //   } else if (depositEvent) {
-    //     type = TransactionType.Deposit;
-    //   } else {
-    //     type = TransactionType.Unknown;
-    //   }
-
-    //   //Get return object
-    //   let returnTxn: PartialBridgeTxn = {
-    //     txnID: txnID,
-    //     txnIDHashed: this.getTxnHashed(txnID),
-    //     bridgeType: BridgeType.USDC,
-    //     txnType: type,
-    //     txnTimestamp: timestamp,
-    //     chainStatus: await this.getTxnStatus(txnID),
-    //     network: this.__network,
-    //     tokenSymbol: "usdc",
-    //     block: blockNumber,
-    //   };
-
-    //   //Get txn params
-    //   if (type === TransactionType.Deposit && transferEvent) {
-    //     returnTxn.address = transferEvent.from;
-    //     returnTxn.units =  BigNumber(depositEvent.amount.toString()) ;
-    //     returnTxn.amount = RoutingHelper.ReadableValue_FromBaseUnits(returnTxn.units,decimals);
-
-    //     //Get Routing
-    //     let toNetwork = this.getChainFromID(depositEvent.destinationChainId);
-    //     let toAddress = toNetwork ? DeserializeEvmBridgeTransfer.deserializeAddress(toNetwork, depositEvent.destinationWallet) : "";
-    //     let routing: Routing = {
-    //       from: {
-    //         network: this.__network,
-    //         address: transferEvent.from,
-    //         token: "usdc",
-    //         txn_signature: txnID,
-    //       },
-    //       to: {
-    //         network: toNetwork?.toString() || "",
-    //         address: toAddress,
-    //         token: "usdc"
-    //       },
-    //       amount: returnTxn.amount,
-    //       units: BigNumber(returnTxn.units),
-    //     };
-    //     returnTxn.routing = routing;
-
-    //   } else if (type === TransactionType.Release && transferEvent) {
-
-    //     returnTxn.address = releaseEvent.destinationWallet;
-    //     returnTxn.units = BigInt(releaseEvent.amount.toString()).toString();
-    //     returnTxn.amount = ValueUnits.fromUnits(BigInt(returnTxn.units), decimals).value;
-
-    //     //Get Routing
-    //     let routing: Routing = {
-    //       from: {
-    //         network: "",
-    //         address: "",
-    //         token: "usdc",
-    //         txn_signature_hashed: releaseEvent.depositTransactionHash,
-    //       },
-    //       to: {
-    //         network: this.__network,
-    //         address: returnTxn.address,
-    //         token: "usdc",
-    //         txn_signature: txnID,
-    //       },
-    //       amount: returnTxn.amount,
-    //       units: BigNumber(returnTxn.units),
-    //     };
-    //     returnTxn.routing = routing;
-
-    //   }
-    //   return Promise.resolve(returnTxn);
-    // }
+   
+    /**
+     * Generates a new Ethereum wallet.
+     *
+     * @returns {ethers.Wallet} - The generated Ethereum wallet.
+     */
     public get generateWallet(): ethers.Wallet {
         return ethers.Wallet.createRandom();
     }
 
+    /**
+     * Retrieves the token configuration (V1)for a given token symbol.
+     *
+     * @param {string} tokenSymbol - The symbol of the token.
+     * @returns {BridgeTokenConfig | undefined} - The token configuration corresponding to the token symbol, or undefined if not found.
+     */
     public getToken(tokenSymbol: string): BridgeTokenConfig | undefined {
         return BridgeTokens.getToken(this.__network, tokenSymbol) as BridgeTokenConfig | undefined; 
     }

@@ -16,7 +16,7 @@ import {
 import { GlitterSDKServer } from "../../../glitterSDKServer";
 import BigNumber from "bignumber.js";
 import { BorshCoder, EventParser } from "@project-serum/anchor";
-import { BridgeTokens, RoutingHelper } from "@glitter-finance/sdk-core";
+import { RoutingHelper } from "@glitter-finance/sdk-core";
 import { SolanaPollerCommon } from "./poller.solana.common";
 
 const idl = {
@@ -173,8 +173,21 @@ const idl = {
     ],
 };
 
+/**
+ * Poller for Solana Token Bridge V2
+ */
 export class SolanaV2Parser {
 
+    /**
+     * Processes a bridge transaction.
+     *
+     * @public
+     * @static
+     * @param {GlitterSDKServer} sdkServer - The Glitter SDK server object.
+     * @param {Connection | undefined} client - The connection object for interacting with the network.
+     * @param {ParsedTransactionWithMeta} txn - The parsed transaction with metadata.
+     * @returns {Promise<PartialBridgeTxn>} A promise that resolves to the partial bridge transaction.
+     */
     public static async process(
         sdkServer: GlitterSDKServer,
         client: Connection | undefined,
@@ -284,6 +297,17 @@ export class SolanaV2Parser {
         return partialTxn;
     }
 
+    /**
+     * Handles a deposit event for a bridge transaction.
+     *
+     * @private
+     * @static
+     * @param {GlitterSDKServer} sdkServer - The Glitter SDK server object.
+     * @param {ParsedTransactionWithMeta} txn - The parsed transaction with metadata.
+     * @param {PartialBridgeTxn} partialTxn - The partial bridge transaction object.
+     * @param {any} depositEvent - The deposit event data.
+     * @returns {Promise<PartialBridgeTxn>} A promise that resolves to the updated partial bridge transaction.
+     */
     private static async handleDeposit(
         sdkServer: GlitterSDKServer,
         txn: ParsedTransactionWithMeta,
@@ -341,20 +365,50 @@ export class SolanaV2Parser {
         
         return partialTxn;
     }
+
+    /**
+     * Handles a release event for a bridge transaction.
+     *
+     * @private
+     * @static
+     * @param {GlitterSDKServer} sdkServer - The Glitter SDK server object.
+     * @param {ParsedTransactionWithMeta} txn - The parsed transaction with metadata.
+     * @param {PartialBridgeTxn} partialTxn - The partial bridge transaction object.
+     * @param {any} releaseEvent - The release event data.
+     * @returns {Promise<PartialBridgeTxn>} A promise that resolves to the updated partial bridge transaction.
+     */
     private static async handleRelease(
         sdkServer: GlitterSDKServer,
         txn: ParsedTransactionWithMeta,
         partialTxn: PartialBridgeTxn,
         releaseEvent: any
     ): Promise<PartialBridgeTxn> {
+        if (!sdkServer) throw new Error("SDK Server not found")
+        if (!txn) throw new Error("Transaction not found")
+        if (!releaseEvent) throw new Error("refundEvent not found")
         return partialTxn;
     }
+
+    /**
+     * Handles a refund event for a bridge transaction.
+     *
+     * @private
+     * @static
+     * @param {GlitterSDKServer} sdkServer - The Glitter SDK server object.
+     * @param {ParsedTransactionWithMeta} txn - The parsed transaction with metadata.
+     * @param {PartialBridgeTxn} partialTxn - The partial bridge transaction object.
+     * @param {any} refundEvent - The refund event data.
+     * @returns {Promise<PartialBridgeTxn>} A promise that resolves to the updated partial bridge transaction.
+     */
     private static async handleRefund(
         sdkServer: GlitterSDKServer,
         txn: ParsedTransactionWithMeta,
         partialTxn: PartialBridgeTxn,
         refundEvent: any
     ): Promise<PartialBridgeTxn> {
+        if (!sdkServer) throw new Error("SDK Server not found")
+        if (!txn) throw new Error("Transaction not found")
+        if (!refundEvent) throw new Error("refundEvent not found")
         return partialTxn;
     }
     private static getV1Routing(

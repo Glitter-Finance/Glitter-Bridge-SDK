@@ -1,3 +1,9 @@
+/**
+ * Enum representing different bridge networks.
+ *
+ * @enum {string}
+ * @readonly
+ */
 export enum BridgeNetworks {
     algorand = "Algorand",
     solana = "Solana",
@@ -11,6 +17,11 @@ export enum BridgeNetworks {
     Optimism = "optimism"
 }
 
+/**
+ * Type representing EVM-based bridge networks.
+ *
+ * @typedef {typeof BridgeNetworks.Avalanche | typeof BridgeNetworks.Ethereum | typeof BridgeNetworks.Polygon | typeof BridgeNetworks.Arbitrum | typeof BridgeNetworks.Binance | typeof BridgeNetworks.Zkevm | typeof BridgeNetworks.Optimism} BridgeEvmNetworks
+ */
 export type BridgeEvmNetworks =
     | typeof BridgeNetworks.Avalanche
     | typeof BridgeNetworks.Ethereum
@@ -41,6 +52,13 @@ export const NetworkIdentifiers: {
     10: BridgeNetworks.Optimism,
 };
 
+/**
+ * Retrieves the numeric network ID for the specified bridge network.
+ *
+ * @function getNumericNetworkId
+ * @param {BridgeNetworks} chain - The bridge network.
+ * @returns {number} - The numeric network ID.
+ */
 export const getNumericNetworkId = (chain: BridgeNetworks): number => {
     const n = Object.entries(NetworkIdentifiers).find(([, network]) => {
         return network === chain;
@@ -50,6 +68,13 @@ export const getNumericNetworkId = (chain: BridgeNetworks): number => {
     return Number(n[0]);
 };
 
+/**
+ * Retrieves the bridge network based on the specified numeric network ID.
+ *
+ * @function getNetworkByNumericId
+ * @param {number} chain - The numeric network ID.
+ * @returns {BridgeNetworks} - The bridge network represented by the `BridgeNetworks` enum.
+ */
 export const getNetworkByNumericId = (chain: number): BridgeNetworks => {
     const n = Object.entries(NetworkIdentifiers).find(([_id]) => {
         return Number(_id) === chain;

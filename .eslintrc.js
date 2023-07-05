@@ -13,7 +13,7 @@ module.exports = {
     tsconfigRootDir: __dirname,
   },
   extends: ["eslint:recommended", "plugin:@typescript-eslint/recommended"],
-  plugins: ["@typescript-eslint", "import"],
+  plugins: ["@typescript-eslint", "import", 'jsdoc'],
   env: {
     es6: true,
     node: true,
@@ -52,6 +52,10 @@ module.exports = {
     "array-bracket-spacing": ["warn", "never"],
     "space-in-parens": ["warn", "never"],
     "object-curly-spacing": ["warn", "always"],
+
+    "jsdoc/check-alignment": 1, // Recommended
+
   },
   ignorePatterns: ["dist", "node_modules", "scripts", ".eslintrc.js"],
+
 };

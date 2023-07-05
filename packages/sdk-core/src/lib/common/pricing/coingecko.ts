@@ -9,6 +9,14 @@ const cg_cache: {
 
 const cache_duration = 1000 * 60 *5; // 5 mins
 
+/**
+ * Retrieves the USD price for the specified Coingecko ID.
+ *
+ * @async
+ * @function getPriceFromCoingecko
+ * @param {string} coingeckoId - The Coingecko ID.
+ * @returns {Promise<{ usdPrice: number, isFresh: boolean }>} - A Promise that resolves to an object containing the USD price and a boolean indicating if the price is fresh.
+ */
 export async function getPriceFromCoingecko (coingeckoId: string): Promise<{ usdPrice: number; isFresh: boolean;}> {
 
     //Check if the cache is still valid

@@ -4,7 +4,19 @@ import { EvmBridgeUSDCEventsParser, USDCBridgeEventGroup } from "./poller.evm.ev
 import { TransactionReceipt } from "@ethersproject/abstract-provider";
 import BigNumber from "bignumber.js";
 
+/**
+ * EVM Circle Parser class.
+ */
 export class EvmCircleParser {
+
+    /**
+     * Processes a transaction.
+     *
+     * @param {GlitterSDKServer} sdkServer - The Glitter SDK server instance.
+     * @param {EvmConnect | undefined} connect - The EvmConnect instance.
+     * @param {string} txnID - The transaction ID to process.
+     * @returns {Promise<PartialBridgeTxn>} A promise that resolves to a PartialBridgeTxn object.
+     */
     public static async process(
         sdkServer: GlitterSDKServer,
         connect: EvmConnect | undefined,
@@ -67,6 +79,13 @@ export class EvmCircleParser {
         //return
         return partialTxn;
     }
+
+    /**
+     * Parses transaction logs.
+     *
+     * @param {TransactionReceipt} receipt - The transaction receipt containing logs.
+     * @returns {Promise<USDCBridgeEventGroup | null>} A promise that resolves to a USDCBridgeEventGroup object or null.
+     */
     public static async parseLogs(receipt: TransactionReceipt): Promise<USDCBridgeEventGroup | null> {
       
         const parsedLogs = EvmBridgeUSDCEventsParser.parseLogs(receipt.logs);
@@ -84,6 +103,16 @@ export class EvmCircleParser {
        
     }    
    
+    /**
+     * Handles a deposit transaction.
+     *
+     * @param {string} txnID - The transaction ID.
+     * @param {EvmConnect} connect - The EvmConnect instance.
+     * @param {TransactionReceipt} txn - The transaction receipt.
+     * @param {PartialBridgeTxn} partialTxn - The partial bridge transaction.
+     * @param {USDCBridgeEventGroup} events - The USDC bridge event group.
+     * @returns {Promise<PartialBridgeTxn>} A promise that resolves to a PartialBridgeTxn object.
+     */
     static async handleDeposit(
         txnID: string,
         connect: EvmConnect,
@@ -181,6 +210,17 @@ export class EvmCircleParser {
 
         return Promise.resolve(partialTxn);
     }
+
+    /**
+     * Handles a release transaction.
+     *
+     * @param {string} txnID - The transaction ID.
+     * @param {EvmConnect} connect - The EvmConnect instance.
+     * @param {TransactionReceipt} txn - The transaction receipt.
+     * @param {PartialBridgeTxn} partialTxn - The partial bridge transaction.
+     * @param {USDCBridgeEventGroup} events - The USDC bridge event group.
+     * @returns {Promise<PartialBridgeTxn>} A promise that resolves to a PartialBridgeTxn object.
+     */
     static async handleRelease(
         txnID: string,
         connect: EvmConnect,
@@ -253,6 +293,12 @@ export class EvmCircleParser {
         return Promise.resolve(partialTxn);
     }
 
+    /**
+     * Gets the network ID for the specified bridge network.
+     *
+     * @param {BridgeNetworks} network - The bridge network.
+     * @returns {number} The network ID.
+     */
     static getNetworkId(network: BridgeNetworks): number {
         const netIds = Object.entries(NetworkIdentifiers);
         const _network = netIds.find((n) => n[1] === network);

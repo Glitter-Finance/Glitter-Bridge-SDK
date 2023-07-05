@@ -7,6 +7,10 @@ import axios from "axios";
 import { EvmV2Parser } from "./poller.evm.token.v2";
 import { EvmCircleParser } from "./poller.evm.circle";
 
+/**
+ * Glitter EVM Poller class.
+ * Implements the GlitterPoller interface.
+ */
 export class GlitterEVMPoller implements GlitterPoller {
 
     //Network
@@ -18,17 +22,49 @@ export class GlitterEVMPoller implements GlitterPoller {
     private connect: EvmConnect | undefined;
     
     //Cursors
+    /**
+     * Cursors object for tracking transaction cursors.
+     * The keys represent BridgeTypes and the values are arrays of Cursor objects.
+     *
+     * @type {Record<BridgeType, Cursor[]>}
+     */
     public cursors: Record<BridgeType, Cursor[]> ;
+    /**
+     * Get the tokenV1Cursor.
+     *
+     * @type {Cursor | undefined}
+     * @readonly
+     */
     public get tokenV1Cursor(): Cursor | undefined{
         return this.cursors?.[BridgeType.TokenV1]?.[0];
     }
+    /**
+     * Get the tokenV2Cursor.
+     *
+     * @type {Cursor | undefined}
+     * @readonly
+     */
     public get tokenV2Cursor(): Cursor | undefined{
         return this.cursors?.[BridgeType.TokenV2]?.[0];
     }
+    /**
+     * Get the usdcCursors.
+     *
+     * @type {Cursor | undefined}
+     * @readonly
+     */
     public get usdcCursors(): Cursor[] | undefined{
         return this.cursors?.[BridgeType.Circle];
     }
+
     //Construct class with network
+    /**
+     * Constructs an instance of the GlitterEVMPoller.
+     *
+     * @param {GlitterSDKServer} sdkServer - The Glitter SDK server instance.
+     * @param {BridgeNetworks} network - The BridgeNetworks instance.
+     * @constructor
+     */
     constructor(sdkServer: GlitterSDKServer, network: BridgeNetworks) {
         this.network = network;
 
@@ -73,6 +109,12 @@ export class GlitterEVMPoller implements GlitterPoller {
     }
 
     //Intialize Poller
+    /**
+     * Initializes the GlitterEVMPoller instance.
+     *
+     * @param {GlitterSDKServer} sdkServer - The Glitter SDK server instance.
+     * @returns {void}
+     */
     initialize(sdkServer: GlitterSDKServer): void {
         if (this.network === undefined) throw ServerError.NetworkNotSet();
 
@@ -112,6 +154,13 @@ export class GlitterEVMPoller implements GlitterPoller {
     }
 
     //Poll
+    /**
+     * Polls for new events using the EvmV2Parser.
+     *
+     * @param {GlitterSDKServer} sdkServer - The Glitter SDK server instance.
+     * @param {Cursor} cursor - The cursor object for pagination.
+     * @returns {Promise<PollerResult>} A promise that resolves to the PollerResult object.
+     */
     async poll(sdkServer: GlitterSDKServer, cursor: Cursor): Promise<PollerResult> {
         const address = cursor.address;
         let startBlock = cursor.end?.block;
@@ -163,6 +212,14 @@ export class GlitterEVMPoller implements GlitterPoller {
     }
 
     //Parse Txn
+    /**
+     * Parses a transaction ID using the EvmV2Parser.
+     *
+     * @param {GlitterSDKServer} sdkServer - The Glitter SDK server instance.
+     * @param {string} txnID - The ID of the transaction to parse.
+     * @param {BridgeType} type - The type of the bridge.
+     * @returns {Promise<PartialBridgeTxn | undefined>} A promise that resolves to the parsed PartialBridgeTxn or undefined if not found.
+     */
     async parseTxnID(sdkServer: GlitterSDKServer, txnID:string, type:BridgeType):Promise<PartialBridgeTxn | undefined>{
         try {
             //Ensure Transaction Exists
