@@ -10,6 +10,9 @@ enum EVMChains {
   BSC_TESTNET = 97,
   AVALANCHE = 43114,
   POLYGON = 137,
+  ARBITRUM = 42161,
+  OPTIMISM = 10,
+  ZKEVM = 1101,
 }
 
 enum NonEVMChains {
@@ -27,6 +30,9 @@ export enum ChainNames {
   POLYGON = "polygon",
   AVALANCHE = "avalanche",
   TRON = "tron",
+  ARBITRUM = "arbitrum",
+  OPTIMISM = "optimism",
+  ZKEVM = "zkEVM",
 }
 
 export const ChainNativeCurrency = {
