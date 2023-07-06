@@ -204,7 +204,7 @@ export class EvmConnect {
         const tokenAddress = this.getAddress("tokens", tokenSymbol);
 
         const token = ERC20__factory.connect(tokenAddress, signer);
-        return await token.increaseAllowance(bridgeAddress, amount);
+        return await token.approve(bridgeAddress, amount);
     }
 
     /**
@@ -432,7 +432,14 @@ export class EvmConnect {
                 signer
             );
 
-            const tokenAddress = this.getAddress("tokens", tokenSymbol);
+            const token = this.getToken(tokenSymbol)!;
+
+            if (token.supportedDestination) {
+                if (!token.supportedDestination.includes(destination)) {
+                    throw new Error('[EvmConnect] Token unsupported on destination chain.');
+                }
+            }
+
             const depositAddress = this.getAddress("depositWallet");
             const _amount =
             typeof amount === "string" ? ethers.BigNumber.from(amount) : amount;
@@ -449,7 +456,7 @@ export class EvmConnect {
                 serlized.destinationChain,
                 serlized.amount,
                 depositAddress,
-                tokenAddress,
+                token.address,
                 serlized.destinationWallet
             );
         } catch (error) {

@@ -52,7 +52,7 @@ export function LogProgress(progress: string) {
  * @returns {string} - The converted regular string.
  */
 export const base64ToString = (encoded: any) => {
-    return Buffer.from(encoded, "base64").toString();
+    return Buffer.from(encoded, "base64").toString("hex");
 };
 
 /**

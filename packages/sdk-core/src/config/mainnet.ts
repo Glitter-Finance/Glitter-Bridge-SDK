@@ -129,6 +129,14 @@ export const config: GlitterBridgeConfig = {
                     name: "USD Coin",
                     minTransfer: 3
                 },
+                {
+                    address: "0xc891eb4cbdeff6e073e859e987815ed1505c2acd",
+                    symbol: "EUROC",
+                    decimals: 6,
+                    name: "Euro Coin",
+                    minTransfer: 3,
+                    supportedDestination: [BridgeNetworks.Ethereum]
+                }
             ],
             depositWallet: "0xa89a90a11e20b61814da283ba906f30742a99492",
             releaseWallet: "0xfdc25702b67201107ab4aFDb4DC87E3F8F50a7b8",
@@ -146,6 +154,14 @@ export const config: GlitterBridgeConfig = {
                     name: "USD Coin",
                     minTransfer: 10
                 },
+                {
+                    address: "0x1aBaEA1f7C830bD89Acc67eC4af516284b1bC33c",
+                    symbol: "EUROC",
+                    decimals: 6,
+                    name: "Euro Coin",
+                    minTransfer: 3,
+                    supportedDestination: [BridgeNetworks.Avalanche]
+                }
             ],
             depositWallet: "0xa89a90a11e20b61814da283ba906f30742a99492",
             releaseWallet: "0xfdc027af59e3D118a19B8D1E754a090c95587438",

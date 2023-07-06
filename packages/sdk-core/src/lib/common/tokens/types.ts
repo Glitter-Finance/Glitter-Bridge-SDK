@@ -1,3 +1,5 @@
+import {BridgeNetworks} from "../networks";
+
 /**
  * Interface representing the base token configuration.
  * @interface BaseTokenConfig
@@ -18,7 +20,8 @@ interface BaseTokenConfig {
   minTransfer?: number;
   maxTransfer?: number;
   totalSupply?: bigint;
-  wrappedSymbol?: string
+  wrappedSymbol?: string;
+  supportedDestination?: BridgeNetworks[];
 }
 
 /**
