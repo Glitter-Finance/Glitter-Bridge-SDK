@@ -12,7 +12,7 @@
     "release:core": "npm run build-and-release -w ./packages/sdk-core",
     "types:core": "typechain --target ethers-v5 --out-dir ./packages/sdk-core/src/typechain ./packages/sdk-core/src/**/*.abi.json",
     "build:web": "yarn workspace @glitter-finance/sdk-web build",
-    "release:web": "npm run build -w ./packages/sdk-web && npm run release -w ./packages/sdk-web",
+    "release:web": "yarn workspace @glitter-finance/sdk-core build && yarn workspace @glitter-finance/sdk-web build && npx lerna publish",
     "build:server": "npm run build -w ./packages/sdk-server",
     "release:server": "yarn workspace @glitter-finance/sdk-core build && yarn workspace @glitter-finance/sdk-server build && npx lerna publish",
     "test:core": "yarn workspace @glitter-finance/sdk-core build && yarn workspace @glitter-finance/sdk-integration-tests test",
