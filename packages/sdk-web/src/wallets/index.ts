@@ -19,7 +19,8 @@ export class Wallets {
         [Chains.ARBITRUM]: {metamask: Metamask, walletConnect: WConnect, coin98: Coin98},
         [Chains.OPTIMISM]: {metamask: Metamask, walletConnect: WConnect, coin98: Coin98},
         [Chains.ZKEVM]: {metamask: Metamask, walletConnect: WConnect, coin98: Coin98},
-        [Chains.TRON]: {tronLink: TronLink}
+        [Chains.TRON]: {tronLink: TronLink},
+        [Chains.BSC]: {metamask: Metamask, walletConnect: WConnect, coin98: Coin98}
     }
 }
 
