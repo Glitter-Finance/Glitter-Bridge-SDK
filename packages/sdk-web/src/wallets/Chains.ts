@@ -33,6 +33,7 @@ export enum ChainNames {
   ARBITRUM = "arbitrum",
   OPTIMISM = "optimism",
   ZKEVM = "zkEVM",
+  BSC = "Binance Smart Chain",
 }
 
 export const ChainNativeCurrency = {
