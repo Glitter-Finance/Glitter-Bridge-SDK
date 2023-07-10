@@ -64,5 +64,5 @@
     "displayName": "@glitter-finance/sdk-core",
     "tsconfig": "./tsconfig.json"
   },
-  "gitHead": "97d2e3cb234fbf9392d823204ce154a334851e8c"
+  "gitHead": "4be28d940c28e1f402940d700f940e28f95da30b"
 }
