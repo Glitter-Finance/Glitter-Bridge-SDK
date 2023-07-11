@@ -127,7 +127,7 @@ export class SolanaCircleParser {
                 partialTxn.txnType = TransactionType.Unknown;//TransactionType.BadRouting;           
                 return partialTxn;
             }
-            if (typeof depositNote.system == "string"){
+            if (depositNote && typeof depositNote.system == "string"){
                 depositNote.system = JSON.parse(depositNote.system);
             }
 
@@ -136,17 +136,32 @@ export class SolanaCircleParser {
 
             //Check deposit vs release
             if (isDeposit) {
-                //console.info(`Transaction ${txnID} is a deposit`);
+
+                //Check Routing
+                if (!routing) {
+                    console.error(`Transaction ${txnID} failed to parse`);
+                    partialTxn.txnType = TransactionType.Error;//TransactionType.BadRouting;
+                    return partialTxn;
+                }
+                
                 partialTxn.address = depositAddress;
                 partialTxn = await handleDeposit(sdkServer, txn, routing, partialTxn);
             } else if (isRelease) {
-                //console.info(`Transaction ${txnID} is a release`);
+
+                //Check Routing
+                if (!routing) {
+                    console.error(`Transaction ${txnID} failed to parse`);
+                    partialTxn.txnType = TransactionType.Error;//TransactionType.BadRouting;
+                    return partialTxn;
+                }
+
                 partialTxn.address = receiverAddress;
                 partialTxn = await handleRelease(sdkServer, txn, routing, partialTxn);
             } else {
                 //console.error(`Transaction ${txnID} is not a deposit or release`);
                 partialTxn.txnType = TransactionType.Error;
             }
+            
         } catch (e) {
             partialTxn.txnType = TransactionType.Error;
             console.error(`Transaction ${txnID} failed to parse`);

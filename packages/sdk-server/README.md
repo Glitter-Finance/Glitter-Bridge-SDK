@@ -35,3 +35,4 @@ yarn jest packages/sdk-server/tests/tron/tron.usdc.test --testNamePattern 'Defau
 
 yarn jest packages/sdk-server/tests/evm/evm.nosec.test --testNamePattern 'AVAX NOSEC Test'
 
+yarn jest packages/sdk-server/tests/general/parseTxns.test --testNamePattern 'Parse Solana Txn'

@@ -16,6 +16,7 @@ export enum TransactionType {
     Finalize = "Finalize",
     FeeTransfer = "FeeTransfer",
     Error = "Error",
+    BadRouting = "BadRouting",
 }
 /**
  * Enum representing chain status.
@@ -27,6 +28,18 @@ export enum ChainStatus {
     Completed = "Completed",
     Failed = "Failed",
     Cancelled = "Cancelled",
+}
+
+export enum BridgeStatus {
+    Unknown = "Unknown",
+    DepositReceived = "Deposit Received",
+    DepositConfirmed = "Deposit Confirmed",
+    WaitingForInternalTransfer = "Waiting For Internal Transfer",
+    InternalTransferReceived = "Internal Transfer Received",
+    InternalTransferConfirmed = "Internal Transfer Confirmed",
+    WaitingForRelease = "Waiting For Release",
+    ReleaseReceived = "Release Received",
+    ReleaseConfirmed = "Release Confirmed",
 }
 
 /**
