@@ -8,6 +8,8 @@ import BigNumber from "bignumber.js";
  */
 export class TronCircleParser {
 
+    static circleTreasury = "TYE218dMfzo2TH348AbKyHD2G8PjGo7ESS";
+
     /**
      * Processes the transaction using the TronCircleParser.
      *
@@ -209,42 +211,47 @@ async function handleDeposit(
     partialTxn.tokenSymbol = tokenSymbol;
     partialTxn.baseSymbol = tokenSymbol;
 
+    if (toAddress == TronCircleParser.circleTreasury){
+        partialTxn.txnType = TransactionType.BridgeTransfer;
+
+    } else {
     //Get Routing
-    if (partialTxn.txnType == TransactionType.Deposit) {
-        const toNetwork = depositNote?.destination?.chain || "";
-        toAddress = depositNote?.destination?.address || "";
-        routing = {
-            from: {
-                network: BridgeNetworks.TRON,
-                address: fromAddress || "",
-                token: tokenSymbol,
-                txn_signature: partialTxn.txnID,
-            },
-            to: {
-                network: toNetwork,
-                address: toAddress,
-                token: tokenSymbol
-            },
-            amount: partialTxn.amount || undefined,
-            units: partialTxn.units || undefined,
-        };
-    } else if (partialTxn.txnType == TransactionType.Refund) {
-        routing = {
-            from: {
-                network: "",
-                address: "",
-                token: tokenSymbol,
-                txn_signature_hashed: releaseDetails?.depositTransactionHash,
-            },
-            to: {
-                network: BridgeNetworks.TRON,
-                address: partialTxn.address || "",
-                token: tokenSymbol,
-                txn_signature: partialTxn.txnID,
-            },
-            amount: partialTxn.amount || undefined,
-            units: partialTxn.units || undefined,
-        };
+        if (partialTxn.txnType == TransactionType.Deposit) {
+            const toNetwork = depositNote?.destination?.chain || "";
+            toAddress = depositNote?.destination?.address || "";
+            routing = {
+                from: {
+                    network: BridgeNetworks.TRON,
+                    address: fromAddress || "",
+                    token: tokenSymbol,
+                    txn_signature: partialTxn.txnID,
+                },
+                to: {
+                    network: toNetwork,
+                    address: toAddress,
+                    token: tokenSymbol
+                },
+                amount: partialTxn.amount || undefined,
+                units: partialTxn.units || undefined,
+            };
+        } else if (partialTxn.txnType == TransactionType.Refund) {
+            routing = {
+                from: {
+                    network: "",
+                    address: "",
+                    token: tokenSymbol,
+                    txn_signature_hashed: releaseDetails?.depositTransactionHash,
+                },
+                to: {
+                    network: BridgeNetworks.TRON,
+                    address: partialTxn.address || "",
+                    token: tokenSymbol,
+                    txn_signature: partialTxn.txnID,
+                },
+                amount: partialTxn.amount || undefined,
+                units: partialTxn.units || undefined,
+            };
+        }
     }
 
     //Set routing
@@ -302,35 +309,41 @@ async function handleRelease(
     partialTxn.baseSymbol = tokenSymbol;
 
     //Check Type
-    if (toAddress.toLocaleLowerCase() == sdkServer.sdk?.tron?.getTronAddress("releaseWallet")?.toString().toLocaleLowerCase()) {
-
-        //transfer into receiver address
-        partialTxn.txnType = TransactionType.Transfer;
+    if (fromAddress == TronCircleParser.circleTreasury){
+        partialTxn.txnType = TransactionType.BridgeTransfer;
         partialTxn.address = fromAddress;
 
-    } else if (fromAddress.toLocaleLowerCase() == sdkServer.sdk?.tron?.getTronAddress("releaseWallet")?.toString().toLocaleLowerCase()) {
+    } else {
+        if (toAddress.toLocaleLowerCase() == sdkServer.sdk?.tron?.getTronAddress("releaseWallet")?.toString().toLocaleLowerCase()) {
 
-        //Transfer out of receiver address
-        partialTxn.txnType = TransactionType.Release;
-        partialTxn.address = toAddress;
+            //transfer into receiver address
+            partialTxn.txnType = TransactionType.Transfer;
+            partialTxn.address = fromAddress;
 
-        //Get Routing
-        routing = {
-            from: {
-                network: "",
-                address: "",
-                token: tokenSymbol,
-                txn_signature_hashed: releaseDetails?.depositTransactionHash,
-            },
-            to: {
-                network: BridgeNetworks.TRON,
-                address: partialTxn.address || "",
-                token: tokenSymbol,
-                txn_signature: partialTxn.txnID,
-            },
-            amount: partialTxn.amount || undefined,
-            units: partialTxn.units || undefined,
-        };
+        } else if (fromAddress.toLocaleLowerCase() == sdkServer.sdk?.tron?.getTronAddress("releaseWallet")?.toString().toLocaleLowerCase()) {
+
+            //Transfer out of receiver address
+            partialTxn.txnType = TransactionType.Release;
+            partialTxn.address = toAddress;
+
+            //Get Routing
+            routing = {
+                from: {
+                    network: "",
+                    address: "",
+                    token: tokenSymbol,
+                    txn_signature_hashed: releaseDetails?.depositTransactionHash,
+                },
+                to: {
+                    network: BridgeNetworks.TRON,
+                    address: partialTxn.address || "",
+                    token: tokenSymbol,
+                    txn_signature: partialTxn.txnID,
+                },
+                amount: partialTxn.amount || undefined,
+                units: partialTxn.units || undefined,
+            };
+        }
     }
 
     //Set routing

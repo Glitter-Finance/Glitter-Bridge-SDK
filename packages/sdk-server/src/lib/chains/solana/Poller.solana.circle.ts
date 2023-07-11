@@ -139,28 +139,20 @@ export class SolanaCircleParser {
             //Check deposit vs release
             if (isDeposit) {
 
-                //Check Routing
-                if (!routing) {
-                    console.error(`Transaction ${txnID} failed to parse`);
-                    partialTxn.txnType = TransactionType.BadRouting;
-                    return partialTxn;
-                }
-                
-                partialTxn.address = depositAddress;
-                partialTxn = await handleDeposit(sdkServer, txn, routing, partialTxn);
-            } else if (isRelease) {
-
-                //Check Routing
+                // //Check Routing
                 // if (!routing) {
                 //     console.error(`Transaction ${txnID} failed to parse`);
                 //     partialTxn.txnType = TransactionType.BadRouting;
                 //     return partialTxn;
                 // }
-
+                
+                partialTxn.address = depositAddress;
+                partialTxn = await handleDeposit(sdkServer, txn, routing, partialTxn);
+            } else if (isRelease) {
+              
                 partialTxn.address = receiverAddress;
                 partialTxn = await handleRelease(sdkServer, txn, routing, partialTxn);
             } else {
-                //console.error(`Transaction ${txnID} is not a deposit or release`);
                 partialTxn.txnType = TransactionType.Error;
             }
 
@@ -205,6 +197,7 @@ async function handleDeposit(
     );
     partialTxn.address = data[0] || "";
 
+    let value = 0;
     if (data[1] < 0) {
 
         //negative delta is a deposit from the user or transfer out
@@ -214,7 +207,7 @@ async function handleDeposit(
             partialTxn.txnType = TransactionType.Deposit;
         }
 
-        const value = -data[1] || 0;
+        value = -data[1] || 0;
         const roundedValue = Number(value.toFixed(decimals));
 
         partialTxn.amount = roundedValue;
@@ -226,7 +219,7 @@ async function handleDeposit(
     } else if (data[1] > 0) {
 
         partialTxn.txnType = TransactionType.Refund; //positive delta is a refund to the user
-        const value = data[1] || 0;
+        value = data[1] || 0;
         const roundedValue = Number(value.toFixed(decimals));
 
         partialTxn.amount = roundedValue;
@@ -235,6 +228,14 @@ async function handleDeposit(
             decimals
         );
 
+    }
+
+    const transfer = SolanaPollerCommon.getSolanaFromTo(txn, "USDC");
+    const transferValueMatch = transfer? transfer.get(value): undefined;
+    const to = transferValueMatch? transferValueMatch.transferTo: undefined;
+
+    if (to == SolanaCircleParser.circleTreasury){
+        partialTxn.txnType = TransactionType.BridgeTransfer;
     }
 
     partialTxn.routing = routing;
@@ -284,8 +285,7 @@ async function handleRelease(
     const transfer = SolanaPollerCommon.getSolanaFromTo(txn, "USDC");
     const transferValueMatch = transfer? transfer.get(value): undefined;
     const from = transferValueMatch? transferValueMatch.transferFrom: undefined;
-    const to = transferValueMatch? transferValueMatch.transferTo: undefined;
-
+   
     if (from == SolanaCircleParser.circleTreasury){
         partialTxn.txnType = TransactionType.BridgeTransfer;
     }
