@@ -22,6 +22,8 @@ import BigNumber from "bignumber.js";
  */
 export class SolanaCircleParser {
 
+    static circleTreasury = "41zCUJsKk6cMB94DDtm99qWmyMZfp4GkAhhuz4xTwePu";
+
     /**
      * Processes a transaction using the SolanaCircleParser.
      *
@@ -122,11 +124,11 @@ export class SolanaCircleParser {
                 }
             }
 
-            if (!depositNote) {
-                console.error(`Transaction ${txnID} failed to parse`);
-                partialTxn.txnType = TransactionType.Unknown;//TransactionType.BadRouting;           
-                return partialTxn;
-            }
+            // if (!depositNote) {
+            //     console.error(`Transaction ${txnID} failed to parse`);
+            //     partialTxn.txnType = TransactionType.Unknown;//TransactionType.BadRouting;           
+            //     return partialTxn;
+            // }
             if (depositNote && typeof depositNote.system == "string"){
                 depositNote.system = JSON.parse(depositNote.system);
             }
@@ -140,7 +142,7 @@ export class SolanaCircleParser {
                 //Check Routing
                 if (!routing) {
                     console.error(`Transaction ${txnID} failed to parse`);
-                    partialTxn.txnType = TransactionType.Error;//TransactionType.BadRouting;
+                    partialTxn.txnType = TransactionType.BadRouting;
                     return partialTxn;
                 }
                 
@@ -149,11 +151,11 @@ export class SolanaCircleParser {
             } else if (isRelease) {
 
                 //Check Routing
-                if (!routing) {
-                    console.error(`Transaction ${txnID} failed to parse`);
-                    partialTxn.txnType = TransactionType.Error;//TransactionType.BadRouting;
-                    return partialTxn;
-                }
+                // if (!routing) {
+                //     console.error(`Transaction ${txnID} failed to parse`);
+                //     partialTxn.txnType = TransactionType.BadRouting;
+                //     return partialTxn;
+                // }
 
                 partialTxn.address = receiverAddress;
                 partialTxn = await handleRelease(sdkServer, txn, routing, partialTxn);
@@ -161,7 +163,7 @@ export class SolanaCircleParser {
                 //console.error(`Transaction ${txnID} is not a deposit or release`);
                 partialTxn.txnType = TransactionType.Error;
             }
-            
+
         } catch (e) {
             partialTxn.txnType = TransactionType.Error;
             console.error(`Transaction ${txnID} failed to parse`);
@@ -278,7 +280,16 @@ async function handleRelease(
     partialTxn.address = data[0] || "";
     const value = data[1] || 0;
     const roundedValue = Number(value.toFixed(decimals));
-      
+
+    const transfer = SolanaPollerCommon.getSolanaFromTo(txn, "USDC");
+    const transferValueMatch = transfer? transfer.get(value): undefined;
+    const from = transferValueMatch? transferValueMatch.transferFrom: undefined;
+    const to = transferValueMatch? transferValueMatch.transferTo: undefined;
+
+    if (from == SolanaCircleParser.circleTreasury){
+        partialTxn.txnType = TransactionType.BridgeTransfer;
+    }
+
     partialTxn.amount = roundedValue;
     partialTxn.units = RoutingHelper.BaseUnits_FromReadableValue(roundedValue, decimals);
 

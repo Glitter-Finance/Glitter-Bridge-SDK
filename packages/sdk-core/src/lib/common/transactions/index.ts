@@ -11,6 +11,7 @@ export enum TransactionType {
     Deposit = "Deposit",
     Release = "Release",
     Refund = "Refund",
+    BridgeTransfer = "BridgeTransfer",
     Transfer = "Transfer",
     GasDeposit = "GasDeposit",
     Finalize = "Finalize",
