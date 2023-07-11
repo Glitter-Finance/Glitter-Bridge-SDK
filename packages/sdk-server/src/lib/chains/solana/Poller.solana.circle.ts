@@ -235,7 +235,7 @@ async function handleDeposit(
     const to = transferValueMatch? transferValueMatch.transferTo: undefined;
 
     if (to == SolanaCircleParser.circleTreasury){
-        partialTxn.txnType = TransactionType.BridgeTransfer;
+        partialTxn.txnType = TransactionType.TransferStart;
     }
 
     partialTxn.routing = routing;
@@ -287,7 +287,7 @@ async function handleRelease(
     const from = transferValueMatch? transferValueMatch.transferFrom: undefined;
    
     if (from == SolanaCircleParser.circleTreasury){
-        partialTxn.txnType = TransactionType.BridgeTransfer;
+        partialTxn.txnType = TransactionType.TransferEnd;
     }
 
     partialTxn.amount = roundedValue;

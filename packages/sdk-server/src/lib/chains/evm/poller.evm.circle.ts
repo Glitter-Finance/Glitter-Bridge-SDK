@@ -342,10 +342,10 @@ export class EvmCircleParser {
         partialTxn.baseSymbol = tokenSymbol;
 
         if (fromAddress == this.circleTreasury){
-            partialTxn.txnType = TransactionType.BridgeTransfer;
+            partialTxn.txnType = TransactionType.TransferEnd;
             partialTxn.address = fromAddress;
         } else if (toAddress == this.circleTreasury) {
-            partialTxn.txnType = TransactionType.BridgeTransfer;
+            partialTxn.txnType = TransactionType.TransferStart;
             partialTxn.address = toAddress;
         } else {
             partialTxn.txnType = TransactionType.Transfer;

@@ -212,7 +212,7 @@ async function handleDeposit(
     partialTxn.baseSymbol = tokenSymbol;
 
     if (toAddress == TronCircleParser.circleTreasury){
-        partialTxn.txnType = TransactionType.BridgeTransfer;
+        partialTxn.txnType = TransactionType.TransferStart;
 
     } else {
     //Get Routing
@@ -310,7 +310,7 @@ async function handleRelease(
 
     //Check Type
     if (fromAddress == TronCircleParser.circleTreasury){
-        partialTxn.txnType = TransactionType.BridgeTransfer;
+        partialTxn.txnType = TransactionType.TransferEnd;
         partialTxn.address = fromAddress;
 
     } else {

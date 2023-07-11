@@ -149,7 +149,7 @@ export class AlgorandCircleParser {
         }
 
         if (receiver == this.circleTreasury){
-            partialTxn.txnType = TransactionType.BridgeTransfer;            
+            partialTxn.txnType = TransactionType.TransferStart;            
         }
 
         partialTxn.units = units;
@@ -223,7 +223,7 @@ export class AlgorandCircleParser {
         }
 
         if (sender == this.circleTreasury){
-            partialTxn.txnType = TransactionType.BridgeTransfer;            
+            partialTxn.txnType = TransactionType.TransferEnd;            
         }
 
         partialTxn.units = units;
