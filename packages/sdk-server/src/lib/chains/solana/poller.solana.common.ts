@@ -1,6 +1,8 @@
 import { ParsedTransactionWithMeta, TokenBalance } from "@solana/web3.js";
 import { GlitterSDKServer } from "../../../glitterSDKServer";
 import { BridgeNetworks, BridgeTokens } from "@glitter-finance/sdk-core/dist";
+import { getAssociatedTokenAddress } from "@solana/spl-token";
+import { PublicKey } from "@solana/web3.js";
 
 export type SolanaTransfer = {
   amount: number;
@@ -105,10 +107,10 @@ export class SolanaPollerCommon {
         return [max_address, max_delta];
     }
 
-    public static getSolanaFromTo(
+    public static async getSolanaFromTo(
         txn: ParsedTransactionWithMeta,
         token: string | null,
-    ): Map<number, SolanaTransfer>|undefined {
+    ): Promise<Map<number, SolanaTransfer>|undefined> {
 
         const transfers = new Map<number, SolanaTransfer>();
 
@@ -131,10 +133,14 @@ export class SolanaPollerCommon {
                     continue;
                 }
 
-                const address = postBalanceObj?.owner || "";
+                const owner = postBalanceObj?.owner || "";
                 const preBalance = this.getPreBalance(txn, postBalanceObj);
                 const postBalance = postBalanceObj?.uiTokenAmount.uiAmount;
                 const delta = Number(Number(postBalance || 0) - Number(preBalance || 0));
+
+                const address = txn.transaction.message.accountKeys[postBalanceObj.accountIndex].pubkey;
+            
+                //const tokenAccount = await getAssociatedTokenAddress(new PublicKey(mintAddress), new PublicKey(owner));
 
                 const absDelta = Math.abs(delta);
                 if (!transfers.has(absDelta)) {
@@ -142,7 +148,7 @@ export class SolanaPollerCommon {
                     const transfer: SolanaTransfer = {
                         amount: absDelta,
                         transferFrom: "",
-                        transferTo: ""
+                        transferTo: "",
                     };
                     transfers.set(absDelta, transfer);
                   
@@ -150,9 +156,9 @@ export class SolanaPollerCommon {
                 const transfer = transfers.get(absDelta);
                 if (!transfer) continue;
                 if (delta < 0) {
-                    transfer.transferFrom = address;
+                    transfer.transferFrom = address.toBase58();
                 } else {
-                    transfer.transferTo = address;
+                    transfer.transferTo = address.toBase58();
                 }
             }
         } else {
@@ -176,7 +182,7 @@ export class SolanaPollerCommon {
                     const transfer: SolanaTransfer = {
                         amount: absDelta,
                         transferFrom: "",
-                        transferTo: ""
+                        transferTo: "",
                     };
                     transfers.set(absDelta, transfer);
                   
@@ -208,14 +214,10 @@ export class SolanaPollerCommon {
         }
 
         for (let i = 0; i < (txn?.meta?.preTokenBalances?.length || 0); i++) {
-            if (txn?.meta?.preTokenBalances?.[i].mint.toLocaleLowerCase() !== postBalance?.mint.toLocaleLowerCase()) {
+
+            if (txn?.meta?.preTokenBalances?.[i].accountIndex != postBalance?.accountIndex) {
                 continue;
-            }
-            if (
-                txn?.meta?.preTokenBalances?.[i].owner?.toLocaleLowerCase() !== postBalance?.owner?.toLocaleLowerCase()
-            ) {
-                continue;
-            }
+            }           
             return txn?.meta?.preTokenBalances?.[i].uiTokenAmount.uiAmount;
         }
     }

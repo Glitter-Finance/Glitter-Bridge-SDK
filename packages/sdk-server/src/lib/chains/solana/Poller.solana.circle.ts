@@ -22,7 +22,7 @@ import BigNumber from "bignumber.js";
  */
 export class SolanaCircleParser {
 
-    static circleTreasury = "41zCUJsKk6cMB94DDtm99qWmyMZfp4GkAhhuz4xTwePu";
+    static circleTreasury = "9gD46MnYLpskDiRisMZGY958JHgMSxLUiT56r8vdNzb8";
 
     /**
      * Processes a transaction using the SolanaCircleParser.
@@ -230,7 +230,7 @@ async function handleDeposit(
 
     }
 
-    const transfer = SolanaPollerCommon.getSolanaFromTo(txn, "USDC");
+    const transfer = await SolanaPollerCommon.getSolanaFromTo(txn, "USDC");
     const transferValueMatch = transfer? transfer.get(value): undefined;
     const to = transferValueMatch? transferValueMatch.transferTo: undefined;
 
@@ -282,7 +282,7 @@ async function handleRelease(
     const value = data[1] || 0;
     const roundedValue = Number(value.toFixed(decimals));
 
-    const transfer = SolanaPollerCommon.getSolanaFromTo(txn, "USDC");
+    const transfer = await SolanaPollerCommon.getSolanaFromTo(txn, "USDC");
     const transferValueMatch = transfer? transfer.get(value): undefined;
     const from = transferValueMatch? transferValueMatch.transferFrom: undefined;
    
