@@ -62,4 +62,9 @@ For full documentation, please visit [Glitter Finance Docs](https://6433e9a86502
     )
 
     console.log(bridgexAlgoTxId)
+    
 ```
+
+# Tests
+
+yarn jest packages/sdk-core/tests/block.test --testNamePattern 'Main Block Test'
