@@ -83,7 +83,6 @@ export class AlgorandCircleParser {
         }
 
         return partialTxn;
-
     }
 
     /**
