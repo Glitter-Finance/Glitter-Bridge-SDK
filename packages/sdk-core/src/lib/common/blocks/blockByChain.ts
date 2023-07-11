@@ -146,6 +146,7 @@ export async function SolanaBlockData(sdk: GlitterBridgeSDK):Promise<{
         block: block,
         isFresh: true
     };
+    
 }
 
 /**
