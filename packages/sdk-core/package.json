@@ -1,6 +1,6 @@
 {
   "name": "@glitter-finance/sdk-core",
-  "version": "2.0.0-alpha.17",
+  "version": "2.0.0-alpha.18",
   "description": "Glitter Finance SDK: Core Functions",
   "main": "dist/index.js",
   "module": "dist/index.js",
@@ -64,5 +64,5 @@
     "displayName": "@glitter-finance/sdk-core",
     "tsconfig": "./tsconfig.json"
   },
-  "gitHead": "4be28d940c28e1f402940d700f940e28f95da30b"
+  "gitHead": "3a22959ac51c4272f5cce7a06089bdb47ab6c949"
 }
