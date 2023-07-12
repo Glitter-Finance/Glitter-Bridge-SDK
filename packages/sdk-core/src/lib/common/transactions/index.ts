@@ -87,7 +87,7 @@ export async function USDCBridgeProgress(status: USDCBridgeStatus, sdk?:GlitterB
                 const confirmations = sdk.confirmationsRequired(chain);
                 const currentBlock = await CurrentBlock.getCurrentBlock(sdk, chain);
                 const percent = (currentBlock.block - startBlock) / confirmations;
-                const weightedPercent = 10 + (percent)* 70;
+                const weightedPercent = clamp(10 + (percent)* 70, 10, 80);
                 return Number((weightedPercent).toFixed(0));
             }
 
@@ -134,7 +134,10 @@ export async function TokenBridgeProgress(status: TokenBridgeStatus, sdk?:Glitte
                 const confirmations = sdk.confirmationsRequired(chain);
                 const currentBlock = await CurrentBlock.getCurrentBlock(sdk, chain);
                 const percent = (currentBlock.block - startBlock) / confirmations;
-                const weightedPercent = 20 + (percent)* 70;
+                const weightedPercent = clamp(20 + (percent)* 70, 20, 70);
+
+                //clamp weightedpercent
+    
                 return Number((weightedPercent).toFixed(0));
 
             }
@@ -146,6 +149,10 @@ export async function TokenBridgeProgress(status: TokenBridgeStatus, sdk?:Glitte
         default:
             return 0;
     }
+}
+
+function clamp(value: number, min: number, max: number): number {
+    return Math.min(Math.max(value, min), max);
 }
 
 /**
