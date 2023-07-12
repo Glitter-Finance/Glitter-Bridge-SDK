@@ -1,6 +1,10 @@
 import BigNumber from "bignumber.js";
 import { Routing } from "../routing";
 import { Routing2 } from "../routing/routing.v2";
+import { Token2Config } from "../tokens";
+import { GlitterBridgeSDK } from "src/GlitterBridgeSDK";
+import { BridgeNetworks } from "../networks";
+import { CurrentBlock } from "../blocks";
 
 /**
  * Enum representing transaction types.
@@ -42,6 +46,106 @@ export enum BridgeStatus {
     WaitingForRelease = "Waiting For Release",
     ReleaseReceived = "Release Received",
     ReleaseConfirmed = "Release Confirmed",
+}
+
+export enum USDCBridgeStatus {
+    Unknown = 0,
+    DepositReceived = 1,
+    DepositConfirmed = 2,
+    InternalTransferStarted = 3,
+    InternalTransferReceived = 4,
+    Released = 5
+}
+export function USDCBridgeStatusDescription(status: USDCBridgeStatus): string {
+    switch (status) {
+        case USDCBridgeStatus.DepositReceived:
+            return "Deposit Received.  Waiting for {x} of {y} confirmations.";
+        case USDCBridgeStatus.DepositConfirmed:
+            return "Deposit Confirmed.  Waiting for internal transfer.";
+        case USDCBridgeStatus.InternalTransferStarted:
+            return "Transferred out of deposit chain.  Waiting to receive on destination chain.";
+        case USDCBridgeStatus.InternalTransferReceived:
+            return "Transfer to destination chain received. Waiting for final release.";
+        // case USDCBridgeStatus.InternalTransferConfirmed:
+        //     return "Internal Transfer Confirmed";
+        //     return "Transfer to destination chain received. Waiting for confirmation.";
+        case USDCBridgeStatus.Released:
+            return "Released.  Funds have arrived at destination.";
+        default:
+            return "Unknown";
+    }
+}
+export async function USDCBridgeProgress(status: USDCBridgeStatus, sdk?:GlitterBridgeSDK, chain?:BridgeNetworks, startBlock?:number,): Promise<number> {
+    switch (status) {
+        case USDCBridgeStatus.DepositReceived:
+         
+            if (!sdk || !startBlock || !chain){
+                return 10;
+            } else {
+
+                //Get percent of confirmations
+                const confirmations = sdk.confirmationsRequired(chain);
+                const currentBlock = await CurrentBlock.getCurrentBlock(sdk, chain);
+                const percent = (currentBlock.block - startBlock) / confirmations;
+                const weightedPercent = 10 + (percent)* 70;
+                return Number((weightedPercent).toFixed(0));
+            }
+
+        case USDCBridgeStatus.DepositConfirmed:
+            return 80;
+        case USDCBridgeStatus.InternalTransferStarted:
+            return 85;
+        case USDCBridgeStatus.InternalTransferReceived:
+            return 95;
+        case USDCBridgeStatus.Released:
+            return 100;
+        default:
+            return 0;
+    }
+}
+
+export enum TokenBridgeStatus {
+    Unknown = 0,
+    DepositReceived = 1,
+    DepositConfirmed = 2,
+    Released = 3
+}
+export function TokenBridgeStatusDescription(status: TokenBridgeStatus): string {
+    switch (status) {
+        case TokenBridgeStatus.DepositReceived:
+            return "Deposit Received.  Waiting for {x} of {y} confirmations.";
+        case TokenBridgeStatus.DepositConfirmed:
+            return "Deposit Confirmed.  Waiting for final release.";
+        case TokenBridgeStatus.Released:
+            return "Released.  Funds have arrived at destination.";
+        default:
+            return "Unknown";
+    }
+}
+export async function TokenBridgeProgress(status: TokenBridgeStatus, sdk?:GlitterBridgeSDK, chain?:BridgeNetworks, startBlock?:number,): Promise<number> {
+    switch (status) {
+        case TokenBridgeStatus.DepositReceived:
+         
+            if (!sdk || !startBlock || !chain){
+                return 20;
+            } else {
+
+                //Get percent of confirmations
+                const confirmations = sdk.confirmationsRequired(chain);
+                const currentBlock = await CurrentBlock.getCurrentBlock(sdk, chain);
+                const percent = (currentBlock.block - startBlock) / confirmations;
+                const weightedPercent = 20 + (percent)* 70;
+                return Number((weightedPercent).toFixed(0));
+
+            }
+
+        case TokenBridgeStatus.DepositConfirmed:
+            return 90;
+        case TokenBridgeStatus.Released:
+            return 100;
+        default:
+            return 0;
+    }
 }
 
 /**
