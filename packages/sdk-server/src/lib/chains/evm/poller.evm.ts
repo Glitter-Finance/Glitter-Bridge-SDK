@@ -144,7 +144,9 @@ export class GlitterEVMPoller implements GlitterPoller {
 
         //Add USDC Cursors
         const usdcAddresses = [
-            this.connect?.getAddress("bridge")
+            //this.connect?.getAddress("bridge"),
+            this.connect?.getAddress("releaseWallet"),
+            this.connect?.getAddress("depositWallet")
         ];
         usdcAddresses.forEach((address) => {
             if (this.network === undefined) throw ServerError.NetworkNotSet();
