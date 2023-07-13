@@ -67,4 +67,4 @@ For full documentation, please visit [Glitter Finance Docs](https://6433e9a86502
 
 # Tests
 
-yarn jest packages/sdk-core/tests/block.test --testNamePattern 'Main Block Test'
+yarn jest packages/sdk-core/tests/enumToString.test --testNamePattern 'Main Test'

@@ -119,3 +119,15 @@ export const addr_to_pk=(addr:string| PublicKey | algosdk.Account):Buffer=>{
     if(addr.startsWith("0x")) return Buffer.from(addr.slice(2), "hex");
     return Buffer.from(addr, "hex");
 }
+
+export function StringToEnum<T extends string, E extends { [key: string]: T }>(
+    str: string,
+    enumType: E
+): E[keyof E] | undefined {
+    
+    for (const [key, value] of Object.entries(enumType)){
+        if (value.toLowerCase() === str.toLowerCase()) return enumType[key as keyof E];
+        if (key.toLowerCase() === str.toLowerCase()) return enumType[key as keyof E];
+    }
+    return undefined;
+}
