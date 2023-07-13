@@ -55,7 +55,8 @@ export enum USDCBridgeStatus {
     DepositConfirmed = 2,
     InternalTransferStarted = 3,
     InternalTransferReceived = 4,
-    Released = 5
+    InternalTransferConfirmed = 5,
+    Released = 6
 }
 
 /**
@@ -68,6 +69,10 @@ export enum USDCBridgeStatus {
  * @returns {Promise<string>} A Promise that resolves to the description string.
  */
 export async function USDCBridgeStatusDescription(status: USDCBridgeStatus, sdk?:GlitterBridgeSDK, chain?:BridgeNetworks, startBlock?:number, currentBlock?:number): Promise<string> {
+    let confirmations;
+    let localcurrentBlock;
+    let delta;
+    
     switch (status) {
         case USDCBridgeStatus.DepositReceived:
             if(!sdk || !startBlock || !chain){
@@ -75,9 +80,9 @@ export async function USDCBridgeStatusDescription(status: USDCBridgeStatus, sdk?
             }
 
             //Get percent of confirmations
-            const confirmations = sdk.confirmationsRequired(chain);
-            const localcurrentBlock = !currentBlock? (await CurrentBlock.getCurrentBlock(sdk, chain)).block: currentBlock;
-            const delta = localcurrentBlock - startBlock;
+            confirmations = sdk.confirmationsRequired(chain);
+            localcurrentBlock = !currentBlock? (await CurrentBlock.getCurrentBlock(sdk, chain)).block: currentBlock;
+            delta = localcurrentBlock - startBlock;
             
             return `Deposit Received.  Waiting for ${delta} of ${confirmations} confirmations.`;
         case USDCBridgeStatus.DepositConfirmed:
@@ -85,10 +90,20 @@ export async function USDCBridgeStatusDescription(status: USDCBridgeStatus, sdk?
         case USDCBridgeStatus.InternalTransferStarted:
             return "Transferred out of deposit chain.  Waiting to receive on destination chain.";
         case USDCBridgeStatus.InternalTransferReceived:
-            return "Transfer to destination chain received. Waiting for final release.";
-        // case USDCBridgeStatus.InternalTransferConfirmed:
-        //     return "Internal Transfer Confirmed";
-        //     return "Transfer to destination chain received. Waiting for confirmation.";
+
+            if(!sdk || !startBlock || !chain){
+                return "Transfer to destination chain received.  Waiting for {x} of {y} confirmations.";
+            }
+
+            //Get percent of confirmations
+            confirmations = sdk.confirmationsRequired(chain);
+            localcurrentBlock = !currentBlock? (await CurrentBlock.getCurrentBlock(sdk, chain)).block: currentBlock;
+            delta = localcurrentBlock - startBlock;
+            
+            return `Transfer to destination chain received. Waiting for ${delta} of ${confirmations} confirmations.`;
+
+        case USDCBridgeStatus.InternalTransferConfirmed:
+            return "Internal Transfer Confirmed.  Waiting for final release";
         case USDCBridgeStatus.Released:
             return "Released.  Funds have arrived at destination.";
         default:
@@ -100,33 +115,84 @@ export async function USDCBridgeStatusDescription(status: USDCBridgeStatus, sdk?
  * Retrieves the progress of the USDCBridge.
  * @param {USDCBridgeProgress} status - The USDCBridgeProgress to get the progress for.
  * @param {GlitterBridgeSDK} [sdk] - (Optional) The GlitterBridgeSDK instance. if currentBlock is undefined, will try to get current block from CurrentBlock class.
- * @param {BridgeNetworks} [chain] - (Optional) The BridgeNetworks value representing the chain.
+ * @param {BridgeNetworks} [sourceChain] - (Optional) The BridgeNetworks value representing the sourceChain.
+ * @param {BridgeNetworks} [destinationChain] - (Optional) The BridgeNetworks value representing the destinationChain.
  * @param {number} [startBlock] - (Optional) The start block number.
  * @param {number} [currentBlock] - (Optional) The current block number.
  * @returns {Promise<number>} A Promise that resolves to the progress value.
  */
-export async function USDCBridgeProgress(status: USDCBridgeStatus, sdk?:GlitterBridgeSDK, chain?:BridgeNetworks, startBlock?:number,): Promise<number> {
+export async function USDCBridgeProgress(status: USDCBridgeStatus, sdk?:GlitterBridgeSDK, sourceChain?:BridgeNetworks, destinationChain?:BridgeNetworks, startBlock?:number,): Promise<number> {
+    let sourceConfirmations;
+    let destinationConfirmations;
+    let currentBlock;
+    let percent;
+    let confirmationRatio;
+    let weightedPercent;
+    let minRatio;
+    let minDelta;
+    let remainingDelta;
+    
     switch (status) {
         case USDCBridgeStatus.DepositReceived:
          
-            if (!sdk || !startBlock || !chain){
+            if (!sdk || !startBlock || !sourceChain || !destinationChain){
                 return 10;
             } else {
 
                 //Get percent of confirmations
-                const confirmations = sdk.confirmationsRequired(chain);
-                const currentBlock = await CurrentBlock.getCurrentBlock(sdk, chain);
-                const percent = (currentBlock.block - startBlock) / confirmations;
-                const weightedPercent = clamp(10 + (percent)* 70, 10, 80);
+                sourceConfirmations = sdk.confirmationsRequired(sourceChain);
+                destinationConfirmations = sdk.confirmationsRequired(destinationChain);
+
+                currentBlock = await CurrentBlock.getCurrentBlock(sdk, sourceChain);
+                percent = (currentBlock.block - startBlock) / sourceConfirmations;
+
+                confirmationRatio = sourceConfirmations / (sourceConfirmations + destinationConfirmations);
+                weightedPercent = clamp(10 + (percent)* 80 * confirmationRatio, 10, 90);
+
                 return Number((weightedPercent).toFixed(0));
             }
 
         case USDCBridgeStatus.DepositConfirmed:
-            return 80;
+
+            if (!sdk || !startBlock || !sourceChain || !destinationChain){
+                return 50;
+            } else {
+
+                //Get percent of confirmations
+                sourceConfirmations = sdk.confirmationsRequired(sourceChain);
+                destinationConfirmations = sdk.confirmationsRequired(destinationChain);
+
+                confirmationRatio = sourceConfirmations / (sourceConfirmations + destinationConfirmations);
+                minRatio = clamp(10 + (1)* 80 * confirmationRatio, 10, 90);
+                weightedPercent = minRatio;
+
+                return Number((weightedPercent).toFixed(0));
+            }
+            
         case USDCBridgeStatus.InternalTransferStarted:
-            return 85;
+
+            if (!sdk || !startBlock || !sourceChain || !destinationChain){
+                return 85;
+            } else {
+                
+                //Get percent of confirmations
+                sourceConfirmations = sdk.confirmationsRequired(sourceChain);
+                destinationConfirmations = sdk.confirmationsRequired(destinationChain);
+
+                currentBlock = await CurrentBlock.getCurrentBlock(sdk, sourceChain);
+                percent = (currentBlock.block - startBlock) / destinationConfirmations;
+
+                minDelta = (1)* 80 * sourceConfirmations / (sourceConfirmations + destinationConfirmations);
+                remainingDelta = 80 - minDelta;
+
+                confirmationRatio = destinationConfirmations / (sourceConfirmations + destinationConfirmations);
+                weightedPercent = clamp(10 + (percent)* remainingDelta * confirmationRatio, 10, 90);
+
+                return Number((weightedPercent).toFixed(0));
+            }
         case USDCBridgeStatus.InternalTransferReceived:
             return 95;
+
         case USDCBridgeStatus.Released:
             return 100;
         default:
