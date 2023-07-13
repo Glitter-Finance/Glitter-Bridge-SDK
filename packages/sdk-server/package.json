@@ -1,6 +1,6 @@
 {
   "name": "@glitter-finance/sdk-server",
-  "version": "2.0.0-2.0.0-alpha.33.0",
+  "version": "2.0.0-alpha.34",
   "description": "Glitter Finance: SDK (Server)",
   "main": "dist/index.js",
   "module": "dist/index.js",
@@ -37,7 +37,7 @@
     "dist/**/*"
   ],
   "dependencies": {
-    "@glitter-finance/sdk-core": "^2.0.0-2.0.0-alpha.33.0",
+    "@glitter-finance/sdk-core": "^2.0.0-alpha.34",
     "@project-serum/anchor": "^0.26.0",
     "@solana/web3.js": "^1.65.0",
     "algosdk": "^2.1.0",
