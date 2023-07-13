@@ -121,16 +121,16 @@ export async function USDCBridgeStatusDescription(status: USDCBridgeStatus, sdk?
  * @param {number} [currentBlock] - (Optional) The current block number.
  * @returns {Promise<number>} A Promise that resolves to the progress value.
  */
-export async function USDCBridgeProgress(status: USDCBridgeStatus, sdk?:GlitterBridgeSDK, sourceChain?:BridgeNetworks, destinationChain?:BridgeNetworks, startBlock?:number,): Promise<number> {
+export async function USDCBridgeProgress(status: USDCBridgeStatus, sdk?:GlitterBridgeSDK, sourceChain?:BridgeNetworks, destinationChain?:BridgeNetworks, startBlock?:number, currentBlock?:number): Promise<number> {
     let sourceConfirmations;
     let destinationConfirmations;
-    let currentBlock;
     let percent;
     let confirmationRatio;
     let weightedPercent;
     let minRatio;
     let minDelta;
     let remainingDelta;
+    let localcurrentBlock;
     
     switch (status) {
         case USDCBridgeStatus.DepositReceived:
@@ -143,8 +143,8 @@ export async function USDCBridgeProgress(status: USDCBridgeStatus, sdk?:GlitterB
                 sourceConfirmations = sdk.confirmationsRequired(sourceChain);
                 destinationConfirmations = sdk.confirmationsRequired(destinationChain);
 
-                currentBlock = await CurrentBlock.getCurrentBlock(sdk, sourceChain);
-                percent = (currentBlock.block - startBlock) / sourceConfirmations;
+                localcurrentBlock = !currentBlock? (await CurrentBlock.getCurrentBlock(sdk, sourceChain)).block: currentBlock;
+                percent = (localcurrentBlock - startBlock) / sourceConfirmations;
 
                 confirmationRatio = sourceConfirmations / (sourceConfirmations + destinationConfirmations);
                 weightedPercent = clamp(10 + (percent)* 80 * confirmationRatio, 10, 90);
@@ -179,8 +179,8 @@ export async function USDCBridgeProgress(status: USDCBridgeStatus, sdk?:GlitterB
                 sourceConfirmations = sdk.confirmationsRequired(sourceChain);
                 destinationConfirmations = sdk.confirmationsRequired(destinationChain);
 
-                currentBlock = await CurrentBlock.getCurrentBlock(sdk, sourceChain);
-                percent = (currentBlock.block - startBlock) / destinationConfirmations;
+                localcurrentBlock = !currentBlock? (await CurrentBlock.getCurrentBlock(sdk, sourceChain)).block: currentBlock;
+                percent = (localcurrentBlock - startBlock) / destinationConfirmations;
 
                 minDelta = (1)* 80 * sourceConfirmations / (sourceConfirmations + destinationConfirmations);
                 remainingDelta = 80 - minDelta;
