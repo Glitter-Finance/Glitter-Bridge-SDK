@@ -1,3 +1,4 @@
+/* eslint-disable no-case-declarations */
 import BigNumber from "bignumber.js";
 import { Routing } from "../routing";
 import { Routing2 } from "../routing/routing.v2";
@@ -56,10 +57,29 @@ export enum USDCBridgeStatus {
     InternalTransferReceived = 4,
     Released = 5
 }
-export function USDCBridgeStatusDescription(status: USDCBridgeStatus): string {
+
+/**
+ * Retrieves the description of a USDCBridgeStatus.
+ * @param {USDCBridgeStatus} status - The USDCBridgeStatus to get the description for.
+ * @param {GlitterBridgeSDK} [sdk] - (Optional) The GlitterBridgeSDK instance.  Used for DepositReceived status confirmation count.  if currentBlock is undefined, will try to get current block from CurrentBlock class.
+ * @param {BridgeNetworks} [chain] - (Optional) The BridgeNetworks value representing the chain.  Used for DepositReceived status confirmation count.
+ * @param {number} [startBlock] - (Optional) The start block number.  Used for DepositReceived status confirmation count.
+ * @param {number} [currentBlock] - (Optional) The current block number.  Used for DepositReceived status confirmation count.
+ * @returns {Promise<string>} A Promise that resolves to the description string.
+ */
+export async function USDCBridgeStatusDescription(status: USDCBridgeStatus, sdk?:GlitterBridgeSDK, chain?:BridgeNetworks, startBlock?:number, currentBlock?:number): Promise<string> {
     switch (status) {
         case USDCBridgeStatus.DepositReceived:
-            return "Deposit Received.  Waiting for {x} of {y} confirmations.";
+            if(!sdk || !startBlock || !chain){
+                return "Deposit Received.  Waiting for {x} of {y} confirmations.";
+            }
+
+            //Get percent of confirmations
+            const confirmations = sdk.confirmationsRequired(chain);
+            const localcurrentBlock = !currentBlock? (await CurrentBlock.getCurrentBlock(sdk, chain)).block: currentBlock;
+            const delta = localcurrentBlock - startBlock;
+            
+            return `Deposit Received.  Waiting for ${delta} of ${confirmations} confirmations.`;
         case USDCBridgeStatus.DepositConfirmed:
             return "Deposit Confirmed.  Waiting for internal transfer.";
         case USDCBridgeStatus.InternalTransferStarted:
@@ -75,6 +95,16 @@ export function USDCBridgeStatusDescription(status: USDCBridgeStatus): string {
             return "Unknown";
     }
 }
+
+/**
+ * Retrieves the progress of the USDCBridge.
+ * @param {USDCBridgeProgress} status - The USDCBridgeProgress to get the progress for.
+ * @param {GlitterBridgeSDK} [sdk] - (Optional) The GlitterBridgeSDK instance. if currentBlock is undefined, will try to get current block from CurrentBlock class.
+ * @param {BridgeNetworks} [chain] - (Optional) The BridgeNetworks value representing the chain.
+ * @param {number} [startBlock] - (Optional) The start block number.
+ * @param {number} [currentBlock] - (Optional) The current block number.
+ * @returns {Promise<number>} A Promise that resolves to the progress value.
+ */
 export async function USDCBridgeProgress(status: USDCBridgeStatus, sdk?:GlitterBridgeSDK, chain?:BridgeNetworks, startBlock?:number,): Promise<number> {
     switch (status) {
         case USDCBridgeStatus.DepositReceived:
@@ -110,10 +140,30 @@ export enum TokenBridgeStatus {
     DepositConfirmed = 2,
     Released = 3
 }
-export function TokenBridgeStatusDescription(status: TokenBridgeStatus): string {
+
+/**
+ * Retrieves the description of a TokenBridgeStatus.
+ * @param {TokenBridgeStatus} status - The TokenBridgeStatus to get the description for.
+ * @param {GlitterBridgeSDK} [sdk] - (Optional) The GlitterBridgeSDK instance.  Used for DepositReceived status confirmation count.  if currentBlock is undefined, will try to get current block from CurrentBlock class.
+ * @param {BridgeNetworks} [chain] - (Optional) The BridgeNetworks value representing the chain.  Used for DepositReceived status confirmation count.
+ * @param {number} [startBlock] - (Optional) The start block number.  Used for DepositReceived status confirmation count.
+ * @param {number} [currentBlock] - (Optional) The current block number.  Used for DepositReceived status confirmation count.
+ * @returns {Promise<string>} A Promise that resolves to the description string.
+ */
+export async function TokenBridgeStatusDescription(status: TokenBridgeStatus, sdk?:GlitterBridgeSDK, chain?:BridgeNetworks, startBlock?:number, currentBlock?:number): Promise<string> {
     switch (status) {
         case TokenBridgeStatus.DepositReceived:
-            return "Deposit Received.  Waiting for {x} of {y} confirmations.";
+
+            if(!sdk || !startBlock || !chain){
+                return "Deposit Received.  Waiting for {x} of {y} confirmations.";
+            }
+
+            //Get percent of confirmations
+            const confirmations = sdk.confirmationsRequired(chain);
+            const localcurrentBlock = !currentBlock? (await CurrentBlock.getCurrentBlock(sdk, chain)).block: currentBlock;
+            const delta = localcurrentBlock - startBlock;
+            
+            return `Deposit Received.  Waiting for ${delta} of ${confirmations} confirmations.`;
         case TokenBridgeStatus.DepositConfirmed:
             return "Deposit Confirmed.  Waiting for final release.";
         case TokenBridgeStatus.Released:
@@ -122,7 +172,16 @@ export function TokenBridgeStatusDescription(status: TokenBridgeStatus): string 
             return "Unknown";
     }
 }
-export async function TokenBridgeProgress(status: TokenBridgeStatus, sdk?:GlitterBridgeSDK, chain?:BridgeNetworks, startBlock?:number,): Promise<number> {
+/**
+ * Retrieves the progress of the TokenBridge.
+ * @param {TokenBridgeStatus} status - The TokenBridgeStatus to get the progress for.
+ * @param {GlitterBridgeSDK} [sdk] - (Optional) The GlitterBridgeSDK instance. if currentBlock is undefined, will try to get current block from CurrentBlock class.
+ * @param {BridgeNetworks} [chain] - (Optional) The BridgeNetworks value representing the chain.
+ * @param {number} [startBlock] - (Optional) The start block number.
+ * @param {number} [currentBlock] - (Optional) The current block number.
+ * @returns {Promise<number>} A Promise that resolves to the progress value.
+ */
+export async function TokenBridgeProgress(status: TokenBridgeStatus, sdk?:GlitterBridgeSDK, chain?:BridgeNetworks, startBlock?:number, currentBlock?:number): Promise<number> {
     switch (status) {
         case TokenBridgeStatus.DepositReceived:
          
@@ -132,8 +191,8 @@ export async function TokenBridgeProgress(status: TokenBridgeStatus, sdk?:Glitte
 
                 //Get percent of confirmations
                 const confirmations = sdk.confirmationsRequired(chain);
-                const currentBlock = await CurrentBlock.getCurrentBlock(sdk, chain);
-                const percent = (currentBlock.block - startBlock) / confirmations;
+                const localcurrentBlock = !currentBlock? (await CurrentBlock.getCurrentBlock(sdk, chain)).block: currentBlock;
+                const percent = (localcurrentBlock - startBlock) / confirmations;
                 const weightedPercent = clamp(20 + (percent)* 70, 20, 70);
 
                 //clamp weightedpercent
