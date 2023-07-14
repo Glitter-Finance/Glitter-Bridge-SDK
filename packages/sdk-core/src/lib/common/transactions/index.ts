@@ -170,9 +170,26 @@ export async function USDCBridgeProgress(status: USDCBridgeStatus, sdk?:GlitterB
             }
             
         case USDCBridgeStatus.InternalTransferStarted:
+       
+            if (!sdk || !startBlock || !sourceChain || !destinationChain){
+                return 55;
+            } else {
+
+                //Get percent of confirmations
+                sourceConfirmations = sdk.confirmationsRequired(sourceChain);
+                destinationConfirmations = sdk.confirmationsRequired(destinationChain);
+
+                confirmationRatio = sourceConfirmations / (sourceConfirmations + destinationConfirmations);
+                minRatio = clamp(15 + (1)* 80 * confirmationRatio, 10, 95);
+                weightedPercent = minRatio;
+
+                return Number((weightedPercent).toFixed(0));
+            }
+           
+        case USDCBridgeStatus.InternalTransferReceived:
 
             if (!sdk || !startBlock || !sourceChain || !destinationChain){
-                return 85;
+                return 95;
             } else {
                 
                 //Get percent of confirmations
@@ -186,12 +203,10 @@ export async function USDCBridgeProgress(status: USDCBridgeStatus, sdk?:GlitterB
                 remainingDelta = 80 - minDelta;
 
                 confirmationRatio = destinationConfirmations / (sourceConfirmations + destinationConfirmations);
-                weightedPercent = clamp(10 + (percent)* remainingDelta * confirmationRatio, 10, 90);
+                weightedPercent = clamp(15 + (percent)* remainingDelta * confirmationRatio, 10, 95);
 
                 return Number((weightedPercent).toFixed(0));
             }
-        case USDCBridgeStatus.InternalTransferReceived:
-            return 95;
 
         case USDCBridgeStatus.Released:
             return 100;
