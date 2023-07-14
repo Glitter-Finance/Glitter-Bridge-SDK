@@ -176,6 +176,7 @@ export class GlitterEVMPoller implements GlitterPoller {
 
         //build url
         const cursorString = cursor.apiString? cursor.apiString : "api?module=account&action=txlist";
+        const cursorLogs = (cursorString === "api?module=logs&action=getLogs")
         const url = this.apiURL +
             `/${cursorString}&address=${address}` +
             `&fromBlock=${startBlock}&offset=${cursor.limit}` +
@@ -188,8 +189,13 @@ export class GlitterEVMPoller implements GlitterPoller {
         const resultData = JSON.parse(JSON.stringify(response.data));
         const events = resultData.result;
 
-        //Map Signatures        
-        const txnHashes: string[] = events.map((event: any) => event.transactionHash);
+        //Map Signatures       
+        let txnHashes: string[] = [];
+        if (cursorLogs) {
+            txnHashes = events.map((event: any) => event.transactionHash);
+        } else {
+            txnHashes = events.map((event: any) => event.hash);
+        }        
         const signatures= new Set(txnHashes)
         const maxBlock = Math.max(...events.map((event: any) => event.blockNumber));
 
