@@ -2,6 +2,8 @@ import { BridgeNetworks, BridgeType, GlitterEnvironment } from "@glitter-finance
 //import { GlitterPoller } from "../../src/lib/common/poller.Interface";
 import { GlitterSDKServer } from "../../src/glitterSDKServer";
 
+import { mainnetAPI as mainAPI, mainnetAPI } from "../config/mainnet-api"
+
 describe("Parsing Test", () => {
 
     //Initialize SDK
@@ -11,7 +13,7 @@ describe("Parsing Test", () => {
     //Before All tests -> create new SDK
     beforeAll(async () => {
         //Initialize SDK
-        sdk = new GlitterSDKServer(GlitterEnvironment.mainnet, undefined, 25);
+        sdk = new GlitterSDKServer(GlitterEnvironment.mainnet, mainnetAPI, 25);
 
         //Create Solana Poller
         sdk.createPollers([BridgeNetworks.Polygon]);

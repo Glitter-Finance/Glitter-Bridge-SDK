@@ -118,3 +118,4 @@ packages/server/dev
 packages/sdk-core/src/lib/chains/evm/abi/
 
 packages/sdk-core/tests/config
+packages/sdk-server/tests/config

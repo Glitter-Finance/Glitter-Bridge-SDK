@@ -132,15 +132,18 @@ export class GlitterEVMPoller implements GlitterPoller {
 
         //Add Token V2 Cursor
         const tokenV2Address = this.connect?.getAddress("tokenBridge");       
-        if (tokenV2Address)
-            this.cursors[BridgeType.TokenV2].push(
-                NewCursor(
-                    this.network,
-                    BridgeType.TokenV2,
-                    tokenV2Address,
-                    sdkServer.defaultLimit
-                )
-            );
+        if (tokenV2Address){
+
+            const cursor = NewCursor(
+                this.network,
+                BridgeType.TokenV2,
+                tokenV2Address,
+                sdkServer.defaultLimit
+            )
+            cursor.apiString = "api?module=logs&action=getLogs"                
+            this.cursors[BridgeType.TokenV2].push(cursor);
+            
+        }
 
         //Add USDC Cursors
         const usdcAddresses = [
