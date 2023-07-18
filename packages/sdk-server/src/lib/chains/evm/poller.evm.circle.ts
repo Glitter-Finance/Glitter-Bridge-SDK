@@ -340,10 +340,10 @@ export class EvmCircleParser {
         partialTxn.baseSymbol = tokenSymbol;
 
         const circleTreasury = connect.getAddress("circleTreasury").toLocaleLowerCase();
-        if (fromAddress == circleTreasury){
+        if (fromAddress.toLocaleLowerCase() == circleTreasury){
             partialTxn.txnType = TransactionType.TransferEnd;
             partialTxn.address = fromAddress;
-        } else if (toAddress == circleTreasury) {
+        } else if (toAddress.toLocaleLowerCase() == circleTreasury) {
             partialTxn.txnType = TransactionType.TransferStart;
             partialTxn.address = toAddress;
         } else {
