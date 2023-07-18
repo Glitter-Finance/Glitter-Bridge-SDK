@@ -9,7 +9,7 @@
   "scripts": {
     "prepare": "husky install",
     "build:core": "yarn workspace @glitter-finance/sdk-core build",
-    "release:core": "npm run build-and-release -w ./packages/sdk-core",
+    "release:core": "yarn workspace @glitter-finance/sdk-core build && npx lerna publish",
     "types:core": "typechain --target ethers-v5 --out-dir ./packages/sdk-core/src/typechain ./packages/sdk-core/src/**/*.abi.json",
     "build:web": "yarn workspace @glitter-finance/sdk-web build",
     "release:web": "yarn workspace @glitter-finance/sdk-core build && yarn workspace @glitter-finance/sdk-web build && npx lerna publish",
