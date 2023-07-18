@@ -9,8 +9,6 @@ import BigNumber from "bignumber.js";
  */
 export class EvmCircleParser {
 
-    static circleTreasury = "";
-
     /**
      * Processes a transaction.
      *
@@ -341,10 +339,11 @@ export class EvmCircleParser {
         partialTxn.tokenSymbol = tokenSymbol;
         partialTxn.baseSymbol = tokenSymbol;
 
-        if (fromAddress == this.circleTreasury){
+        const circleTreasury = connect.getAddress("circleTreasury").toLocaleLowerCase();
+        if (fromAddress == circleTreasury){
             partialTxn.txnType = TransactionType.TransferEnd;
             partialTxn.address = fromAddress;
-        } else if (toAddress == this.circleTreasury) {
+        } else if (toAddress == circleTreasury) {
             partialTxn.txnType = TransactionType.TransferStart;
             partialTxn.address = toAddress;
         } else {
