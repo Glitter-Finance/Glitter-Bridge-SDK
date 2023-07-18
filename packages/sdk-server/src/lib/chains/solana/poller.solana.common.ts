@@ -117,7 +117,9 @@ export class SolanaPollerCommon {
         if (token) {
 
             //Get mint address
-            const mintAddress = BridgeTokens.getToken(BridgeNetworks.solana, token)?.address || "";
+            const tokenData = BridgeTokens.getToken(BridgeNetworks.solana, token);
+            const decimals = tokenData?.decimals || 18;
+            const mintAddress = tokenData?.address || "";
 
             if (mintAddress === "") {
                 console.log("Mint Address not found for token: " + token);
@@ -136,7 +138,7 @@ export class SolanaPollerCommon {
                 const owner = postBalanceObj?.owner || "";
                 const preBalance = this.getPreBalance(txn, postBalanceObj);
                 const postBalance = postBalanceObj?.uiTokenAmount.uiAmount;
-                const delta = Number(Number(postBalance || 0) - Number(preBalance || 0));
+                const delta = Number((Number(Number(postBalance || 0) - Number(preBalance || 0))).toFixed(decimals));
 
                 const address = txn.transaction.message.accountKeys[postBalanceObj.accountIndex].pubkey;
             
