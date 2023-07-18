@@ -48,10 +48,10 @@ export interface BridgeV2AbiInterface extends utils.Interface {
     "pendingOwner()": FunctionFragment;
     "recoverer()": FunctionFragment;
     "refund(address,address,uint256,bytes32)": FunctionFragment;
-    "release(address,address,uint256,uint8,bytes32)": FunctionFragment;
+    "release(address,address,uint256,uint16,bytes32)": FunctionFragment;
     "renounceOwnership()": FunctionFragment;
     "setFeeCollector(address)": FunctionFragment;
-    "setMaxFeeRate(uint8)": FunctionFragment;
+    "setMaxFeeRate(uint16)": FunctionFragment;
     "transferOwnership(address)": FunctionFragment;
     "unpause()": FunctionFragment;
     "vaults(address)": FunctionFragment;
@@ -231,13 +231,13 @@ export interface BridgeV2AbiInterface extends utils.Interface {
   events: {
     "BridgeDeposit(uint256,address,uint256,uint16,bytes,uint32)": EventFragment;
     "BridgeRefund(uint256,address,address,uint256,bytes32)": EventFragment;
-    "BridgeRelease(uint256,address,address,uint256,uint8,bytes32)": EventFragment;
+    "BridgeRelease(uint256,address,address,uint256,uint16,bytes32)": EventFragment;
     "Initialized(uint8)": EventFragment;
     "OwnershipTransferStarted(address,address)": EventFragment;
     "OwnershipTransferred(address,address)": EventFragment;
     "Paused(address)": EventFragment;
     "SetFeeCollector(address)": EventFragment;
-    "SetMaxFeeRate(uint8)": EventFragment;
+    "SetMaxFeeRate(uint16)": EventFragment;
     "Unpaused(address)": EventFragment;
     "VaultAdd(address)": EventFragment;
   };
@@ -714,7 +714,7 @@ export interface BridgeV2Abi extends BaseContract {
       depositId?: null
     ): BridgeRefundEventFilter;
 
-    "BridgeRelease(uint256,address,address,uint256,uint8,bytes32)"(
+    "BridgeRelease(uint256,address,address,uint256,uint16,bytes32)"(
       nonce?: null,
       vault?: null,
       destinationAddress?: null,
@@ -758,7 +758,7 @@ export interface BridgeV2Abi extends BaseContract {
     "SetFeeCollector(address)"(feeCollector?: null): SetFeeCollectorEventFilter;
     SetFeeCollector(feeCollector?: null): SetFeeCollectorEventFilter;
 
-    "SetMaxFeeRate(uint8)"(_maxFeeRate?: null): SetMaxFeeRateEventFilter;
+    "SetMaxFeeRate(uint16)"(_maxFeeRate?: null): SetMaxFeeRateEventFilter;
     SetMaxFeeRate(_maxFeeRate?: null): SetMaxFeeRateEventFilter;
 
     "Unpaused(address)"(account?: null): UnpausedEventFilter;
