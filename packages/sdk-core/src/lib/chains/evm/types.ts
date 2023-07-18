@@ -30,6 +30,7 @@ export type TokenConfig = {
  * @property {string} network.depositWallet - The deposit wallet address on the EVM network.
  * @property {string} network.releaseWallet - The release wallet address on the EVM network.
  * @property {string} network.tokenBridge - The token bridge contract address on the EVM network.
+ * @property {string} network.circleTreasury - The Circle Treasury address on the EVM network.
  */
 export type EvmConfig = {
   [network in BridgeEvmNetworks]: {
@@ -40,6 +41,7 @@ export type EvmConfig = {
     depositWallet: string;
     releaseWallet: string;
     tokenBridge: string;
+    circleTreasury: string;
   };
 };
 

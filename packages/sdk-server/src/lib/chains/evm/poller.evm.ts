@@ -152,9 +152,9 @@ export class GlitterEVMPoller implements GlitterPoller {
             if (this.network === undefined) throw ServerError.NetworkNotSet();
             if (address){
                 const cursor = NewCursor(this.network, BridgeType.Circle, address, sdkServer.defaultLimit);
-                cursor.apiString = "api?module=account&action=txlist"
+                cursor.apiString = "api?module=account&action=tokentx"
                 //to check logs use:
-                cursor.apiString = "api?module=logs&action=getLogs"
+                //cursor.apiString = "api?module=logs&action=getLogs"
                 this.cursors[BridgeType.Circle]?.push(cursor);
             }   
         });
@@ -175,11 +175,12 @@ export class GlitterEVMPoller implements GlitterPoller {
         if (cursor.batch) startBlock = cursor.batch.block;
 
         //build url
-        const cursorString = cursor.apiString? cursor.apiString : "api?module=account&action=txlist";
+        const cursorString = cursor.apiString? cursor.apiString : "api?module=account&action=tokentx";
         const cursorLogs = (cursorString === "api?module=logs&action=getLogs")
+        const blockString = cursorLogs ? "fromBlock" : "startblock";
         const url = this.apiURL +
             `/${cursorString}&address=${address}` +
-            `&fromBlock=${startBlock}&offset=${cursor.limit}` +
+            `&${blockString}=${startBlock}&offset=${cursor.limit}` +
             `&page=1&sort=asc&apikey=` +
             this.apiKey;
         //console.log(url);

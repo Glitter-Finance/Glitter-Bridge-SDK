@@ -9,7 +9,7 @@ import BigNumber from "bignumber.js";
  */
 export class EvmCircleParser {
 
-    static circleTreasury = "0x55FE002aefF02F77364de339a1292923A15844B8";
+    static circleTreasury = "";
 
     /**
      * Processes a transaction.
