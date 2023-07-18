@@ -330,11 +330,14 @@ export class EvmCircleParser {
         }
 
         //get token:
+
         let tokenSymbol = "USDC";
-        if (connect.network == BridgeNetworks.Ethereum && events.deposit?.erc20Address?.toString() == "0x1aBaEA1f7C830bD89Acc67eC4af516284b1bC33c") {
-            tokenSymbol = "EUROC";
-        } else if (connect.network == BridgeNetworks.Avalanche && events.deposit?.erc20Address?.toString() == "0xC891EB4cbdEFf6e073e859e987815Ed1505c2ACD") {
-            tokenSymbol = "EUROC";
+        if (connect.network == BridgeNetworks.Ethereum) {
+            if (txn.to?.toString() == "0x1aBaEA1f7C830bD89Acc67eC4af516284b1bC33c" || 
+                txn.from?.toString() == "0x1aBaEA1f7C830bD89Acc67eC4af516284b1bC33c") tokenSymbol = "EUROC";
+        } else if (connect.network == BridgeNetworks.Avalanche) {
+            if (txn.to?.toString() == "0xC891EB4cbdEFf6e073e859e987815Ed1505c2ACD" ||
+                txn.from?.toString() == "0xC891EB4cbdEFf6e073e859e987815Ed1505c2ACD") tokenSymbol = "EUROC";
         }
         partialTxn.tokenSymbol = tokenSymbol;
         partialTxn.baseSymbol = tokenSymbol;
