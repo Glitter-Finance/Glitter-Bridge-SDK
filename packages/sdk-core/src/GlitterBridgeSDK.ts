@@ -1,3 +1,6 @@
+import { mainnetConfig, mainnetTokenConfig, testnetConfig, testnetTokenConfig } from "./config";
+import { testnetAPI } from "./config/testnet-api";
+import { Token2Config } from "./lib";
 import { AlgorandConnect } from "./lib/chains/algorand";
 import { EvmConnect } from "./lib/chains/evm";
 import { LoadSolanaSchema, SolanaConnect } from "./lib/chains/solana";
@@ -6,12 +9,9 @@ import {
     BridgeEvmNetworks,
     BridgeNetworks,
 } from "./lib/common/networks";
-import { mainnetConfig, testnetConfig, mainnetTokenConfig, testnetTokenConfig } from "./config";
-import { ChainRPCConfig, ChainRPCConfigs, GlitterBridgeConfig, GlitterEnvironment } from "./types";
-import { BridgeV2Tokens } from "./lib/common/tokens/BridgeV2Tokens";
-import { testnetAPI } from "./config/testnet-api";
-import { Token2Config } from "./lib";
 import { TokenPricing } from "./lib/common/pricing/tokenPricing";
+import { BridgeV2Tokens } from "./lib/common/tokens/BridgeV2Tokens";
+import { ChainRPCConfig, ChainRPCConfigs, GlitterBridgeConfig, GlitterEnvironment } from "./types";
 
 /**
  * GlitterBridgeSDK
@@ -134,7 +134,7 @@ export class GlitterBridgeSDK {
      * @returns {void}
      */
     private preInitializeChecks(network: BridgeNetworks) {
-        if (!this._bridgeConfig) throw new Error("Glitter environment not set");
+        if (!this._bridgeConfig || !BridgeV2Tokens.isLoaded) throw new Error("Glitter environment not set");
         /**
          * TODO: have config keys in such
          * a way that we directly check
@@ -227,7 +227,9 @@ export class GlitterBridgeSDK {
 
         this._evm.set(
             network,
-            new EvmConnect(network, this._bridgeConfig!.evm[network])
+            new EvmConnect(network, this._bridgeConfig!.evm[network], {
+                tokens: BridgeV2Tokens.getTokenList() ?? []
+            })
         );
         return this;
     }
