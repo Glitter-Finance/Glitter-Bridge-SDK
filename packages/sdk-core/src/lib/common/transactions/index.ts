@@ -83,6 +83,10 @@ export async function USDCBridgeStatusDescription(status: USDCBridgeStatus, sdk?
             confirmations = sdk.confirmationsRequired(chain);
             localcurrentBlock = !currentBlock? (await CurrentBlock.getCurrentBlock(sdk, chain)).block: currentBlock;
             delta = localcurrentBlock - startBlock;
+
+            if (delta >= confirmations) {
+                return "Deposit  Confirmed.  Waiting for internal transfer.";
+            }
             
             return `Deposit Received.  Waiting for ${delta} of ${confirmations} confirmations.`;
         case USDCBridgeStatus.DepositConfirmed:
@@ -99,6 +103,10 @@ export async function USDCBridgeStatusDescription(status: USDCBridgeStatus, sdk?
             confirmations = sdk.confirmationsRequired(chain);
             localcurrentBlock = !currentBlock? (await CurrentBlock.getCurrentBlock(sdk, chain)).block: currentBlock;
             delta = localcurrentBlock - startBlock;
+
+            if (delta >= confirmations) {
+                return "Internal Transfer Confirmed.  Waiting for final release";
+            }
             
             return `Transfer to destination chain received. Waiting for ${delta} of ${confirmations} confirmations.`;
 
@@ -145,6 +153,7 @@ export async function USDCBridgeProgress(status: USDCBridgeStatus, sdk?:GlitterB
 
                 localcurrentBlock = !currentBlock? (await CurrentBlock.getCurrentBlock(sdk, sourceChain)).block: currentBlock;
                 percent = (localcurrentBlock - startBlock) / sourceConfirmations;
+                percent = clamp(percent, 0, 1);
 
                 confirmationRatio = sourceConfirmations / (sourceConfirmations + destinationConfirmations);
                 weightedPercent = clamp(10 + (percent)* 80 * confirmationRatio, 10, 90);
@@ -198,6 +207,7 @@ export async function USDCBridgeProgress(status: USDCBridgeStatus, sdk?:GlitterB
 
                 localcurrentBlock = !currentBlock? (await CurrentBlock.getCurrentBlock(sdk, sourceChain)).block: currentBlock;
                 percent = (localcurrentBlock - startBlock) / destinationConfirmations;
+                percent = clamp(percent, 0, 1);
 
                 minDelta = (1)* 80 * sourceConfirmations / (sourceConfirmations + destinationConfirmations);
                 remainingDelta = 80 - minDelta;
@@ -243,6 +253,10 @@ export async function TokenBridgeStatusDescription(status: TokenBridgeStatus, sd
             const confirmations = sdk.confirmationsRequired(chain);
             const localcurrentBlock = !currentBlock? (await CurrentBlock.getCurrentBlock(sdk, chain)).block: currentBlock;
             const delta = localcurrentBlock - startBlock;
+
+            if (delta >= confirmations){
+                return "Deposit Confirmed.  Waiting for final release.";
+            } 
             
             return `Deposit Received.  Waiting for ${delta} of ${confirmations} confirmations.`;
         case TokenBridgeStatus.DepositConfirmed:
