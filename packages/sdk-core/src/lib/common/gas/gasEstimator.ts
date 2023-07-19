@@ -21,6 +21,29 @@ export type GasEstimate = {
 }
 
 /**
+ * Represents an estimate of gas tokens.
+ *
+ * @typedef {Object} GasTokenEstimate
+ * @property {string} baseToken - The base token.
+ * @property {BigNumber} tokens - The number of tokens.
+ * @property {number} valueUSD - The value in USD.
+ * @property {BigNumber} [depositTokens] - The number of tokens to be deposited (optional).
+ * @property {number} [depositUSD] - The value in USD to be deposited (optional).
+ * @property {BigNumber} [releaseTokens] - The number of tokens to be released (optional).
+ * @property {number} [releaseUSD] - The value in USD to be released (optional).
+ */
+export type GasTokenEstimate = {
+    baseToken: string;
+    tokens: BigNumber;    
+    valueUSD: number;
+
+    depositTokens?: BigNumber;
+    depositUSD?: number;
+    releaseTokens?: BigNumber;
+    releaseUSD?: number;
+}
+
+/**
  * Represents gas used estimate values.
  *
  * @typedef {Object} GasUsedEstimate
