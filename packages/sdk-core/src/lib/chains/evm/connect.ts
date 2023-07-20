@@ -11,8 +11,7 @@ import {
     BridgeTokenConfig,
     BridgeTokens,
     BridgeV2Tokens,
-    Token2Config,
-    Token2ConfigList,
+    Token2ChainConfig
 } from "../../../lib/common";
 import { BridgeV2Abi__factory, Erc20Abi__factory } from "../../../typechain";
 import {
@@ -40,9 +39,9 @@ import {
  * @property {Map<string, ERC20>} tokens - A map of token symbols to ERC20 token objects.
  */
 type Connection = {
-  rpcProvider: providers.BaseProvider;
-  bridge: TokenBridge;
-  tokens: Map<string, ERC20>;
+    rpcProvider: providers.BaseProvider;
+    bridge: TokenBridge;
+    tokens: Map<string, ERC20>;
 };
 
 /**
@@ -59,37 +58,45 @@ export class EvmConnect {
      * @private
      * @param {string} rpcUrl - The RPC URL for the connection.
      * @param {EvmNetworkConfig} config - The configuration object for the EVM network.
+     * @param {Token2ChainConfig[]} [bridgeV2Tokens] - Tokens for bridgeV2 configuration.
      * @returns {Connection} - The created connection object.
      */
     private createConnections(
         rpcUrl: string,
         config: EvmNetworkConfig,
-        bridgeV2Tokens?: Token2Config
+        bridgeV2Tokens?: Token2ChainConfig[]
     ): Connection {
         const bridgeAddress = config.bridge;
         const rpcProvider = new ethers.providers.JsonRpcProvider(rpcUrl);
-        const bridge = TokenBridge__factory.connect(bridgeAddress, rpcProvider);
+        const bridge = TokenBridge__factory.connect(
+            bridgeAddress,
+            rpcProvider
+        );
         const tokens = new Map<string, ERC20>();
-
-        config.tokens.forEach((_token) => {
-            const symbol = _token.symbol.toLowerCase();
-            tokens.set(
-                symbol,
-                ERC20__factory.connect(_token.address as string, rpcProvider)
-            );
-        }, {} as Record<string, ERC20>);
-
         if (bridgeV2Tokens) {
-            console.log({ bridgeV2Tokens });
-            // bridgeV2Tokens.forEach((_token) => {
-            //     const symbol = _token.symbol.toLowerCase();
-            //     const erc20 =ERC20__factory.connect(_token.address as string, rpcProvider);
-            //     console.log(_token.symbol, erc20)
-            //     tokens.set(
-            //         symbol,
-            //         erc20
-            //     );
-            // })
+            bridgeV2Tokens.forEach((_token) => {
+                const symbol = _token.symbol.toLowerCase();
+                if (!_token.isNative) {
+                    tokens.set(
+                        symbol,
+                        ERC20__factory.connect(
+                            _token.address as string,
+                            rpcProvider
+                        )
+                    );
+                }
+            });
+        } else {
+            config.tokens.forEach((_token) => {
+                const symbol = _token.symbol.toLowerCase();
+                tokens.set(
+                    symbol,
+                    ERC20__factory.connect(
+                        _token.address as string,
+                        rpcProvider
+                    )
+                );
+            });
         }
 
         return {
@@ -104,23 +111,21 @@ export class EvmConnect {
      *
      * @param {BridgeEvmNetworks} network - The network for the instance.
      * @param {EvmNetworkConfig} config - The configuration object for the EVM network.
-     * @param {Token2ConfigList} [bridgeV2Tokens] - The list of bridge V2 tokens (optional).
+     * @param {Token2ChainConfig} [bridgeV2Tokens] - The list of bridge V2 tokens (optional).
      */
     constructor(
         network: BridgeEvmNetworks,
         config: EvmNetworkConfig,
-        bridgeV2Tokens?: Token2ConfigList
+        bridgeV2Tokens?: Token2ChainConfig[]
     ) {
         this.__config = config;
         this.__network = network;
         BridgeTokens.loadConfig(this.__network, config.tokens);
-        console.log(this.__network, config.rpcUrl);
         this.__providers = this.createConnections(
             config.rpcUrl,
             config,
-            BridgeV2Tokens.getTokenConfig(this.__network)
+            bridgeV2Tokens
         );
-        if (bridgeV2Tokens) BridgeV2Tokens.loadConfig(bridgeV2Tokens);
     }
 
     /**
@@ -170,10 +175,12 @@ export class EvmConnect {
             if (!tokenSymbol)
                 throw new Error("[EvmConnect] Please provide token symbol.");
 
-            const token = this.__config.tokens.find(
-                (local_token) =>
-                    local_token.symbol.toLowerCase() === tokenSymbol.toLowerCase()
-            );
+            const token = this.isValidV2Token(tokenSymbol)
+                ? this.getV2Token(tokenSymbol)
+                : this.__config.tokens.find(
+                    (local_token) =>
+                        local_token.symbol.toLowerCase() === tokenSymbol.toLowerCase()
+                );
 
             if (!token || !token.address || typeof token.address === "number") {
                 throw new Error(
@@ -308,11 +315,11 @@ export class EvmConnect {
     ): Promise<Array<TransferEvent | BridgeDepositEvent | BridgeReleaseEvent>> {
         try {
             const events: Array<
-        TransferEvent | BridgeDepositEvent | BridgeReleaseEvent
-      > = [];
+                TransferEvent | BridgeDepositEvent | BridgeReleaseEvent
+            > = [];
             const parser = new EvmBridgeEventsParser();
             const transactionReceipt =
-        await this.__providers.rpcProvider.getTransactionReceipt(txHash);
+                await this.__providers.rpcProvider.getTransactionReceipt(txHash);
 
             if (!transactionReceipt || !("logs" in transactionReceipt)) {
                 return [];
@@ -343,7 +350,7 @@ export class EvmConnect {
     async getBlockNumber(txHash: string): Promise<number> {
         try {
             const transactionReceipt =
-        await this.__providers.rpcProvider.getTransactionReceipt(txHash);
+                await this.__providers.rpcProvider.getTransactionReceipt(txHash);
             const blockNumber = transactionReceipt.blockNumber;
             return blockNumber;
         } catch (error: any) {
@@ -376,7 +383,7 @@ export class EvmConnect {
     async getTimeStamp(txHash: string): Promise<number> {
         try {
             const transactionReceipt =
-        await this.__providers.rpcProvider.getTransactionReceipt(txHash);
+                await this.__providers.rpcProvider.getTransactionReceipt(txHash);
             const blockNumber = transactionReceipt.blockNumber;
             const block = await this.__providers.rpcProvider.getBlock(blockNumber);
             const timestamp = block.timestamp;
@@ -395,7 +402,7 @@ export class EvmConnect {
     async getTxnStatus(txHash: string): Promise<ChainStatus> {
         try {
             const txnReceipt =
-        await this.__providers.rpcProvider.getTransactionReceipt(txHash);
+                await this.__providers.rpcProvider.getTransactionReceipt(txHash);
             let returnValue: ChainStatus = ChainStatus.Unknown;
             if (txnReceipt.status === 1) {
                 returnValue = ChainStatus.Completed;
@@ -515,11 +522,16 @@ export class EvmConnect {
             const token = this.getToken(tokenSymbol)!;
 
             if (token.supportedDestination) {
-                if (!token.supportedDestination.includes(destination)) {
+                console.log({ sd: token.supportedDestination });
+                if (!token.supportedDestination.map(x => x.toLowerCase()).includes(destination.toLowerCase())) {
                     throw new Error(
                         "[EvmConnect] Token unsupported on destination chain."
                     );
                 }
+            }
+
+            if (!token.address) {
+                throw new Error("[EvmConnect] Token address not found.");
             }
 
             const depositAddress = this.getAddress("depositWallet");
@@ -682,11 +694,24 @@ export class EvmConnect {
      * Retrieves the token configuration (V1)for a given token symbol.
      *
      * @param {string} tokenSymbol - The symbol of the token.
-     * @returns {BridgeTokenConfig | undefined} - The token configuration corresponding to the token symbol, or undefined if not found.
      */
-    public getToken(tokenSymbol: string): BridgeTokenConfig | undefined {
+    public getToken(tokenSymbol: string) {
+        return this.isValidV2Token(tokenSymbol) ? this.getV2Token(tokenSymbol) : this.getV1Token(tokenSymbol);
+    }
+
+    private getV1Token(tokenSymbol: string): BridgeTokenConfig | undefined {
         return BridgeTokens.getToken(this.__network, tokenSymbol) as
             | BridgeTokenConfig
             | undefined;
+    }
+
+    private getV2Token(tokenSymbol: string) {
+        const token = BridgeV2Tokens.getTokenConfig(this.network, tokenSymbol);
+        if (!token) throw new Error("Token v2 not found");
+        const chainConfig = BridgeV2Tokens.getTokenConfigChild(token, this.network);
+        return {
+            ...chainConfig,
+            supportedDestination: token?.chains.map((c) => c.chain) as BridgeNetworks[],
+        }
     }
 }

@@ -8,7 +8,7 @@ import {
 } from "@glitter-finance/sdk-core";
 import { PublicKey } from "@solana/web3.js";
 import { BigNumber as BigNumberJS } from "bignumber.js";
-import { Signer } from "ethers";
+import { Signer, ethers } from 'ethers';
 import { EvmNetworks } from "../wallets/Chains";
 
 export class EVMBridge {
@@ -25,19 +25,21 @@ export class EVMBridge {
     }
 
     private async fromTokenUnits(
-        amount: number,
+        amount: number | ethers.BigNumber,
         decimals: number
-    ): Promise<number> {
+    ): Promise<number | string> {
         const bigNumberDecimals = new BigNumberJS(10).pow(decimals);
-        return new BigNumberJS(amount).div(bigNumberDecimals).toNumber();
+        if (typeof amount === "number") {
+            return new BigNumberJS(amount).div(bigNumberDecimals).toNumber();
+        }
+        return ethers.utils.formatUnits(amount, decimals);
     }
 
-    private async toTokenUnits(
-        amount: number,
+    private toTokenUnits(
+        amount: number | string,
         decimals: number
-    ): Promise<BigNumberJS> {
-        const bigNumberDecimals = new BigNumberJS(10).pow(decimals);
-        return new BigNumberJS(amount).multipliedBy(bigNumberDecimals);
+    ): ethers.BigNumber {
+        return ethers.utils.parseUnits(amount.toString(), decimals)
     }
 
     /**
@@ -47,14 +49,9 @@ export class EVMBridge {
      * @param signer
      */
     public async approve(tokenSymbol: string, amount: number, signer: Signer) {
-        const token = this.sdk[this.network]?.config.tokens.find(
-            (x) => x.symbol.toLowerCase() === tokenSymbol.toLowerCase()
-        );
-        let bigNumber = new BigNumberJS(0);
-        if (token) {
-            bigNumber = await this.toTokenUnits(amount, token.decimals);
-        }
-        console.log("Token", token, amount, bigNumber.toString());
+        const token = await this.getToken(tokenSymbol)
+        const bigNumber = token?.decimals ? this.toTokenUnits(amount, token.decimals) : new BigNumberJS(0);
+        console.log(`BridgeApprove: ${tokenSymbol}, ${bigNumber.toString()}`)
         return this.sdk[this.network]?.approveTokensForBridge(
             tokenSymbol,
             bigNumber.toString(),
@@ -86,14 +83,9 @@ export class EVMBridge {
         toWalletAddress: string | PublicKey,
         signer: Signer
     ) {
-        const token = this.sdk[this.network]?.config.tokens.find(
-            (x) => x.symbol.toLowerCase() === tokenSymbol.toLowerCase()
-        );
-        let bigNumber = new BigNumberJS(0);
-        if (token) {
-            bigNumber = await this.toTokenUnits(amount, token.decimals);
-        }
-        console.log("Token", token, amount, bigNumber.toString());
+        const token = await this.getToken(tokenSymbol)
+        const bigNumber = token?.decimals ? this.toTokenUnits(amount, token.decimals) : new BigNumberJS(0);
+
         return this.sdk[this.network]?.bridge(
             toWalletAddress,
             toNetwork,
@@ -105,19 +97,18 @@ export class EVMBridge {
 
     /**
      * Getting token balances by wallet address
-     * @param signerAddress
+     * @param {string} signerAddress
      * 
      * @returns Promise<Array<{token: string, balance: number}>>
      */
     public async getBalances(signerAddress: string) {
         const tokens = this.getTokens();
-        console.log({ tokens: tokens.map(x => x.symbol) });
         if (!tokens) return [];
         const balanceBatch = tokens.map(async (x) => {
             const bigNumber = await this.sdk[this.network]?.getTokenBalanceOnNetwork(
                 x.symbol,
                 signerAddress
-            ).then(bn => bn.toNumber());
+            );
             const decimals = x.decimals;
             const balance = bigNumber
                 ? await this.fromTokenUnits(

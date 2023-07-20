@@ -186,7 +186,7 @@ export const config: GlitterBridgeConfig = {
         },
         [BridgeNetworks.Arbitrum]: {
             bridge: "",
-            rpcUrl: "https://rpc.ankr.com/arbitrum	",
+            rpcUrl: "https://rpc.ankr.com/arbitrum",
             tokens: [],
             depositWallet: "",
             releaseWallet: "",
@@ -195,7 +195,7 @@ export const config: GlitterBridgeConfig = {
         },
         [BridgeNetworks.Binance]: {
             bridge: "",
-            rpcUrl: "",
+            rpcUrl: "https://bsc-dataseed4.binance.org",
             tokens: [],
             depositWallet: "",
             releaseWallet: "",
@@ -204,7 +204,7 @@ export const config: GlitterBridgeConfig = {
         },
         [BridgeNetworks.Zkevm]: {
             bridge: "",
-            rpcUrl: "",
+            rpcUrl: "https://zkevm-rpc.com",
             tokens: [],
             depositWallet: "",
             releaseWallet: "",
@@ -213,7 +213,7 @@ export const config: GlitterBridgeConfig = {
         },
         [BridgeNetworks.Optimism]: {
             bridge: "",
-            rpcUrl: "",
+            rpcUrl: "https://rpc.ankr.com/optimism",
             tokens: [],
             depositWallet: "",
             releaseWallet: "",
