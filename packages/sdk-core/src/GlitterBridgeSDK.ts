@@ -233,17 +233,15 @@ export class GlitterBridgeSDK {
         return this;
     }
 
-    private getV2EvmTokens(network: BridgeEvmNetworks) {
+    private getV2EvmTokens(network: BridgeEvmNetworks): Token2ChainConfig[] {
         const tokenList = BridgeV2Tokens.getTokenList();
-        const output: Token2ChainConfig[] = [];
-        tokenList?.forEach(x => {
+        return tokenList?.reduce((acc, x) => {
             const inNetwork = x.chains.find(chain => chain.chain.toLowerCase() === network.toLowerCase());
             if (inNetwork) {
-                output.push(inNetwork);
+                acc.push(inNetwork);
             }
-        })
-
-        return output;
+            return acc;
+        }, [] as Token2ChainConfig[]) ?? [];
     }
 
     /**
