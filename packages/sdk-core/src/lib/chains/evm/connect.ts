@@ -272,11 +272,62 @@ export class EvmConnect {
         if (!this.isValidToken(tokenSymbol) && !this.isValidV2Token(tokenSymbol))
             return Promise.reject("[EvmConnect] Unsupported token symbol.");
 
+        if (this.isValidV2Token(tokenSymbol)) {
+            // DO THE V2 APPROVAL
+            return await this.v2Approve({ tokenSymbol, amount, signer })
+        }
+        // DO the v1 Approval
         const bridgeAddress = this.getAddress("bridge");
         const tokenAddress = this.getAddress("tokens", tokenSymbol);
 
         const token = ERC20__factory.connect(tokenAddress, signer);
         return await token.approve(bridgeAddress, amount);
+    }
+
+    async v2Approve({ tokenSymbol, amount, signer }: { amount: ethers.BigNumber | string; tokenSymbol: string; signer: ethers.Signer }) {
+        const chainToken = this.getV2Token(tokenSymbol);
+        if (!chainToken) return Promise.reject("[EvmConnect] Unknown chainToken.");
+        const { vault_type, vault_address, address } = chainToken
+        if (!vault_type || !vault_address || !address)
+            throw new Error("missing token config");
+
+        // estimate gas price
+        const { gasPrice, maxFeePerGas, maxPriorityFeePerGas } =
+            await this.provider.getFeeData();
+        if (!gasPrice) {
+            throw new Error("cannot estimate gas costs");
+        }
+        console.log(
+            `Current gas price is ${gasPrice.div(10 ** 9).toString()} gwei`
+        );
+        console.log(
+            `Current maxFeePerGas is ${maxFeePerGas?.div(10 ** 9).toString()} gwei`
+        );
+        console.log(
+            `Current maxPriorityFeePerGas is ${maxPriorityFeePerGas
+                ?.div(10 ** 9)
+                .toString()} gwei`
+        );
+
+        if (vault_type !== "outgoing" && vault_type !== "incoming") throw new Error("invalid vault type");
+        // outgoing vaults are a wrapper of erc20 tokens
+        // For spending tokens, they need to get approved as a spender of the amount of token from the user account.
+        console.log("Approving vault as a token spender");
+        const erc20Contract = Erc20Abi__factory.connect(address, signer);
+        if (
+            this.network == BridgeNetworks.Polygon ||
+            !maxFeePerGas ||
+            !maxPriorityFeePerGas
+        ) {
+            return await erc20Contract.approve(vault_address, amount, {
+                gasPrice,
+            });
+        } else {
+            return await erc20Contract.approve(vault_address, amount, {
+                maxFeePerGas,
+                maxPriorityFeePerGas,
+            });
+        }
     }
 
     /**
@@ -293,6 +344,10 @@ export class EvmConnect {
         if (!this.isValidToken(tokenSymbol) && !this.isValidV2Token(tokenSymbol))
             return Promise.reject("Unsupported token symbol.");
 
+        if (this.isValidV2Token(tokenSymbol)) {
+            return await this.getV2Allowance(tokenSymbol, signer);
+        }
+        // V1 Allowance
         const tokenAddress = this.getAddress("tokens", tokenSymbol);
         const usdc = ERC20__factory.connect(tokenAddress, signer);
 
@@ -302,6 +357,26 @@ export class EvmConnect {
         );
 
         return allowance;
+    }
+
+    async getV2Allowance(tokenSymbol: string, signer: ethers.Signer) {
+        const chainToken = this.getV2Token(tokenSymbol);
+        if (!chainToken) return Promise.reject("[EvmConnect] Unknown chainToken.");
+        const { vault_type, vault_address, address } = chainToken
+        if (!vault_type || !vault_address || !address)
+            throw new Error("missing token config");
+
+        if (vault_type === "outgoing") {
+            // outgoing vaults are a wrapper of erc20 tokens
+            // For spending tokens, they need to get approved as a spender of the amount of token from the user account.
+            const erc20Contract = Erc20Abi__factory.connect(address, signer);
+            return await erc20Contract.allowance(
+                await signer.getAddress(),
+                vault_address,
+            );
+        }
+
+        return ethers.utils.parseEther("0");
     }
 
     /**
@@ -474,6 +549,7 @@ export class EvmConnect {
         v2?: boolean,
         protocolId?: number
     ): Promise<ethers.ContractTransaction> {
+        v2 ||= this.isValidV2Token(tokenSymbol);
         try {
             const signerAddress = await signer.getAddress();
             const isCorrectChain = await this.isCorrectChain(signer);
@@ -619,32 +695,6 @@ export class EvmConnect {
                 ?.div(10 ** 9)
                 .toString()} gwei`
         );
-
-        if (vault_type === "outgoing") {
-            // outgoing vaults are a wrapper of erc20 tokens
-            // For spending tokens, they need to get approved as a spender of the amount of token from the user account.
-            console.log("Approving vault as a token spender");
-            const erc20Contract = Erc20Abi__factory.connect(address, signer);
-            let approvalTx;
-            if (
-                this.network == BridgeNetworks.Polygon ||
-                !maxFeePerGas ||
-                !maxPriorityFeePerGas
-            ) {
-                approvalTx = await erc20Contract.approve(vault_address, amount, {
-                    gasPrice,
-                });
-            } else {
-                approvalTx = await erc20Contract.approve(vault_address, amount, {
-                    maxFeePerGas,
-                    maxPriorityFeePerGas,
-                });
-            }
-            // Wait for 2 confirmations before proceeding with the deposit
-            await approvalTx.wait(2);
-            console.log("Approval confirmed");
-        } else if (vault_type !== "incoming")
-            throw new Error(`ìnvalid vault type ${vault_type}`);
 
         console.log("Calling deposit function");
         const depositArgs = [

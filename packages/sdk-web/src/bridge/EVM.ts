@@ -51,7 +51,7 @@ export class EVMBridge {
     public async approve(tokenSymbol: string, amount: number, signer: Signer) {
         const token = await this.getToken(tokenSymbol)
         const bigNumber = token?.decimals ? this.toTokenUnits(amount, token.decimals) : new BigNumberJS(0);
-        console.log(`BridgeApprove: ${tokenSymbol}, ${bigNumber.toString()}`)
+
         return this.sdk[this.network]?.approveTokensForBridge(
             tokenSymbol,
             bigNumber.toString(),
@@ -91,7 +91,7 @@ export class EVMBridge {
             toNetwork,
             tokenSymbol,
             bigNumber.toString(),
-            signer
+            signer,
         );
     }
 
