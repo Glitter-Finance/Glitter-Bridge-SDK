@@ -121,9 +121,9 @@ const _abi = [
       },
       {
         indexed: false,
-        internalType: "uint8",
+        internalType: "uint16",
         name: "feeRate",
-        type: "uint8",
+        type: "uint16",
       },
       {
         indexed: false,
@@ -217,9 +217,9 @@ const _abi = [
     inputs: [
       {
         indexed: false,
-        internalType: "uint8",
+        internalType: "uint16",
         name: "_maxFeeRate",
-        type: "uint8",
+        type: "uint16",
       },
     ],
     name: "SetMaxFeeRate",
@@ -428,9 +428,9 @@ const _abi = [
     name: "maxFeeRate",
     outputs: [
       {
-        internalType: "uint8",
+        internalType: "uint16",
         name: "",
-        type: "uint8",
+        type: "uint16",
       },
     ],
     stateMutability: "view",
@@ -554,9 +554,9 @@ const _abi = [
         type: "uint256",
       },
       {
-        internalType: "uint8",
+        internalType: "uint16",
         name: "_feeRate",
-        type: "uint8",
+        type: "uint16",
       },
       {
         internalType: "bytes32",
@@ -592,9 +592,9 @@ const _abi = [
   {
     inputs: [
       {
-        internalType: "uint8",
+        internalType: "uint16",
         name: "_maxFeeRate",
-        type: "uint8",
+        type: "uint16",
       },
     ],
     name: "setMaxFeeRate",

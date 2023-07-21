@@ -48,11 +48,10 @@ module.exports = {
     indent: ["warn", 4, { SwitchCase: 1 }],
     "comma-spacing": ["warn", { before: false, after: true }],
     "no-multi-spaces": "warn",
-    "object-curly-spacing": ["warn", "never"],
     "array-bracket-spacing": ["warn", "never"],
     "space-in-parens": ["warn", "never"],
     "object-curly-spacing": ["warn", "always"],
-
+    "space-infix-ops": ["warn", { "int32Hint": false }],
     "jsdoc/check-alignment": 1, // Recommended
 
   },
