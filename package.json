@@ -15,7 +15,7 @@
     "release:web": "yarn workspace @glitter-finance/sdk-core build && yarn workspace @glitter-finance/sdk-web build && npx lerna publish",
     "build:server": "npm run build -w ./packages/sdk-server",
     "release:server": "yarn workspace @glitter-finance/sdk-core build && yarn workspace @glitter-finance/sdk-server build && npx lerna publish",
-    "release:all": "yarn workspace @glitter-finance/sdk-core build && yarn workspace @glitter-finance/sdk-web && yarn workspace @glitter-finance/sdk-server build && npx lerna publish",
+    "release:all": "yarn workspace @glitter-finance/sdk-core build && yarn workspace @glitter-finance/sdk-web build && yarn workspace @glitter-finance/sdk-server build && npx lerna publish",
     "test:core": "yarn workspace @glitter-finance/sdk-core build && yarn workspace @glitter-finance/sdk-integration-tests test",
     "example:server-solana": "npm run example:solana -w ./packages/examples",
     "docs": "npx typedoc --entryPointStrategy packages . --out docs"
