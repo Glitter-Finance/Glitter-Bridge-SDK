@@ -161,7 +161,7 @@
             "asset_symbol": "NOSEC",
             "coingecko_id": "",
             "cmc_id": "",
-            "asset_bridge_fee": 0.015,
+            "asset_bridge_fee": 0.001,
             "chains": [
                 {
                     "chain": "Ethereum",
