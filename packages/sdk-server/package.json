@@ -21,7 +21,7 @@
   "bugs": {
     "url": "https://github.com/Glitter-Finance/SDK/issues"
   },
-  "homepage": "https://github.com/Glitter-Finance/SDK/tree/main/packages/server#readme",
+  "homepage": "https://github.com/Glitter-Finance/SDK/tree/main/packages/sdk-server",
   "devDependencies": {
     "@types/jest": "^29.4.0",
     "@types/node": "^18.15.3",
@@ -57,7 +57,7 @@
   },
   "typedoc": {
     "entryPoint": "./src/index.ts",
-    "readmeFile": "./redme.md",
+    "readmeFile": "./README.md",
     "displayName": "Glitter-SDK-Server",
     "tsconfig": "./tsconfig.json"
   },

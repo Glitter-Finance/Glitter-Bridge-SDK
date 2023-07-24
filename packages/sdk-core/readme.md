@@ -1,8 +1,8 @@
-# @glitter-finance/sdk-core
+<p align="center">
+  <img src="https://uploads-ssl.webflow.com/6192268c5227a1c40c9ba3b0/636d358e04bd2d6007a20cee_glitter-logo-trans-nov-1-p-500.png" alt= “box-dev-logo” width="30%" height="50%">
+</p>
 
-Typescript/Javascript SDK to bridge tokens using Glitter architecture.
-
-For full documentation, please visit [Glitter Finance Docs](https://6433e9a86502fb78caa76faa--lucky-kulfi-2e833e.netlify.app/)
+# Glitter Finance Core SDK
 
 ## Examples
 

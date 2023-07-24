@@ -13,7 +13,7 @@
 // // eslint-disable-next-line @typescript-eslint/no-var-requires
 // const yargs = require("yargs");
 
-// import {} from "@solana/web3.js";
+// import { } from "@solana/web3.js";
 
 // //Demo Parameters
 // let SPEED = 0.85;
@@ -33,7 +33,7 @@
 //     .option("speed", {
 //         alias: "s",
 //         description:
-//       "Speed of demo.  1 = normal speed, 0.5 = half speed, 2 = double speed",
+//             "Speed of demo.  1 = normal speed, 0.5 = half speed, 2 = double speed",
 //         type: "number",
 //     })
 //     .help().argv;
@@ -83,14 +83,14 @@
 //     console.log("");
 //     console.log(
 //         "While in realtime, we don't know what the current Txn is, for this example that's set in the past," +
-//       " we will assume that the current time is just before the 25th txn in the cached list : " +
-//       SOLANA_CACHED_TXIDS[0]
+//         " we will assume that the current time is just before the 25th txn in the cached list : " +
+//         SOLANA_CACHED_TXIDS[0]
 //     );
 //     await Sleep(6500 / SPEED);
 //     console.log("");
 //     console.log(
 //         "The last cached TxnID is: " +
-//       SOLANA_CACHED_TXIDS[SOLANA_CACHED_TXIDS.length - 1]
+//         SOLANA_CACHED_TXIDS[SOLANA_CACHED_TXIDS.length - 1]
 //     );
 //     await Sleep(2500 / SPEED);
 
