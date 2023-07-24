@@ -1,5 +1,5 @@
 import { BridgeNetworks } from "../networks";
-import { Token2Config, Token2ConfigList, Token2ChainConfig, } from "./types";
+import { Token2ChainConfig, Token2Config, Token2ConfigList, } from "./types";
 
 /**
  * Class representing the BridgeV2 tokens.
@@ -48,7 +48,7 @@ export class BridgeV2Tokens {
             //Passed in network:
             for (const token of this._tokenConfig?.tokens ?? []) {
                 for (const chain of token.chains ?? []) {
-                    if (chain.chain.toLowerCase() === (nativeSymbolOrNetwork as BridgeNetworks).toString().toLowerCase() && chain.symbol == localSymbolOrUndefined) {
+                    if (chain.chain.toLowerCase() === (nativeSymbolOrNetwork as BridgeNetworks).toString().toLowerCase() && chain.symbol.toLowerCase() == localSymbolOrUndefined.toLowerCase()) {
                         return token;
                     }
                 }

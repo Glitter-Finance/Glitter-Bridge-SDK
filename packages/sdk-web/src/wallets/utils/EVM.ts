@@ -3,7 +3,12 @@ import { Chains } from "../Chains";
 export enum EVMChain {
   ethereum = "ethereum",
   polygon = "polygon",
-  avalanche = "avalanche"
+  avalanche = "avalanche",
+  arbitrum = "arbitrum",
+  optimism = "optimism",
+  zkevm = "zkevm",
+  bsc = "bsc",
+
 }
 
 export const EVMRPCUrls = {
@@ -13,4 +18,5 @@ export const EVMRPCUrls = {
   [Chains.ARBITRUM as number]: ["https://rpc.ankr.com/arbitrum"],
   [Chains.ZKEVM as number]: ["https://rpc.ankr.com/polygon_zkevm"],
   [Chains.OPTIMISM as number]: ["https://rpc.ankr.com/optimism"],
+  [Chains.BSC as number]: ["https://bsc-dataseed.binance.org"]
 }

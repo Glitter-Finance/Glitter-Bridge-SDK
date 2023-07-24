@@ -1,3 +1,5 @@
+import { BridgeEvmNetworks, BridgeNetworks } from "@glitter-finance/sdk-core";
+import { AlgorandBridge, ChainNames, EVMBridge, SolanaBridge } from "@glitter-finance/sdk-web";
 import {
     Alert,
     Box,
@@ -10,17 +12,15 @@ import {
     Stack, TextField,
     Typography
 } from "@mui/material";
-import Item from "../Item";
-import React, {useEffect, useState} from "react";
-import {useSelectors} from "../store/selectors";
-import {AlgorandBridge, ChainNames, EVMBridge, SolanaBridge} from "@glitter-finance/sdk-web";
-import {BridgeMapping, RPC_URL} from "../store/type";
-import {ethers} from "ethers";
-import {toast} from 'react-toastify';
-import {ADD_SOURCE_WALLET, CONNECT_WALLET_MODAL, UPDATE_TRANSACTION_STATUS} from "../store/actionTypes";
-import {useCallbacks} from "../store/callbacks";
 import axios from "axios";
-import { BridgeNetworks, BridgeEvmNetworks } from "@glitter-finance/sdk-core";
+import { ethers } from "ethers";
+import React, { useEffect, useState } from "react";
+import { toast } from 'react-toastify';
+import Item from "../Item";
+import { ADD_SOURCE_WALLET, CONNECT_WALLET_MODAL, UPDATE_TRANSACTION_STATUS } from "../store/actionTypes";
+import { useCallbacks } from "../store/callbacks";
+import { useSelectors } from "../store/selectors";
+import { BridgeMapping, RPC_URL } from "../store/type";
 
 function Bridge() {
     const {walletConnect, transactionStatus, saveWallet} = useCallbacks();
@@ -53,7 +53,6 @@ function Bridge() {
     }
 
     const checkForOptIn = async (tokenSymbol: string) => {
-        console.log(tokenSymbol, wallet.destinationNetworkName);
         if (wallet.destinationNetworkName === ChainNames.SOLANA || wallet.destinationNetworkName === ChainNames.ALGORAND) {
             const bridge = wallet.destinationNetworkName === ChainNames.SOLANA ? new SolanaBridge(RPC_URL) : new AlgorandBridge();
             const exists = await bridge.optInAccountExists(wallet.destinationWalletAddress as string, tokenSymbol.toLowerCase());

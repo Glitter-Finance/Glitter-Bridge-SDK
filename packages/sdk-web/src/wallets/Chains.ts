@@ -1,3 +1,5 @@
+import { BridgeNetworks } from '@glitter-finance/sdk-core';
+
 enum EVMChains {
   ETHEREUM = 1,
   ETHEREUM_ROPSTEN = 3,
@@ -23,19 +25,29 @@ enum NonEVMChains {
   TRON = 1234
 }
 
-export enum ChainNames {
-  ALGORAND = "Algorand",
-  SOLANA = "Solana",
-  ETHEREUM = "ethereum",
-  POLYGON = "polygon",
-  AVALANCHE = "avalanche",
-  TRON = "tron",
-  ARBITRUM = "arbitrum",
-  OPTIMISM = "optimism",
-  ZKEVM = "zkEVM",
-  BSC = "BNB",
-}
+export  const ChainNames = {
+  ALGORAND : BridgeNetworks.algorand,
+  SOLANA : BridgeNetworks.solana,
+  ETHEREUM : BridgeNetworks.Ethereum,
+  POLYGON : BridgeNetworks.Polygon,
+  AVALANCHE : BridgeNetworks.Avalanche,
+  TRON : BridgeNetworks.TRON,
+  ARBITRUM : BridgeNetworks.Arbitrum,
+  OPTIMISM : BridgeNetworks.Optimism,
+  ZKEVM : BridgeNetworks.Zkevm,
+  BSC : BridgeNetworks.Binance,
+} as const;
 
+
+export const EvmNetworks = [
+    BridgeNetworks.Avalanche, 
+    BridgeNetworks.Ethereum,
+    BridgeNetworks.Polygon, 
+    BridgeNetworks.Arbitrum,
+    BridgeNetworks.Binance,
+    BridgeNetworks.Optimism,
+    BridgeNetworks.Zkevm
+];
 export const ChainNativeCurrency = {
     [EVMChains.AVALANCHE.toString()]: {
         name: "AVAX",

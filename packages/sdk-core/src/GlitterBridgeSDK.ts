@@ -1,3 +1,6 @@
+import { mainnetConfig, mainnetTokenConfig, testnetConfig, testnetTokenConfig } from "./config";
+import { testnetAPI } from "./config/testnet-api";
+import { Token2ChainConfig, Token2Config } from "./lib";
 import { AlgorandConnect } from "./lib/chains/algorand";
 import { EvmConnect } from "./lib/chains/evm";
 import { LoadSolanaSchema, SolanaConnect } from "./lib/chains/solana";
@@ -6,12 +9,9 @@ import {
     BridgeEvmNetworks,
     BridgeNetworks,
 } from "./lib/common/networks";
-import { mainnetConfig, testnetConfig, mainnetTokenConfig, testnetTokenConfig } from "./config";
-import { ChainRPCConfig, ChainRPCConfigs, GlitterBridgeConfig, GlitterEnvironment } from "./types";
-import { BridgeV2Tokens } from "./lib/common/tokens/BridgeV2Tokens";
-import { testnetAPI } from "./config/testnet-api";
-import { Token2Config } from "./lib";
 import { TokenPricing } from "./lib/common/pricing/tokenPricing";
+import { BridgeV2Tokens } from "./lib/common/tokens/BridgeV2Tokens";
+import { ChainRPCConfig, ChainRPCConfigs, GlitterBridgeConfig, GlitterEnvironment } from "./types";
 
 /**
  * GlitterBridgeSDK
@@ -36,7 +36,7 @@ export class GlitterBridgeSDK {
     private _solana: SolanaConnect | undefined;
     private _tron: TronConnect | undefined;
     private _pricing: TokenPricing | undefined;
-    
+
     /**
      * Sets the environment for the Glitter Bridge SDK.
      *
@@ -48,7 +48,7 @@ export class GlitterBridgeSDK {
 
         switch (environment) {
             case GlitterEnvironment.mainnet:
-                this._bridgeConfig = mainnetConfig;                
+                this._bridgeConfig = mainnetConfig;
                 BridgeV2Tokens.loadConfig(mainnetTokenConfig);
                 break;
             case GlitterEnvironment.testnet:
@@ -82,7 +82,7 @@ export class GlitterBridgeSDK {
      * @param {ChainRPCConfigs} [rpcListOverride] - Optional custom RPC configurations to override the default RPC configurations for the networks.
      * @returns {GlitterBridgeSDK} The connected GlitterBridgeSDK instance.
      */
-    public connect(networks: BridgeNetworks[], rpcListOverride?:ChainRPCConfigs): GlitterBridgeSDK {
+    public connect(networks: BridgeNetworks[], rpcListOverride?: ChainRPCConfigs): GlitterBridgeSDK {
 
         if (rpcListOverride) this._rpcList = rpcListOverride;
         TokenPricing.loadConfig(this._rpcList?.CMC_API || "");
@@ -93,10 +93,10 @@ export class GlitterBridgeSDK {
         });
 
         networks.forEach((network) => {
-           
+
             //Get rpcoverride for the network
             this._rpcOverrides[network] = this._rpcList?.chainAPIs.find((chain) => chain.network.toLocaleLowerCase() === network.toLocaleLowerCase())?.RPC || this._rpcOverrides[network];
-           
+
             /**
              * TODO: Have a single method
              * for each chain e.g
@@ -121,7 +121,8 @@ export class GlitterBridgeSDK {
                 case BridgeNetworks.TRON:
                     this.connectToTron();
                     break;
-            }});
+            }
+        });
 
         return this;
     }
@@ -134,7 +135,7 @@ export class GlitterBridgeSDK {
      * @returns {void}
      */
     private preInitializeChecks(network: BridgeNetworks) {
-        if (!this._bridgeConfig) throw new Error("Glitter environment not set");
+        if (!this._bridgeConfig || !BridgeV2Tokens.isLoaded) throw new Error("Glitter environment not set");
         /**
          * TODO: have config keys in such
          * a way that we directly check
@@ -160,8 +161,8 @@ export class GlitterBridgeSDK {
      */
     private connectToTron(): GlitterBridgeSDK {
         this.preInitializeChecks(BridgeNetworks.TRON);
-        
-        if (this._rpcOverrides[BridgeNetworks.TRON]) {  
+
+        if (this._rpcOverrides[BridgeNetworks.TRON]) {
             this._bridgeConfig!.tron.fullNode = this._rpcOverrides[BridgeNetworks.TRON];
             this._bridgeConfig!.tron.solidityNode = this._rpcOverrides[BridgeNetworks.TRON];
             this._bridgeConfig!.tron.eventServer = this._rpcOverrides[BridgeNetworks.TRON];
@@ -200,7 +201,7 @@ export class GlitterBridgeSDK {
      */
     private connectToSolana(): GlitterBridgeSDK {
         this.preInitializeChecks(BridgeNetworks.solana);
-        
+
         LoadSolanaSchema();
 
         if (this._rpcOverrides[BridgeNetworks.solana]) {
@@ -222,14 +223,25 @@ export class GlitterBridgeSDK {
         this.preInitializeChecks(network);
 
         if (this._rpcOverrides[network]) {
-      this._bridgeConfig!.evm[network].rpcUrl = this._rpcOverrides[network];
+            this._bridgeConfig!.evm[network].rpcUrl = this._rpcOverrides[network];
         }
 
         this._evm.set(
             network,
-            new EvmConnect(network, this._bridgeConfig!.evm[network])
+            new EvmConnect(network, this._bridgeConfig!.evm[network], this.getV2EvmTokens(network))
         );
         return this;
+    }
+
+    private getV2EvmTokens(network: BridgeEvmNetworks): Token2ChainConfig[] {
+        const tokenList = BridgeV2Tokens.getTokenList();
+        return tokenList?.reduce((acc, x) => {
+            const inNetwork = x.chains.find(chain => chain.chain.toLowerCase() === network.toLowerCase());
+            if (inNetwork) {
+                acc.push(inNetwork);
+            }
+            return acc;
+        }, [] as Token2ChainConfig[]) ?? [];
     }
 
     /**
@@ -242,7 +254,7 @@ export class GlitterBridgeSDK {
         let connect = this._evm.get(evmNetwork);
         if (!connect) {
             //loop through all evm networks enum values
-            
+
             Object.values(BridgeNetworks).forEach((network) => {
                 if (network.toLocaleLowerCase() === evmNetwork.toLocaleLowerCase()) {
                     connect = this._evm.get(network as BridgeEvmNetworks);
@@ -358,7 +370,7 @@ export class GlitterBridgeSDK {
      *
      * @returns {ChainRPCConfigs | undefined} - The RPC list configuration or undefined if not available.
      */
-    get rpcList(): ChainRPCConfigs|undefined {
+    get rpcList(): ChainRPCConfigs | undefined {
         return this._rpcList;
     }
 
@@ -368,19 +380,19 @@ export class GlitterBridgeSDK {
      * @param {string | BridgeNetworks} chainOrName - The chain name or BridgeNetworks value.
      * @returns {number} - The number of confirmations required.
      */
-    public confirmationsRequired(chainName: string): number 
-    public confirmationsRequired(chain: string): number 
+    public confirmationsRequired(chainName: string): number
+    public confirmationsRequired(chain: string): number
     public confirmationsRequired(chainOrName: BridgeNetworks): number {
 
         const confirmations = this._bridgeConfig?.confirmations[chainOrName] || 0;
         if (confirmations > 0) return confirmations;
-        
+
         //parse through confirmation pairs
         for (const [chain, localconfirmations] of Object.entries(this._bridgeConfig?.confirmations || {})) {
             if (chain.toLowerCase() === chainOrName.toLowerCase()) {
                 return localconfirmations;
             }
-        }       
+        }
 
         return 0;
     }
@@ -391,9 +403,9 @@ export class GlitterBridgeSDK {
      * @param {string | BridgeNetworks} chainOrName - The chain name or BridgeNetworks value.
      * @returns {Token2Config | undefined} - The gas token configuration, or undefined if not found.
      */
-    public gasToken(chainName: string): Token2Config 
-    public gasToken(chain: string): Token2Config 
-    public gasToken(chainOrName: BridgeNetworks): Token2Config|undefined {
+    public gasToken(chainName: string): Token2Config
+    public gasToken(chain: string): Token2Config
+    public gasToken(chainOrName: BridgeNetworks): Token2Config | undefined {
 
         //get gas token from config
         let gasToken = this._bridgeConfig?.gasTokens[chainOrName];
@@ -401,7 +413,7 @@ export class GlitterBridgeSDK {
             //parse through gas token pairs
             for (const [chain, localgasToken] of Object.entries(this._bridgeConfig?.gasTokens || {})) {
                 if (chain.toLowerCase() === chainOrName.toLowerCase()) {
-                    gasToken= localgasToken;
+                    gasToken = localgasToken;
                 }
             }
         }
@@ -411,7 +423,7 @@ export class GlitterBridgeSDK {
             gasTokenConfig = BridgeV2Tokens.getTokenConfigFromChildSymbol(gasToken || "");
         }
 
-        return gasTokenConfig;       
+        return gasTokenConfig;
     }
 
 }

@@ -1,7 +1,7 @@
-import {ChainNames} from "../Chains";
-import {Transaction} from "@solana/web3.js";
-import bs58 from "bs58"
-import {CodeStatus} from "../metamask/CodeStatusEnum";
+import { Transaction } from "@solana/web3.js";
+import bs58 from "bs58";
+import { ChainNames } from "../Chains";
+import { CodeStatus } from "../metamask/CodeStatusEnum";
 
 declare global {
     interface Window {
@@ -10,7 +10,7 @@ declare global {
 }
 
 export class Coin98 {
-    public chain: ChainNames.SOLANA | ChainNames.ETHEREUM | ChainNames.POLYGON | ChainNames.ALGORAND;
+    public chain: typeof ChainNames.SOLANA | typeof ChainNames.ETHEREUM | typeof ChainNames.POLYGON | typeof ChainNames.ALGORAND;
     public provider: any;
     public methods = {
         [ChainNames.SOLANA]: {
@@ -21,7 +21,7 @@ export class Coin98 {
         }
     }
 
-    constructor(chain: ChainNames.SOLANA | ChainNames.ETHEREUM | ChainNames.POLYGON | ChainNames.ALGORAND) {
+    constructor(chain:  typeof ChainNames.SOLANA |  typeof ChainNames.ETHEREUM |  typeof ChainNames.POLYGON |  typeof ChainNames.ALGORAND) {
         this.chain = chain;
         if (chain === ChainNames.SOLANA) {
             this.provider = window.coin98.sol;

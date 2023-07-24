@@ -248,7 +248,7 @@
                     "symbol": "EUROC",
                     "name": "Euro Coin",
                     "decimals": 6,
-                    "address": "0x1aBaEA1f7C830bD89Acc67eC4af516284b1bC33c",
+                    "address": "0xc891eb4cbdeff6e073e859e987815ed1505c2acd",
                     "min_transfer": 20
                 },
                 {
@@ -256,7 +256,7 @@
                     "symbol": "EUROC",
                     "name": "Euro Coin",
                     "decimals": 6,
-                    "address": "0xc891eb4cbdeff6e073e859e987815ed1505c2acd",
+                    "address": "0x1aBaEA1f7C830bD89Acc67eC4af516284b1bC33c",
                     "min_transfer": 20
                 }
             ]
