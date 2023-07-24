@@ -16,7 +16,7 @@ describe("Parsing Test", () => {
         sdk = new GlitterSDKServer(GlitterEnvironment.mainnet, mainnetAPI, 25);
 
         //Create Solana Poller
-        sdk.createPollers([BridgeNetworks.Optimism]);
+        sdk.createPollers([BridgeNetworks.Binance]);
 
         //local references for ease of use
         //poller = sdk.poller(BridgeNetworks.solana);
@@ -24,7 +24,7 @@ describe("Parsing Test", () => {
 
     //Default Cursor Test
     it("Parse Solana Txn", async () => {
-        const result = await sdk.parseTxnID(BridgeNetworks.Optimism, "0x2c8f3eb3164aa2ac9f16b65042be0fc1cbb457410c1d0ed242ac79ce555df29e", BridgeType.TokenV2);
+        const result = await sdk.parseTxnID(BridgeNetworks.Binance, "0x435a9b3f09077a9da92ea3c4706f1c2ea3b86b1c9bc9c68483014790c6fceebb", BridgeType.TokenV2);
         Promise.resolve();
     }, 120000);
 

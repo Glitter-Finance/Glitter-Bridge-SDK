@@ -29,7 +29,7 @@ export type TokenBridgeV2EventGroup = {
  * @property {"BridgeDeposit" | "BridgeRelease" | "BridgeRefund"} type - The type of the event.
  */
 export type TokenBridgeV2Event = {
-    nonce:BigNumber;
+    nonce: BigNumber;
     vault: string;
     amount: BigNumber;
     destinationAddress: string;
@@ -97,37 +97,50 @@ export class EvmBridgeV2EventsParser {
      * @returns {ethers.utils.LogDescription[]} The parsed log descriptions.
      */
     static parseLogs(eventLogs: ethers.providers.Log[]): ethers.utils.LogDescription[] {
-        try{
-            const bridgeContractinterface = new ethers.utils.Interface(EvmBridgeV2EventsParser.EventsABI_R1);
 
-            return eventLogs
+        const bridgeContractinterface1 = new ethers.utils.Interface(EvmBridgeV2EventsParser.EventsABI_R0);
+        const bridgeContractinterface2 = new ethers.utils.Interface(EvmBridgeV2EventsParser.EventsABI_R1);
+
+        //parse interface 1
+        let parsedLogs1 = undefined;
+        try {
+            parsedLogs1 = eventLogs
                 .map((log) => {
                     try {
-                        return bridgeContractinterface.parseLog(log);
+                        return bridgeContractinterface1.parseLog(log);
                     } catch (error) {
-                    //console.log("[EvmBridgeEvents] Unable to parse event logs.", error);
+                        //console.log("[EvmBridgeEvents] Unable to parse event logs.", error);
                         return null;
                     }
                 })
                 .filter((parsedLog) => !!parsedLog) as ethers.utils.LogDescription[];
-
         } catch (error) {
+        }
 
-            const bridgeContractinterface2 = new ethers.utils.Interface(EvmBridgeV2EventsParser.EventsABI_R0);
-
-            return eventLogs
+        //parse interface 2
+        let parsedLogs2 = undefined;
+        try {
+            parsedLogs2 = eventLogs
                 .map((log) => {
                     try {
                         return bridgeContractinterface2.parseLog(log);
                     } catch (error) {
-                    //console.log("[EvmBridgeEvents] Unable to parse event logs.", error);
+                        //console.log("[EvmBridgeEvents] Unable to parse event logs.", error);
                         return null;
                     }
                 })
                 .filter((parsedLog) => !!parsedLog) as ethers.utils.LogDescription[];
-
+        } catch (error) {
         }
-       
+
+        if (!parsedLogs1 && !parsedLogs2) throw Error("Unable to parse event logs.");
+        if (!parsedLogs1 && parsedLogs2) return parsedLogs2;
+        if (!parsedLogs2 && parsedLogs1) return parsedLogs1;
+
+        if ((parsedLogs1 && parsedLogs2) && parsedLogs1.length > parsedLogs2?.length) return parsedLogs1;
+        if (parsedLogs2) return parsedLogs2;
+        throw Error("Unable to parse event logs.");
+
     }
 
     /**
@@ -151,7 +164,7 @@ export class EvmBridgeV2EventsParser {
             type: "BridgeDeposit",
             protocolId,
         };
-    }   
+    }
 
     /**
      * Parses a release event from parsed logs.
