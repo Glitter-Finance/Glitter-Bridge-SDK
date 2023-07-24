@@ -1,35 +1,35 @@
-import { BridgeNetworks, BridgeType, GlitterEnvironment, Sleep } from "@glitter-finance/sdk-core";
-import { GlitterSolanaPoller } from "../../src/lib/chains/solana/poller.solana";
-import { GlitterPoller } from "../../src/lib/common/poller.Interface";
+import { BridgeNetworks, BridgeType, GlitterEnvironment } from "@glitter-finance/sdk-core";
+//import { GlitterPoller } from "../../src/lib/common/poller.Interface";
 import { GlitterSDKServer } from "../../src/glitterSDKServer";
-import * as assert from "assert";
-import * as util from "util";
+
+import { mainnetAPI as mainAPI, mainnetAPI } from "../config/mainnet-api"
 
 describe("Parsing Test", () => {
 
     //Initialize SDK
     let sdk: GlitterSDKServer;
-    let poller: GlitterPoller | undefined;
+    //let poller: GlitterPoller | undefined;
 
     //Before All tests -> create new SDK
     beforeAll(async () => {
         //Initialize SDK
-        sdk = new GlitterSDKServer(GlitterEnvironment.mainnet, undefined, 25);
+        sdk = new GlitterSDKServer(GlitterEnvironment.mainnet, mainnetAPI, 25);
 
         //Create Solana Poller
-        sdk.createPollers([BridgeNetworks.solana]);
+        sdk.createPollers([BridgeNetworks.Optimism]);
 
         //local references for ease of use
-        poller = sdk.poller(BridgeNetworks.solana);
+        //poller = sdk.poller(BridgeNetworks.solana);
     });
 
     //Default Cursor Test
     it("Parse Solana Txn", async () => {
-        const result = await sdk.parseTxnID(BridgeNetworks.solana, "bLgGh73VJK1S1ujA96j9GgS2r3HQzqtVpuDpuAU6roLyxWYKr1vTmaSHRcR8uyRjx9s2gjTbi1tinGdsiLqT8kT", BridgeType.TokenV1);
+        const result = await sdk.parseTxnID(BridgeNetworks.Optimism, "0x2c8f3eb3164aa2ac9f16b65042be0fc1cbb457410c1d0ed242ac79ce555df29e", BridgeType.TokenV2);
         Promise.resolve();
-    }, 120_000);
+    }, 120000);
 
     afterAll(async () => {
         console.log("Closing SDK");
     });
+
 });

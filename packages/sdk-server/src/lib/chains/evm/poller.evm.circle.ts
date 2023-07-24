@@ -72,6 +72,8 @@ export class EvmCircleParser {
             partialTxn = await this.handleDeposit(txnID, connect, txnReceipt, partialTxn, events);
         } else if (events.release) {
             partialTxn = await this.handleRelease(txnID, connect, txnReceipt, partialTxn, events);
+        } else if (events.transfer) {
+            partialTxn = await this.handleTransfer(txnID, connect, txnReceipt, partialTxn, events);
         } else {
             throw new Error("Unknown event type");
         }
@@ -291,6 +293,69 @@ export class EvmCircleParser {
         partialTxn.routing = routing;
 
         return Promise.resolve(partialTxn);
+    }
+
+    /**
+     * Handles a transfer transaction.
+     *
+     * @param {string} txnID - The transaction ID.
+     * @param {EvmConnect} connect - The EvmConnect instance.
+     * @param {TransactionReceipt} txn - The transaction receipt.
+     * @param {PartialBridgeTxn} partialTxn - The partial bridge transaction.
+     * @param {USDCBridgeEventGroup} events - The USDC bridge event group.
+     * @returns {Promise<PartialBridgeTxn>} A promise that resolves to a PartialBridgeTxn object.
+     */
+    static async handleTransfer(
+        txnID: string,
+        connect: EvmConnect,
+        txn: TransactionReceipt,
+        partialTxn: PartialBridgeTxn,
+        events: USDCBridgeEventGroup
+    ): Promise<PartialBridgeTxn> {
+
+        const decimals = 6;
+
+        //Get Addresses
+        let toAddress = txn.to;
+        let fromAddress = txn.from;        
+       
+        //Get transfer amount
+        if (events.transfer) {
+            fromAddress = events.transfer.from;
+            toAddress = events.transfer.to;
+            partialTxn.units = BigNumber(events.transfer.value.toString());
+            partialTxn.amount = RoutingHelper.ReadableValue_FromBaseUnits(partialTxn.units, decimals);  
+        } else {
+            throw new Error("No transfer event found");   
+        }
+
+        //get token:
+
+        let tokenSymbol = "USDC";
+        if (connect.network == BridgeNetworks.Ethereum) {
+            if (txn.to?.toString() == "0x1aBaEA1f7C830bD89Acc67eC4af516284b1bC33c" || 
+                txn.from?.toString() == "0x1aBaEA1f7C830bD89Acc67eC4af516284b1bC33c") tokenSymbol = "EUROC";
+        } else if (connect.network == BridgeNetworks.Avalanche) {
+            if (txn.to?.toString() == "0xC891EB4cbdEFf6e073e859e987815Ed1505c2ACD" ||
+                txn.from?.toString() == "0xC891EB4cbdEFf6e073e859e987815Ed1505c2ACD") tokenSymbol = "EUROC";
+        }
+        partialTxn.tokenSymbol = tokenSymbol;
+        partialTxn.baseSymbol = tokenSymbol;
+
+        const circleTreasury = connect.getAddress("circleTreasury").toLocaleLowerCase();
+        if (fromAddress.toLocaleLowerCase() == circleTreasury){
+            partialTxn.txnType = TransactionType.TransferEnd;
+            partialTxn.address = fromAddress;
+        } else if (toAddress.toLocaleLowerCase() == circleTreasury) {
+            partialTxn.txnType = TransactionType.TransferStart;
+            partialTxn.address = toAddress;
+        } else {
+            partialTxn.txnType = TransactionType.Transfer;
+            partialTxn.address = toAddress;
+        }
+
+        return Promise.resolve(partialTxn);
+        
     }
 
     /**

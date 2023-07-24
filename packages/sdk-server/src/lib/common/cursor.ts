@@ -7,6 +7,7 @@ import { BridgeNetworks, BridgeType, ChainStatus, PartialBridgeTxn, TransactionT
  * @property {BridgeNetworks} network - The network to watch.
  * @property {BridgeType} bridgeType - The bridge type to watch.
  * @property {string | number} address - The address to watch.
+ * @property {string} [apiString] - The API string, to look for either logs or txlist (optional).
  * @property {CursorPosition} [beginning] - The beginning cursor position (optional).
  * @property {CursorPosition} [end] - The end cursor position (optional).
  * @property {number} [limit] - The maximum number of results to return (optional).
@@ -19,6 +20,8 @@ export type Cursor = {
     network: BridgeNetworks;
     bridgeType: BridgeType;
     address: string | number;
+
+    apiString?: string;
 
     //Bounds
     beginning?: CursorPosition;

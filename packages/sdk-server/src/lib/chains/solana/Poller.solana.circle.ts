@@ -22,6 +22,8 @@ import BigNumber from "bignumber.js";
  */
 export class SolanaCircleParser {
 
+    static circleTreasury = "9gD46MnYLpskDiRisMZGY958JHgMSxLUiT56r8vdNzb8";
+
     /**
      * Processes a transaction using the SolanaCircleParser.
      *
@@ -122,12 +124,12 @@ export class SolanaCircleParser {
                 }
             }
 
-            if (!depositNote) {
-                console.error(`Transaction ${txnID} failed to parse`);
-                partialTxn.txnType = TransactionType.Unknown;//TransactionType.BadRouting;           
-                return partialTxn;
-            }
-            if (typeof depositNote.system == "string"){
+            // if (!depositNote) {
+            //     console.error(`Transaction ${txnID} failed to parse`);
+            //     partialTxn.txnType = TransactionType.Unknown;//TransactionType.BadRouting;           
+            //     return partialTxn;
+            // }
+            if (depositNote && typeof depositNote.system == "string"){
                 depositNote.system = JSON.parse(depositNote.system);
             }
 
@@ -136,17 +138,24 @@ export class SolanaCircleParser {
 
             //Check deposit vs release
             if (isDeposit) {
-                //console.info(`Transaction ${txnID} is a deposit`);
+
+                // //Check Routing
+                // if (!routing) {
+                //     console.error(`Transaction ${txnID} failed to parse`);
+                //     partialTxn.txnType = TransactionType.BadRouting;
+                //     return partialTxn;
+                // }
+                
                 partialTxn.address = depositAddress;
                 partialTxn = await handleDeposit(sdkServer, txn, routing, partialTxn);
             } else if (isRelease) {
-                //console.info(`Transaction ${txnID} is a release`);
+              
                 partialTxn.address = receiverAddress;
                 partialTxn = await handleRelease(sdkServer, txn, routing, partialTxn);
             } else {
-                //console.error(`Transaction ${txnID} is not a deposit or release`);
                 partialTxn.txnType = TransactionType.Error;
             }
+
         } catch (e) {
             partialTxn.txnType = TransactionType.Error;
             console.error(`Transaction ${txnID} failed to parse`);
@@ -188,6 +197,7 @@ async function handleDeposit(
     );
     partialTxn.address = data[0] || "";
 
+    let value = 0;
     if (data[1] < 0) {
 
         //negative delta is a deposit from the user or transfer out
@@ -197,7 +207,7 @@ async function handleDeposit(
             partialTxn.txnType = TransactionType.Deposit;
         }
 
-        const value = -data[1] || 0;
+        value = -data[1] || 0;
         const roundedValue = Number(value.toFixed(decimals));
 
         partialTxn.amount = roundedValue;
@@ -209,7 +219,7 @@ async function handleDeposit(
     } else if (data[1] > 0) {
 
         partialTxn.txnType = TransactionType.Refund; //positive delta is a refund to the user
-        const value = data[1] || 0;
+        value = data[1] || 0;
         const roundedValue = Number(value.toFixed(decimals));
 
         partialTxn.amount = roundedValue;
@@ -218,6 +228,14 @@ async function handleDeposit(
             decimals
         );
 
+    }
+
+    const transfer = await SolanaPollerCommon.getSolanaFromTo(txn, "USDC");
+    const transferValueMatch = transfer? transfer.get(value): undefined;
+    const to = transferValueMatch? transferValueMatch.transferTo: undefined;
+
+    if (to == SolanaCircleParser.circleTreasury){
+        partialTxn.txnType = TransactionType.TransferStart;
     }
 
     partialTxn.routing = routing;
@@ -263,7 +281,15 @@ async function handleRelease(
     partialTxn.address = data[0] || "";
     const value = data[1] || 0;
     const roundedValue = Number(value.toFixed(decimals));
-      
+
+    const transfer = await SolanaPollerCommon.getSolanaFromTo(txn, "USDC");
+    const transferValueMatch = transfer? transfer.get(value): undefined;
+    const from = transferValueMatch? transferValueMatch.transferFrom: undefined;
+   
+    if (from == SolanaCircleParser.circleTreasury){
+        partialTxn.txnType = TransactionType.TransferEnd;
+    }
+
     partialTxn.amount = roundedValue;
     partialTxn.units = RoutingHelper.BaseUnits_FromReadableValue(roundedValue, decimals);
 

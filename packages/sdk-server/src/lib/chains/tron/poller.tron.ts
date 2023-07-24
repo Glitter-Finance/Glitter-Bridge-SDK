@@ -106,6 +106,7 @@ export class GlitterTronPoller implements GlitterPoller {
                         limit: cursor.limit,
                         order_by: 'timestamp,asc',
                         min_timestamp: lastTimestamp_ms,
+                        only_confirmed : true
                     }
                 });
                 break;

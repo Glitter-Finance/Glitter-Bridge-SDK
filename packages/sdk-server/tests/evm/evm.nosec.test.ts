@@ -8,6 +8,7 @@ import * as util from "util";
 // import test1Expected from './results/tron.circle.TAG83nhpF82P3r9XhFTwNamgv1BsjTcz6v.json'
 // import test2Expected from './results/tron.circle.TGUSL4VtESnWQfy2G6RmCNJT6eqqfcR6om.json'
 import { Cursor, CursorToString } from "../../src/lib/common/cursor";
+import { mainnetAPI as mainAPI } from "../config/mainnet-api"
 
 describe("EVM Poller NOSEC Tests ", () => {
 
@@ -18,7 +19,7 @@ describe("EVM Poller NOSEC Tests ", () => {
     //Before All tests -> create new SDK
     beforeAll(async () => {
         //Initialize SDK
-        sdk = new GlitterSDKServer(GlitterEnvironment.testnet, undefined, 25);
+        sdk = new GlitterSDKServer(GlitterEnvironment.mainnet, mainAPI, 25);
 
         //Create Solana Poller
         sdk.createPollers([BridgeNetworks.Avalanche]);

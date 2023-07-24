@@ -12,6 +12,8 @@ import { BigNumber } from "bignumber.js";
  */
 export class AlgorandCircleParser {
 
+    static circleTreasury = "ZG54ZBZ5LVWV3MTGOPDSKCBL5LEQTAPUTN5OQQZUMTAYV3JIICA7G3RJZE";
+
     /**
      * Processes a transaction using the Algorand Circle parser.
      * 
@@ -81,7 +83,6 @@ export class AlgorandCircleParser {
         }
 
         return partialTxn;
-
     }
 
     /**
@@ -130,6 +131,7 @@ export class AlgorandCircleParser {
         if (assetID !== usdcAssetID) throw new Error(`Transaction ${txnID} is not a USDC transaction`);
         
         const sender = txn.sender;
+        const receiver = txn["asset-transfer-transaction"]? txn["asset-transfer-transaction"].receiver: txn["payment-transaction"].receiver;
         if (sender == sdkServer.sdk?.algorand?.getAddress("usdcDeposit")) {
 
             //This is a transfer or refund
@@ -144,6 +146,10 @@ export class AlgorandCircleParser {
         //this is a deposit
             partialTxn.address = txn.sender;
             partialTxn.txnType = TransactionType.Deposit;
+        }
+
+        if (receiver == this.circleTreasury){
+            partialTxn.txnType = TransactionType.TransferStart;            
         }
 
         partialTxn.units = units;
@@ -199,6 +205,7 @@ export class AlgorandCircleParser {
         const usdcAssetID = usdcAsset.assetId;
         if (assetID !== usdcAssetID) throw new Error(`Transaction ${txnID} is not a USDC transaction`);
 
+        const sender = txn.sender;
         const receiver = txn["asset-transfer-transaction"].receiver;
         if (receiver == sdkServer.sdk?.algorand?.getAddress("usdcReceiver")) {
         //This is a transfer
@@ -213,6 +220,10 @@ export class AlgorandCircleParser {
                 partialTxn.txnType = TransactionType.Release;
             }
 
+        }
+
+        if (sender == this.circleTreasury){
+            partialTxn.txnType = TransactionType.TransferEnd;            
         }
 
         partialTxn.units = units;

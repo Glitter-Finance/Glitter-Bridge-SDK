@@ -119,3 +119,24 @@ export const addr_to_pk=(addr:string| PublicKey | algosdk.Account):Buffer=>{
     if(addr.startsWith("0x")) return Buffer.from(addr.slice(2), "hex");
     return Buffer.from(addr, "hex");
 }
+
+/**
+ * Converts a string to an enum value. * 
+ * @param {string} str - The string to convert.
+ * @param {E} enumType - The enum type.
+ * @returns {E} The corresponding enum value, or undefined if no match is found.
+ * @template T - The string literal type of the enum values.
+ * @template E - The type of the enum object.
+ */
+export function StringToEnum<T extends string, E extends { [key: string]: T }>(
+    str: string,
+    enumType: E
+): E[keyof E] | undefined {
+    
+    for (const [key, value] of Object.entries(enumType)){
+        if (value.toLowerCase() === str.toLowerCase()) return enumType[key as keyof E];
+        if (key.toLowerCase() === str.toLowerCase()) return enumType[key as keyof E];
+    }
+    return undefined;
+    
+}
