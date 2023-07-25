@@ -31,16 +31,19 @@ export type GasEstimate = {
  * @property {number} [depositUSD] - The value in USD to be deposited (optional).
  * @property {BigNumber} [releaseTokens] - The number of tokens to be released (optional).
  * @property {number} [releaseUSD] - The value in USD to be released (optional).
+ * @property {BigNumber} [recommendedMinBridgeTokens] - The recommended minimum number of tokens to bridge.  Bridging less than this amount may result in the transaction not being able to be processed on TokenV2 bridge. (optional).
  */
 export type GasTokenEstimate = {
     baseToken: string;
-    tokens: BigNumber;    
+    tokens: BigNumber;
     valueUSD: number;
 
     depositTokens?: BigNumber;
     depositUSD?: number;
     releaseTokens?: BigNumber;
     releaseUSD?: number;
+
+    recommendedMinBridgeTokens?: BigNumber
 }
 
 /**
@@ -78,10 +81,10 @@ export class GasEstimator {
         from: string,
         to: string,
         type: BridgeType
-    ): Promise<GasEstimate|undefined> {
+    ): Promise<GasEstimate | undefined> {
 
         //Validate Params
-        if (!from || !to) return undefined;   
+        if (!from || !to) return undefined;
 
         //Iterate through BridgeNetwork enum to get from network
         let fromNetwork: BridgeNetworks | undefined = undefined;
@@ -100,10 +103,10 @@ export class GasEstimator {
                 toNetwork = network as BridgeNetworks;
                 break;
             }
-        }      
+        }
         if (!toNetwork) return undefined;
 
-        let returnValue : GasEstimate | undefined= undefined;
+        let returnValue: GasEstimate | undefined = undefined;
         switch (type) {
             case BridgeType.Circle:
                 returnValue = await this.estimateCircleGasPrice(sdk, fromNetwork, toNetwork);
@@ -134,7 +137,7 @@ export class GasEstimator {
                     release: 0,
                 }
                 break;
-          
+
             default:
                 throw new Error("Invalid bridge type");
         }
@@ -163,10 +166,10 @@ export class GasEstimator {
         toNetwork: BridgeNetworks): Promise<GasEstimate | undefined> {
 
         try {
-           
+
             const fromGasPrice = await this.getCircleFromEstimate(sdk, fromNetwork);
             const toGasPrice = await this.getCircleToEstimate(sdk, toNetwork);
-            if (!fromGasPrice||!toGasPrice) return undefined
+            if (!fromGasPrice || !toGasPrice) return undefined
 
             return {
                 usd: fromGasPrice.plus(toGasPrice).toNumber(),
@@ -196,10 +199,10 @@ export class GasEstimator {
         toNetwork: BridgeNetworks): Promise<GasEstimate | undefined> {
 
         try {
-           
+
             const fromGasPrice = await this.getTokenV2FromEstimate(sdk, fromNetwork);
             const toGasPrice = await this.getTokenV2ToEstimate(sdk, toNetwork);
-            if (!fromGasPrice||!toGasPrice) return undefined
+            if (!fromGasPrice || !toGasPrice) return undefined
 
             return {
                 usd: fromGasPrice.plus(toGasPrice).toNumber(),
@@ -212,7 +215,7 @@ export class GasEstimator {
             return undefined;
         }
     }
-       
+
     /**
      * Retrieves the Circle token amount for a given network estimate.
      *
@@ -223,19 +226,19 @@ export class GasEstimator {
      * @returns {Promise<BigNumber | undefined>} - A Promise that resolves to the Circle token amount as a BigNumber, or undefined if retrieval fails.
      */
     private static async getCircleFromEstimate(sdk: GlitterBridgeSDK,
-        network: BridgeNetworks): Promise<BigNumber|undefined>{
-        
+        network: BridgeNetworks): Promise<BigNumber | undefined> {
+
         //Get gas token
         const gasToken = await sdk.gasToken(network);
         if (!gasToken) return undefined;
         const gasTokenChain = BridgeV2Tokens.getTokenConfigChild(gasToken, network)
         const gasTokenPrice = await TokenPricing.getPrice(gasToken?.asset_symbol || "");
-        
+
         //Get From Gas Estimate      
         let gasPrice: {
-                nativePrice: BigNumber;
-                isFresh: boolean;
-            };
+            nativePrice: BigNumber;
+            isFresh: boolean;
+        };
 
         switch (network.toLocaleLowerCase()) {
             case BridgeNetworks.Ethereum.toLocaleLowerCase():
@@ -283,19 +286,19 @@ export class GasEstimator {
      * @returns {Promise<BigNumber | undefined>} - A Promise that resolves to the Circle token amount as a BigNumber, or undefined if retrieval fails.
      */
     private static async getCircleToEstimate(sdk: GlitterBridgeSDK,
-        network: BridgeNetworks): Promise<BigNumber|undefined>{
-        
+        network: BridgeNetworks): Promise<BigNumber | undefined> {
+
         //Get gas token
         const gasToken = await sdk.gasToken(network);
         if (!gasToken) return undefined;
         const gasTokenChain = BridgeV2Tokens.getTokenConfigChild(gasToken, network)
         const gasTokenPrice = await TokenPricing.getPrice(gasToken?.asset_symbol || "");
-        
+
         //Get From Gas Estimate      
         let gasPrice: {
-                nativePrice: BigNumber;
-                isFresh: boolean;
-            };
+            nativePrice: BigNumber;
+            isFresh: boolean;
+        };
         switch (network.toLocaleLowerCase()) {
             case BridgeNetworks.Ethereum.toLocaleLowerCase():
             case BridgeNetworks.Binance.toLocaleLowerCase():
@@ -339,7 +342,7 @@ export class GasEstimator {
      * @returns {Promise<BigNumber | undefined>} - A Promise that resolves to the TokenV2 token amount as a BigNumber, or undefined if retrieval fails.
      */
     private static async getTokenV2FromEstimate(sdk: GlitterBridgeSDK,
-        network: BridgeNetworks): Promise<BigNumber|undefined>{
+        network: BridgeNetworks): Promise<BigNumber | undefined> {
 
         switch (network.toLocaleLowerCase()) {
             case BridgeNetworks.Ethereum.toLocaleLowerCase():
@@ -349,8 +352,8 @@ export class GasEstimator {
             case BridgeNetworks.Zkevm.toLocaleLowerCase():
             case BridgeNetworks.Arbitrum.toLocaleLowerCase():
             case BridgeNetworks.Optimism.toLocaleLowerCase():
-                return new BigNumber(0);                                         
-            default:               
+                return new BigNumber(0);
+            default:
                 return undefined;
         }
     }
@@ -365,19 +368,19 @@ export class GasEstimator {
      * @returns {Promise<BigNumber | undefined>} - A Promise that resolves to the TokenV2 token amount as a BigNumber, or undefined if retrieval fails.
      */
     private static async getTokenV2ToEstimate(sdk: GlitterBridgeSDK,
-        network: BridgeNetworks): Promise<BigNumber|undefined>{
-        
+        network: BridgeNetworks): Promise<BigNumber | undefined> {
+
         //Get gas token
         const gasToken = await sdk.gasToken(network);
         if (!gasToken) return undefined;
         const gasTokenChain = BridgeV2Tokens.getTokenConfigChild(gasToken, network)
         const gasTokenPrice = await TokenPricing.getPrice(gasToken?.asset_symbol || "");
-        
+
         //Get From Gas Estimate      
         let gasPrice: {
-                nativePrice: BigNumber;
-                isFresh: boolean;
-            };
+            nativePrice: BigNumber;
+            isFresh: boolean;
+        };
         switch (network.toLocaleLowerCase()) {
             case BridgeNetworks.Ethereum.toLocaleLowerCase():
             case BridgeNetworks.Binance.toLocaleLowerCase():
@@ -395,7 +398,7 @@ export class GasEstimator {
 
                 // eslint-disable-next-line no-case-declarations              
                 return gasPrice.nativePrice.times(circleReleaseGasEstimate).times(gasTokenPrice.average_price).dividedBy(10 ** (gasTokenChain?.decimals || 0));
-           
+
             default:
                 return undefined;
         }
