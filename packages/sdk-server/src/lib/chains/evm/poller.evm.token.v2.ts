@@ -355,8 +355,17 @@ export class EvmV2Parser {
 
         //get token name
         const token = await BridgeV2Tokens.getChainConfigByVault(connect?.network, events.refund?.vault || "");
+        if (!token) throw new Error("From token not found");
         const tokenName = token?.symbol || "Unknown";
         const decimals = token?.decimals || 0;
+
+        //get token name
+        const baseToken = BridgeV2Tokens.getChainConfigParent(token);
+        if (!baseToken) throw new Error("Base token not found")
+
+        //Get symbol (updated-2)
+        partialTxn.tokenSymbol = token.symbol;
+        partialTxn.baseSymbol = baseToken.asset_symbol;
 
         //Get transfer amount
         if (events.transfer) {
