@@ -398,7 +398,7 @@ export class EvmV2Parser {
                 network: "",
                 address: "",
                 token: tokenName,
-                txn_signature_hashed: events.release?.depositId,
+                txn_signature_hashed: events.refund?.depositId,
             },
             to: {
                 network: connect.network,
