@@ -29,10 +29,10 @@ export class EvmV2Parser {
         if (!connect) throw Error("EVM Connect is undefined");
 
         //Get Bridge Address
-        const bridgeID = connect?.getAddress("tokenBridge") ;   
+        const bridgeID = connect?.getAddress("tokenBridge");
         if (!bridgeID || typeof bridgeID !== "string")
             throw Error("Bridge ID is undefined");
-            
+
         //Get EVM Transaction data
         let partialTxn: PartialBridgeTxn = {
             txnID: txnID,
@@ -60,7 +60,7 @@ export class EvmV2Parser {
             }
 
         }
-        
+
         //Get Gas
         const gasPaid = txnReceipt.gasUsed.mul(ethers.BigNumber.from(gasPrice.toString()));
         partialTxn.gasPaid = new BigNumber(gasPaid.toString());
@@ -69,7 +69,7 @@ export class EvmV2Parser {
         const timestamp_s = partialTxn.block ? (await connect.getTimeStampFromBlockNumber(partialTxn.block)) : 0;
         const timestamp = new Date(timestamp_s * 1000);
         partialTxn.txnTimestamp = timestamp;
-        
+
         //Check status
         if (txnReceipt.status === 0) {
             partialTxn.chainStatus = ChainStatus.Failed;
@@ -81,7 +81,7 @@ export class EvmV2Parser {
 
         const events = await this.parseLogs(txnReceipt);
         if (!events) return partialTxn;
-        
+
         //Check deposit vs release   
         if (events.deposit) {
             partialTxn = await this.handleDeposit(txnID, connect, txnReceipt, partialTxn, events);
@@ -89,11 +89,11 @@ export class EvmV2Parser {
             partialTxn = await this.handleRelease(txnID, connect, txnReceipt, partialTxn, events);
         } else if (events.refund) {
             partialTxn = await this.handleRefund(txnID, connect, txnReceipt, partialTxn, events);
-        } 
+        }
 
         return partialTxn;
     }
-    
+
     /**
      * Parses logs from a transaction receipt using the EvmV2Parser.
      *
@@ -101,22 +101,22 @@ export class EvmV2Parser {
      * @returns {Promise<TokenBridgeV2EventGroup | null>} A promise that resolves to the parsed TokenBridgeV2EventGroup or null if not found.
      */
     public static async parseLogs(receipt: TransactionReceipt): Promise<TokenBridgeV2EventGroup | null> {
-      
+
         const parsedLogs = EvmBridgeV2EventsParser.parseLogs(receipt.logs);
 
-        const returnValue:TokenBridgeV2EventGroup = { };
+        const returnValue: TokenBridgeV2EventGroup = {};
         const deposit = EvmBridgeV2EventsParser.parseDeposit(parsedLogs);
         const release = EvmBridgeV2EventsParser.parseRelease(parsedLogs);
         const refund = EvmBridgeV2EventsParser.parseRefund(parsedLogs);
         const transfer = EvmBridgeV2EventsParser.parseTransfer(parsedLogs);
-               
+
         if (deposit) { returnValue.deposit = deposit; }
         if (release) { returnValue.release = release; }
         if (refund) { returnValue.refund = refund; }
         if (transfer) { returnValue.transfer = transfer; }
 
         return returnValue;
-       
+
     }
 
     /**
@@ -134,9 +134,9 @@ export class EvmV2Parser {
         connect: EvmConnect,
         txn: TransactionReceipt,
         partialTxn: PartialBridgeTxn,
-        events: TokenBridgeV2EventGroup 
+        events: TokenBridgeV2EventGroup
     ): Promise<PartialBridgeTxn> {
-       
+
         //Get Addresses
         let toAddress = txn.to;
         let fromAddress = txn.from;
@@ -146,44 +146,44 @@ export class EvmV2Parser {
         if (!fromToken) throw new Error("From token not found")
         const baseToken = BridgeV2Tokens.getChainConfigParent(fromToken);
         if (!baseToken) throw new Error("Base token not found")
-       
+
         //Get symbol (updated)
         partialTxn.tokenSymbol = fromToken.symbol;
         partialTxn.baseSymbol = baseToken.asset_symbol;
 
         //Get referral ID
-        partialTxn.referral_id =events.deposit?.protocolId || undefined;
+        partialTxn.referral_id = events.deposit?.protocolId || undefined;
 
         //Get transfer amount
         if (events.transfer) {
             fromAddress = events.transfer.from;
             toAddress = events.transfer.to;
             partialTxn.units = BigNumber(events.transfer.value.toString());
-            partialTxn.amount = RoutingHelper.ReadableValue_FromBaseUnits(partialTxn.units, fromToken.decimals);  
+            partialTxn.amount = RoutingHelper.ReadableValue_FromBaseUnits(partialTxn.units, fromToken.decimals);
         } else {
             throw new Error("Transfer event not found");
         }
 
         //Check address
-        if (fromToken?.vault_type?.toLocaleLowerCase() === "incoming"){
+        if (fromToken?.vault_type?.toLocaleLowerCase() === "incoming") {
 
             //This is a burn/mint.  To address is the 0x0 address
-            if (toAddress.toLocaleLowerCase() != "0x0000000000000000000000000000000000000000"){
+            if (toAddress.toLocaleLowerCase() != "0x0000000000000000000000000000000000000000") {
                 throw new Error("Invalid to address. Expected 0x0 for incoming vault");
             }
 
-        } else if (fromToken?.vault_type?.toLocaleLowerCase() === "outgoing"){
+        } else if (fromToken?.vault_type?.toLocaleLowerCase() === "outgoing") {
 
             //This is a lock/release.  To Address is the vault address
             const vaultAddress = fromToken.vault_address || "";
-            if (toAddress.toLocaleLowerCase() != vaultAddress.toLocaleLowerCase()){
+            if (toAddress.toLocaleLowerCase() != vaultAddress.toLocaleLowerCase()) {
                 throw new Error(`Invalid to address. Expected ${vaultAddress} for outgoing vault`);
             }
 
         }
         partialTxn.txnType = TransactionType.Deposit;
         partialTxn.address = fromAddress;
-       
+
         //Get Routing
         let routing: Routing2 | null = null;
         if (partialTxn.txnType == TransactionType.Deposit) {
@@ -230,7 +230,7 @@ export class EvmV2Parser {
                     base_units: partialTxn.units,
                 },
                 amount: partialTxn.amount || undefined
-            }as Routing2;
+            } as Routing2;
         }
 
         //Set routing
@@ -256,7 +256,7 @@ export class EvmV2Parser {
         partialTxn: PartialBridgeTxn,
         events: TokenBridgeV2EventGroup
     ): Promise<PartialBridgeTxn> {
-              
+
         //Get Addresses
         let toAddress = txn.to;
         let fromAddress = txn.from;
@@ -266,7 +266,7 @@ export class EvmV2Parser {
         if (!toToken) throw new Error("From token not found")
         const baseToken = BridgeV2Tokens.getChainConfigParent(toToken);
         if (!baseToken) throw new Error("Base token not found")
-      
+
         //Get symbol (updated-2)
         partialTxn.tokenSymbol = toToken.symbol;
         partialTxn.baseSymbol = baseToken.asset_symbol;
@@ -276,31 +276,31 @@ export class EvmV2Parser {
             fromAddress = events.transfer.from;
             toAddress = events.transfer.to;
             partialTxn.units = BigNumber(events.transfer.value.toString());
-            partialTxn.amount = RoutingHelper.ReadableValue_FromBaseUnits(partialTxn.units, toToken.decimals);  
+            partialTxn.amount = RoutingHelper.ReadableValue_FromBaseUnits(partialTxn.units, toToken.decimals);
         } else {
             throw new Error("Transfer event not found");
         }
 
         //Check address
-        if (toToken?.vault_type?.toLocaleLowerCase() === "incoming"){
-            
+        if (toToken?.vault_type?.toLocaleLowerCase() === "incoming") {
+
             //This is a burn/mint.  From address is the 0x0 address
-            if (fromAddress.toLocaleLowerCase() != "0x0000000000000000000000000000000000000000"){
+            if (fromAddress.toLocaleLowerCase() != "0x0000000000000000000000000000000000000000") {
                 throw new Error("Invalid from address. Expected 0x0 for incoming vault");
             }
 
-        } else if (toToken?.vault_type?.toLocaleLowerCase() === "outgoing"){
+        } else if (toToken?.vault_type?.toLocaleLowerCase() === "outgoing") {
 
             //This is a lock/release.  From Address is the vault address
             const vaultAddress = toToken.vault_address || "";
-            if (fromAddress.toLocaleLowerCase() != vaultAddress.toLocaleLowerCase()){
+            if (fromAddress.toLocaleLowerCase() != vaultAddress.toLocaleLowerCase()) {
                 throw new Error(`Invalid from address. Expected ${vaultAddress} for outgoing vault`);
             }
 
         }
 
         let routing: Routing2 | null = null;
-      
+
         //Transfer out of receiver address
         partialTxn.txnType = TransactionType.Release;
         partialTxn.address = toAddress;
@@ -348,41 +348,41 @@ export class EvmV2Parser {
         partialTxn: PartialBridgeTxn,
         events: TokenBridgeV2EventGroup
     ): Promise<PartialBridgeTxn> {
-             
+
         //Get Addresses
         let toAddress = txn.to;
         let fromAddress = txn.from;
 
         //get token name
-        const token = await BridgeV2Tokens.getChainConfigByVault(connect?.network, events.deposit?.vault || "");
+        const token = await BridgeV2Tokens.getChainConfigByVault(connect?.network, events.refund?.vault || "");
         const tokenName = token?.symbol || "Unknown";
         const decimals = token?.decimals || 0;
-      
+
         //Get transfer amount
         if (events.transfer) {
             fromAddress = events.transfer.from;
             toAddress = events.transfer.to;
             partialTxn.units = BigNumber(events.transfer.value.toString());
-            partialTxn.amount = RoutingHelper.ReadableValue_FromBaseUnits(partialTxn.units, decimals);  
+            partialTxn.amount = RoutingHelper.ReadableValue_FromBaseUnits(partialTxn.units, decimals);
         } else {
             throw new Error("Transfer event not found");
         }
 
         let routing: Routing | null = null;
-        
+
         //Check address
-        if (token?.vault_type?.toLocaleLowerCase() === "incoming"){
-            
+        if (token?.vault_type?.toLocaleLowerCase() === "incoming") {
+
             //This is a burn/mint.  From address is the 0x0 address
-            if (fromAddress.toLocaleLowerCase() != "0x0000000000000000000000000000000000000000"){
+            if (fromAddress.toLocaleLowerCase() != "0x0000000000000000000000000000000000000000") {
                 throw new Error("Invalid from address. Expected 0x0 for incoming vault");
             }
 
-        } else if (token?.vault_type?.toLocaleLowerCase() === "outgoing"){
+        } else if (token?.vault_type?.toLocaleLowerCase() === "outgoing") {
 
             //This is a lock/release.  From Address is the vault address
             const vaultAddress = token.vault_address || "";
-            if (fromAddress.toLocaleLowerCase() != vaultAddress.toLocaleLowerCase()){
+            if (fromAddress.toLocaleLowerCase() != vaultAddress.toLocaleLowerCase()) {
                 throw new Error(`Invalid from address. Expected ${vaultAddress} for outgoing vault`);
             }
 
