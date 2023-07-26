@@ -106,7 +106,7 @@ export const feeTransaction = async (
     feeRouting.to.token = feeRouting.from.token;
     feeRouting.to.address = feeCollector;
     if (routing.amount && tokenConfig.feeDivisor) {
-        feeRouting.units = new BigNumber(routing.units).div(tokenConfig.feeDivisor).dp(0);
+        feeRouting.units = new BigNumber(Math.trunc(new BigNumber(routing.units).div(tokenConfig.feeDivisor).toNumber()));
         feeRouting.amount = new BigNumber(feeRouting.units).div(10 ** tokenConfig.decimals)
 
         return await getTransferTxByAssetSymbol(client, feeRouting, tokenConfig);
