@@ -1,12 +1,12 @@
 import algosdk, { Transaction } from "algosdk";
 import BigNumber from "bignumber.js";
 import {
-    AlgorandStandardAssetConfig,
     AlgorandNativeTokenConfig,
+    AlgorandStandardAssetConfig,
+    BridgeNetworks,
     Routing,
     RoutingDefault,
 } from "../../../../common";
-import { BridgeNetworks } from "../../../../common";
 import {
     algoTransferTxnWithRoutingNote,
     assetTransferTxnWithRoutingNote,
@@ -20,8 +20,8 @@ import {
 } from "./helpers";
 
 function validateTokenBridgeTransaction(params: {
-  routing: Routing;
-  tokenConfig: AlgorandNativeTokenConfig | AlgorandStandardAssetConfig;
+    routing: Routing;
+    tokenConfig: AlgorandNativeTokenConfig | AlgorandStandardAssetConfig;
 }): boolean {
     const { routing, tokenConfig } = params;
     const toNetwork = routing.to.network.toLowerCase();
@@ -75,7 +75,7 @@ const getTransferTxByAssetSymbol = async (
             return await assetTransferTxnWithRoutingNote(
                 client,
                 routing,
-        tokenConfig as AlgorandStandardAssetConfig
+                tokenConfig as AlgorandStandardAssetConfig
             );
     }
 };
@@ -106,8 +106,8 @@ export const feeTransaction = async (
     feeRouting.to.token = feeRouting.from.token;
     feeRouting.to.address = feeCollector;
     if (routing.amount && tokenConfig.feeDivisor) {
-        feeRouting.units = new BigNumber(routing.units).div(tokenConfig.feeDivisor);
-        feeRouting.amount = new BigNumber(feeRouting.units).div(10**tokenConfig.decimals)
+        feeRouting.units = new BigNumber(routing.units).div(tokenConfig.feeDivisor).dp(0);
+        feeRouting.amount = new BigNumber(feeRouting.units).div(10 ** tokenConfig.decimals)
 
         return await getTransferTxByAssetSymbol(client, feeRouting, tokenConfig);
     }
@@ -130,9 +130,9 @@ export const feeTransaction = async (
 export const approvalTransaction = async (
     client: algosdk.Algodv2,
     method:
-    | AlgorandTokenBridgeDepositTransactions
-    | AlgorandTokenBridgeRefundTransactions
-    | AlgorandTokenBridgeReleaseTransactions,
+        | AlgorandTokenBridgeDepositTransactions
+        | AlgorandTokenBridgeRefundTransactions
+        | AlgorandTokenBridgeReleaseTransactions,
     routing: Routing,
     destinationOnChainAddress: string,
     bridgeAppIndex: number,
@@ -183,9 +183,9 @@ export const bridgeDeposit = async (
     destinationNetwork: BridgeNetworks,
     amount: bigint,
     vaultConfig: {
-    algoVault: string;
-    asaVault: string;
-  },
+        algoVault: string;
+        asaVault: string;
+    },
     feeCollectorAddress: string,
     tokenConfig: AlgorandStandardAssetConfig | AlgorandNativeTokenConfig
 ): Promise<Transaction[]> => {

@@ -1,9 +1,5 @@
 import * as algosdk from "algosdk";
-import { AlgorandConfig } from "./types";
-import { AssetsRepository } from "./AssetsRepository";
-import { BridgeNetworks } from "../../../lib/common/networks";
 import BigNumber from "bignumber.js";
-import { assetOptin, bridgeDeposit, bridgeUSDC } from "./transactions";
 import {
     AlgorandNativeTokenConfig,
     AlgorandStandardAssetConfig,
@@ -11,7 +7,11 @@ import {
     RoutingDefault,
     Sleep,
 } from "../../../lib/common";
+import { BridgeNetworks } from "../../../lib/common/networks";
 import { AlgorandAccountsStore } from "./AccountsStore";
+import { AssetsRepository } from "./AssetsRepository";
+import { assetOptin, bridgeDeposit, bridgeUSDC } from "./transactions";
+import { AlgorandConfig } from "./types";
 
 /**
  * Class representing the Algorand connection.
@@ -97,7 +97,7 @@ export class AlgorandConnect {
         routing.to.token = token.wrappedSymbol ?? token.symbol;
         routing.to.network = destinationNetwork.toString().toLowerCase();
         routing.amount = new BigNumber(amount.toString()).div(
-            10**token.decimals
+            10 ** token.decimals
         ).dp(2);
         routing.units = new BigNumber(amount.toString());
 
