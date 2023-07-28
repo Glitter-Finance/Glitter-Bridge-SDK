@@ -1,12 +1,12 @@
 import {
     Connection, Keypair, PublicKey, Transaction
 } from "@solana/web3.js";
-import { SolanaConfig, SolanaPublicNetworks } from "./types";
-import { SolanaAccount, SolanaAccountsStore } from "./AccountsStore";
-import { GlitterBridgeConfig, GlitterEnvironment } from "../../../types";
-import { BridgeNetworks, BridgeTokenConfig, BridgeTokens, Routing, Sleep } from "../../../lib/common";
 import BigNumber from "bignumber.js";
+import { BridgeNetworks, BridgeTokenConfig, BridgeTokens, Routing, Sleep } from "../../../lib/common";
+import { GlitterBridgeConfig, GlitterEnvironment } from "../../../types";
+import { SolanaAccount, SolanaAccountsStore } from "./AccountsStore";
 import { LoadSolanaSchema, bridgeUSDC, createAssociatedTokenAccountTransaction, getAssociatedTokenAccount, solBridgeTransaction, tokenBridgeTransaction } from "./transactions";
+import { SolanaConfig, SolanaPublicNetworks } from "./types";
 
 /**
  * Represents a connection to the Solana network.
@@ -103,7 +103,7 @@ export class SolanaConnect {
                 token: token.wrappedSymbol ?? token.symbol,
                 txn_signature: ""
             },
-            amount: bigAmount.div(10**token.decimals),
+            amount: bigAmount.div(10 ** token.decimals),
             units: bigAmount
         }
 
