@@ -15,7 +15,7 @@ export class GlitterAlgorandPoller implements GlitterPoller {
 
     //Network
     public network: BridgeNetworks = BridgeNetworks.algorand;
-    
+
     //Cursors
     /**
      * Cursors object for tracking transaction cursors.
@@ -31,7 +31,7 @@ export class GlitterAlgorandPoller implements GlitterPoller {
      * @type {Cursor | undefined}
      * @readonly
      */
-    public get tokenV1Cursor(): Cursor | undefined{
+    public get tokenV1Cursor(): Cursor | undefined {
         return this.cursors?.[BridgeType.TokenV1]?.[0];
     }
     /**
@@ -40,7 +40,7 @@ export class GlitterAlgorandPoller implements GlitterPoller {
      * @type {Cursor | undefined}
      * @readonly
      */
-    public get tokenV2Cursor(): Cursor | undefined{
+    public get tokenV2Cursor(): Cursor | undefined {
         return this.cursors?.[BridgeType.TokenV2]?.[0];
     }
     /**
@@ -49,7 +49,7 @@ export class GlitterAlgorandPoller implements GlitterPoller {
      * @type {Cursor | undefined}
      * @readonly
      */
-    public get usdcCursors(): Cursor[] | undefined{
+    public get usdcCursors(): Cursor[] | undefined {
         return this.cursors?.[BridgeType.Circle];
     }
 
@@ -69,7 +69,7 @@ export class GlitterAlgorandPoller implements GlitterPoller {
      * @returns {void}
      */
     initialize(sdkServer: GlitterSDKServer): void {
-      
+
         //Add Token Cursor
         const tokenAddress = parseInt(sdkServer.sdk?.algorand?.getAddress("tokenBridgeProgramID")?.toString() || "");
         if (tokenAddress)
@@ -115,67 +115,73 @@ export class GlitterAlgorandPoller implements GlitterPoller {
      * @returns {Promise<PollerResult>} A promise that resolves to a PollerResult object.
      */
     async poll(sdkServer: GlitterSDKServer, cursor: Cursor): Promise<PollerResult> {
-       
-        //get indexer
-        const indexer = sdkServer.sdk?.algorand?.clientIndexer;
-        const client = sdkServer.sdk?.algorand?.client;
-
-        if (!indexer) { throw ServerError.ClientNotSet(BridgeNetworks.algorand) ;}
-        if (!client) { throw ServerError.ClientNotSet(BridgeNetworks.algorand); }
-
-        //Get transactions
-        const caller = indexer
-            .searchForTransactions()
-
-        if (cursor.batch?.nextAPIToken) caller.nextToken(cursor.batch?.nextAPIToken);
-        if (cursor.limit) caller.limit(cursor.limit);
-        if (cursor.end?.block) caller.minRound(Number(cursor.end.block));
-
-        //Check appid or address
-        if (typeof cursor.address === "number") {
-            caller.applicationID(cursor.address);
-        } else if (typeof cursor.address === "string") {
-            caller.address(cursor.address);
-        }
-
-        //Get response
-        const response = await caller.do();
-
-        //Set next token
-        const nextToken = response['next-token'];
-
-        //Map Signatures
-        const signatures: string[] = [];
-        if (response && response.transactions) {
-            signatures.push(...response.transactions.map((txn:any) => txn.id));
-        }
-
-        //Get partial transactions
         const partialTxns: PartialBridgeTxn[] = [];
-        let maxBlock = cursor.end?.block as number || 0;
-        for (const txnID of signatures) {
+        try {
 
-            //Check if transaction was previously processed
-            if (cursor.batch?.txns?.has(txnID)) continue;
-            if (cursor.lastBatchTxns?.has(txnID)) continue;
+            //get indexer
+            const indexer = sdkServer.sdk?.algorand?.clientIndexer;
+            const client = sdkServer.sdk?.algorand?.client;
 
-            //Process Transaction
-            const partialTxn = await this.parseTxnID(sdkServer, txnID, cursor.bridgeType);
-            if (!partialTxn) continue;
+            if (!indexer) { throw ServerError.ClientNotSet(BridgeNetworks.algorand); }
+            if (!client) { throw ServerError.ClientNotSet(BridgeNetworks.algorand); }
 
-            //Run Through Filter
-            if (CursorFilter(cursor, partialTxn)) partialTxns.push(partialTxn);    
-                
-            //Update max block
-            if (partialTxn?.block) maxBlock = Math.max(maxBlock, partialTxn.block);
+            //Get transactions
+            const caller = indexer
+                .searchForTransactions()
 
+            if (cursor.batch?.nextAPIToken) caller.nextToken(cursor.batch?.nextAPIToken);
+            if (cursor.limit) caller.limit(cursor.limit);
+            if (cursor.end?.block) caller.minRound(Number(cursor.end.block));
+
+            //Check appid or address
+            if (typeof cursor.address === "number") {
+                caller.applicationID(cursor.address);
+            } else if (typeof cursor.address === "string") {
+                caller.address(cursor.address);
+            }
+
+            //Get response
+            const response = await caller.do();
+
+            //Set next token
+            const nextToken = response['next-token'];
+
+            //Map Signatures
+            const signatures: string[] = [];
+            if (response && response.transactions) {
+                signatures.push(...response.transactions.map((txn: any) => txn.id));
+            }
+
+            //Get partial transactions
+
+            let maxBlock = cursor.end?.block as number || 0;
+            for (const txnID of signatures) {
+
+                //Check if transaction was previously processed
+                if (cursor.batch?.txns?.has(txnID)) continue;
+                if (cursor.lastBatchTxns?.has(txnID)) continue;
+
+                //Process Transaction
+                const partialTxn = await this.parseTxnID(sdkServer, txnID, cursor.bridgeType);
+                if (!partialTxn) continue;
+
+                //Run Through Filter
+                if (CursorFilter(cursor, partialTxn)) partialTxns.push(partialTxn);
+
+                //Update max block
+                if (partialTxn?.block) maxBlock = Math.max(maxBlock, partialTxn.block);
+
+            }
+
+            //Ensure that max block is really max in the case of backward counting batches
+            maxBlock = Math.max(maxBlock, cursor.batch?.block as number || 0);
+
+            //update cursor        
+            cursor = await UpdateCursor(cursor, signatures, maxBlock, nextToken);
+
+        } catch (error) {
+            console.log(error);
         }
-
-        //Ensure that max block is really max in the case of backward counting batches
-        maxBlock = Math.max(maxBlock, cursor.batch?.block as number || 0);
-
-        //update cursor        
-        cursor = await UpdateCursor(cursor, signatures, maxBlock, nextToken);
 
         //Return Result
         return {
@@ -192,7 +198,7 @@ export class GlitterAlgorandPoller implements GlitterPoller {
      * @param {BridgeType} type - The bridge type associated with the transaction.
      * @returns {Promise<PartialBridgeTxn | undefined>} A promise that resolves to a PartialBridgeTxn object or undefined.
      */
-    async parseTxnID(sdkServer: GlitterSDKServer, txnID:string, type:BridgeType):Promise<PartialBridgeTxn | undefined>{
+    async parseTxnID(sdkServer: GlitterSDKServer, txnID: string, type: BridgeType): Promise<PartialBridgeTxn | undefined> {
         try {
             //Ensure Transaction Exists
             if (!txnID) return;
@@ -200,7 +206,7 @@ export class GlitterAlgorandPoller implements GlitterPoller {
             //get indexer
             const indexer = sdkServer.sdk?.algorand?.clientIndexer;
             const client = sdkServer.sdk?.algorand?.client;
-    
+
             //Process Transaction
             switch (type) {
                 case BridgeType.TokenV1:
@@ -215,7 +221,7 @@ export class GlitterAlgorandPoller implements GlitterPoller {
                         type
                     );
             }
-           
+
         } catch (error) {
             console.error((error as Error).message)
         }

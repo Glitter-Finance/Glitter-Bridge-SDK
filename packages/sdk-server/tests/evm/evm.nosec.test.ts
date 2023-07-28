@@ -5,7 +5,7 @@ import { GlitterSDKServer } from "../../src/glitterSDKServer";
 import * as assert from "assert";
 import * as util from "util";
 
-// import test1Expected from './results/tron.circle.TAG83nhpF82P3r9XhFTwNamgv1BsjTcz6v.json'
+import test1Expected from './results/evm.nosec.json'
 // import test2Expected from './results/tron.circle.TGUSL4VtESnWQfy2G6RmCNJT6eqqfcR6om.json'
 import { Cursor, CursorToString } from "../../src/lib/common/cursor";
 import { mainnetAPI as mainAPI } from "../config/mainnet-api"
@@ -34,7 +34,7 @@ describe("EVM Poller NOSEC Tests ", () => {
         //Get Poller & token cursor
         if (!poller) throw Error("Poller is undefined");
         const cursor = poller.tokenV2Cursor;
-        assert.ok(cursor != undefined, "Cursor is undefined");    
+        assert.ok(cursor != undefined, "Cursor is undefined");
 
         const result = await poller.poll(sdk, cursor);
         const stringify = `
@@ -43,7 +43,7 @@ describe("EVM Poller NOSEC Tests ", () => {
                 "Txns": ${JSON.stringify(result.txns)}
             }`;
 
-        const expectedConfig:any = null;
+        const expectedConfig: any = test1Expected;
         // if (cursor.address === "TAG83nhpF82P3r9XhFTwNamgv1BsjTcz6v") {
         //     expectedConfig = test1Expected;
         // } else if (cursor.address === "TGUSL4VtESnWQfy2G6RmCNJT6eqqfcR6om") {
@@ -52,7 +52,7 @@ describe("EVM Poller NOSEC Tests ", () => {
         //     console.log(stringify);
         //     throw Error("Unknown Cursor Address");
         // }
-            
+
         const expectedString = `
             {
                 "Cursor": ${CursorToString(expectedConfig.Cursor)},
@@ -66,7 +66,7 @@ describe("EVM Poller NOSEC Tests ", () => {
         assert.ok(expectedString === stringify, "Expected and Actual are not equal.")
 
         await Sleep(5000);
-            
+
         Promise.resolve();
     }, 120_000);
 

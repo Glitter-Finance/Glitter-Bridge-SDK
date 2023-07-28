@@ -1,0 +1,661 @@
+{
+    "Cursor": {
+        "network": "avalanche",
+        "bridgeType": "TokenV2",
+        "address": "0x52d71eef6846b1c7047b0bd1804d304f9a6ad1d1",
+        "beginning": {
+            "txn": "0x24a84839fafe7fe699f160c25531e6d575ef1fd0a8fea1f097aba25cfbb720d0"
+        },
+        "limit": 25,
+        "batch": {
+            "txns": [
+                "0x24a84839fafe7fe699f160c25531e6d575ef1fd0a8fea1f097aba25cfbb720d0",
+                "0xdd3491189f8ec71b109f534cd2256c21f84a5fce043b97375c7d55a68ee32a46",
+                "0x2b03e7dde4daaff182269e3d7b3f88872de502e78545701092a3a5dbad908792",
+                "0x28c4514db3b5e00cdb70e21f57fcd6f3077cd2ef83601c6ec27c83551581e49d",
+                "0xb1442fbbc384d54c89f956ed7e2fd154e23c4e003f75c98b2942adb571b5635a",
+                "0xcd59c68168a5aa8364201bbc74e56991e64f8543ef2a82e5fd74631a92dce31d",
+                "0x1a8f3563cd7fea27256286a165b108f823395bea65e3720ee327033582b7041e",
+                "0xc46e69073bcea1cc66064f1e49b0dbc274d0880479a6787d0625b319a30c08fd",
+                "0xdfe43ec2b864345c784fe91fa0c06d4e9f222835a7bace4ea01de214c0c10534",
+                "0xb5df7277ae2459d840a9d9dcb8a2dc2fa84243e10c6b4786a4ccdd4ed4b02417",
+                "0xa7332d11a746cfa79e5088b92387c96ba1d936772ecf9e335353855f4cd5f5f8",
+                "0xa6abfe193425dbf88c8c34511a3241108b29e6eb9266a092ce0c03d6b6b412d3",
+                "0xfb5ec42cc91132e62295d5a729254262a0c17afdadc8fe33ba2960e4cb023460",
+                "0x19fbd3f6bc51dcace199a60c8d9f68d9fee952ed5898bf54f161760e06f46b71",
+                "0xd8b0991394c340ec4c8a155706737da321b7b3dcce0d434618f167530175dd09",
+                "0x98c3302a6c8a417d405f845d02beb4ec528d9c720bebc215db20cc3a187e3849",
+                "0x7ff3fc976bb67f6a038741ec23397873200224b5791861b1bf0cfa27ef2c48fd",
+                "0x77c505170a45c3f6768307c6a60b8d123493fd3658c53262a0e927a5ab587871",
+                "0x48b2819c5812d7070bc6371ef29c9c45380f247e8e81cc672980733eb0ccb857",
+                "0xb50b29ec2a85a53f1eb638c5aac80ad7eaed8485732aba305460c8dda0b3e696"
+            ],
+            "position": "0xb50b29ec2a85a53f1eb638c5aac80ad7eaed8485732aba305460c8dda0b3e696",
+            "complete": false,
+            "block": 32173919
+        },
+        "apiString": "api?module=logs&action=getLogs"
+    },
+    "Txns": [
+        {
+            "txnID": "0x24a84839fafe7fe699f160c25531e6d575ef1fd0a8fea1f097aba25cfbb720d0",
+            "txnIDHashed": "0xaa8408f40d51c4cecaac537772605a564a0aaf9ea22374c5671474d8959240ac",
+            "bridgeType": "TokenV2",
+            "txnType": "Unknown",
+            "network": "avalanche",
+            "address": "0x52d71eef6846b1c7047b0bd1804d304f9a6ad1d1",
+            "protocol": "Glitter Finance",
+            "block": 31272909,
+            "confirmations": 1918289,
+            "gasPaid": "18944066074249731",
+            "txnTimestamp": "2023-06-13T09:51:30.000Z",
+            "chainStatus": "Completed"
+        },
+        {
+            "txnID": "0xdd3491189f8ec71b109f534cd2256c21f84a5fce043b97375c7d55a68ee32a46",
+            "txnIDHashed": "0x275d9d4eb7c392f101bddb56a19d378fbfe25da26ce5e076f80bf84766548259",
+            "bridgeType": "TokenV2",
+            "txnType": "Unknown",
+            "network": "avalanche",
+            "address": "0x52d71eef6846b1c7047b0bd1804d304f9a6ad1d1",
+            "protocol": "Glitter Finance",
+            "block": 31313176,
+            "confirmations": 1878022,
+            "gasPaid": "3030647452834070",
+            "txnTimestamp": "2023-06-14T08:43:05.000Z",
+            "chainStatus": "Completed"
+        },
+        {
+            "txnID": "0x2b03e7dde4daaff182269e3d7b3f88872de502e78545701092a3a5dbad908792",
+            "txnIDHashed": "0x1c47642a9cae90648676ab38843d1872b8af95d45f78fff7f635122935200dd4",
+            "bridgeType": "TokenV2",
+            "txnType": "Unknown",
+            "network": "avalanche",
+            "address": "0x52d71eef6846b1c7047b0bd1804d304f9a6ad1d1",
+            "protocol": "Glitter Finance",
+            "block": 31520408,
+            "confirmations": 1670790,
+            "gasPaid": "2865206500000000",
+            "txnTimestamp": "2023-06-19T06:30:25.000Z",
+            "chainStatus": "Completed"
+        },
+        {
+            "txnID": "0x28c4514db3b5e00cdb70e21f57fcd6f3077cd2ef83601c6ec27c83551581e49d",
+            "txnIDHashed": "0x89ecc049a09e3ba490f45a49e66d123d8c01075204a2bd561280408cfa046834",
+            "bridgeType": "TokenV2",
+            "txnType": "Release",
+            "network": "avalanche",
+            "address": "0xCF2a8E508F3825d280B1e6619C46BCAFa784EEf1",
+            "protocol": "Glitter Finance",
+            "block": 31596921,
+            "confirmations": 1594277,
+            "gasPaid": "4633710500000000",
+            "txnTimestamp": "2023-06-21T01:35:13.000Z",
+            "chainStatus": "Completed",
+            "tokenSymbol": "xNOSEC",
+            "baseSymbol": "NOSEC",
+            "units": "1000000000000000000",
+            "amount": "1",
+            "routing": {
+                "from": {
+                    "network": "",
+                    "address": "",
+                    "local_symbol": "",
+                    "txn_signature_hashed": "0xde90d3794d39e2bdacca7ac028f390d1d814ee3c435b3585926d02c257efeca6"
+                },
+                "to": {
+                    "network": "avalanche",
+                    "address": "0xCF2a8E508F3825d280B1e6619C46BCAFa784EEf1",
+                    "local_symbol": "Wrapped Not A Security",
+                    "base_units": "1000000000000000000",
+                    "txn_signature": "0x28c4514db3b5e00cdb70e21f57fcd6f3077cd2ef83601c6ec27c83551581e49d"
+                },
+                "amount": "1"
+            }
+        },
+        {
+            "txnID": "0xb1442fbbc384d54c89f956ed7e2fd154e23c4e003f75c98b2942adb571b5635a",
+            "txnIDHashed": "0x5e7cc7b14078945d8a763cc3d90b2e92261981a6a3e92e681c5ad55bc535f8a7",
+            "bridgeType": "TokenV2",
+            "txnType": "Deposit",
+            "network": "avalanche",
+            "address": "0xCF2a8E508F3825d280B1e6619C46BCAFa784EEf1",
+            "protocol": "Glitter Finance",
+            "block": 31605815,
+            "confirmations": 1585383,
+            "gasPaid": "1920799500000000",
+            "txnTimestamp": "2023-06-21T06:35:48.000Z",
+            "chainStatus": "Completed",
+            "tokenSymbol": "xNOSEC",
+            "baseSymbol": "NOSEC",
+            "units": "1000000000000000000",
+            "amount": "1",
+            "routing": {
+                "from": {
+                    "network": "avalanche",
+                    "address": "0xCF2a8E508F3825d280B1e6619C46BCAFa784EEf1",
+                    "local_symbol": "xNOSEC",
+                    "base_units": "1000000000000000000",
+                    "txn_signature": "0xb1442fbbc384d54c89f956ed7e2fd154e23c4e003f75c98b2942adb571b5635a"
+                },
+                "to": {
+                    "network": "ethereum",
+                    "address": "0xcf2a8e508f3825d280b1e6619c46bcafa784eef1",
+                    "local_symbol": "NOSEC",
+                    "base_units": "1000000000000000000"
+                },
+                "amount": "1"
+            }
+        },
+        {
+            "txnID": "0xcd59c68168a5aa8364201bbc74e56991e64f8543ef2a82e5fd74631a92dce31d",
+            "txnIDHashed": "0xb128fb77195ff43d2534a0b1fe1e84bc1bfd30a9a0b4a816200e74c84f0c3f96",
+            "bridgeType": "TokenV2",
+            "txnType": "Release",
+            "network": "avalanche",
+            "address": "0xCF2a8E508F3825d280B1e6619C46BCAFa784EEf1",
+            "protocol": "Glitter Finance",
+            "block": 31682246,
+            "confirmations": 1508952,
+            "gasPaid": "4840119000000000",
+            "txnTimestamp": "2023-06-23T02:22:04.000Z",
+            "chainStatus": "Completed",
+            "tokenSymbol": "xNOSEC",
+            "baseSymbol": "NOSEC",
+            "units": "985000000000000000",
+            "amount": "0.985",
+            "routing": {
+                "from": {
+                    "network": "",
+                    "address": "",
+                    "local_symbol": "",
+                    "txn_signature_hashed": "0x8e15b679ac410f5bc4548100a86b479c5ee2cb953ddd1daeb31a8d25baf4529c"
+                },
+                "to": {
+                    "network": "avalanche",
+                    "address": "0xCF2a8E508F3825d280B1e6619C46BCAFa784EEf1",
+                    "local_symbol": "Wrapped Not A Security",
+                    "base_units": "985000000000000000",
+                    "txn_signature": "0xcd59c68168a5aa8364201bbc74e56991e64f8543ef2a82e5fd74631a92dce31d"
+                },
+                "amount": "0.985"
+            }
+        },
+        {
+            "txnID": "0x1a8f3563cd7fea27256286a165b108f823395bea65e3720ee327033582b7041e",
+            "txnIDHashed": "0x5e4c3652fb056021044204dc313e5507410d3a0d017a360024630f3f94d9beed",
+            "bridgeType": "TokenV2",
+            "txnType": "Deposit",
+            "network": "avalanche",
+            "address": "0xCF2a8E508F3825d280B1e6619C46BCAFa784EEf1",
+            "protocol": "Glitter Finance",
+            "block": 31682467,
+            "confirmations": 1508731,
+            "gasPaid": "1921117500000000",
+            "txnTimestamp": "2023-06-23T02:29:45.000Z",
+            "chainStatus": "Completed",
+            "tokenSymbol": "xNOSEC",
+            "baseSymbol": "NOSEC",
+            "units": "985000000000000000",
+            "amount": "0.985",
+            "routing": {
+                "from": {
+                    "network": "avalanche",
+                    "address": "0xCF2a8E508F3825d280B1e6619C46BCAFa784EEf1",
+                    "local_symbol": "xNOSEC",
+                    "base_units": "985000000000000000",
+                    "txn_signature": "0x1a8f3563cd7fea27256286a165b108f823395bea65e3720ee327033582b7041e"
+                },
+                "to": {
+                    "network": "ethereum",
+                    "address": "0xcf2a8e508f3825d280b1e6619c46bcafa784eef1",
+                    "local_symbol": "NOSEC",
+                    "base_units": "985000000000000000"
+                },
+                "amount": "0.985"
+            }
+        },
+        {
+            "txnID": "0xc46e69073bcea1cc66064f1e49b0dbc274d0880479a6787d0625b319a30c08fd",
+            "txnIDHashed": "0x84684e48d692ddb49596429464aa8153d97148ebcbfe96cd3506a5b5428dd401",
+            "bridgeType": "TokenV2",
+            "txnType": "Release",
+            "network": "avalanche",
+            "address": "0xCF2a8E508F3825d280B1e6619C46BCAFa784EEf1",
+            "protocol": "Glitter Finance",
+            "block": 32151603,
+            "confirmations": 1039595,
+            "gasPaid": "4255078500000000",
+            "txnTimestamp": "2023-07-04T04:11:35.000Z",
+            "chainStatus": "Completed",
+            "tokenSymbol": "xNOSEC",
+            "baseSymbol": "NOSEC",
+            "units": "19700000000000000000",
+            "amount": "19.7",
+            "routing": {
+                "from": {
+                    "network": "",
+                    "address": "",
+                    "local_symbol": "",
+                    "txn_signature_hashed": "0xba7a27903af92a316bd998bb579365d33cab631d499a298047fb963e9ededb73"
+                },
+                "to": {
+                    "network": "avalanche",
+                    "address": "0xCF2a8E508F3825d280B1e6619C46BCAFa784EEf1",
+                    "local_symbol": "Wrapped Not A Security",
+                    "base_units": "19700000000000000000",
+                    "txn_signature": "0xc46e69073bcea1cc66064f1e49b0dbc274d0880479a6787d0625b319a30c08fd"
+                },
+                "amount": "19.7"
+            }
+        },
+        {
+            "txnID": "0xdfe43ec2b864345c784fe91fa0c06d4e9f222835a7bace4ea01de214c0c10534",
+            "txnIDHashed": "0xebd03f4e1af7b51500bee0feeafe0727e0135267ed7efbecc98af437477059b1",
+            "bridgeType": "TokenV2",
+            "txnType": "Deposit",
+            "network": "avalanche",
+            "address": "0xCF2a8E508F3825d280B1e6619C46BCAFa784EEf1",
+            "protocol": "Glitter Finance",
+            "block": 32152181,
+            "confirmations": 1039017,
+            "gasPaid": "1920799500000000",
+            "txnTimestamp": "2023-07-04T04:31:02.000Z",
+            "chainStatus": "Completed",
+            "tokenSymbol": "xNOSEC",
+            "baseSymbol": "NOSEC",
+            "units": "1000000000000000000",
+            "amount": "1",
+            "routing": {
+                "from": {
+                    "network": "avalanche",
+                    "address": "0xCF2a8E508F3825d280B1e6619C46BCAFa784EEf1",
+                    "local_symbol": "xNOSEC",
+                    "base_units": "1000000000000000000",
+                    "txn_signature": "0xdfe43ec2b864345c784fe91fa0c06d4e9f222835a7bace4ea01de214c0c10534"
+                },
+                "to": {
+                    "network": "polygon",
+                    "address": "0xcf2a8e508f3825d280b1e6619c46bcafa784eef1",
+                    "local_symbol": "xNOSEC",
+                    "base_units": "1000000000000000000"
+                },
+                "amount": "1"
+            }
+        },
+        {
+            "txnID": "0xb5df7277ae2459d840a9d9dcb8a2dc2fa84243e10c6b4786a4ccdd4ed4b02417",
+            "txnIDHashed": "0x2237221770a03a82b5d43db2724f88fa25f7c7daa5de588dc1de8b4b87084394",
+            "bridgeType": "TokenV2",
+            "txnType": "Deposit",
+            "network": "avalanche",
+            "address": "0xCF2a8E508F3825d280B1e6619C46BCAFa784EEf1",
+            "protocol": "Glitter Finance",
+            "block": 32152188,
+            "confirmations": 1039010,
+            "gasPaid": "1932416726016906",
+            "txnTimestamp": "2023-07-04T04:31:17.000Z",
+            "chainStatus": "Completed",
+            "tokenSymbol": "xNOSEC",
+            "baseSymbol": "NOSEC",
+            "units": "1000000000000000000",
+            "amount": "1",
+            "routing": {
+                "from": {
+                    "network": "avalanche",
+                    "address": "0xCF2a8E508F3825d280B1e6619C46BCAFa784EEf1",
+                    "local_symbol": "xNOSEC",
+                    "base_units": "1000000000000000000",
+                    "txn_signature": "0xb5df7277ae2459d840a9d9dcb8a2dc2fa84243e10c6b4786a4ccdd4ed4b02417"
+                },
+                "to": {
+                    "network": "arbitrum",
+                    "address": "0xcf2a8e508f3825d280b1e6619c46bcafa784eef1",
+                    "local_symbol": "xNOSEC",
+                    "base_units": "1000000000000000000"
+                },
+                "amount": "1"
+            }
+        },
+        {
+            "txnID": "0xa7332d11a746cfa79e5088b92387c96ba1d936772ecf9e335353855f4cd5f5f8",
+            "txnIDHashed": "0xf8d285772bc9ccd974f7a12cc4f6038dfbfffaa06a4bc6d32b7f0b7f355d7a8e",
+            "bridgeType": "TokenV2",
+            "txnType": "Deposit",
+            "network": "avalanche",
+            "address": "0xCF2a8E508F3825d280B1e6619C46BCAFa784EEf1",
+            "protocol": "Glitter Finance",
+            "block": 32152194,
+            "confirmations": 1039004,
+            "gasPaid": "1920799500000000",
+            "txnTimestamp": "2023-07-04T04:31:32.000Z",
+            "chainStatus": "Completed",
+            "tokenSymbol": "xNOSEC",
+            "baseSymbol": "NOSEC",
+            "units": "1000000000000000000",
+            "amount": "1",
+            "routing": {
+                "from": {
+                    "network": "avalanche",
+                    "address": "0xCF2a8E508F3825d280B1e6619C46BCAFa784EEf1",
+                    "local_symbol": "xNOSEC",
+                    "base_units": "1000000000000000000",
+                    "txn_signature": "0xa7332d11a746cfa79e5088b92387c96ba1d936772ecf9e335353855f4cd5f5f8"
+                },
+                "to": {
+                    "network": "binance",
+                    "address": "0xcf2a8e508f3825d280b1e6619c46bcafa784eef1",
+                    "local_symbol": "xNOSEC",
+                    "base_units": "1000000000000000000"
+                },
+                "amount": "1"
+            }
+        },
+        {
+            "txnID": "0xa6abfe193425dbf88c8c34511a3241108b29e6eb9266a092ce0c03d6b6b412d3",
+            "txnIDHashed": "0x577812637434648a01a436412d594435da5c08067648faace4c63cb25cb6c4dc",
+            "bridgeType": "TokenV2",
+            "txnType": "Deposit",
+            "network": "avalanche",
+            "address": "0xCF2a8E508F3825d280B1e6619C46BCAFa784EEf1",
+            "protocol": "Glitter Finance",
+            "block": 32152200,
+            "confirmations": 1038998,
+            "gasPaid": "1920799500000000",
+            "txnTimestamp": "2023-07-04T04:31:44.000Z",
+            "chainStatus": "Completed",
+            "tokenSymbol": "xNOSEC",
+            "baseSymbol": "NOSEC",
+            "units": "1000000000000000000",
+            "amount": "1",
+            "routing": {
+                "from": {
+                    "network": "avalanche",
+                    "address": "0xCF2a8E508F3825d280B1e6619C46BCAFa784EEf1",
+                    "local_symbol": "xNOSEC",
+                    "base_units": "1000000000000000000",
+                    "txn_signature": "0xa6abfe193425dbf88c8c34511a3241108b29e6eb9266a092ce0c03d6b6b412d3"
+                },
+                "to": {
+                    "network": "zkevm",
+                    "address": "0xcf2a8e508f3825d280b1e6619c46bcafa784eef1",
+                    "local_symbol": "xNOSEC",
+                    "base_units": "1000000000000000000"
+                },
+                "amount": "1"
+            }
+        },
+        {
+            "txnID": "0xfb5ec42cc91132e62295d5a729254262a0c17afdadc8fe33ba2960e4cb023460",
+            "txnIDHashed": "0x9f2c1c87bb5e77db529e3e978d235ead572ce25ac2d926cf67b5fbd1478130c5",
+            "bridgeType": "TokenV2",
+            "txnType": "Deposit",
+            "network": "avalanche",
+            "address": "0xCF2a8E508F3825d280B1e6619C46BCAFa784EEf1",
+            "protocol": "Glitter Finance",
+            "block": 32152207,
+            "confirmations": 1038991,
+            "gasPaid": "1920799500000000",
+            "txnTimestamp": "2023-07-04T04:31:59.000Z",
+            "chainStatus": "Completed",
+            "tokenSymbol": "xNOSEC",
+            "baseSymbol": "NOSEC",
+            "units": "1000000000000000000",
+            "amount": "1",
+            "routing": {
+                "from": {
+                    "network": "avalanche",
+                    "address": "0xCF2a8E508F3825d280B1e6619C46BCAFa784EEf1",
+                    "local_symbol": "xNOSEC",
+                    "base_units": "1000000000000000000",
+                    "txn_signature": "0xfb5ec42cc91132e62295d5a729254262a0c17afdadc8fe33ba2960e4cb023460"
+                },
+                "to": {
+                    "network": "optimism",
+                    "address": "0xcf2a8e508f3825d280b1e6619c46bcafa784eef1",
+                    "local_symbol": "xNOSEC",
+                    "base_units": "1000000000000000000"
+                },
+                "amount": "1"
+            }
+        },
+        {
+            "txnID": "0x19fbd3f6bc51dcace199a60c8d9f68d9fee952ed5898bf54f161760e06f46b71",
+            "txnIDHashed": "0xfccac4c1d50a5bb0e9b00d7841043e47aa6d2e7836e5666c9464c5006d9c79ab",
+            "bridgeType": "TokenV2",
+            "txnType": "Release",
+            "network": "avalanche",
+            "address": "0xCF2a8E508F3825d280B1e6619C46BCAFa784EEf1",
+            "protocol": "Glitter Finance",
+            "block": 32152656,
+            "confirmations": 1038542,
+            "gasPaid": "3348460500000000",
+            "txnTimestamp": "2023-07-04T04:47:00.000Z",
+            "chainStatus": "Completed",
+            "tokenSymbol": "xNOSEC",
+            "baseSymbol": "NOSEC",
+            "units": "985000000000000000",
+            "amount": "0.985",
+            "routing": {
+                "from": {
+                    "network": "",
+                    "address": "",
+                    "local_symbol": "",
+                    "txn_signature_hashed": "0x32c6abc3bd0c1cbfb6d0fae4c16500865c3b0c3cd20dc4a34d4b63984a7d1f0e"
+                },
+                "to": {
+                    "network": "avalanche",
+                    "address": "0xCF2a8E508F3825d280B1e6619C46BCAFa784EEf1",
+                    "local_symbol": "Wrapped Not A Security",
+                    "base_units": "985000000000000000",
+                    "txn_signature": "0x19fbd3f6bc51dcace199a60c8d9f68d9fee952ed5898bf54f161760e06f46b71"
+                },
+                "amount": "0.985"
+            }
+        },
+        {
+            "txnID": "0xd8b0991394c340ec4c8a155706737da321b7b3dcce0d434618f167530175dd09",
+            "txnIDHashed": "0xbbe10969bf5bd4a8577f2b52413a8b22e5b9fa44bcb17f9967eecc44917a9b45",
+            "bridgeType": "TokenV2",
+            "txnType": "Release",
+            "network": "avalanche",
+            "address": "0xCF2a8E508F3825d280B1e6619C46BCAFa784EEf1",
+            "protocol": "Glitter Finance",
+            "block": 32152682,
+            "confirmations": 1038516,
+            "gasPaid": "3480987000000000",
+            "txnTimestamp": "2023-07-04T04:47:53.000Z",
+            "chainStatus": "Completed",
+            "tokenSymbol": "xNOSEC",
+            "baseSymbol": "NOSEC",
+            "units": "985000000000000000",
+            "amount": "0.985",
+            "routing": {
+                "from": {
+                    "network": "",
+                    "address": "",
+                    "local_symbol": "",
+                    "txn_signature_hashed": "0x1926e9e75f936c045af48dcdb67e8bea6951e1b69a042b6bbe91a8b0659a6f14"
+                },
+                "to": {
+                    "network": "avalanche",
+                    "address": "0xCF2a8E508F3825d280B1e6619C46BCAFa784EEf1",
+                    "local_symbol": "Wrapped Not A Security",
+                    "base_units": "985000000000000000",
+                    "txn_signature": "0xd8b0991394c340ec4c8a155706737da321b7b3dcce0d434618f167530175dd09"
+                },
+                "amount": "0.985"
+            }
+        },
+        {
+            "txnID": "0x98c3302a6c8a417d405f845d02beb4ec528d9c720bebc215db20cc3a187e3849",
+            "txnIDHashed": "0x3ce69dcc5c353e82003eb4089c2273ab717252efdf41b70ef90f4f9e26b1e4b2",
+            "bridgeType": "TokenV2",
+            "txnType": "Release",
+            "network": "avalanche",
+            "address": "0xCF2a8E508F3825d280B1e6619C46BCAFa784EEf1",
+            "protocol": "Glitter Finance",
+            "block": 32152802,
+            "confirmations": 1038396,
+            "gasPaid": "3480987000000000",
+            "txnTimestamp": "2023-07-04T04:51:54.000Z",
+            "chainStatus": "Completed",
+            "tokenSymbol": "xNOSEC",
+            "baseSymbol": "NOSEC",
+            "units": "985000000000000000",
+            "amount": "0.985",
+            "routing": {
+                "from": {
+                    "network": "",
+                    "address": "",
+                    "local_symbol": "",
+                    "txn_signature_hashed": "0xbd28b6e870ac700097709f8132a11b3994110bf2b4028c27e705faf6f443f59d"
+                },
+                "to": {
+                    "network": "avalanche",
+                    "address": "0xCF2a8E508F3825d280B1e6619C46BCAFa784EEf1",
+                    "local_symbol": "Wrapped Not A Security",
+                    "base_units": "985000000000000000",
+                    "txn_signature": "0x98c3302a6c8a417d405f845d02beb4ec528d9c720bebc215db20cc3a187e3849"
+                },
+                "amount": "0.985"
+            }
+        },
+        {
+            "txnID": "0x7ff3fc976bb67f6a038741ec23397873200224b5791861b1bf0cfa27ef2c48fd",
+            "txnIDHashed": "0x6f5c5989b842c7b4ac794d1517c1fd4f84afdf237912ce8151f266627bbecd9c",
+            "bridgeType": "TokenV2",
+            "txnType": "Release",
+            "network": "avalanche",
+            "address": "0xCF2a8E508F3825d280B1e6619C46BCAFa784EEf1",
+            "protocol": "Glitter Finance",
+            "block": 32152894,
+            "confirmations": 1038304,
+            "gasPaid": "3396286549981332",
+            "txnTimestamp": "2023-07-04T04:54:58.000Z",
+            "chainStatus": "Completed",
+            "tokenSymbol": "xNOSEC",
+            "baseSymbol": "NOSEC",
+            "units": "985000000000000000",
+            "amount": "0.985",
+            "routing": {
+                "from": {
+                    "network": "",
+                    "address": "",
+                    "local_symbol": "",
+                    "txn_signature_hashed": "0xfa44473326540f591304c232bbd359c27762c2341b8fcb1581de33561be536f7"
+                },
+                "to": {
+                    "network": "avalanche",
+                    "address": "0xCF2a8E508F3825d280B1e6619C46BCAFa784EEf1",
+                    "local_symbol": "Wrapped Not A Security",
+                    "base_units": "985000000000000000",
+                    "txn_signature": "0x7ff3fc976bb67f6a038741ec23397873200224b5791861b1bf0cfa27ef2c48fd"
+                },
+                "amount": "0.985"
+            }
+        },
+        {
+            "txnID": "0x77c505170a45c3f6768307c6a60b8d123493fd3658c53262a0e927a5ab587871",
+            "txnIDHashed": "0x4d9c005c18e17a40f17e3e39fcfc0073ab13319507e05d5ae18156b5fb8cff4c",
+            "bridgeType": "TokenV2",
+            "txnType": "Deposit",
+            "network": "avalanche",
+            "address": "0xCF2a8E508F3825d280B1e6619C46BCAFa784EEf1",
+            "protocol": "Glitter Finance",
+            "block": 32173903,
+            "confirmations": 1017295,
+            "gasPaid": "1920799500000000",
+            "txnTimestamp": "2023-07-04T16:44:20.000Z",
+            "chainStatus": "Completed",
+            "tokenSymbol": "xNOSEC",
+            "baseSymbol": "NOSEC",
+            "units": "1000000000000000000",
+            "amount": "1",
+            "routing": {
+                "from": {
+                    "network": "avalanche",
+                    "address": "0xCF2a8E508F3825d280B1e6619C46BCAFa784EEf1",
+                    "local_symbol": "xNOSEC",
+                    "base_units": "1000000000000000000",
+                    "txn_signature": "0x77c505170a45c3f6768307c6a60b8d123493fd3658c53262a0e927a5ab587871"
+                },
+                "to": {
+                    "network": "polygon",
+                    "address": "0xcf2a8e508f3825d280b1e6619c46bcafa784eef1",
+                    "local_symbol": "xNOSEC",
+                    "base_units": "1000000000000000000"
+                },
+                "amount": "1"
+            }
+        },
+        {
+            "txnID": "0x48b2819c5812d7070bc6371ef29c9c45380f247e8e81cc672980733eb0ccb857",
+            "txnIDHashed": "0xdc6280be0b3ea1397eac528647e525737142e08a2af49ca7f7aa3e1dd9af716c",
+            "bridgeType": "TokenV2",
+            "txnType": "Deposit",
+            "network": "avalanche",
+            "address": "0xCF2a8E508F3825d280B1e6619C46BCAFa784EEf1",
+            "protocol": "Glitter Finance",
+            "block": 32173910,
+            "confirmations": 1017292,
+            "gasPaid": "1920799500000000",
+            "txnTimestamp": "2023-07-04T16:44:35.000Z",
+            "chainStatus": "Completed",
+            "tokenSymbol": "xNOSEC",
+            "baseSymbol": "NOSEC",
+            "units": "1000000000000000000",
+            "amount": "1",
+            "routing": {
+                "from": {
+                    "network": "avalanche",
+                    "address": "0xCF2a8E508F3825d280B1e6619C46BCAFa784EEf1",
+                    "local_symbol": "xNOSEC",
+                    "base_units": "1000000000000000000",
+                    "txn_signature": "0x48b2819c5812d7070bc6371ef29c9c45380f247e8e81cc672980733eb0ccb857"
+                },
+                "to": {
+                    "network": "arbitrum",
+                    "address": "0xcf2a8e508f3825d280b1e6619c46bcafa784eef1",
+                    "local_symbol": "xNOSEC",
+                    "base_units": "1000000000000000000"
+                },
+                "amount": "1"
+            }
+        },
+        {
+            "txnID": "0xb50b29ec2a85a53f1eb638c5aac80ad7eaed8485732aba305460c8dda0b3e696",
+            "txnIDHashed": "0x6b5d33775a2b16a67d7715cd4bc5f25b1cb734f26ac44a82fd8ed6e7f13e20f8",
+            "bridgeType": "TokenV2",
+            "txnType": "Deposit",
+            "network": "avalanche",
+            "address": "0xCF2a8E508F3825d280B1e6619C46BCAFa784EEf1",
+            "protocol": "Glitter Finance",
+            "block": 32173919,
+            "confirmations": 1017283,
+            "gasPaid": "1920799500000000",
+            "txnTimestamp": "2023-07-04T16:44:52.000Z",
+            "chainStatus": "Completed",
+            "tokenSymbol": "xNOSEC",
+            "baseSymbol": "NOSEC",
+            "units": "1000000000000000000",
+            "amount": "1",
+            "routing": {
+                "from": {
+                    "network": "avalanche",
+                    "address": "0xCF2a8E508F3825d280B1e6619C46BCAFa784EEf1",
+                    "local_symbol": "xNOSEC",
+                    "base_units": "1000000000000000000",
+                    "txn_signature": "0xb50b29ec2a85a53f1eb638c5aac80ad7eaed8485732aba305460c8dda0b3e696"
+                },
+                "to": {
+                    "network": "binance",
+                    "address": "0xcf2a8e508f3825d280b1e6619c46bcafa784eef1",
+                    "local_symbol": "xNOSEC",
+                    "base_units": "1000000000000000000"
+                },
+                "amount": "1"
+            }
+        }
+    ]
+}

@@ -12,6 +12,7 @@ describe("Parsing Test", () => {
 
     //Before All tests -> create new SDK
     beforeAll(async () => {
+
         //Initialize SDK
         sdk = new GlitterSDKServer(GlitterEnvironment.mainnet, mainnetAPI, 25);
 

@@ -25,10 +25,10 @@ import { SolanaV2Parser } from "./poller.solana.token.v2";
  * Implements the GlitterPoller interface.
  */
 export class GlitterSolanaPoller implements GlitterPoller {
-    
+
     //Network
     public network: BridgeNetworks = BridgeNetworks.solana;
-    
+
     //Cursors
     /**
      * Cursors object for tracking transaction cursors.
@@ -36,14 +36,14 @@ export class GlitterSolanaPoller implements GlitterPoller {
      *
      * @type {Record<BridgeType, Cursor[]>}
      */
-    public cursors: Record<BridgeType, Cursor[]> ;
+    public cursors: Record<BridgeType, Cursor[]>;
     /**
      * Get the tokenV1Cursor.
      *
      * @type {Cursor | undefined}
      * @readonly
      */
-    public get tokenV1Cursor(): Cursor | undefined{
+    public get tokenV1Cursor(): Cursor | undefined {
         return this.cursors?.[BridgeType.TokenV1]?.[0];
     }
     /**
@@ -52,7 +52,7 @@ export class GlitterSolanaPoller implements GlitterPoller {
      * @type {Cursor | undefined}
      * @readonly
      */
-    public get tokenV2Cursor(): Cursor | undefined{
+    public get tokenV2Cursor(): Cursor | undefined {
         return this.cursors?.[BridgeType.TokenV2]?.[0];
     }
     /**
@@ -61,7 +61,7 @@ export class GlitterSolanaPoller implements GlitterPoller {
      * @type {Cursor | undefined}
      * @readonly
      */
-    public get usdcCursors(): Cursor[] | undefined{
+    public get usdcCursors(): Cursor[] | undefined {
         return this.cursors?.[BridgeType.Circle];
     }
 
@@ -73,7 +73,7 @@ export class GlitterSolanaPoller implements GlitterPoller {
             [BridgeType.Unknown]: []
         };
     }
-    
+
     //Initialize
     /**
      * Initializes the solana poller.
@@ -83,7 +83,7 @@ export class GlitterSolanaPoller implements GlitterPoller {
      * @returns {void}
      */
     public initialize(sdkServer: GlitterSDKServer): void {
-        
+
         //Add Token Cursor
         const tokenAddress = sdkServer.sdk?.solana?.getAddress("bridgeProgram");
         if (tokenAddress)
@@ -142,72 +142,77 @@ export class GlitterSolanaPoller implements GlitterPoller {
         cursor: Cursor
     ): Promise<PollerResult> {
 
-        //Check Client
-        const client = this.getClient(sdkServer, cursor.bridgeType);
-        if (!client) throw ServerError.ClientNotSet(BridgeNetworks.solana);
-
-        //Get New Transactions
-        const searchFilter = await this.getFilter(cursor);
-        let attempts = 0;
-        let newTxns: ConfirmedSignatureInfo[] = [];
-        do {
-            try {
-                newTxns = await client.getSignaturesForAddress(
-                    new PublicKey(cursor.address || ""),
-                    searchFilter
-                );
-                break;
-            } catch (e: any) {
-                attempts++;
-                console.log(`Error getting signatures for address: ${e.message}`);
-                console.log(`Retrying ${attempts} of 5`);
-                await sdkServer.sdk.solana?.reconnect();
-            }
-        } while (attempts < 5);
-
-        //Map Signatures
-        const signatures: string[] = [];
-
-        //Check if transaction was previously processed
-        for (const txn of newTxns) {
-            if (cursor.batch?.txns?.has(txn.signature)) continue;
-            if (cursor.lastBatchTxns?.has(txn.signature)) continue;
-            signatures.push(txn.signature);
-        }
-
-        //Get Transaction Data
-        let txnData: (ParsedTransactionWithMeta | null)[] = [];
-        do {
-            try {
-                txnData = await client.getParsedTransactions(signatures, {
-                    maxSupportedTransactionVersion: 0,
-                });
-                break;
-            } catch (e: any) {
-                attempts++;
-                console.log(`Error getting signatures for address: ${e.message}`);
-                console.log(`Retrying ${attempts} of 5`);
-                await sdkServer.sdk.solana?.reconnect();
-            }
-        } while (attempts < 5);
-
-        //Get partial transactions
         const partialTxns: PartialBridgeTxn[] = [];
-        for (const txn of txnData) {         
+        try {
 
-            if (!txn) continue;
+            //Check Client
+            const client = this.getClient(sdkServer, cursor.bridgeType);
+            if (!client) throw ServerError.ClientNotSet(BridgeNetworks.solana);
 
-            //Process Transaction
-            const partialTxn = await this.parseTxnData(sdkServer, txn, cursor.bridgeType);
-            if (!partialTxn) continue;
+            //Get New Transactions
+            const searchFilter = await this.getFilter(cursor);
+            let attempts = 0;
+            let newTxns: ConfirmedSignatureInfo[] = [];
+            do {
+                try {
+                    newTxns = await client.getSignaturesForAddress(
+                        new PublicKey(cursor.address || ""),
+                        searchFilter
+                    );
+                    break;
+                } catch (e: any) {
+                    attempts++;
+                    console.log(`Error getting signatures for address: ${e.message}`);
+                    console.log(`Retrying ${attempts} of 5`);
+                    await sdkServer.sdk.solana?.reconnect();
+                }
+            } while (attempts < 5);
 
-            //Run Through Filter
-            if (CursorFilter(cursor, partialTxn)) partialTxns.push(partialTxn);    
+            //Map Signatures
+            const signatures: string[] = [];
+
+            //Check if transaction was previously processed
+            for (const txn of newTxns) {
+                if (cursor.batch?.txns?.has(txn.signature)) continue;
+                if (cursor.lastBatchTxns?.has(txn.signature)) continue;
+                signatures.push(txn.signature);
+            }
+
+            //Get Transaction Data
+            let txnData: (ParsedTransactionWithMeta | null)[] = [];
+            do {
+                try {
+                    txnData = await client.getParsedTransactions(signatures, {
+                        maxSupportedTransactionVersion: 0,
+                    });
+                    break;
+                } catch (e: any) {
+                    attempts++;
+                    console.log(`Error getting signatures for address: ${e.message}`);
+                    console.log(`Retrying ${attempts} of 5`);
+                    await sdkServer.sdk.solana?.reconnect();
+                }
+            } while (attempts < 5);
+
+            //Get partial transactions
+            for (const txn of txnData) {
+
+                if (!txn) continue;
+
+                //Process Transaction
+                const partialTxn = await this.parseTxnData(sdkServer, txn, cursor.bridgeType);
+                if (!partialTxn) continue;
+
+                //Run Through Filter
+                if (CursorFilter(cursor, partialTxn)) partialTxns.push(partialTxn);
+            }
+
+            //update cursor
+            cursor = await UpdateCursor(cursor, signatures);
+
+        } catch (error) {
+            console.log(error);
         }
-
-        //update cursor
-        cursor = await UpdateCursor(cursor, signatures);
-
         //Return Result
         return {
             cursor: cursor,
@@ -225,8 +230,8 @@ export class GlitterSolanaPoller implements GlitterPoller {
      * @param {BridgeType} type - The bridge type.
      * @returns {Promise<PartialBridgeTxn | undefined>} A promise that resolves to the partial bridge transaction, or undefined if parsing fails.
      */
-    async parseTxnData(sdkServer: GlitterSDKServer, txnData:ParsedTransactionWithMeta, type:BridgeType):Promise<PartialBridgeTxn | undefined>{
-        
+    async parseTxnData(sdkServer: GlitterSDKServer, txnData: ParsedTransactionWithMeta, type: BridgeType): Promise<PartialBridgeTxn | undefined> {
+
         //Check Client
         const client = this.getClient(sdkServer, type);
         if (!client) throw ServerError.ClientNotSet(BridgeNetworks.solana);
@@ -253,7 +258,7 @@ export class GlitterSolanaPoller implements GlitterPoller {
                         type
                     );
             }
-                      
+
         } catch (error) {
             console.error((error as Error).message)
         }
@@ -270,9 +275,9 @@ export class GlitterSolanaPoller implements GlitterPoller {
      * @param {BridgeType} type - The bridge type.
      * @returns {Promise<PartialBridgeTxn | undefined>} A promise that resolves to the partial bridge transaction, or undefined if parsing fails.
      */
-    async parseTxnID(sdkServer: GlitterSDKServer, txnID:string, type:BridgeType):Promise<PartialBridgeTxn | undefined>{
+    async parseTxnID(sdkServer: GlitterSDKServer, txnID: string, type: BridgeType): Promise<PartialBridgeTxn | undefined> {
         try {
-            
+
             //Ensure Transaction Exists
             if (!txnID) return undefined;
 
@@ -291,7 +296,7 @@ export class GlitterSolanaPoller implements GlitterPoller {
                 case BridgeType.TokenV1:
                     return await SolanaV1Parser.process(sdkServer, txn);
                 case BridgeType.TokenV2:
-                    return await SolanaV2Parser.process(sdkServer, client, txn);                
+                    return await SolanaV2Parser.process(sdkServer, client, txn);
                 case BridgeType.Circle:
                     return await SolanaCircleParser.process(sdkServer, txn, client);
                 default:
@@ -300,7 +305,7 @@ export class GlitterSolanaPoller implements GlitterPoller {
                         type
                     );
             }
-                      
+
         } catch (error) {
             console.error((error as Error).message)
         }
@@ -318,7 +323,7 @@ export class GlitterSolanaPoller implements GlitterPoller {
      * @returns {Promise<SignaturesForAddressOptions>} A promise that resolves to the filter options for obtaining signatures.
      */
     public async getFilter(cursor: Cursor): Promise<SignaturesForAddressOptions> {
-    //Set Search Filter
+        //Set Search Filter
         const searchFilter = {
             limit: cursor.limit,
             before: cursor.beginning?.txn || undefined,
@@ -341,7 +346,7 @@ export class GlitterSolanaPoller implements GlitterPoller {
      * @param {BridgeType} type - The bridge type.
      * @returns {Connection | undefined} The connection client for the specified bridge type, or undefined if not found.
      */
-    getClient(sdkServer: GlitterSDKServer, type:BridgeType): Connection | undefined{
+    getClient(sdkServer: GlitterSDKServer, type: BridgeType): Connection | undefined {
         //Check Client
         let client = sdkServer.sdk?.solana?.connections[sdkServer.sdk?.solana?.defaultConnection];
         if (sdkServer.sdk.environment === GlitterEnvironment.testnet) {
@@ -354,5 +359,5 @@ export class GlitterSolanaPoller implements GlitterPoller {
         return client;
 
     }
-   
+
 }

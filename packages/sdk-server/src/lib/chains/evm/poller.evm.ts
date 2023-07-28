@@ -15,12 +15,12 @@ export class GlitterEVMPoller implements GlitterPoller {
 
     //Network
     public network: BridgeNetworks;
-    
+
     //EVM Connect
     private apiKey: string | undefined;
     private apiURL: string | undefined;
     private connect: EvmConnect | undefined;
-    
+
     //Cursors
     /**
      * Cursors object for tracking transaction cursors.
@@ -28,14 +28,14 @@ export class GlitterEVMPoller implements GlitterPoller {
      *
      * @type {Record<BridgeType, Cursor[]>}
      */
-    public cursors: Record<BridgeType, Cursor[]> ;
+    public cursors: Record<BridgeType, Cursor[]>;
     /**
      * Get the tokenV1Cursor.
      *
      * @type {Cursor | undefined}
      * @readonly
      */
-    public get tokenV1Cursor(): Cursor | undefined{
+    public get tokenV1Cursor(): Cursor | undefined {
         return this.cursors?.[BridgeType.TokenV1]?.[0];
     }
     /**
@@ -44,7 +44,7 @@ export class GlitterEVMPoller implements GlitterPoller {
      * @type {Cursor | undefined}
      * @readonly
      */
-    public get tokenV2Cursor(): Cursor | undefined{
+    public get tokenV2Cursor(): Cursor | undefined {
         return this.cursors?.[BridgeType.TokenV2]?.[0];
     }
     /**
@@ -53,7 +53,7 @@ export class GlitterEVMPoller implements GlitterPoller {
      * @type {Cursor | undefined}
      * @readonly
      */
-    public get usdcCursors(): Cursor[] | undefined{
+    public get usdcCursors(): Cursor[] | undefined {
         return this.cursors?.[BridgeType.Circle];
     }
 
@@ -123,16 +123,16 @@ export class GlitterEVMPoller implements GlitterPoller {
         if (tokenAddress)
             this.cursors[BridgeType.TokenV1].push(
                 NewCursor(
-                    this.network, 
-                    BridgeType.TokenV1, 
-                    tokenAddress, 
+                    this.network,
+                    BridgeType.TokenV1,
+                    tokenAddress,
                     sdkServer.defaultLimit
                 )
             );
 
         //Add Token V2 Cursor
-        const tokenV2Address = this.connect?.getAddress("tokenBridge");       
-        if (tokenV2Address){
+        const tokenV2Address = this.connect?.getAddress("tokenBridge");
+        if (tokenV2Address) {
 
             const cursor = NewCursor(
                 this.network,
@@ -140,9 +140,9 @@ export class GlitterEVMPoller implements GlitterPoller {
                 tokenV2Address,
                 sdkServer.defaultLimit
             )
-            cursor.apiString = "api?module=logs&action=getLogs"                
+            cursor.apiString = "api?module=logs&action=getLogs"
             this.cursors[BridgeType.TokenV2].push(cursor);
-            
+
         }
 
         //Add USDC Cursors
@@ -153,13 +153,13 @@ export class GlitterEVMPoller implements GlitterPoller {
         ];
         usdcAddresses.forEach((address) => {
             if (this.network === undefined) throw ServerError.NetworkNotSet();
-            if (address){
+            if (address) {
                 const cursor = NewCursor(this.network, BridgeType.Circle, address, sdkServer.defaultLimit);
                 cursor.apiString = "api?module=account&action=tokentx"
                 //to check logs use:
                 //cursor.apiString = "api?module=logs&action=getLogs"
                 this.cursors[BridgeType.Circle]?.push(cursor);
-            }   
+            }
         });
     }
 
@@ -172,56 +172,61 @@ export class GlitterEVMPoller implements GlitterPoller {
      * @returns {Promise<PollerResult>} A promise that resolves to the PollerResult object.
      */
     async poll(sdkServer: GlitterSDKServer, cursor: Cursor): Promise<PollerResult> {
-        const address = cursor.address;
-        let startBlock = cursor.end?.block;
-
-        if (cursor.batch) startBlock = cursor.batch.block;
-
-        //build url
-        const cursorString = cursor.apiString? cursor.apiString : "api?module=account&action=tokentx";
-        const cursorLogs = (cursorString === "api?module=logs&action=getLogs")
-        const blockString = cursorLogs ? "fromBlock" : "startblock";
-        const url = this.apiURL +
-            `/${cursorString}&address=${address}` +
-            `&${blockString}=${startBlock}&offset=${cursor.limit}` +
-            `&page=1&sort=asc&apikey=` +
-            this.apiKey;
-        //console.log(url);
-
-        //Request Data
-        const response = await axios.get(url);
-        const resultData = JSON.parse(JSON.stringify(response.data));
-        const events = resultData.result;
-
-        //Map Signatures       
-        let txnHashes: string[] = [];
-        if (cursorLogs) {
-            txnHashes = events.map((event: any) => event.transactionHash);
-        } else {
-            txnHashes = events.map((event: any) => event.hash);
-        }        
-        const signatures= new Set(txnHashes)
-        const maxBlock = Math.max(...events.map((event: any) => event.blockNumber));
-
-        //Parse Txns
         const partialTxns: PartialBridgeTxn[] = [];
-        for (const txnID of signatures) {
+        try {
+            const address = cursor.address;
+            let startBlock = cursor.end?.block;
 
-            //Check if transaction was previously processed
-            if (cursor.batch?.txns?.has(txnID)) continue;
-            if (cursor.lastBatchTxns?.has(txnID)) continue;
+            if (cursor.batch) startBlock = cursor.batch.block;
 
-            //Process Transaction
-            const partialTxn = await this.parseTxnID(sdkServer, txnID, cursor.bridgeType);
-            if (!partialTxn) continue;
+            //build url
+            const cursorString = cursor.apiString ? cursor.apiString : "api?module=account&action=tokentx";
+            const cursorLogs = (cursorString === "api?module=logs&action=getLogs")
+            const blockString = cursorLogs ? "fromBlock" : "startblock";
+            const url = this.apiURL +
+                `/${cursorString}&address=${address}` +
+                `&${blockString}=${startBlock}&offset=${cursor.limit}` +
+                `&page=1&sort=asc&apikey=` +
+                this.apiKey;
+            //console.log(url);
 
-            //Run Through Filter
-            if (CursorFilter(cursor, partialTxn)) partialTxns.push(partialTxn);    
-                
+            //Request Data
+            const response = await axios.get(url);
+            const resultData = JSON.parse(JSON.stringify(response.data));
+            const events = resultData.result;
+
+            //Map Signatures       
+            let txnHashes: string[] = [];
+            if (cursorLogs) {
+                txnHashes = events.map((event: any) => event.transactionHash);
+            } else {
+                txnHashes = events.map((event: any) => event.hash);
+            }
+            const signatures = new Set(txnHashes)
+            const maxBlock = Math.max(...events.map((event: any) => event.blockNumber));
+
+            //Parse Txns
+            for (const txnID of signatures) {
+
+                //Check if transaction was previously processed
+                if (cursor.batch?.txns?.has(txnID)) continue;
+                if (cursor.lastBatchTxns?.has(txnID)) continue;
+
+                //Process Transaction
+                const partialTxn = await this.parseTxnID(sdkServer, txnID, cursor.bridgeType);
+                if (!partialTxn) continue;
+
+                //Run Through Filter
+                if (CursorFilter(cursor, partialTxn)) partialTxns.push(partialTxn);
+
+            }
+
+            //update cursor
+            cursor = await UpdateCursor(cursor, txnHashes, maxBlock);
+
+        } catch (error) {
+            console.log(error);
         }
-
-        //update cursor
-        cursor = await UpdateCursor(cursor, txnHashes, maxBlock);
 
         return {
             cursor: cursor,
@@ -238,11 +243,11 @@ export class GlitterEVMPoller implements GlitterPoller {
      * @param {BridgeType} type - The type of the bridge.
      * @returns {Promise<PartialBridgeTxn | undefined>} A promise that resolves to the parsed PartialBridgeTxn or undefined if not found.
      */
-    async parseTxnID(sdkServer: GlitterSDKServer, txnID:string, type:BridgeType):Promise<PartialBridgeTxn | undefined>{
+    async parseTxnID(sdkServer: GlitterSDKServer, txnID: string, type: BridgeType): Promise<PartialBridgeTxn | undefined> {
         try {
             //Ensure Transaction Exists
             if (!txnID) return undefined;
-           
+
             //Process Transaction
             switch (type) {
                 case BridgeType.TokenV1:
@@ -251,8 +256,8 @@ export class GlitterEVMPoller implements GlitterPoller {
                     return await EvmV2Parser.process(sdkServer, this.connect, txnID);
                 case BridgeType.Circle:
                     return await EvmCircleParser.process(
-                        sdkServer,  
-                        this.connect,                      
+                        sdkServer,
+                        this.connect,
                         txnID
                     );
                 default:
@@ -261,7 +266,7 @@ export class GlitterEVMPoller implements GlitterPoller {
                         type
                     );
             }
-                      
+
         } catch (error) {
             console.error((error as Error).message)
         }

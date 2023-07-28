@@ -29,7 +29,6 @@ npx ts-node examples/solana.interactive -v -s 20
 Due to tsconfig dependencies, these need to be run from the packages/sdk-server terminal location (ex: cd packages/sdk-server)
 
 
-yarn jest packages/sdk-server/tests/evm/evm.gtt.test --testNamePattern 'Ethereum GTT Deposits'
 
 yarn jest packages/sdk-server/tests/tron/tron.usdc.test --testNamePattern 'Default Cursor Test'
 
