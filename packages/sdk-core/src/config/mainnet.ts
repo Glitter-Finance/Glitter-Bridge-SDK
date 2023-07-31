@@ -250,7 +250,7 @@ export const config: GlitterBridgeConfig = {
     confirmationsV2: {
         [BridgeNetworks.Arbitrum]: 300,
         [BridgeNetworks.Avalanche]: 1,
-        [BridgeNetworks.Ethereum]: 12,
+        [BridgeNetworks.Ethereum]: 35,
         [BridgeNetworks.Polygon]: 372,
         [BridgeNetworks.Binance]: 15,
         [BridgeNetworks.Zkevm]: 80,
