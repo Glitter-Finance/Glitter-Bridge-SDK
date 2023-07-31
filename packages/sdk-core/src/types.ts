@@ -13,7 +13,8 @@ export type GlitterBridgeConfig = {
   solana: SolanaConfig;
   evm: EvmConfig;
   tron: TronConfig;
-  confirmations: { [key in BridgeNetworks]: number };  
+  confirmationsV2: { [key in BridgeNetworks]: number };
+  confirmationsCircle: { [key in BridgeNetworks]: number };
   gasTokens: { [key in BridgeNetworks]: string };
 };
 
@@ -29,16 +30,16 @@ export enum GlitterEnvironment {
  * Configuration for chain RPC endpoints and CoinMarketCap API.
  */
 export type ChainRPCConfigs = {
-    chainAPIs: ChainRPCConfig[];
-    CMC_API: string;
+  chainAPIs: ChainRPCConfig[];
+  CMC_API: string;
 }
 
 /**
  * Configuration for a specific chain's RPC endpoint.
  */
 export type ChainRPCConfig = {
-    network: BridgeNetworks;
-    API_KEY: string;
-    API_URL: string;
-    RPC: string;
+  network: BridgeNetworks;
+  API_KEY: string;
+  API_URL: string;
+  RPC: string;
 }

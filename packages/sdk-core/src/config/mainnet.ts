@@ -140,8 +140,8 @@ export const config: GlitterBridgeConfig = {
             ],
             depositWallet: "0xa89a90a11e20b61814da283ba906f30742a99492",
             releaseWallet: "0xfdc25702b67201107ab4aFDb4DC87E3F8F50a7b8",
-            tokenBridge: "0x52d71eef6846b1c7047b0bd1804d304f9a6ad1d1",      
-            circleTreasury:"0xbf14db80d9275fb721383a77c00ae180fc40ae98"    
+            tokenBridge: "0x52d71eef6846b1c7047b0bd1804d304f9a6ad1d1",
+            circleTreasury: "0xbf14db80d9275fb721383a77c00ae180fc40ae98"
         },
         [BridgeNetworks.Ethereum]: {
             chainId: 1,
@@ -166,8 +166,8 @@ export const config: GlitterBridgeConfig = {
             ],
             depositWallet: "0xa89a90a11e20b61814da283ba906f30742a99492",
             releaseWallet: "0xfdc027af59e3D118a19B8D1E754a090c95587438",
-            tokenBridge: "0xb393c3f26765173b8896a3c1014204dc44115ff2",    
-            circleTreasury:"0x55FE002aefF02F77364de339a1292923A15844B8"     
+            tokenBridge: "0xb393c3f26765173b8896a3c1014204dc44115ff2",
+            circleTreasury: "0x55FE002aefF02F77364de339a1292923A15844B8"
         },
         [BridgeNetworks.Polygon]: {
             chainId: 137,
@@ -185,7 +185,7 @@ export const config: GlitterBridgeConfig = {
             depositWallet: "0xa89a90a11e20b61814da283ba906f30742a99492",
             releaseWallet: "0xfdc9Af7852F9b2d234b96B1F53804BC781Ce26b3",
             tokenBridge: "0x446c264ed8888dad27f5452094d2ceadb1e038ea",
-            circleTreasury:"0x166716C2838e182d64886135a96f1AABCA9A9756"
+            circleTreasury: "0x166716C2838e182d64886135a96f1AABCA9A9756"
         },
         [BridgeNetworks.Arbitrum]: {
             bridge: "",
@@ -195,7 +195,7 @@ export const config: GlitterBridgeConfig = {
             releaseWallet: "",
             tokenBridge: "0xb393c3f26765173b8896a3c1014204dc44115ff2",
             chainId: 42161,
-            circleTreasury:""
+            circleTreasury: ""
         },
         [BridgeNetworks.Binance]: {
             bridge: "",
@@ -205,7 +205,7 @@ export const config: GlitterBridgeConfig = {
             releaseWallet: "",
             tokenBridge: "0xb393c3f26765173b8896a3c1014204dc44115ff2",
             chainId: 56,
-            circleTreasury:""
+            circleTreasury: ""
         },
         [BridgeNetworks.Zkevm]: {
             bridge: "",
@@ -215,7 +215,7 @@ export const config: GlitterBridgeConfig = {
             releaseWallet: "",
             tokenBridge: "0x72decebe0597740551396d3c9e7546cfc97971e9",
             chainId: 1101,
-            circleTreasury:""
+            circleTreasury: ""
         },
         [BridgeNetworks.Optimism]: {
             bridge: "",
@@ -225,7 +225,7 @@ export const config: GlitterBridgeConfig = {
             releaseWallet: "",
             tokenBridge: "0xb393c3f26765173b8896a3c1014204dc44115ff2",
             chainId: 10,
-            circleTreasury:""
+            circleTreasury: ""
         }
     },
     tron: {
@@ -247,9 +247,7 @@ export const config: GlitterBridgeConfig = {
             releaseWallet: "TGUSL4VtESnWQfy2G6RmCNJT6eqqfcR6om",
         },
     },
-    confirmations: {
-        [BridgeNetworks.algorand]: 1,
-        [BridgeNetworks.solana]: 1,
+    confirmationsV2: {
         [BridgeNetworks.Arbitrum]: 300,
         [BridgeNetworks.Avalanche]: 1,
         [BridgeNetworks.Ethereum]: 12,
@@ -257,7 +255,25 @@ export const config: GlitterBridgeConfig = {
         [BridgeNetworks.Binance]: 15,
         [BridgeNetworks.Zkevm]: 80,
         [BridgeNetworks.Optimism]: 80,
+
+        //Not Supported
+        [BridgeNetworks.algorand]: 0,
+        [BridgeNetworks.solana]: 0,
+        [BridgeNetworks.TRON]: 0,
+    },
+    confirmationsCircle: {
+        [BridgeNetworks.algorand]: 1,
+        [BridgeNetworks.solana]: 1,
+        [BridgeNetworks.Avalanche]: 1,
+        [BridgeNetworks.Ethereum]: 12,
+        [BridgeNetworks.Polygon]: 372,
         [BridgeNetworks.TRON]: 19,
+
+        //Not Supported
+        [BridgeNetworks.Binance]: 0,
+        [BridgeNetworks.Arbitrum]: 0,
+        [BridgeNetworks.Optimism]: 0,
+        [BridgeNetworks.Zkevm]: 0,
     },
     gasTokens: {
         [BridgeNetworks.algorand]: "ALGO",

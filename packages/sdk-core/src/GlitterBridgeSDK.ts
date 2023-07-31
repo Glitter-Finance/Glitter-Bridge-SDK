@@ -1,6 +1,6 @@
 import { mainnetConfig, mainnetTokenConfig, testnetConfig, testnetTokenConfig } from "./config";
 import { testnetAPI } from "./config/testnet-api";
-import { Token2ChainConfig, Token2Config } from "./lib";
+import { BridgeType, Token2ChainConfig, Token2Config } from "./lib";
 import { AlgorandConnect } from "./lib/chains/algorand";
 import { EvmConnect } from "./lib/chains/evm";
 import { LoadSolanaSchema, SolanaConnect } from "./lib/chains/solana";
@@ -380,15 +380,27 @@ export class GlitterBridgeSDK {
      * @param {string | BridgeNetworks} chainOrName - The chain name or BridgeNetworks value.
      * @returns {number} - The number of confirmations required.
      */
-    public confirmationsRequired(chainName: string): number
-    public confirmationsRequired(chain: string): number
-    public confirmationsRequired(chainOrName: BridgeNetworks): number {
+    public confirmationsRequired(chainName: string, bridgeType?: BridgeType): number
+    public confirmationsRequired(chain: string, bridgeType?: BridgeType): number
+    public confirmationsRequired(chainOrName: BridgeNetworks, bridgeType?: BridgeType): number {
 
-        const confirmations = this._bridgeConfig?.confirmations[chainOrName] || 0;
+        let confirmations = 0;
+
+        if (bridgeType === BridgeType.TokenV2) {
+            confirmations = this._bridgeConfig?.confirmationsV2[chainOrName] || 0;
+        } else {
+            confirmations = this._bridgeConfig?.confirmationsCircle[chainOrName] || 0;
+        }
         if (confirmations > 0) return confirmations;
 
         //parse through confirmation pairs
-        for (const [chain, localconfirmations] of Object.entries(this._bridgeConfig?.confirmations || {})) {
+        for (const [chain, localconfirmations] of Object.entries(this._bridgeConfig?.confirmationsV2 || {})) {
+            if (chain.toLowerCase() === chainOrName.toLowerCase()) {
+                return localconfirmations;
+            }
+        }
+
+        for (const [chain, localconfirmations] of Object.entries(this._bridgeConfig?.confirmationsCircle || {})) {
             if (chain.toLowerCase() === chainOrName.toLowerCase()) {
                 return localconfirmations;
             }

@@ -72,6 +72,16 @@ export class AlgorandAccountsStore {
     }
 
     /**
+     * gets the mnemonic for an Algorand account.
+     * @param {AlgorandAccount} account - The Algorand account.
+     * @returns {Promise<string>} - A promise that resolves with the mnemonic for the account.    
+     */
+    public async getMnemonic(account: AlgorandAccount): Promise<string> {
+        if (!account) return Promise.reject("Unable to find account");
+        return algosdk.secretKeyToMnemonic(account.sk);
+    }
+
+    /**
      * Adds a new multi-signature Algorand account to the store.
      *
      * @param {string[]} addresses - The addresses of the participants in the multi-signature account.
@@ -177,7 +187,7 @@ export class AlgorandAccountsStore {
         prefix: string,
         tries = 10000
     ): Promise<AlgorandAccount> {
-        for (let i = 0; i < Math.min(tries, 10**5); i++) {
+        for (let i = 0; i < Math.min(tries, 10 ** 5); i++) {
             if (i % 100 === 0) console.log(`Trying ${i} of ${tries}`);
 
             const account = algosdk.generateAccount();
@@ -331,5 +341,5 @@ export class AlgorandAccountsStore {
             4
         );
         return txnResult;
-    }    
+    }
 }
