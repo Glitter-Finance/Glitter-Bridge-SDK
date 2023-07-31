@@ -1,6 +1,6 @@
 {
   "name": "@glitter-finance/sdk-web",
-  "version": "2.0.1-alpha.0",
+  "version": "2.0.1-alpha.1",
   "description": "Glitter Finance Bridge: React Support Library (Dev Version)",
   "license": "MIT",
   "main": "dist/index.js",
@@ -54,7 +54,7 @@
   "dependencies": {
     "@blockshake/defly-connect": "^1.1.1",
     "@coin98-com/connect-sdk": "^1.0.9",
-    "@glitter-finance/sdk-core": "^2.0.1-alpha.0",
+    "@glitter-finance/sdk-core": "^2.0.1-alpha.1",
     "@json-rpc-tools/utils": "^1.7.6",
     "@metamask/onboarding": "^1.0.1",
     "@perawallet/connect": "^1.2.1",
