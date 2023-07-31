@@ -6,8 +6,28 @@
 
 ## Examples
 
+1. Create a new Project
 
-1. SDK Setup
+If you already have a project, you can skip this step.  
+
+```bash
+    mkdir glitter-sdk-example
+    cd glitter-sdk-example
+    npm init -y
+```
+
+2. Install dependencies
+
+```bash
+
+    #Install & Initialize Typescript
+    npm install typescript --save-dev
+    npx tsc --init
+
+    npm add @glitter-finance/sdk-core
+```
+
+3. Code Imports & Setup
 
 ```typescript
     import { BridgeNetworks, BridgeTokens, GlitterBridgeSDK, GlitterEnvironment } from "@glitter-finance/sdk-core";
@@ -25,7 +45,7 @@
     ])
 ```
 
-2. Add Solana and Algorand Accounts
+4. Add Solana and Algorand Accounts
 
 ```typescript
     ...
@@ -36,7 +56,7 @@
     const solAccount = await solana.accountStore.add("<mnemonic>")
 ```
 
-3. Get Supported Tokens List
+5. Get Supported Tokens List
 
 ```typescript
     import { BridgeNetworks, BridgeTokens } from "@glitter-finance/sdk-core";
@@ -47,7 +67,7 @@
     const supportedTokensTron = BridgeTokens.getTokens(BridgeNetworks.TRON)
 ```
 
-4. Bridge Tokens
+6. Bridge Tokens
 
 ```typescript
     ...
@@ -64,7 +84,3 @@
     console.log(bridgexAlgoTxId)
     
 ```
-
-# Tests
-
-yarn jest packages/sdk-core/tests/enumToString.test --testNamePattern 'Main Test'
