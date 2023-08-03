@@ -163,7 +163,7 @@ export class EvmConnect {
      * @returns {string} returns the address for the given entity
      */
     getAddress(
-        entity: "tokens" | "bridge" | "depositWallet" | "releaseWallet"| "tokenBridge" | "circleTreasury",
+        entity: "tokens" | "bridge" | "depositWallet" | "releaseWallet" | "tokenBridge" | "circleTreasury",
         tokenSymbol?: string
     ): string {
         if (entity === "tokens") {
@@ -252,6 +252,23 @@ export class EvmConnect {
     }
 
     /**
+     * Approves tokens to be used by the v1 bridge.
+     *
+     * @param {string} tokenSymbol - The symbol of the token to approve.
+     * @param {ethers.Signer} signer - The signer to use for the approval transaction.
+     * @param {ethers.BigNumber | string} amount - The amount of tokens to approve.
+     * @returns {Promise<ethers.ContractTransaction>} - A promise that resolves with the approval transaction.
+     */
+    async v1Approve(tokenSymbol: string, signer: ethers.Signer, amount: ethers.BigNumber | string): Promise<ethers.ContractTransaction> {
+        // DO the v1 Approval
+        const bridgeAddress = this.getAddress("bridge");
+        const tokenAddress = this.getAddress("tokens", tokenSymbol);
+
+        const token = ERC20__factory.connect(tokenAddress, signer);
+        return await token.approve(bridgeAddress, amount);
+    }
+
+    /**
      * Approves tokens to be used by the bridge.
      *
      * @param {string} tokenSymbol - The symbol of the token to approve.
@@ -259,24 +276,19 @@ export class EvmConnect {
      * @param {ethers.Signer} signer - The signer to use for the approval transaction.
      * @returns {Promise<ethers.ContractTransaction>} - A promise that resolves with the approval transaction.
      */
-    async approveTokensForBridge(
+    approveTokensForBridge(
         tokenSymbol: string,
         amount: ethers.BigNumber | string,
         signer: ethers.Signer
     ): Promise<ethers.ContractTransaction> {
-        if (!this.isValidToken(tokenSymbol) && !this.isValidV2Token(tokenSymbol))
-            return Promise.reject("[EvmConnect] Unsupported token symbol.");
-
-        if (this.isValidV2Token(tokenSymbol)) {
-            // DO THE V2 APPROVAL
-            return await this.v2Approve({ tokenSymbol, amount, signer })
+        switch (true) {
+            case this.isValidToken(tokenSymbol):
+                return this.v1Approve(tokenSymbol, signer, amount);
+            case this.isValidV2Token(tokenSymbol):
+                return this.v2Approve({ tokenSymbol, amount, signer });
+            default:
+                throw new Error("[EvmConnect] Unsupported token symbol.");
         }
-        // DO the v1 Approval
-        const bridgeAddress = this.getAddress("bridge");
-        const tokenAddress = this.getAddress("tokens", tokenSymbol);
-
-        const token = ERC20__factory.connect(tokenAddress, signer);
-        return await token.approve(bridgeAddress, amount);
     }
 
     async v2Approve({ tokenSymbol, amount, signer }: { amount: ethers.BigNumber | string; tokenSymbol: string; signer: ethers.Signer }) {
@@ -326,22 +338,12 @@ export class EvmConnect {
     }
 
     /**
-     * Retrieves the current allowance of tokens for the bridge.
-     *
-     * @param {string} tokenSymbol - The symbol of the token.
-     * @param {ethers.Signer} signer - The signer to use for the operation.
-     * @returns {Promise<ethers.BigNumber>} - A promise that resolves with the current token allowance for the bridge.
+     * Returns allowance value for a specified token.
+     * @param tokenSymbol {string} - The symbol of the token.
+     * @param signer {ethers.Signer} - The signer to use for the operation.
+     * @returns 
      */
-    async bridgeAllowance(
-        tokenSymbol: string,
-        signer: ethers.Signer
-    ): Promise<ethers.BigNumber> {
-        if (!this.isValidToken(tokenSymbol) && !this.isValidV2Token(tokenSymbol))
-            return Promise.reject("Unsupported token symbol.");
-
-        if (this.isValidV2Token(tokenSymbol)) {
-            return await this.getV2Allowance(tokenSymbol, signer);
-        }
+    async getV1Allowance(tokenSymbol: string, signer: ethers.Signer): Promise<ethers.BigNumber> {
         // V1 Allowance
         const tokenAddress = this.getAddress("tokens", tokenSymbol);
         const usdc = ERC20__factory.connect(tokenAddress, signer);
@@ -352,6 +354,27 @@ export class EvmConnect {
         );
 
         return allowance;
+    }
+
+    /**
+     * Retrieves the current allowance of tokens for the bridge.
+     *
+     * @param {string} tokenSymbol - The symbol of the token.
+     * @param {ethers.Signer} signer - The signer to use for the operation.
+     * @returns {Promise<ethers.BigNumber>} - A promise that resolves with the current token allowance for the bridge.
+     */
+    async bridgeAllowance(
+        tokenSymbol: string,
+        signer: ethers.Signer
+    ): Promise<ethers.BigNumber> {
+        switch (true) {
+            case this.isValidToken(tokenSymbol):
+                return this.getV1Allowance(tokenSymbol, signer);
+            case this.isValidV2Token(tokenSymbol):
+                return this.getV2Allowance(tokenSymbol, signer);
+            default:
+                throw new Error("[EvmConnect] Unsupported token symbol.");
+        }
     }
 
     async getV2Allowance(tokenSymbol: string, signer: ethers.Signer) {
@@ -545,6 +568,15 @@ export class EvmConnect {
         protocolId?: number
     ): Promise<ethers.ContractTransaction> {
         v2 ||= this.isValidV2Token(tokenSymbol);
+        // if this is not a v2 bridging deposit
+        if (!this.isValidToken(tokenSymbol) || !v2) {
+            throw new Error(`[EvmConnect] Unsupported token symbol.`);
+        }
+
+        if (destination === this.__network) {
+            throw new Error("[EvmConnect] Cannot transfer tokens to same chain.");
+        }
+
         try {
             const signerAddress = await signer.getAddress();
             const isCorrectChain = await this.isCorrectChain(signer);
@@ -552,6 +584,49 @@ export class EvmConnect {
                 throw new Error(
                     `[EvmConnect] Signer should be connected to network ${this.__network}`
                 );
+
+            // V1 Bridging
+            if (this.isValidToken(tokenSymbol)) {
+
+                const bridge = TokenBridge__factory.connect(
+                    this.getAddress("bridge"),
+                    signer
+                );
+
+                const token = this.getToken(tokenSymbol)!;
+
+                if (token.supportedDestination) {
+                    if (!token.supportedDestination.map(x => x.toLowerCase()).includes(destination.toLowerCase())) {
+                        throw new Error(
+                            "[EvmConnect] Token unsupported on destination chain."
+                        );
+                    }
+                }
+
+                if (!token.address) {
+                    throw new Error("[EvmConnect] Token address not found.");
+                }
+
+                const depositAddress = this.getAddress("depositWallet");
+                const _amount =
+                    typeof amount === "string" ? ethers.BigNumber.from(amount) : amount;
+
+                const serlized = SerializeEvmBridgeTransfer.serialize(
+                    this.__network,
+                    destination,
+                    signerAddress,
+                    walletToAddress(destinationWallet),
+                    _amount
+                );
+
+                return await bridge.deposit(
+                    serlized.destinationChain,
+                    serlized.amount,
+                    depositAddress,
+                    token.address,
+                    serlized.destinationWallet
+                );
+            }
 
             // handle deposit on bridge v2
             if (v2) {
@@ -576,54 +651,8 @@ export class EvmConnect {
                 });
             }
 
-            // if this is not a v2 bridging deposit
-            if (!this.isValidToken(tokenSymbol)) {
-                throw new Error(`[EvmConnect] Unsupported token symbol.`);
-            }
+            throw new Error("[EvmConnect] Bridge error, token is neither v1 nor v2")
 
-            if (destination === this.__network) {
-                throw new Error("[EvmConnect] Cannot transfer tokens to same chain.");
-            }
-
-            const bridge = TokenBridge__factory.connect(
-                this.getAddress("bridge"),
-                signer
-            );
-
-            const token = this.getToken(tokenSymbol)!;
-
-            if (token.supportedDestination) {
-                console.log({ sd: token.supportedDestination });
-                if (!token.supportedDestination.map(x => x.toLowerCase()).includes(destination.toLowerCase())) {
-                    throw new Error(
-                        "[EvmConnect] Token unsupported on destination chain."
-                    );
-                }
-            }
-
-            if (!token.address) {
-                throw new Error("[EvmConnect] Token address not found.");
-            }
-
-            const depositAddress = this.getAddress("depositWallet");
-            const _amount =
-                typeof amount === "string" ? ethers.BigNumber.from(amount) : amount;
-
-            const serlized = SerializeEvmBridgeTransfer.serialize(
-                this.__network,
-                destination,
-                signerAddress,
-                walletToAddress(destinationWallet),
-                _amount
-            );
-
-            return await bridge.deposit(
-                serlized.destinationChain,
-                serlized.amount,
-                depositAddress,
-                token.address,
-                serlized.destinationWallet
-            );
         } catch (error) {
             return Promise.reject(error);
         }
