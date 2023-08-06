@@ -194,7 +194,7 @@ export class EvmConnect {
      * @returns {boolean} - Returns true if the token symbol is valid, otherwise false.
      */
     private isValidToken(tokenSymbol: string): boolean {
-        return !!this.__providers.tokens.get(tokenSymbol.toLowerCase());
+        return this.config.tokens.some((token) => token.symbol.toLowerCase() === tokenSymbol.toLowerCase())
     }
 
     private isValidV2Token(tokenSymbol: string): boolean {
@@ -584,7 +584,7 @@ export class EvmConnect {
         const isValidV1Token = this.isValidToken(tokenSymbol);
 
         // if invalid token
-        if (!isValidV1Token || !v2) {
+        if (!isValidV1Token && !v2) {
             throw new Error(`[EvmConnect] Unsupported token symbol.`);
         }
 
