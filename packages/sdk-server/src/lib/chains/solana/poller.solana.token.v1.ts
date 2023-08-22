@@ -45,7 +45,7 @@ export class SolanaV1Parser {
         sdkServer: GlitterSDKServer,
         txn: ParsedTransactionWithMeta,
     ): Promise<PartialBridgeTxn> {
-        
+
         //Destructure Local Vars
         const txnID = txn.transaction.signatures[0];
 
@@ -83,8 +83,19 @@ export class SolanaV1Parser {
             partialTxn.gasPaid = new BigNumber(txn.meta?.fee || 0);
 
             //Get txnData From Solana
-            const txnData = (txn.transaction.message.instructions[0] as PartiallyDecodedInstruction).data;
-            const data_bytes = bs58.decode(txnData);
+            let txnData: string | null = null;
+
+            for (let i = 0; i < txn.transaction.message.instructions.length; i++) {
+                const instruction = txn.transaction.message.instructions[i];
+                const programID = instruction.programId;
+                if (programID == null) continue;
+                const programAddress = programID.toBase58();
+                if (programAddress === "GLittnj1E7PtSF5thj6nYgjtMvobyBuZZMuoemXpnv3G") {
+                    txnData = (txn.transaction.message.instructions[i] as PartiallyDecodedInstruction).data;
+                }
+            }
+
+            const data_bytes = bs58.decode(txnData || "");
 
             //Parse Transaction Type
             switch (Number(data_bytes[0])) {
